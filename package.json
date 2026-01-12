@@ -1,0 +1,47 @@
+{
+  "name": "distilled-cloudflare",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "generate": "bun scripts/generate-clients.ts",
+    "generate:service": "bun scripts/generate-clients.ts --service",
+    "find": "bun scripts/find-errors/index.ts",
+    "check": "biome check",
+    "check:write": "biome check --write",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "effect": "latest",
+    "@effect/platform": "latest"
+  },
+  "devDependencies": {
+    "@effect/cli": "latest",
+    "@effect/platform-node": "latest",
+    "@effect/vitest": "latest",
+    "@types/bun": "latest",
+    "vitest": "latest"
+  },
+  "exports": {
+    "./*": {
+      "bun": "./src/services/*.ts"
+    },
+    "./Auth": {
+      "bun": "./src/auth.ts"
+    },
+    "./Category": {
+      "bun": "./src/category.ts"
+    },
+    "./Errors": {
+      "bun": "./src/errors.ts"
+    },
+    "./Traits": {
+      "bun": "./src/traits.ts"
+    },
+    ".": {
+      "bun": "./src/index.ts"
+    }
+  }
+}
