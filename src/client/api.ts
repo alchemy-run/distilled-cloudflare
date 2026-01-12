@@ -111,6 +111,8 @@ export const make = <
       // Add authentication headers
       if (auth.auth.type === "token") {
         headers["Authorization"] = `Bearer ${Redacted.value(auth.auth.token)}`;
+      } else if (auth.auth.type === "oauth") {
+        headers["Authorization"] = `Bearer ${Redacted.value(auth.auth.accessToken)}`;
       } else {
         headers["X-Auth-Key"] = Redacted.value(auth.auth.apiKey);
         headers["X-Auth-Email"] = auth.auth.email;

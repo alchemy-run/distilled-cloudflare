@@ -73,7 +73,7 @@ All operations require two context services: `ApiToken` and `HttpClient`.
 
 ### Authentication
 
-Cloudflare supports two authentication methods:
+Cloudflare supports three authentication methods:
 
 ```typescript
 import { Auth } from "distilled-cloudflare";
@@ -89,6 +89,52 @@ Effect.provide(Auth.fromToken("your-api-token"))
 
 // Static API key + email
 Effect.provide(Auth.fromApiKey("your-api-key", "your-email@example.com"))
+
+// OAuth with client credentials and refresh token
+Effect.provide(Auth.fromOAuth({
+  clientId: "your-client-id",
+  clientSecret: "your-client-secret",
+  refreshToken: "your-refresh-token",
+}))
+```
+
+#### OAuth Authentication
+
+OAuth authentication exchanges a refresh token for an access token on layer construction. This is useful when integrating with OAuth flows like those from the [alchemy CLI](https://alchemy.run).
+
+```typescript
+import { Effect } from "effect";
+import { FetchHttpClient } from "@effect/platform";
+import * as R2 from "distilled-cloudflare/r2";
+import { Auth } from "distilled-cloudflare";
+
+const program = R2.listBuckets({
+  account_id: "your-account-id",
+});
+
+program.pipe(
+  Effect.provide(Auth.fromOAuth({
+    clientId: "your-client-id",
+    clientSecret: "your-client-secret",
+    refreshToken: "your-refresh-token",
+  })),
+  Effect.provide(FetchHttpClient.layer),
+  Effect.runPromise,
+);
+```
+
+The `OAuthError` is thrown if token refresh fails:
+
+```typescript
+import { Effect } from "effect";
+import { Auth } from "distilled-cloudflare";
+
+program.pipe(
+  Effect.provide(Auth.fromOAuth({ ... })),
+  Effect.catchTag("OAuthError", (error) =>
+    Effect.fail(new Error(`OAuth failed: ${error.message}`))
+  ),
+);
 ```
 
 ### HTTP Client
