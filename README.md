@@ -20,7 +20,7 @@ bun add distilled-cloudflare effect @effect/platform
 ## Quick Start
 
 ```typescript
-import { Effect } from "effect";
+import { Effect, Layer } from "effect";
 import { FetchHttpClient } from "@effect/platform";
 import * as R2 from "distilled-cloudflare/r2";
 import { Auth } from "distilled-cloudflare";
@@ -40,12 +40,10 @@ const program = Effect.gen(function* () {
   return buckets.result.buckets;
 });
 
-// Run with required services
-program.pipe(
-  Effect.provide(FetchHttpClient.layer),
-  Effect.provide(Auth.fromEnv()),
-  Effect.runPromise,
-);
+// Compose layers and run
+const CloudflareLive = Layer.mergeAll(FetchHttpClient.layer, Auth.fromEnv());
+
+program.pipe(Effect.provide(CloudflareLive), Effect.runPromise);
 ```
 
 ## Importing Services
@@ -103,7 +101,7 @@ Effect.provide(Auth.fromOAuth({
 OAuth authentication exchanges a refresh token for an access token on layer construction. This is useful when integrating with OAuth flows like those from the [alchemy CLI](https://alchemy.run).
 
 ```typescript
-import { Effect } from "effect";
+import { Effect, Layer } from "effect";
 import { FetchHttpClient } from "@effect/platform";
 import * as R2 from "distilled-cloudflare/r2";
 import { Auth } from "distilled-cloudflare";
@@ -112,15 +110,14 @@ const program = R2.listBuckets({
   account_id: "your-account-id",
 });
 
-program.pipe(
-  Effect.provide(Auth.fromOAuth({
-    clientId: "your-client-id",
-    clientSecret: "your-client-secret",
-    refreshToken: "your-refresh-token",
-  })),
-  Effect.provide(FetchHttpClient.layer),
-  Effect.runPromise,
-);
+// Compose layers - Auth.fromOAuth requires HttpClient
+const CloudflareLive = Auth.fromOAuth({
+  clientId: "your-client-id",
+  clientSecret: "your-client-secret",
+  refreshToken: "your-refresh-token",
+}).pipe(Layer.provideMerge(FetchHttpClient.layer));
+
+program.pipe(Effect.provide(CloudflareLive), Effect.runPromise);
 ```
 
 The `OAuthError` is thrown if token refresh fails:
@@ -156,7 +153,7 @@ Effect.provide(NodeHttpClient.layer)
 ### R2 Storage
 
 ```typescript
-import { Console, Effect } from "effect";
+import { Console, Effect, Layer } from "effect";
 import { FetchHttpClient } from "@effect/platform";
 import * as R2 from "distilled-cloudflare/r2";
 import { Auth } from "distilled-cloudflare";
@@ -211,17 +208,15 @@ const program = Effect.gen(function* () {
   });
 });
 
-program.pipe(
-  Effect.provide(FetchHttpClient.layer),
-  Effect.provide(Auth.fromEnv()),
-  Effect.runPromise,
-);
+const CloudflareLive = Layer.mergeAll(FetchHttpClient.layer, Auth.fromEnv());
+
+program.pipe(Effect.provide(CloudflareLive), Effect.runPromise);
 ```
 
 ### Workers KV
 
 ```typescript
-import { Console, Effect } from "effect";
+import { Console, Effect, Layer } from "effect";
 import { FetchHttpClient } from "@effect/platform";
 import * as KV from "distilled-cloudflare/kv";
 import { Auth } from "distilled-cloudflare";
@@ -288,17 +283,15 @@ const program = Effect.gen(function* () {
   });
 });
 
-program.pipe(
-  Effect.provide(FetchHttpClient.layer),
-  Effect.provide(Auth.fromEnv()),
-  Effect.runPromise,
-);
+const CloudflareLive = Layer.mergeAll(FetchHttpClient.layer, Auth.fromEnv());
+
+program.pipe(Effect.provide(CloudflareLive), Effect.runPromise);
 ```
 
 ### Queues
 
 ```typescript
-import { Console, Effect } from "effect";
+import { Console, Effect, Layer } from "effect";
 import { FetchHttpClient } from "@effect/platform";
 import * as Queues from "distilled-cloudflare/queues";
 import { Auth } from "distilled-cloudflare";
@@ -361,17 +354,15 @@ const program = Effect.gen(function* () {
   });
 });
 
-program.pipe(
-  Effect.provide(FetchHttpClient.layer),
-  Effect.provide(Auth.fromEnv()),
-  Effect.runPromise,
-);
+const CloudflareLive = Layer.mergeAll(FetchHttpClient.layer, Auth.fromEnv());
+
+program.pipe(Effect.provide(CloudflareLive), Effect.runPromise);
 ```
 
 ### Workers
 
 ```typescript
-import { Console, Effect } from "effect";
+import { Console, Effect, Layer } from "effect";
 import { FetchHttpClient } from "@effect/platform";
 import * as Workers from "distilled-cloudflare/workers";
 import { Auth } from "distilled-cloudflare";
@@ -426,11 +417,9 @@ const program = Effect.gen(function* () {
   yield* Console.log(`Workers subdomain: ${subdomain.result.subdomain}.workers.dev`);
 });
 
-program.pipe(
-  Effect.provide(FetchHttpClient.layer),
-  Effect.provide(Auth.fromEnv()),
-  Effect.runPromise,
-);
+const CloudflareLive = Layer.mergeAll(FetchHttpClient.layer, Auth.fromEnv());
+
+program.pipe(Effect.provide(CloudflareLive), Effect.runPromise);
 ```
 
 ## Error Handling

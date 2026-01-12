@@ -20,6 +20,8 @@ const platform = Layer.mergeAll(
   Logger.pretty,
 );
 
+const TestLayer = Layer.mergeAll(platform, Auth.fromEnv());
+
 type TestCase = Effect.Effect<void, any, Provided> | (() => Effect.Effect<void, any, Provided>);
 
 function resolveTestCase(testCase: TestCase): Effect.Effect<void, any, Provided> {
@@ -80,12 +82,10 @@ function provideTestEnv<A, E, R extends Provided>(
   effect: Effect.Effect<A, E, R>,
 ) {
   return effect.pipe(
-    Effect.provide(platform),
-    Effect.provide(Auth.fromEnv()),
     Logger.withMinimumLogLevel(
       process.env.DEBUG ? LogLevel.Debug : LogLevel.Info,
     ),
-    Effect.provide(NodeContext.layer),
+    Effect.provide(TestLayer),
   );
 }
 
