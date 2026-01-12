@@ -117,6 +117,8 @@ async function loadAndApplyPatches(spec: {
     }
 
     // Merge component schemas
+    // For component schemas, use direct replacement (not deep merge)
+    // This allows patches to fully override schemas instead of merging properties
     if (patch.components?.schemas) {
       if (!spec.components) {
         spec.components = { schemas: {} };
@@ -124,10 +126,10 @@ async function loadAndApplyPatches(spec: {
       if (!spec.components.schemas) {
         spec.components.schemas = {};
       }
-      spec.components.schemas = deepMerge(
-        spec.components.schemas as Record<string, unknown>,
-        patch.components.schemas as Record<string, unknown>,
-      );
+      for (const [schemaName, schemaValue] of Object.entries(patch.components.schemas)) {
+        // Fully replace the schema instead of merging
+        (spec.components.schemas as Record<string, unknown>)[schemaName] = schemaValue;
+      }
     }
 
     return spec;
@@ -240,6 +242,92 @@ function schemaToTsType(
 /**
  * Generate TypeScript code for a schema.
  */
+/**
+ * Recursively merge all allOf schemas into a single flattened schema.
+ * This properly handles nested refs and allOf combinations.
+ */
+function mergeAllOfSchemas(
+  schema: OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference,
+  allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
+): OpenAPI.OpenApiSchemaObject {
+  const resolved = resolveSchema(schema, allSchemas);
+  
+  // If no allOf, just return the resolved schema
+  if (!resolved.allOf || resolved.allOf.length === 0) {
+    return resolved;
+  }
+  
+  // Merge all allOf members recursively
+  const mergedProperties: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference> = {};
+  const mergedRequired: string[] = [];
+  
+  for (const member of resolved.allOf) {
+    // Recursively merge each member (handles nested allOf and refs)
+    const memberSchema = mergeAllOfSchemas(member, allSchemas);
+    
+    // Merge properties
+    if (memberSchema.properties) {
+      for (const [propName, propSchema] of Object.entries(memberSchema.properties)) {
+        mergedProperties[propName] = propSchema;
+      }
+    }
+    
+    // Merge required
+    if (memberSchema.required) {
+      for (const req of memberSchema.required) {
+        if (!mergedRequired.includes(req)) {
+          mergedRequired.push(req);
+        }
+      }
+    }
+  }
+  
+  // Also include direct properties from the schema itself
+  if (resolved.properties) {
+    for (const [propName, propSchema] of Object.entries(resolved.properties)) {
+      mergedProperties[propName] = propSchema;
+    }
+  }
+  if (resolved.required) {
+    for (const req of resolved.required) {
+      if (!mergedRequired.includes(req)) {
+        mergedRequired.push(req);
+      }
+    }
+  }
+  
+  return {
+    type: 'object',
+    properties: mergedProperties,
+    required: mergedRequired.length > 0 ? mergedRequired : undefined,
+  } as OpenAPI.OpenApiSchemaObject;
+}
+
+/**
+ * Extract the 'result' property schema from a Cloudflare API response.
+ * 
+ * Cloudflare responses follow this pattern:
+ * { success: boolean, errors: [], messages: [], result: T | null, result_info?: {} }
+ * 
+ * This function recursively merges allOf schemas and extracts the 'result' property.
+ * Returns null if no result property is found (meaning result is always null for this operation).
+ */
+function extractResultSchema(
+  schema: OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference,
+  allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
+): OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference | null {
+  // Merge all allOf schemas to get the full combined schema
+  const merged = mergeAllOfSchemas(schema, allSchemas);
+  
+  // Check if the merged schema has a 'result' property
+  if (merged.properties && 'result' in merged.properties) {
+    return merged.properties.result as OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference;
+  }
+  
+  // No result property found - this operation returns result: null
+  return null;
+}
+
 function generateSchemaCode(
   name: string,
   schema: OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference,
@@ -550,15 +638,24 @@ function generateServiceFile(
       generatedSchemas.add(responseClassName);
 
       const response200 = operation.responses["200"];
-      let resultSchema = "Schema.Unknown";
-      let resultTsType = "unknown";
+      let resultSchema = "Schema.NullOr(Schema.Unknown)";
+      let resultTsType = "unknown | null";
 
       if (response200 && !OpenAPI.isJsonReference(response200)) {
         const r = response200 as OpenAPI.ResponseObject;
         const jsonContent = r.content?.["application/json"];
         if (jsonContent?.schema) {
-          resultSchema = generateSchemaCode("result", jsonContent.schema, allSchemas);
-          resultTsType = schemaToTsType(jsonContent.schema, allSchemas);
+          // Extract the 'result' property from the Cloudflare response envelope
+          // This recursively merges allOf schemas and finds the result property
+          const extractedResult = extractResultSchema(jsonContent.schema, allSchemas);
+          
+          if (extractedResult) {
+            // Found a 'result' property - use its schema
+            resultSchema = generateSchemaCode("result", extractedResult, allSchemas);
+            resultTsType = schemaToTsType(extractedResult, allSchemas);
+          }
+          // If no result property found, the operation returns result: null
+          // (common for DELETE operations) - we already default to Schema.NullOr(Schema.Unknown)
         }
       }
 

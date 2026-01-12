@@ -258,26 +258,74 @@ test("NoCorsConfiguration error on fresh bucket", () =>
 
 Run tests again and repeat steps 2-7 for any remaining unknown errors.
 
-### OpenAPI Patches
+### OpenAPI Schema Patches
 
-For response schema issues (not error codes), use `spec/openapi.patch.json` to override incorrect OpenAPI definitions:
+The Cloudflare OpenAPI spec has bugs. Use `spec/openapi.patch.json` to fix them.
+
+**Patch behavior:**
+- **Path patches** (`paths`): Deep merged with existing paths
+- **Schema patches** (`components.schemas`): **Fully replace** the existing schema (not merged)
+
+This means schema patches must be complete - include all properties you want to keep.
+
+#### Common Spec Bugs
+
+1. **Enum case mismatch**: Spec has lowercase, API returns uppercase
+
+```json
+{
+  "components": {
+    "schemas": {
+      "r2_bucket_location": {
+        "description": "Location of the bucket. API returns uppercase but spec has lowercase.",
+        "enum": ["APAC", "EEUR", "ENAM", "WEUR", "WNAM", "OC", "apac", "eeur", "enam", "weur", "wnam", "oc"],
+        "type": "string"
+      }
+    }
+  }
+}
+```
+
+2. **Required fields that are optional**: Spec marks fields required but API returns empty objects
+
+```json
+{
+  "components": {
+    "schemas": {
+      "r2_lifecycle-rule": {
+        "properties": {
+          "conditions": {
+            "properties": { "prefix": { "type": "string" } },
+            "type": "object"
+          },
+          "enabled": { "type": "boolean" },
+          "id": { "type": "string" }
+        },
+        "required": ["id", "enabled"],
+        "type": "object"
+      }
+    }
+  }
+}
+```
+
+3. **Missing endpoints**: Add entirely new paths for undocumented APIs
 
 ```json
 {
   "paths": {
-    "/accounts/{account_id}/r2/buckets/{bucket_name}": {
-      "delete": {
-        "operationId": "deleteBucket",
+    "/accounts/{account_id}/containers/applications": {
+      "get": {
+        "operationId": "listContainerApplications",
+        "tags": ["Containers"],
+        "parameters": [
+          { "name": "account_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
         "responses": {
           "200": {
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "result": { "type": "object" }
-                  }
-                }
+                "schema": { "properties": { "result": { "type": "array" } } }
               }
             }
           }
@@ -287,6 +335,16 @@ For response schema issues (not error codes), use `spec/openapi.patch.json` to o
   }
 }
 ```
+
+#### Debugging Schema Decode Failures
+
+When you see `CloudflareHttpError: Schema decode failed`:
+
+1. The error body shows the actual API response
+2. Compare with the generated schema in `src/services/{service}.ts`
+3. Identify the mismatch (wrong enum values, required fields, type differences)
+4. Add a schema patch to `spec/openapi.patch.json`
+5. Regenerate: `bun generate --service {service}`
 
 ## ERROR CATALOG FORMAT
 
@@ -333,10 +391,58 @@ For response schema issues (not error codes), use `spec/openapi.patch.json` to o
 `scripts/generate-clients.ts`:
 
 1. Loads OpenAPI spec (fetches or uses cache)
-2. Groups operations by service (based on path patterns)
-3. Generates Effect Schema classes for request/response types
-4. Applies HTTP binding traits from parameter definitions
-5. Outputs to `src/services/{service}.ts`
+2. Applies patches from `spec/openapi.patch.json` (schema patches fully replace, path patches deep merge)
+3. Groups operations by service (based on path patterns)
+4. Generates Effect Schema classes for request/response types
+5. Applies HTTP binding traits from parameter definitions
+6. Outputs to `src/services/{service}.ts`
+
+### Response Schema Generation
+
+Cloudflare APIs return responses in this envelope format:
+
+```json
+{ "success": true, "errors": [], "messages": [], "result": <actual data> }
+```
+
+The OpenAPI spec often uses `allOf` to combine a common wrapper with the actual result:
+
+```json
+{
+  "allOf": [
+    { "$ref": "#/components/schemas/api-response-common" },
+    { "properties": { "result": { "$ref": "#/components/schemas/MyData" } } }
+  ]
+}
+```
+
+The generator:
+1. **Recursively merges all `allOf` schemas** to build the complete response structure
+2. **Extracts the `result` property** to generate the response schema
+3. **Defaults to `Schema.NullOr(Schema.Unknown)`** when no `result` property is found (e.g., DELETE operations)
+
+### Operation ID to Function Name Mapping
+
+OpenAPI operation IDs are transformed to function names via `scripts/openapi-schema.ts`:
+
+| Operation ID | Function Name |
+|--------------|---------------|
+| `queues-create` | `create` |
+| `queues-get` | `get_` (underscore for reserved words) |
+| `queues-delete` | `delete_` |
+| `queues-purge-get` | `get_1` (collision with `queues-get`) |
+
+**Important:** When adding errors to `spec/{service}.json`, use the **generated function name**, not the operation ID:
+
+```json
+{
+  "operations": {
+    "create": { "errors": ["QueueAlreadyExists", "InvalidQueueName"] },
+    "get_": { "errors": ["QueueNotFound"] },
+    "delete_": { "errors": ["QueueNotFound"] }
+  }
+}
+```
 
 ### Service Grouping
 
@@ -349,6 +455,7 @@ Operations are grouped by path prefix:
 | `/accounts/{account_id}/storage/kv` | `kv` |
 | `/accounts/{account_id}/r2` | `r2` |
 | `/accounts/{account_id}/d1` | `d1` |
+| `/accounts/{account_id}/queues` | `queues` |
 
 ## TRAITS SYSTEM
 
@@ -539,6 +646,59 @@ yield* Workers.workerScriptUploadWorkerModule({
 
 Workflows require a Worker that exports a Workflow class, then a Workflow resource pointing to it.
 
+**Queue-specific patterns:**
+
+Queues require special setup for certain operations:
+
+```typescript
+// To pull messages via HTTP, you MUST create an http_pull consumer first
+yield* Queues.createConsumer({
+  account_id: accountId(),
+  queue_id: queueId,
+  body: {
+    type: "http_pull",
+    settings: {
+      batch_size: 10,
+      visibility_timeout_ms: 30000,
+    },
+  },
+});
+
+// Now you can pull messages
+const messages = yield* Queues.queuesPullMessages({
+  account_id: accountId(),
+  queue_id: queueId,
+  body: { batch_size: 10, visibility_timeout_ms: 30000 },
+});
+
+// Push messages require body and content_type
+yield* Queues.queuesPushMessage({
+  account_id: accountId(),
+  queue_id: queueId,
+  body: { body: "message content", content_type: "text" },
+});
+```
+
+**Queue test helper pattern:**
+
+```typescript
+const withQueue = <A, E, R>(
+  name: string,
+  fn: (queueId: string) => Effect.Effect<A, E, R>,
+) =>
+  Effect.gen(function* () {
+    yield* cleanupByName(name);
+    
+    const created = yield* Queues.create({
+      account_id: accountId(),
+      body: { queue_name: name },
+    });
+    
+    const queueId = (created.result as { queue_id: string }).queue_id;
+    return yield* fn(queueId);
+  }).pipe(Effect.ensuring(cleanupByName(name)));
+```
+
 **Use `Effect.ensuring` for cleanup, NOT `try/finally`:**
 
 ```typescript
@@ -604,10 +764,23 @@ Effect.gen(function* () {
 |---------|------|-------------|
 | Workers | `src/services/workers.ts` | Worker scripts, settings, deployments, versions, cron triggers |
 | KV | `src/services/kv.ts` | Workers KV namespaces and key-value operations |
-| R2 | `src/services/r2.ts` | R2 object storage buckets, usage, custom domains |
-| Queues | `src/services/queues.ts` | Queue management, consumers, message sending/pulling |
+| R2 | `src/services/r2.ts` | R2 object storage buckets, CORS, lifecycle, public access |
+| Queues | `src/services/queues.ts` | Queue CRUD, consumers (http_pull), message push/pull, purge |
 | Workflows | `src/services/workflows.ts` | Workflow definitions, instances, versions |
 | DNS | `src/services/dns.ts` | DNS record management (zone-scoped) |
+
+### Service-Specific Notes
+
+**Queues:**
+- Use `create`, `get_`, `delete_`, `update` for queue CRUD
+- Create `http_pull` consumer before calling `queuesPullMessages`
+- Message push requires `body` and `content_type` fields
+- Purge status (`get_1`) returns null until a purge is triggered
+
+**R2:**
+- Bucket location enum: API returns uppercase (`WNAM`), spec has lowercase
+- Lifecycle rules: `conditions` object may be empty (no prefix)
+- Fresh buckets have no CORS config (returns `NoCorsConfiguration` error)
 
 ## EXTERNAL REFERENCES
 

@@ -44,13 +44,12 @@ export const ListCatalogsRequest = Schema.Struct({
 ).annotations({ identifier: "ListCatalogsRequest" }) as unknown as Schema.Schema<ListCatalogsRequest>;
 
 export interface ListCatalogsResponse {
-  result: unknown;
+  result: { warehouses: { bucket: string; credential_status?: string; id: string; maintenance_config?: Record<string, unknown>; name: string; status: "active" | "inactive" }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListCatalogsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   warehouses: Schema.Array(Schema.Struct({
   bucket: Schema.String,
   credential_status: Schema.optional(Schema.String),
@@ -58,7 +57,6 @@ export const ListCatalogsResponse = Schema.Struct({
   maintenance_config: Schema.optional(Schema.Struct({})),
   name: Schema.String,
   status: Schema.Literal("active", "inactive")
-}))
 }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -95,20 +93,18 @@ export const GetCatalogDetailsRequest = Schema.Struct({
 ).annotations({ identifier: "GetCatalogDetailsRequest" }) as unknown as Schema.Schema<GetCatalogDetailsRequest>;
 
 export interface GetCatalogDetailsResponse {
-  result: unknown;
+  result: { bucket: string; credential_status?: string; id: string; maintenance_config?: Record<string, unknown>; name: string; status: "active" | "inactive" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetCatalogDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   bucket: Schema.String,
   credential_status: Schema.optional(Schema.String),
   id: Schema.UUID,
   maintenance_config: Schema.optional(Schema.Struct({})),
   name: Schema.String,
   status: Schema.Literal("active", "inactive")
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -148,14 +144,12 @@ export const StoreCredentialsRequest = Schema.Struct({
 ).annotations({ identifier: "StoreCredentialsRequest" }) as unknown as Schema.Schema<StoreCredentialsRequest>;
 
 export interface StoreCredentialsResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const StoreCredentialsResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -190,12 +184,12 @@ export const DisableCatalogRequest = Schema.Struct({
 ).annotations({ identifier: "DisableCatalogRequest" }) as unknown as Schema.Schema<DisableCatalogRequest>;
 
 export interface DisableCatalogResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DisableCatalogResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -230,16 +224,14 @@ export const EnableCatalogRequest = Schema.Struct({
 ).annotations({ identifier: "EnableCatalogRequest" }) as unknown as Schema.Schema<EnableCatalogRequest>;
 
 export interface EnableCatalogResponse {
-  result: unknown;
+  result: { id: string; name: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const EnableCatalogResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   id: Schema.UUID,
   name: Schema.String
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -275,13 +267,12 @@ export const GetMaintenanceConfigRequest = Schema.Struct({
 ).annotations({ identifier: "GetMaintenanceConfigRequest" }) as unknown as Schema.Schema<GetMaintenanceConfigRequest>;
 
 export interface GetMaintenanceConfigResponse {
-  result: unknown;
+  result: { credential_status: "present" | "absent"; maintenance_config: { compaction?: { state: "enabled" | "disabled"; target_size_mb: "64" | "128" | "256" | "512" }; snapshot_expiration?: { max_snapshot_age: string; min_snapshots_to_keep: number; state: "enabled" | "disabled" } } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetMaintenanceConfigResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   credential_status: Schema.Literal("present", "absent"),
   maintenance_config: Schema.Struct({
   compaction: Schema.optional(Schema.Struct({
@@ -294,7 +285,6 @@ export const GetMaintenanceConfigResponse = Schema.Struct({
   state: Schema.Literal("enabled", "disabled")
 }))
 })
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -342,13 +332,12 @@ export const UpdateMaintenanceConfigRequest = Schema.Struct({
 ).annotations({ identifier: "UpdateMaintenanceConfigRequest" }) as unknown as Schema.Schema<UpdateMaintenanceConfigRequest>;
 
 export interface UpdateMaintenanceConfigResponse {
-  result: unknown;
+  result: { compaction?: { state: "enabled" | "disabled"; target_size_mb: "64" | "128" | "256" | "512" }; snapshot_expiration?: { max_snapshot_age: string; min_snapshots_to_keep: number; state: "enabled" | "disabled" } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const UpdateMaintenanceConfigResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   compaction: Schema.optional(Schema.Struct({
   state: Schema.Literal("enabled", "disabled"),
   target_size_mb: Schema.Literal("64", "128", "256", "512")
@@ -357,7 +346,6 @@ export const UpdateMaintenanceConfigResponse = Schema.Struct({
   max_snapshot_age: Schema.String,
   min_snapshots_to_keep: Schema.Number,
   state: Schema.Literal("enabled", "disabled")
-}))
 }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -404,13 +392,12 @@ export const ListNamespacesRequest = Schema.Struct({
 ).annotations({ identifier: "ListNamespacesRequest" }) as unknown as Schema.Schema<ListNamespacesRequest>;
 
 export interface ListNamespacesResponse {
-  result: unknown;
+  result: { details?: { created_at?: string; namespace: string[]; namespace_uuid: string; updated_at?: string }[]; namespace_uuids?: string[]; namespaces: string[][]; next_page_token?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListNamespacesResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   details: Schema.optional(Schema.Array(Schema.Struct({
   created_at: Schema.optional(Schema.Date),
   namespace: Schema.Array(Schema.String),
@@ -420,7 +407,6 @@ export const ListNamespacesResponse = Schema.Struct({
   namespace_uuids: Schema.optional(Schema.Array(Schema.UUID)),
   namespaces: Schema.Array(Schema.Array(Schema.String)),
   next_page_token: Schema.optional(Schema.String)
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -466,13 +452,12 @@ export const ListTablesRequest = Schema.Struct({
 ).annotations({ identifier: "ListTablesRequest" }) as unknown as Schema.Schema<ListTablesRequest>;
 
 export interface ListTablesResponse {
-  result: unknown;
+  result: { details?: { created_at?: string; identifier: { name: string; namespace: string[] }; location?: string; metadata_location?: string; table_uuid: string; updated_at?: string }[]; identifiers: { name: string; namespace: string[] }[]; next_page_token?: string; table_uuids?: string[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListTablesResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   details: Schema.optional(Schema.Array(Schema.Struct({
   created_at: Schema.optional(Schema.Date),
   identifier: Schema.Struct({
@@ -490,7 +475,6 @@ export const ListTablesResponse = Schema.Struct({
 })),
   next_page_token: Schema.optional(Schema.String),
   table_uuids: Schema.optional(Schema.Array(Schema.UUID))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -530,13 +514,12 @@ export const GetTableMaintenanceConfigRequest = Schema.Struct({
 ).annotations({ identifier: "GetTableMaintenanceConfigRequest" }) as unknown as Schema.Schema<GetTableMaintenanceConfigRequest>;
 
 export interface GetTableMaintenanceConfigResponse {
-  result: unknown;
+  result: { maintenance_config: { compaction?: { state: "enabled" | "disabled"; target_size_mb: "64" | "128" | "256" | "512" }; snapshot_expiration?: { max_snapshot_age: string; min_snapshots_to_keep: number; state: "enabled" | "disabled" } } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetTableMaintenanceConfigResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   maintenance_config: Schema.Struct({
   compaction: Schema.optional(Schema.Struct({
   state: Schema.Literal("enabled", "disabled"),
@@ -548,7 +531,6 @@ export const GetTableMaintenanceConfigResponse = Schema.Struct({
   state: Schema.Literal("enabled", "disabled")
 }))
 })
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -600,13 +582,12 @@ export const UpdateTableMaintenanceConfigRequest = Schema.Struct({
 ).annotations({ identifier: "UpdateTableMaintenanceConfigRequest" }) as unknown as Schema.Schema<UpdateTableMaintenanceConfigRequest>;
 
 export interface UpdateTableMaintenanceConfigResponse {
-  result: unknown;
+  result: { compaction?: { state: "enabled" | "disabled"; target_size_mb: "64" | "128" | "256" | "512" }; snapshot_expiration?: { max_snapshot_age: string; min_snapshots_to_keep: number; state: "enabled" | "disabled" } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const UpdateTableMaintenanceConfigResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   compaction: Schema.optional(Schema.Struct({
   state: Schema.Literal("enabled", "disabled"),
   target_size_mb: Schema.Literal("64", "128", "256", "512")
@@ -615,7 +596,6 @@ export const UpdateTableMaintenanceConfigResponse = Schema.Struct({
   max_snapshot_age: Schema.String,
   min_snapshots_to_keep: Schema.Number,
   state: Schema.Literal("enabled", "disabled")
-}))
 }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -664,21 +644,19 @@ export const ListBucketsRequest = Schema.Struct({
 ).annotations({ identifier: "ListBucketsRequest" }) as unknown as Schema.Schema<ListBucketsRequest>;
 
 export interface ListBucketsResponse {
-  result: unknown;
+  result: { buckets?: { creation_date?: string; jurisdiction?: "default" | "eu" | "fedramp"; location?: "APAC" | "EEUR" | "ENAM" | "WEUR" | "WNAM" | "OC" | "apac" | "eeur" | "enam" | "weur" | "wnam" | "oc"; name?: string; storage_class?: "Standard" | "InfrequentAccess" }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListBucketsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   buckets: Schema.optional(Schema.Array(Schema.Struct({
   creation_date: Schema.optional(Schema.String),
   jurisdiction: Schema.optional(Schema.Literal("default", "eu", "fedramp")),
-  location: Schema.optional(Schema.Literal("apac", "eeur", "enam", "weur", "wnam", "oc")),
+  location: Schema.optional(Schema.Literal("APAC", "EEUR", "ENAM", "WEUR", "WNAM", "OC", "apac", "eeur", "enam", "weur", "wnam", "oc")),
   name: Schema.optional(Schema.String),
   storage_class: Schema.optional(Schema.Literal("Standard", "InfrequentAccess"))
 })))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -704,14 +682,14 @@ export const listBuckets: (
 export interface CreateBucketRequest {
   account_id: string;
   "cf-r2-jurisdiction"?: "default" | "eu" | "fedramp";
-  body: { locationHint?: "apac" | "eeur" | "enam" | "weur" | "wnam" | "oc"; name: string; storageClass?: "Standard" | "InfrequentAccess" };
+  body: { locationHint?: "APAC" | "EEUR" | "ENAM" | "WEUR" | "WNAM" | "OC" | "apac" | "eeur" | "enam" | "weur" | "wnam" | "oc"; name: string; storageClass?: "Standard" | "InfrequentAccess" };
 }
 
 export const CreateBucketRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   "cf-r2-jurisdiction": Schema.optional(Schema.Literal("default", "eu", "fedramp")).pipe(T.HttpHeader("cf-r2-jurisdiction")),
   body: Schema.Struct({
-  locationHint: Schema.optional(Schema.Literal("apac", "eeur", "enam", "weur", "wnam", "oc")),
+  locationHint: Schema.optional(Schema.Literal("APAC", "EEUR", "ENAM", "WEUR", "WNAM", "OC", "apac", "eeur", "enam", "weur", "wnam", "oc")),
   name: Schema.String,
   storageClass: Schema.optional(Schema.Literal("Standard", "InfrequentAccess"))
 }).pipe(T.HttpBody())
@@ -720,19 +698,17 @@ export const CreateBucketRequest = Schema.Struct({
 ).annotations({ identifier: "CreateBucketRequest" }) as unknown as Schema.Schema<CreateBucketRequest>;
 
 export interface CreateBucketResponse {
-  result: unknown;
+  result: { creation_date?: string; jurisdiction?: "default" | "eu" | "fedramp"; location?: "APAC" | "EEUR" | "ENAM" | "WEUR" | "WNAM" | "OC" | "apac" | "eeur" | "enam" | "weur" | "wnam" | "oc"; name?: string; storage_class?: "Standard" | "InfrequentAccess" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateBucketResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   creation_date: Schema.optional(Schema.String),
   jurisdiction: Schema.optional(Schema.Literal("default", "eu", "fedramp")),
-  location: Schema.optional(Schema.Literal("apac", "eeur", "enam", "weur", "wnam", "oc")),
+  location: Schema.optional(Schema.Literal("APAC", "EEUR", "ENAM", "WEUR", "WNAM", "OC", "apac", "eeur", "enam", "weur", "wnam", "oc")),
   name: Schema.optional(Schema.String),
   storage_class: Schema.optional(Schema.Literal("Standard", "InfrequentAccess"))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -770,19 +746,17 @@ export const GetBucketRequest = Schema.Struct({
 ).annotations({ identifier: "GetBucketRequest" }) as unknown as Schema.Schema<GetBucketRequest>;
 
 export interface GetBucketResponse {
-  result: unknown;
+  result: { creation_date?: string; jurisdiction?: "default" | "eu" | "fedramp"; location?: "APAC" | "EEUR" | "ENAM" | "WEUR" | "WNAM" | "OC" | "apac" | "eeur" | "enam" | "weur" | "wnam" | "oc"; name?: string; storage_class?: "Standard" | "InfrequentAccess" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetBucketResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   creation_date: Schema.optional(Schema.String),
   jurisdiction: Schema.optional(Schema.Literal("default", "eu", "fedramp")),
-  location: Schema.optional(Schema.Literal("apac", "eeur", "enam", "weur", "wnam", "oc")),
+  location: Schema.optional(Schema.Literal("APAC", "EEUR", "ENAM", "WEUR", "WNAM", "OC", "apac", "eeur", "enam", "weur", "wnam", "oc")),
   name: Schema.optional(Schema.String),
   storage_class: Schema.optional(Schema.Literal("Standard", "InfrequentAccess"))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -820,20 +794,12 @@ export const DeleteBucketRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteBucketRequest" }) as unknown as Schema.Schema<DeleteBucketRequest>;
 
 export interface DeleteBucketResponse {
-  result: { errors: { code: number; message: string }[]; messages: string[]; result: Record<string, unknown>; success: true };
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteBucketResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.String),
   result: Schema.Struct({}),
-  success: Schema.Literal(true)
-}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -872,19 +838,17 @@ export const PatchBucketRequest = Schema.Struct({
 ).annotations({ identifier: "PatchBucketRequest" }) as unknown as Schema.Schema<PatchBucketRequest>;
 
 export interface PatchBucketResponse {
-  result: unknown;
+  result: { creation_date?: string; jurisdiction?: "default" | "eu" | "fedramp"; location?: "APAC" | "EEUR" | "ENAM" | "WEUR" | "WNAM" | "OC" | "apac" | "eeur" | "enam" | "weur" | "wnam" | "oc"; name?: string; storage_class?: "Standard" | "InfrequentAccess" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PatchBucketResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   creation_date: Schema.optional(Schema.String),
   jurisdiction: Schema.optional(Schema.Literal("default", "eu", "fedramp")),
-  location: Schema.optional(Schema.Literal("apac", "eeur", "enam", "weur", "wnam", "oc")),
+  location: Schema.optional(Schema.Literal("APAC", "EEUR", "ENAM", "WEUR", "WNAM", "OC", "apac", "eeur", "enam", "weur", "wnam", "oc")),
   name: Schema.optional(Schema.String),
   storage_class: Schema.optional(Schema.Literal("Standard", "InfrequentAccess"))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -922,13 +886,12 @@ export const GetBucketCorsPolicyRequest = Schema.Struct({
 ).annotations({ identifier: "GetBucketCorsPolicyRequest" }) as unknown as Schema.Schema<GetBucketCorsPolicyRequest>;
 
 export interface GetBucketCorsPolicyResponse {
-  result: unknown;
+  result: { rules?: { allowed: { headers?: string[]; methods: "GET" | "PUT" | "POST" | "DELETE" | "HEAD"[]; origins: string[] }; exposeHeaders?: string[]; id?: string; maxAgeSeconds?: number }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetBucketCorsPolicyResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   rules: Schema.optional(Schema.Array(Schema.Struct({
   allowed: Schema.Struct({
   headers: Schema.optional(Schema.Array(Schema.String)),
@@ -939,7 +902,6 @@ export const GetBucketCorsPolicyResponse = Schema.Struct({
   id: Schema.optional(Schema.String),
   maxAgeSeconds: Schema.optional(Schema.Number)
 })))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -990,7 +952,7 @@ export const PutBucketCorsPolicyRequest = Schema.Struct({
 ).annotations({ identifier: "PutBucketCorsPolicyRequest" }) as unknown as Schema.Schema<PutBucketCorsPolicyRequest>;
 
 export interface PutBucketCorsPolicyResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
@@ -1032,7 +994,7 @@ export const DeleteBucketCorsPolicyRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteBucketCorsPolicyRequest" }) as unknown as Schema.Schema<DeleteBucketCorsPolicyRequest>;
 
 export interface DeleteBucketCorsPolicyResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
@@ -1074,13 +1036,12 @@ export const ListCustomDomainsRequest = Schema.Struct({
 ).annotations({ identifier: "ListCustomDomainsRequest" }) as unknown as Schema.Schema<ListCustomDomainsRequest>;
 
 export interface ListCustomDomainsResponse {
-  result: unknown;
+  result: { domains: { ciphers?: string[]; domain: string; enabled: boolean; minTLS?: "1.0" | "1.1" | "1.2" | "1.3"; status: { ownership: "pending" | "active" | "deactivated" | "blocked" | "error" | "unknown"; ssl: "initializing" | "pending" | "active" | "deactivated" | "error" | "unknown" }; zoneId?: string; zoneName?: string }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListCustomDomainsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   domains: Schema.Array(Schema.Struct({
   ciphers: Schema.optional(Schema.Array(Schema.String)),
   domain: Schema.String,
@@ -1092,7 +1053,6 @@ export const ListCustomDomainsResponse = Schema.Struct({
 }),
   zoneId: Schema.optional(Schema.String),
   zoneName: Schema.optional(Schema.String)
-}))
 }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -1139,18 +1099,16 @@ export const R2AddCustomDomainRequest = Schema.Struct({
 ).annotations({ identifier: "R2AddCustomDomainRequest" }) as unknown as Schema.Schema<R2AddCustomDomainRequest>;
 
 export interface R2AddCustomDomainResponse {
-  result: unknown;
+  result: { ciphers?: string[]; domain: string; enabled: boolean; minTLS?: "1.0" | "1.1" | "1.2" | "1.3" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const R2AddCustomDomainResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   ciphers: Schema.optional(Schema.Array(Schema.String)),
   domain: Schema.String,
   enabled: Schema.Boolean,
   minTLS: Schema.optional(Schema.Literal("1.0", "1.1", "1.2", "1.3"))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1196,7 +1154,6 @@ export interface GetCustomDomainSettingsResponse {
 
 export const GetCustomDomainSettingsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   ciphers: Schema.optional(Schema.Array(Schema.String)),
   domain: Schema.String,
   enabled: Schema.Boolean,
@@ -1207,7 +1164,6 @@ export const GetCustomDomainSettingsResponse = Schema.Struct({
 }),
   zoneId: Schema.optional(Schema.String),
   zoneName: Schema.optional(Schema.String)
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1259,12 +1215,10 @@ export interface R2EditCustomDomainSettingsResponse {
 
 export const R2EditCustomDomainSettingsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   ciphers: Schema.optional(Schema.Array(Schema.String)),
   domain: Schema.String,
   enabled: Schema.optional(Schema.Boolean),
   minTLS: Schema.optional(Schema.Literal("1.0", "1.1", "1.2", "1.3"))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1304,15 +1258,13 @@ export const DeleteCustomDomainRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteCustomDomainRequest" }) as unknown as Schema.Schema<DeleteCustomDomainRequest>;
 
 export interface DeleteCustomDomainResponse {
-  result: unknown;
+  result: { domain: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteCustomDomainResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   domain: Schema.String
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1350,17 +1302,15 @@ export const GetBucketPublicPolicyRequest = Schema.Struct({
 ).annotations({ identifier: "GetBucketPublicPolicyRequest" }) as unknown as Schema.Schema<GetBucketPublicPolicyRequest>;
 
 export interface GetBucketPublicPolicyResponse {
-  result: unknown;
+  result: { bucketId: string; domain: string; enabled: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetBucketPublicPolicyResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   bucketId: Schema.String,
   domain: Schema.String,
   enabled: Schema.Boolean
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1402,17 +1352,15 @@ export const PutBucketPublicPolicyRequest = Schema.Struct({
 ).annotations({ identifier: "PutBucketPublicPolicyRequest" }) as unknown as Schema.Schema<PutBucketPublicPolicyRequest>;
 
 export interface PutBucketPublicPolicyResponse {
-  result: unknown;
+  result: { bucketId: string; domain: string; enabled: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PutBucketPublicPolicyResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   bucketId: Schema.String,
   domain: Schema.String,
   enabled: Schema.Boolean
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1450,13 +1398,12 @@ export const GetBucketLifecycleConfigurationRequest = Schema.Struct({
 ).annotations({ identifier: "GetBucketLifecycleConfigurationRequest" }) as unknown as Schema.Schema<GetBucketLifecycleConfigurationRequest>;
 
 export interface GetBucketLifecycleConfigurationResponse {
-  result: unknown;
+  result: { rules?: unknown[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetBucketLifecycleConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   rules: Schema.optional(Schema.Array(Schema.Struct({
   abortMultipartUploadsTransition: Schema.optional(Schema.Struct({
   condition: Schema.optional(Schema.Struct({
@@ -1464,9 +1411,9 @@ export const GetBucketLifecycleConfigurationResponse = Schema.Struct({
   type: Schema.Literal("Age")
 }))
 })),
-  conditions: Schema.Struct({
-  prefix: Schema.String
-}),
+  conditions: Schema.optional(Schema.Struct({
+  prefix: Schema.optional(Schema.String)
+})),
   deleteObjectsTransition: Schema.optional(Schema.Struct({
   condition: Schema.optional(Schema.Union(Schema.Struct({
   maxAge: Schema.Number,
@@ -1489,7 +1436,6 @@ export const GetBucketLifecycleConfigurationResponse = Schema.Struct({
   storageClass: Schema.Literal("InfrequentAccess")
 })))
 })))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1516,7 +1462,7 @@ export interface PutBucketLifecycleConfigurationRequest {
   bucket_name: string;
   account_id: string;
   "cf-r2-jurisdiction"?: "default" | "eu" | "fedramp";
-  body: { rules?: { abortMultipartUploadsTransition?: { condition?: unknown }; conditions: { prefix: string }; deleteObjectsTransition?: { condition?: unknown }; enabled: boolean; id: string; storageClassTransitions?: unknown[] }[] };
+  body: { rules?: { abortMultipartUploadsTransition?: { condition?: { maxAge: number; type: "Age" } }; conditions?: { prefix?: string }; deleteObjectsTransition?: { condition?: unknown }; enabled: boolean; id: string; storageClassTransitions?: { condition: unknown; storageClass: "InfrequentAccess" }[] }[] };
 }
 
 export const PutBucketLifecycleConfigurationRequest = Schema.Struct({
@@ -1531,9 +1477,9 @@ export const PutBucketLifecycleConfigurationRequest = Schema.Struct({
   type: Schema.Literal("Age")
 }))
 })),
-  conditions: Schema.Struct({
-  prefix: Schema.String
-}),
+  conditions: Schema.optional(Schema.Struct({
+  prefix: Schema.optional(Schema.String)
+})),
   deleteObjectsTransition: Schema.optional(Schema.Struct({
   condition: Schema.optional(Schema.Union(Schema.Struct({
   maxAge: Schema.Number,
@@ -1562,7 +1508,7 @@ export const PutBucketLifecycleConfigurationRequest = Schema.Struct({
 ).annotations({ identifier: "PutBucketLifecycleConfigurationRequest" }) as unknown as Schema.Schema<PutBucketLifecycleConfigurationRequest>;
 
 export interface PutBucketLifecycleConfigurationResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
@@ -1604,13 +1550,12 @@ export const GetBucketLockConfigurationRequest = Schema.Struct({
 ).annotations({ identifier: "GetBucketLockConfigurationRequest" }) as unknown as Schema.Schema<GetBucketLockConfigurationRequest>;
 
 export interface GetBucketLockConfigurationResponse {
-  result: unknown;
+  result: { rules?: unknown[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetBucketLockConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   rules: Schema.optional(Schema.Array(Schema.Struct({
   condition: Schema.Union(Schema.Struct({
   maxAgeSeconds: Schema.Number,
@@ -1625,7 +1570,6 @@ export const GetBucketLockConfigurationResponse = Schema.Struct({
   id: Schema.String,
   prefix: Schema.optional(Schema.String)
 })))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1680,7 +1624,7 @@ export const PutBucketLockConfigurationRequest = Schema.Struct({
 ).annotations({ identifier: "PutBucketLockConfigurationRequest" }) as unknown as Schema.Schema<PutBucketLockConfigurationRequest>;
 
 export interface PutBucketLockConfigurationResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
@@ -1722,13 +1666,12 @@ export const GetBucketSippyConfigRequest = Schema.Struct({
 ).annotations({ identifier: "GetBucketSippyConfigRequest" }) as unknown as Schema.Schema<GetBucketSippyConfigRequest>;
 
 export interface GetBucketSippyConfigResponse {
-  result: unknown;
+  result: { destination?: { accessKeyId?: string; account?: string; bucket?: string; provider?: "r2" }; enabled?: boolean; source?: { bucket?: string; bucketUrl?: string; provider?: "aws" | "gcs" | "s3"; region?: string } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetBucketSippyConfigResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   destination: Schema.optional(Schema.Struct({
   accessKeyId: Schema.optional(Schema.String),
   account: Schema.optional(Schema.String),
@@ -1741,7 +1684,6 @@ export const GetBucketSippyConfigResponse = Schema.Struct({
   bucketUrl: Schema.optional(Schema.String),
   provider: Schema.optional(Schema.Literal("aws", "gcs", "s3")),
   region: Schema.optional(Schema.String)
-}))
 }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -1782,13 +1724,12 @@ export const PutBucketSippyConfigRequest = Schema.Struct({
 ).annotations({ identifier: "PutBucketSippyConfigRequest" }) as unknown as Schema.Schema<PutBucketSippyConfigRequest>;
 
 export interface PutBucketSippyConfigResponse {
-  result: unknown;
+  result: { destination?: { accessKeyId?: string; account?: string; bucket?: string; provider?: "r2" }; enabled?: boolean; source?: { bucket?: string; bucketUrl?: string; provider?: "aws" | "gcs" | "s3"; region?: string } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PutBucketSippyConfigResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   destination: Schema.optional(Schema.Struct({
   accessKeyId: Schema.optional(Schema.String),
   account: Schema.optional(Schema.String),
@@ -1801,7 +1742,6 @@ export const PutBucketSippyConfigResponse = Schema.Struct({
   bucketUrl: Schema.optional(Schema.String),
   provider: Schema.optional(Schema.Literal("aws", "gcs", "s3")),
   region: Schema.optional(Schema.String)
-}))
 }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -1840,15 +1780,13 @@ export const DeleteBucketSippyConfigRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteBucketSippyConfigRequest" }) as unknown as Schema.Schema<DeleteBucketSippyConfigRequest>;
 
 export interface DeleteBucketSippyConfigResponse {
-  result: unknown;
+  result: { enabled?: false };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteBucketSippyConfigResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   enabled: Schema.optional(Schema.Literal(false))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1882,13 +1820,12 @@ export const GetAccountLevelMetricsRequest = Schema.Struct({
 ).annotations({ identifier: "GetAccountLevelMetricsRequest" }) as unknown as Schema.Schema<GetAccountLevelMetricsRequest>;
 
 export interface GetAccountLevelMetricsResponse {
-  result: unknown;
+  result: { infrequentAccess?: { published?: { metadataSize?: number; objects?: number; payloadSize?: number }; uploaded?: { metadataSize?: number; objects?: number; payloadSize?: number } }; standard?: { published?: { metadataSize?: number; objects?: number; payloadSize?: number }; uploaded?: { metadataSize?: number; objects?: number; payloadSize?: number } } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetAccountLevelMetricsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   infrequentAccess: Schema.optional(Schema.Struct({
   published: Schema.optional(Schema.Struct({
   metadataSize: Schema.optional(Schema.Number),
@@ -1911,7 +1848,6 @@ export const GetAccountLevelMetricsResponse = Schema.Struct({
   metadataSize: Schema.optional(Schema.Number),
   objects: Schema.optional(Schema.Number),
   payloadSize: Schema.optional(Schema.Number)
-}))
 }))
 }))
 }),
@@ -1956,17 +1892,15 @@ export const CreateTempAccessCredentialsRequest = Schema.Struct({
 ).annotations({ identifier: "CreateTempAccessCredentialsRequest" }) as unknown as Schema.Schema<CreateTempAccessCredentialsRequest>;
 
 export interface CreateTempAccessCredentialsResponse {
-  result: unknown;
+  result: { accessKeyId?: string; secretAccessKey?: string; sessionToken?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateTempAccessCredentialsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   accessKeyId: Schema.optional(Schema.String),
   secretAccessKey: Schema.optional(Schema.String),
   sessionToken: Schema.optional(Schema.String)
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

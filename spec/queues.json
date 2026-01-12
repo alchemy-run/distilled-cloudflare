@@ -1,16 +1,21 @@
 {
   "operations": {
-    "listQueues": { "errors": [] },
-    "createQueue": { "errors": ["InvalidQueueName", "ValidationError"] },
-    "getQueue": { "errors": ["QueueNotFound"] },
-    "updateQueue": { "errors": ["QueueNotFound", "InvalidQueueName", "ValidationError"] },
-    "deleteQueue": { "errors": ["QueueNotFound"] },
-    "sendMessages": { "errors": ["QueueNotFound", "ValidationError"] },
-    "pullMessages": { "errors": ["QueueNotFound"] },
-    "ackMessages": { "errors": ["QueueNotFound", "ValidationError"] },
+    "list": { "errors": [] },
+    "create": { "errors": ["InvalidQueueName", "ValidationError", "QueueAlreadyExists"] },
+    "get_": { "errors": ["QueueNotFound"] },
+    "update": { "errors": ["QueueNotFound", "InvalidQueueName", "ValidationError"] },
+    "delete_": { "errors": ["QueueNotFound"] },
+    "updatePartial": { "errors": ["QueueNotFound", "InvalidQueueName", "ValidationError"] },
     "listConsumers": { "errors": ["QueueNotFound"] },
     "createConsumer": { "errors": ["QueueNotFound", "ValidationError", "NoSuchKey"] },
+    "getConsumer": { "errors": ["QueueNotFound"] },
     "updateConsumer": { "errors": ["QueueNotFound", "ValidationError"] },
-    "deleteConsumer": { "errors": ["QueueNotFound"] }
+    "deleteConsumer": { "errors": ["QueueNotFound"] },
+    "queuesPushMessage": { "errors": ["QueueNotFound", "ValidationError"] },
+    "queuesAckMessages": { "errors": ["QueueNotFound", "ValidationError"] },
+    "queuesPushMessages": { "errors": ["QueueNotFound", "ValidationError"] },
+    "queuesPullMessages": { "errors": ["QueueNotFound"] },
+    "getpurgestatus": { "errors": ["QueueNotFound"] },
+    "queuesPurge": { "errors": ["QueueNotFound"] }
   }
 }

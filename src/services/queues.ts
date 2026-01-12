@@ -19,9 +19,11 @@ import {
 } from "../errors.ts";
 import {
   AuthenticationError,
+  InvalidQueueName,
   InvalidToken,
   MissingToken,
   NoSuchKey,
+  QueueAlreadyExists,
   QueueNotFound,
   RateLimited,
   TokenExpired,
@@ -41,12 +43,26 @@ export const ListRequest = Schema.Struct({
 ).annotations({ identifier: "ListRequest" }) as unknown as Schema.Schema<ListRequest>;
 
 export interface ListResponse {
-  result: Record<string, unknown>;
+  result: { consumers?: Record<string, unknown>[]; consumers_total_count?: number; created_on?: string; modified_on?: string; producers?: Record<string, unknown>[]; producers_total_count?: number; queue_id?: string; queue_name?: string; settings?: { delivery_delay?: number; delivery_paused?: boolean; message_retention_period?: number } }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Array(Schema.Struct({
+  consumers: Schema.optional(Schema.Array(Schema.Struct({}))),
+  consumers_total_count: Schema.optional(Schema.Number),
+  created_on: Schema.optional(Schema.String),
+  modified_on: Schema.optional(Schema.String),
+  producers: Schema.optional(Schema.Array(Schema.Struct({}))),
+  producers_total_count: Schema.optional(Schema.Number),
+  queue_id: Schema.optional(Schema.String),
+  queue_name: Schema.optional(Schema.String),
+  settings: Schema.optional(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.Number),
+  delivery_paused: Schema.optional(Schema.Boolean),
+  message_retention_period: Schema.optional(Schema.Number)
+}))
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -83,12 +99,26 @@ export const CreateRequest = Schema.Struct({
 ).annotations({ identifier: "CreateRequest" }) as unknown as Schema.Schema<CreateRequest>;
 
 export interface CreateResponse {
-  result: Record<string, unknown>;
+  result: { consumers?: Record<string, unknown>[]; consumers_total_count?: number; created_on?: string; modified_on?: string; producers?: Record<string, unknown>[]; producers_total_count?: number; queue_id?: string; queue_name?: string; settings?: { delivery_delay?: number; delivery_paused?: boolean; message_retention_period?: number } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  consumers: Schema.optional(Schema.Array(Schema.Struct({}))),
+  consumers_total_count: Schema.optional(Schema.Number),
+  created_on: Schema.optional(Schema.String),
+  modified_on: Schema.optional(Schema.String),
+  producers: Schema.optional(Schema.Array(Schema.Struct({}))),
+  producers_total_count: Schema.optional(Schema.Number),
+  queue_id: Schema.optional(Schema.String),
+  queue_name: Schema.optional(Schema.String),
+  settings: Schema.optional(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.Number),
+  delivery_paused: Schema.optional(Schema.Boolean),
+  message_retention_period: Schema.optional(Schema.Number)
+}))
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -102,12 +132,12 @@ export const create: (
   input: CreateRequest
 ) => Effect.Effect<
   CreateResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | InvalidQueueName | ValidationError | QueueAlreadyExists | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: CreateRequest,
   output: CreateResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, InvalidQueueName, ValidationError, QueueAlreadyExists],
 }));
 
 export interface Get_Request {
@@ -123,12 +153,26 @@ export const Get_Request = Schema.Struct({
 ).annotations({ identifier: "Get_Request" }) as unknown as Schema.Schema<Get_Request>;
 
 export interface Get_Response {
-  result: Record<string, unknown>;
+  result: { consumers?: Record<string, unknown>[]; consumers_total_count?: number; created_on?: string; modified_on?: string; producers?: Record<string, unknown>[]; producers_total_count?: number; queue_id?: string; queue_name?: string; settings?: { delivery_delay?: number; delivery_paused?: boolean; message_retention_period?: number } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const Get_Response = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  consumers: Schema.optional(Schema.Array(Schema.Struct({}))),
+  consumers_total_count: Schema.optional(Schema.Number),
+  created_on: Schema.optional(Schema.String),
+  modified_on: Schema.optional(Schema.String),
+  producers: Schema.optional(Schema.Array(Schema.Struct({}))),
+  producers_total_count: Schema.optional(Schema.Number),
+  queue_id: Schema.optional(Schema.String),
+  queue_name: Schema.optional(Schema.String),
+  settings: Schema.optional(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.Number),
+  delivery_paused: Schema.optional(Schema.Boolean),
+  message_retention_period: Schema.optional(Schema.Number)
+}))
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -142,12 +186,12 @@ export const get_: (
   input: Get_Request
 ) => Effect.Effect<
   Get_Response,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: Get_Request,
   output: Get_Response,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound],
 }));
 
 export interface UpdateRequest {
@@ -198,12 +242,12 @@ export const update: (
   input: UpdateRequest
 ) => Effect.Effect<
   UpdateResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | InvalidQueueName | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: UpdateRequest,
   output: UpdateResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound, InvalidQueueName, ValidationError],
 }));
 
 export interface Delete_Request {
@@ -219,19 +263,12 @@ export const Delete_Request = Schema.Struct({
 ).annotations({ identifier: "Delete_Request" }) as unknown as Schema.Schema<Delete_Request>;
 
 export interface Delete_Response {
-  result: { errors?: { code: number; message: string }[]; messages?: string[]; success?: true };
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const Delete_Response = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.optional(Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-}))),
-  messages: Schema.optional(Schema.Array(Schema.String)),
-  success: Schema.optional(Schema.Literal(true))
-}),
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -245,12 +282,12 @@ export const delete_: (
   input: Delete_Request
 ) => Effect.Effect<
   Delete_Response,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: Delete_Request,
   output: Delete_Response,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound],
 }));
 
 export interface UpdatePartialRequest {
@@ -301,12 +338,12 @@ export const updatePartial: (
   input: UpdatePartialRequest
 ) => Effect.Effect<
   UpdatePartialResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | InvalidQueueName | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: UpdatePartialRequest,
   output: UpdatePartialResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound, InvalidQueueName, ValidationError],
 }));
 
 export interface ListConsumersRequest {
@@ -322,12 +359,12 @@ export const ListConsumersRequest = Schema.Struct({
 ).annotations({ identifier: "ListConsumersRequest" }) as unknown as Schema.Schema<ListConsumersRequest>;
 
 export interface ListConsumersResponse {
-  result: Record<string, unknown>;
+  result: Record<string, unknown>[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListConsumersResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Array(Schema.Struct({})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -425,12 +462,12 @@ export const getConsumer: (
   input: GetConsumerRequest
 ) => Effect.Effect<
   GetConsumerResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetConsumerRequest,
   output: GetConsumerResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound],
 }));
 
 export interface UpdateConsumerRequest {
@@ -492,19 +529,12 @@ export const DeleteConsumerRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteConsumerRequest" }) as unknown as Schema.Schema<DeleteConsumerRequest>;
 
 export interface DeleteConsumerResponse {
-  result: { errors?: { code: number; message: string }[]; messages?: string[]; success?: true };
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteConsumerResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.optional(Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-}))),
-  messages: Schema.optional(Schema.Array(Schema.String)),
-  success: Schema.optional(Schema.Literal(true))
-}),
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -543,19 +573,12 @@ export const QueuesPushMessageRequest = Schema.Struct({
 ).annotations({ identifier: "QueuesPushMessageRequest" }) as unknown as Schema.Schema<QueuesPushMessageRequest>;
 
 export interface QueuesPushMessageResponse {
-  result: { errors?: { code: number; message: string }[]; messages?: string[]; success?: true };
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const QueuesPushMessageResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.optional(Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-}))),
-  messages: Schema.optional(Schema.Array(Schema.String)),
-  success: Schema.optional(Schema.Literal(true))
-}),
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -569,12 +592,12 @@ export const queuesPushMessage: (
   input: QueuesPushMessageRequest
 ) => Effect.Effect<
   QueuesPushMessageResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPushMessageRequest,
   output: QueuesPushMessageResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound, ValidationError],
 }));
 
 export interface QueuesAckMessagesRequest {
@@ -600,12 +623,16 @@ export const QueuesAckMessagesRequest = Schema.Struct({
 ).annotations({ identifier: "QueuesAckMessagesRequest" }) as unknown as Schema.Schema<QueuesAckMessagesRequest>;
 
 export interface QueuesAckMessagesResponse {
-  result: Record<string, unknown>;
+  result: { ackCount?: number; retryCount?: number; warnings?: string[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const QueuesAckMessagesResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  ackCount: Schema.optional(Schema.Number),
+  retryCount: Schema.optional(Schema.Number),
+  warnings: Schema.optional(Schema.Array(Schema.String))
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -619,12 +646,12 @@ export const queuesAckMessages: (
   input: QueuesAckMessagesRequest
 ) => Effect.Effect<
   QueuesAckMessagesResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesAckMessagesRequest,
   output: QueuesAckMessagesResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound, ValidationError],
 }));
 
 export interface QueuesPushMessagesRequest {
@@ -647,19 +674,12 @@ export const QueuesPushMessagesRequest = Schema.Struct({
 ).annotations({ identifier: "QueuesPushMessagesRequest" }) as unknown as Schema.Schema<QueuesPushMessagesRequest>;
 
 export interface QueuesPushMessagesResponse {
-  result: { errors?: { code: number; message: string }[]; messages?: string[]; success?: true };
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const QueuesPushMessagesResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.optional(Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-}))),
-  messages: Schema.optional(Schema.Array(Schema.String)),
-  success: Schema.optional(Schema.Literal(true))
-}),
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -673,12 +693,12 @@ export const queuesPushMessages: (
   input: QueuesPushMessagesRequest
 ) => Effect.Effect<
   QueuesPushMessagesResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPushMessagesRequest,
   output: QueuesPushMessagesResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound, ValidationError],
 }));
 
 export interface QueuesPullMessagesRequest {
@@ -699,12 +719,22 @@ export const QueuesPullMessagesRequest = Schema.Struct({
 ).annotations({ identifier: "QueuesPullMessagesRequest" }) as unknown as Schema.Schema<QueuesPullMessagesRequest>;
 
 export interface QueuesPullMessagesResponse {
-  result: Record<string, unknown>;
+  result: { message_backlog_count?: number; messages?: { attempts?: number; body?: string; id?: string; lease_id?: string; metadata?: Record<string, unknown>; timestamp_ms?: number }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const QueuesPullMessagesResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  message_backlog_count: Schema.optional(Schema.Number),
+  messages: Schema.optional(Schema.Array(Schema.Struct({
+  attempts: Schema.optional(Schema.Number),
+  body: Schema.optional(Schema.String),
+  id: Schema.optional(Schema.String),
+  lease_id: Schema.optional(Schema.String),
+  metadata: Schema.optional(Schema.Struct({})),
+  timestamp_ms: Schema.optional(Schema.Number)
+})))
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -718,12 +748,12 @@ export const queuesPullMessages: (
   input: QueuesPullMessagesRequest
 ) => Effect.Effect<
   QueuesPullMessagesResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPullMessagesRequest,
   output: QueuesPullMessagesResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound],
 }));
 
 export interface Get_1Request {
@@ -739,12 +769,15 @@ export const Get_1Request = Schema.Struct({
 ).annotations({ identifier: "Get_1Request" }) as unknown as Schema.Schema<Get_1Request>;
 
 export interface Get_1Response {
-  result: Record<string, unknown>;
+  result: { completed?: string; started_at?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const Get_1Response = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  completed: Schema.optional(Schema.String),
+  started_at: Schema.optional(Schema.String)
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -802,10 +835,10 @@ export const queuesPurge: (
   input: QueuesPurgeRequest
 ) => Effect.Effect<
   QueuesPurgeResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPurgeRequest,
   output: QueuesPurgeResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound],
 }));

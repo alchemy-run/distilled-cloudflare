@@ -10,7 +10,11 @@ import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";
 import { test, getAccountId } from "../test.ts";
 import * as Queues from "../../src/services/queues.ts";
-import { QueueNotFound } from "../../src/errors/generated.ts";
+import {
+  QueueNotFound,
+  QueueAlreadyExists,
+  InvalidQueueName,
+} from "../../src/errors/generated.ts";
 
 const accountId = () => getAccountId();
 
@@ -20,9 +24,8 @@ const findQueueByName = (name: string) =>
     const response = yield* Queues.list({
       account_id: accountId(),
     });
-    // The result structure may vary, handle accordingly
-    const result = response.result as { queues?: Array<{ queue_id: string; queue_name: string }> };
-    const queues = result.queues ?? [];
+    // The result is directly an array of queues
+    const queues = response.result as Array<{ queue_id: string; queue_name: string }>;
     return queues.find((q) => q.queue_name === name);
   });
 
@@ -120,6 +123,7 @@ describe("Queues", () => {
             account_id: accountId(),
             queue_id: queueId,
             body: {
+              queue_name: "itty-cf-queues-update",
               settings: {
                 delivery_delay: 10,
               },
@@ -173,14 +177,27 @@ describe("Queues", () => {
     test("push and pull messages", () =>
       withQueue("itty-cf-queues-messages", (queueId) =>
         Effect.gen(function* () {
+          // First create an http_pull consumer to enable pulling
+          yield* Queues.createConsumer({
+            account_id: accountId(),
+            queue_id: queueId,
+            body: {
+              type: "http_pull",
+              settings: {
+                batch_size: 10,
+                visibility_timeout_ms: 30000,
+              },
+            },
+          });
+
           // Push a batch of messages
           const pushResponse = yield* Queues.queuesPushMessages({
             account_id: accountId(),
             queue_id: queueId,
             body: {
               messages: [
-                { delay_seconds: 0 },
-                { delay_seconds: 0 },
+                { body: "message 1", content_type: "text" },
+                { body: "message 2", content_type: "text" },
               ],
             },
           });
@@ -206,7 +223,8 @@ describe("Queues", () => {
             account_id: accountId(),
             queue_id: queueId,
             body: {
-              delay_seconds: 0,
+              body: "test message",
+              content_type: "text",
             },
           });
           expect(response.result).toBeDefined();
@@ -218,11 +236,26 @@ describe("Queues", () => {
     test("get purge status", () =>
       withQueue("itty-cf-queues-purge-status", (queueId) =>
         Effect.gen(function* () {
+          // First push a message and trigger a purge
+          yield* Queues.queuesPushMessage({
+            account_id: accountId(),
+            queue_id: queueId,
+            body: { body: "message to purge", content_type: "text" },
+          });
+
+          yield* Queues.queuesPurge({
+            account_id: accountId(),
+            queue_id: queueId,
+            body: { delete_messages_permanently: true },
+          });
+
+          // Now get purge status - get_1 is the generated name for queues-purge-get
           const response = yield* Queues.get_1({
             account_id: accountId(),
             queue_id: queueId,
           });
           expect(response.result).toBeDefined();
+          expect(response.result.started_at).toBeDefined();
         }),
       ));
 
@@ -234,7 +267,7 @@ describe("Queues", () => {
             account_id: accountId(),
             queue_id: queueId,
             body: {
-              messages: [{ delay_seconds: 0 }],
+              messages: [{ body: "message to purge", content_type: "text" }],
             },
           });
 
@@ -254,37 +287,108 @@ describe("Queues", () => {
   describe("Error Handling", () => {
     test("QueueNotFound error when listing consumers for non-existent queue", () =>
       Effect.gen(function* () {
-        const result = yield* Queues.listConsumers({
+        yield* Queues.listConsumers({
           account_id: accountId(),
           queue_id: "00000000-0000-0000-0000-000000000000",
-        }).pipe(Effect.exit);
-
-        expect(Exit.isFailure(result)).toBe(true);
-        if (Exit.isFailure(result)) {
-          const error = result.cause;
-          if ("_tag" in error && error._tag === "Fail") {
-            const failure = error as { error: unknown };
-            expect(failure.error).toBeInstanceOf(QueueNotFound);
-          }
-        }
+        }).pipe(
+          Effect.matchEffect({
+            onSuccess: () => Effect.die("Expected QueueNotFound error"),
+            onFailure: (error) =>
+              Effect.gen(function* () {
+                expect(error).toBeInstanceOf(QueueNotFound);
+                expect((error as QueueNotFound).code).toBe(11000);
+              }),
+          }),
+        );
       }));
 
     test("QueueNotFound error when deleting consumer from non-existent queue", () =>
       Effect.gen(function* () {
-        const result = yield* Queues.deleteConsumer({
+        yield* Queues.deleteConsumer({
           account_id: accountId(),
           queue_id: "00000000-0000-0000-0000-000000000000",
           consumer_id: "00000000-0000-0000-0000-000000000000",
-        }).pipe(Effect.exit);
+        }).pipe(
+          Effect.matchEffect({
+            onSuccess: () => Effect.die("Expected QueueNotFound error"),
+            onFailure: (error) =>
+              Effect.gen(function* () {
+                expect(error).toBeInstanceOf(QueueNotFound);
+                expect((error as QueueNotFound).code).toBe(11000);
+              }),
+          }),
+        );
+      }));
 
-        expect(Exit.isFailure(result)).toBe(true);
-        if (Exit.isFailure(result)) {
-          const error = result.cause;
-          if ("_tag" in error && error._tag === "Fail") {
-            const failure = error as { error: unknown };
-            expect(failure.error).toBeInstanceOf(QueueNotFound);
-          }
-        }
+    test("QueueNotFound error when getting non-existent queue", () =>
+      Effect.gen(function* () {
+        yield* Queues.get_({
+          account_id: accountId(),
+          queue_id: "00000000-0000-0000-0000-000000000000",
+        }).pipe(
+          Effect.matchEffect({
+            onSuccess: () => Effect.die("Expected QueueNotFound error"),
+            onFailure: (error) =>
+              Effect.gen(function* () {
+                expect(error).toBeInstanceOf(QueueNotFound);
+                expect((error as QueueNotFound).code).toBe(11000);
+              }),
+          }),
+        );
+      }));
+
+    test("QueueAlreadyExists error when creating duplicate queue", () =>
+      withQueue("itty-cf-queues-duplicate", () =>
+        Effect.gen(function* () {
+          // Try to create the same queue again
+          yield* Queues.create({
+            account_id: accountId(),
+            body: { queue_name: "itty-cf-queues-duplicate" },
+          }).pipe(
+            Effect.matchEffect({
+              onSuccess: () => Effect.die("Expected QueueAlreadyExists error"),
+              onFailure: (error) =>
+                Effect.gen(function* () {
+                  expect(error).toBeInstanceOf(QueueAlreadyExists);
+                  expect((error as QueueAlreadyExists).code).toBe(11009);
+                }),
+            }),
+          );
+        }),
+      ));
+
+    test("InvalidQueueName error when creating queue with invalid name", () =>
+      Effect.gen(function* () {
+        yield* Queues.create({
+          account_id: accountId(),
+          body: { queue_name: "" },
+        }).pipe(
+          Effect.matchEffect({
+            onSuccess: () => Effect.die("Expected InvalidQueueName error"),
+            onFailure: (error) =>
+              Effect.gen(function* () {
+                expect(error).toBeInstanceOf(InvalidQueueName);
+                expect((error as InvalidQueueName).code).toBe(11003);
+              }),
+          }),
+        );
+      }));
+
+    test("InvalidQueueName error when creating queue with special characters", () =>
+      Effect.gen(function* () {
+        yield* Queues.create({
+          account_id: accountId(),
+          body: { queue_name: "invalid!queue@name" },
+        }).pipe(
+          Effect.matchEffect({
+            onSuccess: () => Effect.die("Expected InvalidQueueName error"),
+            onFailure: (error) =>
+              Effect.gen(function* () {
+                expect(error).toBeInstanceOf(InvalidQueueName);
+                expect((error as InvalidQueueName).code).toBe(11003);
+              }),
+          }),
+        );
       }));
   });
 });

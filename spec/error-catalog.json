@@ -59,7 +59,8 @@
     "10073": { "name": "BucketConflict", "category": "ConflictError" },
     "100100": { "name": "EntityTooLarge", "category": "BadRequestError" },
     "11000": { "name": "QueueNotFound", "category": "NotFoundError" },
-    "11003": { "name": "InvalidQueueName", "category": "BadRequestError" }
+    "11003": { "name": "InvalidQueueName", "category": "BadRequestError" },
+    "11009": { "name": "QueueAlreadyExists", "category": "ConflictError" }
   },
   "patterns": [
     { "regex": "not found", "name": "NotFound", "category": "NotFoundError" },

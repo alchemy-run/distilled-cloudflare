@@ -543,6 +543,16 @@ export class BucketConflict extends Schema.TaggedError<BucketConflict>()("Bucket
   static readonly code = 10073;
 }
 
+/**
+ * Cloudflare error code 11009: QueueAlreadyExists
+ */
+export class QueueAlreadyExists extends Schema.TaggedError<QueueAlreadyExists>()("QueueAlreadyExists", {
+  code: Schema.Literal(11009),
+  message: Schema.String,
+}) {
+  static readonly code = 11009;
+}
+
 // =============================================================================
 // ThrottlingError
 // =============================================================================
@@ -618,11 +628,11 @@ export class ServiceUnavailable extends Schema.TaggedError<ServiceUnavailable>()
 export type AuthErrors = Unauthorized | InvalidToken | MissingToken | TokenExpired | AuthenticationError | Unauthorized_10002 | AccessDenied | NotEntitled | ExpiredRequest | NotEntitled_10042;
 export type BadRequestErrors = InvalidRequest | InvalidFormat | InvalidType | InvalidMethod | InvalidBucketName | EntityTooSmall | MetadataTooLarge | IncompleteBody | InvalidDigest | InvalidWorkerName | NamespaceNameRequired | InvalidObjectName | ValidationError | InvalidPart | InvalidRequestBody | WorkerSizeLimitExceeded | MissingContentLength | BadDigest | InvalidRange | BucketNameRequired | InvalidPartSize | BindingNameRequired | EnvVarSizeExceeded | EnvVarCountExceeded | NoEventHandlers | UnsupportedEventHandlers | InvalidQueueName | EntityTooLarge;
 export type NotFoundErrors = InvalidZone | RecordNotFound | NoRouteForURI | NoRoute | NoSuchBucket | NoSuchKey | NoSuchUpload | BindingNotFound | NoCorsConfiguration | QueueNotFound;
-export type ConflictErrors = BucketNotEmpty | PreconditionFailed | ConcurrentModification | BucketConflict;
+export type ConflictErrors = BucketNotEmpty | PreconditionFailed | ConcurrentModification | BucketConflict | QueueAlreadyExists;
 export type ThrottlingErrors = RateLimited | TooManyRequests | TooManyBuckets | TooManyRequests_10058;
 export type ServerErrors = InternalError | ServiceUnavailable;
 
-export type CloudflareKnownError = Unauthorized | InvalidToken | MissingToken | TokenExpired | AuthenticationError | Unauthorized_10002 | AccessDenied | NotEntitled | ExpiredRequest | NotEntitled_10042 | InvalidRequest | InvalidFormat | InvalidType | InvalidMethod | InvalidBucketName | EntityTooSmall | MetadataTooLarge | IncompleteBody | InvalidDigest | InvalidWorkerName | NamespaceNameRequired | InvalidObjectName | ValidationError | InvalidPart | InvalidRequestBody | WorkerSizeLimitExceeded | MissingContentLength | BadDigest | InvalidRange | BucketNameRequired | InvalidPartSize | BindingNameRequired | EnvVarSizeExceeded | EnvVarCountExceeded | NoEventHandlers | UnsupportedEventHandlers | InvalidQueueName | EntityTooLarge | InvalidZone | RecordNotFound | NoRouteForURI | NoRoute | NoSuchBucket | NoSuchKey | NoSuchUpload | BindingNotFound | NoCorsConfiguration | QueueNotFound | BucketNotEmpty | PreconditionFailed | ConcurrentModification | BucketConflict | RateLimited | TooManyRequests | TooManyBuckets | TooManyRequests_10058 | InternalError | ServiceUnavailable;
+export type CloudflareKnownError = Unauthorized | InvalidToken | MissingToken | TokenExpired | AuthenticationError | Unauthorized_10002 | AccessDenied | NotEntitled | ExpiredRequest | NotEntitled_10042 | InvalidRequest | InvalidFormat | InvalidType | InvalidMethod | InvalidBucketName | EntityTooSmall | MetadataTooLarge | IncompleteBody | InvalidDigest | InvalidWorkerName | NamespaceNameRequired | InvalidObjectName | ValidationError | InvalidPart | InvalidRequestBody | WorkerSizeLimitExceeded | MissingContentLength | BadDigest | InvalidRange | BucketNameRequired | InvalidPartSize | BindingNameRequired | EnvVarSizeExceeded | EnvVarCountExceeded | NoEventHandlers | UnsupportedEventHandlers | InvalidQueueName | EntityTooLarge | InvalidZone | RecordNotFound | NoRouteForURI | NoRoute | NoSuchBucket | NoSuchKey | NoSuchUpload | BindingNotFound | NoCorsConfiguration | QueueNotFound | BucketNotEmpty | PreconditionFailed | ConcurrentModification | BucketConflict | QueueAlreadyExists | RateLimited | TooManyRequests | TooManyBuckets | TooManyRequests_10058 | InternalError | ServiceUnavailable;
 
 /**
  * Map of error codes to their error class constructors.
@@ -680,6 +690,7 @@ export const ERROR_CODE_MAP = {
   10031: PreconditionFailed,
   10035: ConcurrentModification,
   10073: BucketConflict,
+  11009: QueueAlreadyExists,
   971: RateLimited,
   6100: TooManyRequests,
   10009: TooManyBuckets,
@@ -752,5 +763,6 @@ export const ERROR_CATALOG: Map<number, { name: string; category: string }> = ne
   [10073, { name: "BucketConflict", category: "ConflictError" }],
   [11000, { name: "QueueNotFound", category: "NotFoundError" }],
   [11003, { name: "InvalidQueueName", category: "BadRequestError" }],
+  [11009, { name: "QueueAlreadyExists", category: "ConflictError" }],
   [100100, { name: "EntityTooLarge", category: "BadRequestError" }],
 ]);

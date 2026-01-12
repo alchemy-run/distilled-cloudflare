@@ -596,6 +596,47 @@
             }
           }
         }
+      },
+      "r2_bucket_location": {
+        "description": "Location of the bucket. API returns uppercase but spec has lowercase.",
+        "enum": ["APAC", "EEUR", "ENAM", "WEUR", "WNAM", "OC", "apac", "eeur", "enam", "weur", "wnam", "oc"],
+        "type": "string"
+      },
+      "r2_lifecycle-rule": {
+        "description": "Lifecycle rule for R2 bucket. Patched: conditions and prefix are optional.",
+        "properties": {
+          "abortMultipartUploadsTransition": {
+            "properties": {
+              "condition": { "$ref": "#/components/schemas/r2_lifecycle-age-condition" }
+            },
+            "type": "object"
+          },
+          "conditions": {
+            "properties": {
+              "prefix": { "type": "string" }
+            },
+            "type": "object"
+          },
+          "deleteObjectsTransition": {
+            "properties": {
+              "condition": {
+                "oneOf": [
+                  { "$ref": "#/components/schemas/r2_lifecycle-age-condition" },
+                  { "$ref": "#/components/schemas/r2_lifecycle-date-condition" }
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "enabled": { "type": "boolean" },
+          "id": { "type": "string" },
+          "storageClassTransitions": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/r2_lifecycle-storage-transition" }
+          }
+        },
+        "required": ["id", "enabled"],
+        "type": "object"
       }
     }
   }
