@@ -22,7 +22,6 @@ import * as T from "../traits.ts";
 import { buildRequest } from "./request-builder.ts";
 import {
   parseResponse,
-  emptyErrorCatalog,
   type ErrorCatalog,
 } from "./response-parser.ts";
 
@@ -54,19 +53,26 @@ export const make = <
     errors: Schema.Schema.AnyNoContext[];
     pagination?: T.PaginationTrait;
   },
-  catalog: ErrorCatalog = emptyErrorCatalog(),
 ) => {
   type Input = Schema.Schema.Type<I>;
   type Output = Schema.Schema.Type<O>;
 
   const op = initOperation();
 
-  // Build error schema map for response parsing
+  // Build error schema map and catalog from the errors array
   const errorSchemas = new Map<string, Schema.Schema.AnyNoContext>();
+  const catalog: ErrorCatalog = new Map();
+  
   for (const errorSchema of op.errors) {
-    const identifier = errorSchema.ast.annotations?.identifier;
-    if (typeof identifier === "string") {
-      errorSchemas.set(identifier, errorSchema);
+    const ErrorClass = errorSchema as unknown as { name: string; code?: number };
+    const identifier = ErrorClass.name;
+    
+    // Add to schema map (name -> schema)
+    errorSchemas.set(identifier, errorSchema);
+    
+    // Add to catalog (code -> name) if the error has a static code property
+    if (typeof ErrorClass.code === "number") {
+      catalog.set(ErrorClass.code, { name: identifier, category: "error" });
     }
   }
 
@@ -102,11 +108,19 @@ export const make = <
         ? `${CLOUDFLARE_API_BASE}${request.path}?${queryString}`
         : `${CLOUDFLARE_API_BASE}${request.path}`;
 
+      // Determine content type (default to JSON, but respect custom content type)
+      const contentType = request.contentType ?? "application/json";
+      const isFormData = request.body instanceof FormData;
+
       // Build headers with auth
       const headers: Record<string, string> = {
         ...request.headers,
-        "Content-Type": "application/json",
       };
+
+      // Don't set Content-Type for FormData - let the runtime set it with boundary
+      if (!isFormData) {
+        headers["Content-Type"] = contentType;
+      }
 
       // Add authentication headers
       if (auth.auth.type === "token") {
@@ -125,10 +139,24 @@ export const make = <
       httpRequest = HttpClientRequest.setHeaders(headers)(httpRequest);
 
       if (request.body !== undefined) {
-        httpRequest = HttpClientRequest.setBody(
-          HttpBody.text(JSON.stringify(request.body), "application/json"),
-        )(httpRequest);
+        if (isFormData) {
+          // FormData body - use formData body type
+          httpRequest = HttpClientRequest.setBody(
+            HttpBody.formData(request.body as FormData),
+          )(httpRequest);
+        } else {
+          // Serialize body based on content type
+          const bodyText = contentType === "application/json"
+            ? JSON.stringify(request.body)
+            : String(request.body);
+
+          httpRequest = HttpClientRequest.setBody(
+            HttpBody.text(bodyText, contentType),
+          )(httpRequest);
+        }
       }
+
+      yield* Effect.logDebug(httpRequest)
 
       // Execute request
       const client = yield* HttpClient.HttpClient;
@@ -141,6 +169,12 @@ export const make = <
             }),
         ),
       );
+
+      yield* Effect.logDebug({
+        status: rawResponse.status,
+        headers: rawResponse.headers,
+        // can't log body because it's a stream
+      })
 
       // Convert response headers to Record
       const responseHeaders = rawResponse.headers as Record<string, string>;
@@ -194,13 +228,12 @@ export const makePaginated = <
     errors: Schema.Schema.AnyNoContext[];
     pagination: T.PaginationTrait;
   },
-  catalog: ErrorCatalog = emptyErrorCatalog(),
 ) => {
   type Input = Schema.Schema.Type<I>;
   type Output = Schema.Schema.Type<O>;
 
   const op = initOperation();
-  const baseFn = make(initOperation, catalog);
+  const baseFn = make(initOperation);
   const pagination = op.pagination;
 
   // Pages iterator

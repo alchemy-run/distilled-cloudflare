@@ -18,9 +18,16 @@ import {
   CloudflareHttpError,
 } from "../errors.ts";
 import {
+  AuthenticationError,
   InvalidRequest,
+  InvalidToken,
   InvalidZone,
+  MissingToken,
+  RateLimited,
   RecordNotFound,
+  TokenExpired,
+  TooManyRequests,
+  Unauthorized,
   ValidationError,
 } from "../errors/generated.ts";
 
@@ -120,12 +127,12 @@ export const listDnsRecords: (
   input: ListDnsRecordsRequest
 ) => Effect.Effect<
   ListDnsRecordsResponse,
-  InvalidZone | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | InvalidZone | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: ListDnsRecordsRequest,
   output: ListDnsRecordsResponse,
-  errors: [InvalidZone],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, InvalidZone],
 }));
 
 export interface CreateDnsRecordRequest {
@@ -160,12 +167,12 @@ export const createDnsRecord: (
   input: CreateDnsRecordRequest
 ) => Effect.Effect<
   CreateDnsRecordResponse,
-  InvalidZone | ValidationError | InvalidRequest | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | InvalidZone | ValidationError | InvalidRequest | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: CreateDnsRecordRequest,
   output: CreateDnsRecordResponse,
-  errors: [InvalidZone, ValidationError, InvalidRequest],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, InvalidZone, ValidationError, InvalidRequest],
 }));
 
 export interface DnsRecordsForAZoneBatchDnsRecordsRequest {
@@ -209,12 +216,12 @@ export const dnsRecordsForAZoneBatchDnsRecords: (
   input: DnsRecordsForAZoneBatchDnsRecordsRequest
 ) => Effect.Effect<
   DnsRecordsForAZoneBatchDnsRecordsResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DnsRecordsForAZoneBatchDnsRecordsRequest,
   output: DnsRecordsForAZoneBatchDnsRecordsResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface DnsRecordsForAZoneExportDnsRecordsRequest {
@@ -247,20 +254,22 @@ export const dnsRecordsForAZoneExportDnsRecords: (
   input: DnsRecordsForAZoneExportDnsRecordsRequest
 ) => Effect.Effect<
   DnsRecordsForAZoneExportDnsRecordsResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DnsRecordsForAZoneExportDnsRecordsRequest,
   output: DnsRecordsForAZoneExportDnsRecordsResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface DnsRecordsForAZoneImportDnsRecordsRequest {
   zone_id: string;
+  body: FormData;
 }
 
 export const DnsRecordsForAZoneImportDnsRecordsRequest = Schema.Struct({
-  zone_id: Schema.String.pipe(T.HttpPath("zone_id"))
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
+  body: Schema.instanceOf(FormData).pipe(T.HttpFormData())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/dns_records/import" }),
 ).annotations({ identifier: "DnsRecordsForAZoneImportDnsRecordsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneImportDnsRecordsRequest>;
@@ -285,12 +294,12 @@ export const dnsRecordsForAZoneImportDnsRecords: (
   input: DnsRecordsForAZoneImportDnsRecordsRequest
 ) => Effect.Effect<
   DnsRecordsForAZoneImportDnsRecordsResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DnsRecordsForAZoneImportDnsRecordsRequest,
   output: DnsRecordsForAZoneImportDnsRecordsResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface DnsRecordsForAZoneScanDnsRecordsRequest {
@@ -323,12 +332,12 @@ export const dnsRecordsForAZoneScanDnsRecords: (
   input: DnsRecordsForAZoneScanDnsRecordsRequest
 ) => Effect.Effect<
   DnsRecordsForAZoneScanDnsRecordsResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DnsRecordsForAZoneScanDnsRecordsRequest,
   output: DnsRecordsForAZoneScanDnsRecordsResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface DnsRecordsForAZoneReviewDnsScanRequest {
@@ -361,12 +370,12 @@ export const dnsRecordsForAZoneReviewDnsScan: (
   input: DnsRecordsForAZoneReviewDnsScanRequest
 ) => Effect.Effect<
   DnsRecordsForAZoneReviewDnsScanResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DnsRecordsForAZoneReviewDnsScanRequest,
   output: DnsRecordsForAZoneReviewDnsScanResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface DnsRecordsForAZoneApplyDnsScanResultsRequest {
@@ -404,12 +413,12 @@ export const dnsRecordsForAZoneApplyDnsScanResults: (
   input: DnsRecordsForAZoneApplyDnsScanResultsRequest
 ) => Effect.Effect<
   DnsRecordsForAZoneApplyDnsScanResultsResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DnsRecordsForAZoneApplyDnsScanResultsRequest,
   output: DnsRecordsForAZoneApplyDnsScanResultsResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface DnsRecordsForAZoneTriggerDnsScanRequest {
@@ -442,12 +451,12 @@ export const dnsRecordsForAZoneTriggerDnsScan: (
   input: DnsRecordsForAZoneTriggerDnsScanRequest
 ) => Effect.Effect<
   DnsRecordsForAZoneTriggerDnsScanResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DnsRecordsForAZoneTriggerDnsScanRequest,
   output: DnsRecordsForAZoneTriggerDnsScanResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface GetUsageRequest {
@@ -480,12 +489,12 @@ export const getUsage: (
   input: GetUsageRequest
 ) => Effect.Effect<
   GetUsageResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetUsageRequest,
   output: GetUsageResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface DnsRecordsForAZoneDnsRecordDetailsRequest {
@@ -520,12 +529,12 @@ export const dnsRecordsForAZoneDnsRecordDetails: (
   input: DnsRecordsForAZoneDnsRecordDetailsRequest
 ) => Effect.Effect<
   DnsRecordsForAZoneDnsRecordDetailsResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DnsRecordsForAZoneDnsRecordDetailsRequest,
   output: DnsRecordsForAZoneDnsRecordDetailsResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface UpdateDnsRecordRequest {
@@ -562,12 +571,12 @@ export const updateDnsRecord: (
   input: UpdateDnsRecordRequest
 ) => Effect.Effect<
   UpdateDnsRecordResponse,
-  InvalidZone | RecordNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | InvalidZone | RecordNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: UpdateDnsRecordRequest,
   output: UpdateDnsRecordResponse,
-  errors: [InvalidZone, RecordNotFound, ValidationError],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, InvalidZone, RecordNotFound, ValidationError],
 }));
 
 export interface DeleteDnsRecordRequest {
@@ -606,12 +615,12 @@ export const deleteDnsRecord: (
   input: DeleteDnsRecordRequest
 ) => Effect.Effect<
   DeleteDnsRecordResponse,
-  InvalidZone | RecordNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | InvalidZone | RecordNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DeleteDnsRecordRequest,
   output: DeleteDnsRecordResponse,
-  errors: [InvalidZone, RecordNotFound],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, InvalidZone, RecordNotFound],
 }));
 
 export interface PatchDnsRecordRequest {
@@ -648,10 +657,10 @@ export const patchDnsRecord: (
   input: PatchDnsRecordRequest
 ) => Effect.Effect<
   PatchDnsRecordResponse,
-  InvalidZone | RecordNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | InvalidZone | RecordNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: PatchDnsRecordRequest,
   output: PatchDnsRecordResponse,
-  errors: [InvalidZone, RecordNotFound, ValidationError],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, InvalidZone, RecordNotFound, ValidationError],
 }));

@@ -97,6 +97,22 @@ export const HttpHeader = (name: string) => makeAnnotation(httpHeaderSymbol, nam
 export const httpBodySymbol = Symbol.for("distilled-cloudflare/http-body");
 export const HttpBody = () => makeAnnotation(httpBodySymbol, true);
 
+/** Content type for the request body */
+export const httpContentTypeSymbol = Symbol.for("distilled-cloudflare/http-content-type");
+export const HttpContentType = (contentType: string) => makeAnnotation(httpContentTypeSymbol, contentType);
+
+/** Text body binding (plain text, JavaScript, etc.) */
+export const HttpTextBody = (contentType: string = "text/plain") =>
+  all(HttpBody(), HttpContentType(contentType));
+
+/** FormData body binding (multipart/form-data) */
+export const httpFormDataSymbol = Symbol.for("distilled-cloudflare/http-form-data");
+export const HttpFormData = () => all(HttpBody(), makeAnnotation(httpFormDataSymbol, true));
+
+/** Check if body is FormData */
+export const hasHttpFormData = (prop: AST.PropertySignature): boolean =>
+  hasPropAnnotation(prop, httpFormDataSymbol);
+
 /** HTTP response status code binding */
 export const httpStatusSymbol = Symbol.for("distilled-cloudflare/http-status");
 export const HttpStatus = () => makeAnnotation(httpStatusSymbol, true);
@@ -245,6 +261,9 @@ export const getHttpHeader = (prop: AST.PropertySignature): string | undefined =
 
 export const hasHttpBody = (prop: AST.PropertySignature): boolean =>
   hasPropAnnotation(prop, httpBodySymbol);
+
+export const getHttpContentType = (prop: AST.PropertySignature): string | undefined =>
+  getPropAnnotation<string>(prop, httpContentTypeSymbol);
 
 export const hasHttpStatus = (prop: AST.PropertySignature): boolean =>
   hasPropAnnotation(prop, httpStatusSymbol);

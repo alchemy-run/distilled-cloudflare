@@ -1,0 +1,602 @@
+{
+  "$schema": "./openapi.patch.schema.json",
+  "paths": {
+    "/accounts/{account_id}/containers/applications": {
+      "get": {
+        "operationId": "listContainerApplications",
+        "summary": "List all container applications",
+        "tags": ["Containers"],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/ContainerApplication" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createContainerApplication",
+        "summary": "Create a new container application",
+        "tags": ["Containers"],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateContainerApplicationBody" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": { "$ref": "#/components/schemas/ContainerApplication" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}/containers/applications/{application_id}": {
+      "get": {
+        "operationId": "getContainerApplication",
+        "summary": "Get a container application by ID",
+        "tags": ["Containers"],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": { "$ref": "#/components/schemas/ContainerApplication" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateContainerApplication",
+        "summary": "Update a container application",
+        "tags": ["Containers"],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateContainerApplicationBody" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": { "$ref": "#/components/schemas/ContainerApplication" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteContainerApplication",
+        "summary": "Delete a container application",
+        "tags": ["Containers"],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}/containers/applications/{application_id}/rollouts": {
+      "post": {
+        "operationId": "createContainerApplicationRollout",
+        "summary": "Create a rollout for a container application",
+        "tags": ["Containers"],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateRolloutBody" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": { "$ref": "#/components/schemas/RolloutResponse" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}/containers/me": {
+      "get": {
+        "operationId": "getContainerIdentity",
+        "summary": "Get container identity and limits for the account",
+        "tags": ["Containers"],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": { "$ref": "#/components/schemas/ContainerIdentity" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ContainerApplication": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "account_id": { "type": "string" },
+          "scheduling_policy": { "type": "string" },
+          "instances": { "type": "integer" },
+          "max_instances": { "type": "integer" },
+          "created_at": { "type": "string" },
+          "version": { "type": "integer" },
+          "durable_object_namespace_id": { "type": "string" },
+          "constraints": {
+            "type": "object",
+            "properties": {
+              "tier": { "type": "integer" }
+            }
+          },
+          "configuration": { "$ref": "#/components/schemas/DeploymentConfiguration" },
+          "durable_objects": {
+            "type": "object",
+            "properties": {
+              "namespace_id": { "type": "string" }
+            }
+          },
+          "health": {
+            "type": "object",
+            "properties": {
+              "instances": { "type": "object" }
+            }
+          }
+        }
+      },
+      "CreateContainerApplicationBody": {
+        "type": "object",
+        "required": ["name", "max_instances", "configuration"],
+        "properties": {
+          "name": { "type": "string" },
+          "max_instances": { "type": "integer" },
+          "instances": { "type": "integer" },
+          "scheduling_policy": { "type": "string" },
+          "configuration": { "$ref": "#/components/schemas/DeploymentConfiguration" },
+          "durable_objects": {
+            "type": "object",
+            "properties": {
+              "namespace_id": { "type": "string" }
+            }
+          },
+          "constraints": {
+            "type": "object",
+            "properties": {
+              "tier": { "type": "integer" }
+            }
+          },
+          "affinities": {
+            "type": "object",
+            "properties": {
+              "colocation": { "type": "string", "enum": ["datacenter"] }
+            }
+          }
+        }
+      },
+      "UpdateContainerApplicationBody": {
+        "type": "object",
+        "properties": {
+          "instances": { "type": "integer" },
+          "max_instances": { "type": "integer" },
+          "scheduling_policy": { "type": "string" },
+          "configuration": { "$ref": "#/components/schemas/DeploymentConfiguration" },
+          "constraints": {
+            "type": "object",
+            "properties": {
+              "tier": { "type": "integer" },
+              "region": { "type": "string" },
+              "regions": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "cities": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "affinities": {
+            "type": "object",
+            "properties": {
+              "colocation": { "type": "string", "enum": ["datacenter"] }
+            }
+          }
+        }
+      },
+      "DeploymentConfiguration": {
+        "type": "object",
+        "required": ["image"],
+        "properties": {
+          "image": { "type": "string" },
+          "instance_type": { "type": "string" },
+          "vcpu": { "type": "number" },
+          "memory": { "type": "string" },
+          "observability": {
+            "type": "object",
+            "properties": {
+              "logs": {
+                "type": "object",
+                "properties": {
+                  "enabled": { "type": "boolean" }
+                }
+              }
+            }
+          },
+          "ssh_public_key_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "secrets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string", "enum": ["env"] },
+                "secret": { "type": "string" }
+              }
+            }
+          },
+          "disk": {
+            "type": "object",
+            "properties": {
+              "size": { "type": "string" }
+            }
+          },
+          "environment_variables": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            }
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            }
+          },
+          "network": {
+            "type": "object",
+            "properties": {
+              "assign_ipv4": { "type": "string", "enum": ["none", "predefined", "account"] },
+              "assign_ipv6": { "type": "string", "enum": ["none", "predefined", "account"] },
+              "mode": { "type": "string", "enum": ["public", "private"] }
+            }
+          },
+          "command": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "entrypoint": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "dns": {
+            "type": "object",
+            "properties": {
+              "servers": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "searches": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "ports": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "port": { "type": "integer" }
+              }
+            }
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string", "enum": ["http", "tcp"] },
+                "tls": { "type": "boolean" },
+                "port": { "type": "string" },
+                "http": {
+                  "type": "object",
+                  "properties": {
+                    "method": { "type": "string" },
+                    "body": { "type": "string" },
+                    "path": { "type": "string" },
+                    "headers": { "type": "object" }
+                  }
+                },
+                "interval": { "type": "string" },
+                "timeout": { "type": "string" },
+                "retries": { "type": "integer" },
+                "kind": { "type": "string", "enum": ["health", "ready"] }
+              }
+            }
+          }
+        }
+      },
+      "CreateRolloutBody": {
+        "type": "object",
+        "required": ["description", "strategy", "step_percentage", "target_configuration"],
+        "properties": {
+          "description": { "type": "string" },
+          "strategy": { "type": "string", "enum": ["rolling"] },
+          "kind": { "type": "string", "enum": ["full_auto"] },
+          "step_percentage": { "type": "integer" },
+          "target_configuration": { "$ref": "#/components/schemas/DeploymentConfiguration" }
+        }
+      },
+      "RolloutResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "created_at": { "type": "string" },
+          "last_updated_at": { "type": "string" },
+          "description": { "type": "string" },
+          "status": { "type": "string" },
+          "kind": { "type": "string" },
+          "strategy": { "type": "string" },
+          "current_version": { "type": "integer" },
+          "target_version": { "type": "integer" },
+          "health": {
+            "type": "object",
+            "properties": {
+              "instances": {
+                "type": "object",
+                "properties": {
+                  "healthy": { "type": "integer" },
+                  "failed": { "type": "integer" },
+                  "starting": { "type": "integer" },
+                  "scheduling": { "type": "integer" }
+                }
+              }
+            }
+          },
+          "current_configuration": {
+            "type": "object",
+            "properties": {
+              "image": { "type": "string" },
+              "observability": { "type": "object" }
+            }
+          },
+          "target_configuration": { "$ref": "#/components/schemas/DeploymentConfiguration" },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer" },
+                "status": { "type": "string" },
+                "step_size": {
+                  "type": "object",
+                  "properties": {
+                    "percentage": { "type": "integer" }
+                  }
+                },
+                "description": { "type": "string" },
+                "started_at": { "type": "string" }
+              }
+            }
+          },
+          "progress": {
+            "type": "object",
+            "properties": {
+              "total_steps": { "type": "integer" },
+              "current_step": { "type": "integer" },
+              "updated_instances": { "type": "integer" },
+              "total_instances": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "ContainerIdentity": {
+        "type": "object",
+        "properties": {
+          "account_id": { "type": "string" },
+          "external_account_id": { "type": "string" },
+          "legacy_identity": { "type": "string" },
+          "capabilities": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "limits": {
+            "type": "object",
+            "properties": {
+              "account_id": { "type": "string" },
+              "vcpu_per_deployment": { "type": "integer" },
+              "memory_mib_per_deployment": { "type": "integer" },
+              "memory_per_deployment": { "type": "string" },
+              "disk_per_deployment": { "type": "string" },
+              "disk_mb_per_deployment": { "type": "integer" },
+              "total_vcpu": { "type": "integer" },
+              "total_memory_mib": { "type": "integer" },
+              "node_group": { "type": "string" },
+              "ipv4s": { "type": "integer" },
+              "network_modes": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "total_disk_mb": { "type": "integer" },
+              "total_memory": { "type": "string" }
+            }
+          },
+          "locations": {
+            "type": "array",
+            "items": { "type": "object" }
+          },
+          "defaults": {
+            "type": "object",
+            "properties": {
+              "vcpus": { "type": "integer" },
+              "memory_mib": { "type": "integer" },
+              "memory": { "type": "string" },
+              "disk_mb": { "type": "integer" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -51,7 +51,91 @@ const SERVICE_PATTERNS: Record<string, RegExp> = {
   firewall: /^\/zones\/\{zone_id\}\/firewall/,
   cache: /^\/zones\/\{zone_id\}\/cache/,
   ssl: /^\/zones\/\{zone_id\}\/ssl/,
+  // Additional services with patched endpoints
+  containers: /^\/accounts\/\{account_id\}\/containers/,
+  hyperdrive: /^\/accounts\/\{account_id\}\/hyperdrive/,
+  workflows: /^\/accounts\/\{account_id\}\/workflows/,
 };
+
+const OPENAPI_PATCH = "spec/openapi.patch.json";
+
+/**
+ * Deep merge two objects, with source taking precedence.
+ * Arrays are concatenated, objects are recursively merged.
+ */
+function deepMerge<T extends Record<string, unknown>>(target: T, source: Record<string, unknown>): T {
+  const result = { ...target } as Record<string, unknown>;
+
+  for (const key of Object.keys(source)) {
+    const sourceValue = source[key];
+    const targetValue = result[key];
+
+    if (
+      sourceValue !== null &&
+      typeof sourceValue === "object" &&
+      !Array.isArray(sourceValue) &&
+      targetValue !== null &&
+      typeof targetValue === "object" &&
+      !Array.isArray(targetValue)
+    ) {
+      // Recursively merge objects
+      result[key] = deepMerge(
+        targetValue as Record<string, unknown>,
+        sourceValue as Record<string, unknown>,
+      );
+    } else {
+      // Override with source value (or add new key)
+      result[key] = sourceValue;
+    }
+  }
+
+  return result as T;
+}
+
+/**
+ * Load and apply OpenAPI patches from spec/openapi.patch.json
+ */
+async function loadAndApplyPatches(spec: {
+  paths: Record<string, Record<string, unknown>>;
+  components?: { schemas?: Record<string, unknown> };
+}): Promise<typeof spec> {
+  try {
+    const patchExists = await Bun.file(OPENAPI_PATCH).exists();
+    if (!patchExists) {
+      return spec;
+    }
+
+    const patchContent = await Bun.file(OPENAPI_PATCH).text();
+    const patch = JSON.parse(patchContent) as {
+      paths?: Record<string, Record<string, unknown>>;
+      components?: { schemas?: Record<string, unknown> };
+    };
+
+    // Merge paths
+    if (patch.paths) {
+      spec.paths = deepMerge(spec.paths, patch.paths);
+    }
+
+    // Merge component schemas
+    if (patch.components?.schemas) {
+      if (!spec.components) {
+        spec.components = { schemas: {} };
+      }
+      if (!spec.components.schemas) {
+        spec.components.schemas = {};
+      }
+      spec.components.schemas = deepMerge(
+        spec.components.schemas as Record<string, unknown>,
+        patch.components.schemas as Record<string, unknown>,
+      );
+    }
+
+    return spec;
+  } catch (error) {
+    console.warn(`Warning: Failed to load OpenAPI patch: ${error}`);
+    return spec;
+  }
+}
 
 // Reserved words that cannot be used as function names
 const RESERVED_WORDS = new Set([
@@ -284,6 +368,7 @@ function generateServiceFile(
     operation: OpenAPI.OperationObject;
   }>,
   allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
+  allRequestBodies: Record<string, OpenAPI.RequestBodyObject | OpenAPI.JsonReference>,
   serviceSpec: ServiceSpec,
 ): string {
   // Collect all errors used by this service
@@ -319,15 +404,25 @@ function generateServiceFile(
     '} from "../errors.ts";',
   ];
 
-  // Import specific errors used by this service
-  if (allErrorNames.size > 0) {
-    const sortedErrors = [...allErrorNames].sort();
-    lines.push(`import {`);
-    for (const error of sortedErrors) {
-      lines.push(`  ${error},`);
-    }
-    lines.push(`} from "../errors/generated.ts";`);
+  // Common errors that can occur on any operation
+  const COMMON_ERRORS = [
+    "RateLimited",
+    "TooManyRequests",
+    "AuthenticationError",
+    "InvalidToken",
+    "MissingToken",
+    "TokenExpired",
+    "Unauthorized",
+  ];
+
+  // Import common errors and specific errors used by this service
+  const allImportedErrors = new Set([...COMMON_ERRORS, ...allErrorNames]);
+  const sortedErrorImports = [...allImportedErrors].sort();
+  lines.push(`import {`);
+  for (const error of sortedErrorImports) {
+    lines.push(`  ${error},`);
   }
+  lines.push(`} from "../errors/generated.ts";`);
 
   lines.push("");
 
@@ -390,14 +485,42 @@ function generateServiceFile(
     }
 
     // Add request body if present
-    if (operation.requestBody && !OpenAPI.isJsonReference(operation.requestBody)) {
-      const rb = operation.requestBody as OpenAPI.RequestBodyObject;
-      const jsonContent = rb.content["application/json"];
-      if (jsonContent?.schema) {
-        const tsType = schemaToTsType(jsonContent.schema, allSchemas);
-        const schemaType = generateSchemaCode("body", jsonContent.schema, allSchemas);
-        interfaceFields.push(`body: ${tsType}`);
-        schemaFields.push(`  body: ${schemaType}.pipe(T.HttpBody())`);
+    if (operation.requestBody) {
+      // Resolve reference if needed
+      let rb: OpenAPI.RequestBodyObject | undefined;
+      if (OpenAPI.isJsonReference(operation.requestBody)) {
+        const refName = OpenAPI.getSchemaName(operation.requestBody);
+        const resolved = allRequestBodies[refName];
+        if (resolved && !OpenAPI.isJsonReference(resolved)) {
+          rb = resolved;
+        }
+      } else {
+        rb = operation.requestBody as OpenAPI.RequestBodyObject;
+      }
+
+      if (rb) {
+        const jsonContent = rb.content["application/json"];
+        const jsContent = rb.content["application/javascript"] ?? rb.content["text/javascript"];
+        const formDataContent = rb.content["multipart/form-data"];
+
+        if (jsonContent?.schema) {
+          const tsType = schemaToTsType(jsonContent.schema, allSchemas);
+          const schemaType = generateSchemaCode("body", jsonContent.schema, allSchemas);
+          interfaceFields.push(`body: ${tsType}`);
+          schemaFields.push(`  body: ${schemaType}.pipe(T.HttpBody())`);
+        } else if (formDataContent?.schema) {
+          // Handle multipart/form-data (e.g., worker script uploads)
+          // For FormData, we accept a FormData object directly
+          interfaceFields.push(`body: FormData`);
+          schemaFields.push(`  body: Schema.instanceOf(FormData).pipe(T.HttpFormData())`);
+        } else if (jsContent?.schema) {
+          // Handle JavaScript/text content types (e.g., simple service worker uploads)
+          const tsType = schemaToTsType(jsContent.schema, allSchemas);
+          const schemaType = generateSchemaCode("body", jsContent.schema, allSchemas);
+          const contentType = rb.content["application/javascript"] ? "application/javascript" : "text/javascript";
+          interfaceFields.push(`body: ${tsType}`);
+          schemaFields.push(`  body: ${schemaType}.pipe(T.HttpTextBody("${contentType}"))`);
+        }
       }
     }
 
@@ -464,8 +587,11 @@ function generateServiceFile(
     const operationErrors = serviceSpec.operations[safeFuncName]?.errors ?? [];
 
     // Build error union type
+    // Combine common errors with operation-specific errors
+    const allOperationErrors = [...new Set([...COMMON_ERRORS, ...operationErrors])];
+    
     const errorTypes = [
-      ...operationErrors,
+      ...allOperationErrors,
       "CloudflareError",
       "UnknownCloudflareError",
       "CloudflareNetworkError",
@@ -483,11 +609,7 @@ function generateServiceFile(
     lines.push(`> = API.make(() => ({`);
     lines.push(`  input: ${requestClassName},`);
     lines.push(`  output: ${responseClassName},`);
-    if (operationErrors.length > 0) {
-      lines.push(`  errors: [${operationErrors.join(", ")}],`);
-    } else {
-      lines.push(`  errors: [],`);
-    }
+    lines.push(`  errors: [${allOperationErrors.join(", ")}],`);
     lines.push(`}));`);
     lines.push("");
   }
@@ -526,16 +648,32 @@ const generateCommand = Command.make(
       }
 
       // Parse spec (just use JSON.parse since the spec is large)
-      const spec = JSON.parse(specContent) as {
+      let spec = JSON.parse(specContent) as {
         paths: Record<string, Record<string, unknown>>;
-        components?: { schemas?: Record<string, unknown> };
+        components?: {
+          schemas?: Record<string, unknown>;
+          requestBodies?: Record<string, OpenAPI.RequestBodyObject | OpenAPI.JsonReference>;
+        };
       };
 
-      yield* Console.log(`   Found ${Object.keys(spec.paths).length} paths`);
+      const originalPathCount = Object.keys(spec.paths).length;
+      yield* Console.log(`   Found ${originalPathCount} paths in OpenAPI spec`);
+
+      // Apply patches from spec/openapi.patch.json
+      spec = yield* Effect.tryPromise(() => loadAndApplyPatches(spec));
+      const patchedPathCount = Object.keys(spec.paths).length;
+      if (patchedPathCount > originalPathCount) {
+        yield* Console.log(`   Applied patches: ${patchedPathCount - originalPathCount} new paths added`);
+      }
 
       const allSchemas = (spec.components?.schemas ?? {}) as Record<
         string,
         OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference
+      >;
+
+      const allRequestBodies = (spec.components?.requestBodies ?? {}) as Record<
+        string,
+        OpenAPI.RequestBodyObject | OpenAPI.JsonReference
       >;
 
       // Group operations by service
@@ -592,7 +730,7 @@ const generateCommand = Command.make(
         // Load service spec for errors
         const serviceSpec = yield* Effect.tryPromise(() => loadServiceSpec(serviceName));
 
-        const content = generateServiceFile(serviceName, ops, allSchemas, serviceSpec);
+        const content = generateServiceFile(serviceName, ops, allSchemas, allRequestBodies, serviceSpec);
         yield* Effect.tryPromise(() =>
           Bun.write(`src/services/${serviceName}.ts`, content),
         );

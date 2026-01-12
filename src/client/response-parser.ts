@@ -118,15 +118,20 @@ export const parseResponse = <O>(
       // Check catalog for known error
       const catalogEntry = catalog.get(errorCode);
       if (catalogEntry) {
-        const errorSchema = errorSchemas.get(catalogEntry.name);
-        if (errorSchema) {
-          // Decode using the specific error schema
-          const decoded = yield* Schema.decodeUnknown(errorSchema)({
-            code: errorCode,
-            message: errorMessage,
-          }).pipe(Effect.mapError(() => new CloudflareError({ code: errorCode, message: errorMessage })));
-
-          return yield* Effect.fail(decoded as CloudflareError);
+        const ErrorClass = errorSchemas.get(catalogEntry.name);
+        if (ErrorClass) {
+          // Instantiate the specific error class directly
+          // Error classes are TaggedError subclasses with (props) constructor
+          try {
+            const errorInstance = new (ErrorClass as unknown as new (props: { code: number; message: string }) => CloudflareError)({
+              code: errorCode,
+              message: errorMessage,
+            });
+            return yield* Effect.fail(errorInstance);
+          } catch {
+            // If instantiation fails, fall back to base error
+            return yield* Effect.fail(new CloudflareError({ code: errorCode, message: errorMessage }));
+          }
         }
 
         // Known error but no schema, use base CloudflareError

@@ -480,6 +480,16 @@ export class BindingNotFound extends Schema.TaggedError<BindingNotFound>()("Bind
 }
 
 /**
+ * Cloudflare error code 10059: NoCorsConfiguration
+ */
+export class NoCorsConfiguration extends Schema.TaggedError<NoCorsConfiguration>()("NoCorsConfiguration", {
+  code: Schema.Literal(10059),
+  message: Schema.String,
+}) {
+  static readonly code = 10059;
+}
+
+/**
  * Cloudflare error code 11000: QueueNotFound
  */
 export class QueueNotFound extends Schema.TaggedError<QueueNotFound>()("QueueNotFound", {
@@ -536,6 +546,16 @@ export class BucketConflict extends Schema.TaggedError<BucketConflict>()("Bucket
 // =============================================================================
 // ThrottlingError
 // =============================================================================
+
+/**
+ * Cloudflare error code 971: RateLimited
+ */
+export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited", {
+  code: Schema.Literal(971),
+  message: Schema.String,
+}) {
+  static readonly code = 971;
+}
 
 /**
  * Cloudflare error code 6100: TooManyRequests
@@ -597,12 +617,12 @@ export class ServiceUnavailable extends Schema.TaggedError<ServiceUnavailable>()
 
 export type AuthErrors = Unauthorized | InvalidToken | MissingToken | TokenExpired | AuthenticationError | Unauthorized_10002 | AccessDenied | NotEntitled | ExpiredRequest | NotEntitled_10042;
 export type BadRequestErrors = InvalidRequest | InvalidFormat | InvalidType | InvalidMethod | InvalidBucketName | EntityTooSmall | MetadataTooLarge | IncompleteBody | InvalidDigest | InvalidWorkerName | NamespaceNameRequired | InvalidObjectName | ValidationError | InvalidPart | InvalidRequestBody | WorkerSizeLimitExceeded | MissingContentLength | BadDigest | InvalidRange | BucketNameRequired | InvalidPartSize | BindingNameRequired | EnvVarSizeExceeded | EnvVarCountExceeded | NoEventHandlers | UnsupportedEventHandlers | InvalidQueueName | EntityTooLarge;
-export type NotFoundErrors = InvalidZone | RecordNotFound | NoRouteForURI | NoRoute | NoSuchBucket | NoSuchKey | NoSuchUpload | BindingNotFound | QueueNotFound;
+export type NotFoundErrors = InvalidZone | RecordNotFound | NoRouteForURI | NoRoute | NoSuchBucket | NoSuchKey | NoSuchUpload | BindingNotFound | NoCorsConfiguration | QueueNotFound;
 export type ConflictErrors = BucketNotEmpty | PreconditionFailed | ConcurrentModification | BucketConflict;
-export type ThrottlingErrors = TooManyRequests | TooManyBuckets | TooManyRequests_10058;
+export type ThrottlingErrors = RateLimited | TooManyRequests | TooManyBuckets | TooManyRequests_10058;
 export type ServerErrors = InternalError | ServiceUnavailable;
 
-export type CloudflareKnownError = Unauthorized | InvalidToken | MissingToken | TokenExpired | AuthenticationError | Unauthorized_10002 | AccessDenied | NotEntitled | ExpiredRequest | NotEntitled_10042 | InvalidRequest | InvalidFormat | InvalidType | InvalidMethod | InvalidBucketName | EntityTooSmall | MetadataTooLarge | IncompleteBody | InvalidDigest | InvalidWorkerName | NamespaceNameRequired | InvalidObjectName | ValidationError | InvalidPart | InvalidRequestBody | WorkerSizeLimitExceeded | MissingContentLength | BadDigest | InvalidRange | BucketNameRequired | InvalidPartSize | BindingNameRequired | EnvVarSizeExceeded | EnvVarCountExceeded | NoEventHandlers | UnsupportedEventHandlers | InvalidQueueName | EntityTooLarge | InvalidZone | RecordNotFound | NoRouteForURI | NoRoute | NoSuchBucket | NoSuchKey | NoSuchUpload | BindingNotFound | QueueNotFound | BucketNotEmpty | PreconditionFailed | ConcurrentModification | BucketConflict | TooManyRequests | TooManyBuckets | TooManyRequests_10058 | InternalError | ServiceUnavailable;
+export type CloudflareKnownError = Unauthorized | InvalidToken | MissingToken | TokenExpired | AuthenticationError | Unauthorized_10002 | AccessDenied | NotEntitled | ExpiredRequest | NotEntitled_10042 | InvalidRequest | InvalidFormat | InvalidType | InvalidMethod | InvalidBucketName | EntityTooSmall | MetadataTooLarge | IncompleteBody | InvalidDigest | InvalidWorkerName | NamespaceNameRequired | InvalidObjectName | ValidationError | InvalidPart | InvalidRequestBody | WorkerSizeLimitExceeded | MissingContentLength | BadDigest | InvalidRange | BucketNameRequired | InvalidPartSize | BindingNameRequired | EnvVarSizeExceeded | EnvVarCountExceeded | NoEventHandlers | UnsupportedEventHandlers | InvalidQueueName | EntityTooLarge | InvalidZone | RecordNotFound | NoRouteForURI | NoRoute | NoSuchBucket | NoSuchKey | NoSuchUpload | BindingNotFound | NoCorsConfiguration | QueueNotFound | BucketNotEmpty | PreconditionFailed | ConcurrentModification | BucketConflict | RateLimited | TooManyRequests | TooManyBuckets | TooManyRequests_10058 | InternalError | ServiceUnavailable;
 
 /**
  * Map of error codes to their error class constructors.
@@ -654,11 +674,13 @@ export const ERROR_CODE_MAP = {
   10007: NoSuchKey,
   10024: NoSuchUpload,
   10056: BindingNotFound,
+  10059: NoCorsConfiguration,
   11000: QueueNotFound,
   10008: BucketNotEmpty,
   10031: PreconditionFailed,
   10035: ConcurrentModification,
   10073: BucketConflict,
+  971: RateLimited,
   6100: TooManyRequests,
   10009: TooManyBuckets,
   10058: TooManyRequests_10058,
@@ -667,3 +689,68 @@ export const ERROR_CODE_MAP = {
 } as const;
 
 export type ErrorCodeMap = typeof ERROR_CODE_MAP;
+
+/**
+ * Error catalog for response parser.
+ * Maps error codes to their names (matching the class identifiers).
+ */
+export const ERROR_CATALOG: Map<number, { name: string; category: string }> = new Map([
+  [971, { name: "RateLimited", category: "ThrottlingError" }],
+  [1000, { name: "InvalidRequest", category: "BadRequestError" }],
+  [1001, { name: "InvalidFormat", category: "BadRequestError" }],
+  [1002, { name: "InvalidType", category: "BadRequestError" }],
+  [1003, { name: "InvalidZone", category: "NotFoundError" }],
+  [1004, { name: "RecordNotFound", category: "NotFoundError" }],
+  [6003, { name: "InvalidMethod", category: "BadRequestError" }],
+  [6100, { name: "TooManyRequests", category: "ThrottlingError" }],
+  [7000, { name: "NoRouteForURI", category: "NotFoundError" }],
+  [7003, { name: "NoRoute", category: "NotFoundError" }],
+  [9000, { name: "Unauthorized", category: "AuthError" }],
+  [9103, { name: "InvalidToken", category: "AuthError" }],
+  [9106, { name: "MissingToken", category: "AuthError" }],
+  [9109, { name: "TokenExpired", category: "AuthError" }],
+  [10000, { name: "AuthenticationError", category: "AuthError" }],
+  [10001, { name: "InternalError", category: "ServerError" }],
+  [10002, { name: "Unauthorized_10002", category: "AuthError" }],
+  [10003, { name: "AccessDenied", category: "AuthError" }],
+  [10005, { name: "InvalidBucketName", category: "BadRequestError" }],
+  [10006, { name: "NoSuchBucket", category: "NotFoundError" }],
+  [10007, { name: "NoSuchKey", category: "NotFoundError" }],
+  [10008, { name: "BucketNotEmpty", category: "ConflictError" }],
+  [10009, { name: "TooManyBuckets", category: "ThrottlingError" }],
+  [10011, { name: "EntityTooSmall", category: "BadRequestError" }],
+  [10012, { name: "MetadataTooLarge", category: "BadRequestError" }],
+  [10013, { name: "IncompleteBody", category: "BadRequestError" }],
+  [10014, { name: "InvalidDigest", category: "BadRequestError" }],
+  [10015, { name: "NotEntitled", category: "AuthError" }],
+  [10016, { name: "InvalidWorkerName", category: "BadRequestError" }],
+  [10018, { name: "ExpiredRequest", category: "AuthError" }],
+  [10019, { name: "NamespaceNameRequired", category: "BadRequestError" }],
+  [10020, { name: "InvalidObjectName", category: "BadRequestError" }],
+  [10021, { name: "ValidationError", category: "BadRequestError" }],
+  [10024, { name: "NoSuchUpload", category: "NotFoundError" }],
+  [10025, { name: "InvalidPart", category: "BadRequestError" }],
+  [10026, { name: "InvalidRequestBody", category: "BadRequestError" }],
+  [10027, { name: "WorkerSizeLimitExceeded", category: "BadRequestError" }],
+  [10031, { name: "PreconditionFailed", category: "ConflictError" }],
+  [10033, { name: "MissingContentLength", category: "BadRequestError" }],
+  [10035, { name: "ConcurrentModification", category: "ConflictError" }],
+  [10037, { name: "BadDigest", category: "BadRequestError" }],
+  [10039, { name: "InvalidRange", category: "BadRequestError" }],
+  [10040, { name: "BucketNameRequired", category: "BadRequestError" }],
+  [10042, { name: "NotEntitled_10042", category: "AuthError" }],
+  [10043, { name: "ServiceUnavailable", category: "ServerError" }],
+  [10048, { name: "InvalidPartSize", category: "BadRequestError" }],
+  [10052, { name: "BindingNameRequired", category: "BadRequestError" }],
+  [10054, { name: "EnvVarSizeExceeded", category: "BadRequestError" }],
+  [10055, { name: "EnvVarCountExceeded", category: "BadRequestError" }],
+  [10056, { name: "BindingNotFound", category: "NotFoundError" }],
+  [10058, { name: "TooManyRequests_10058", category: "ThrottlingError" }],
+  [10059, { name: "NoCorsConfiguration", category: "NotFoundError" }],
+  [10068, { name: "NoEventHandlers", category: "BadRequestError" }],
+  [10069, { name: "UnsupportedEventHandlers", category: "BadRequestError" }],
+  [10073, { name: "BucketConflict", category: "ConflictError" }],
+  [11000, { name: "QueueNotFound", category: "NotFoundError" }],
+  [11003, { name: "InvalidQueueName", category: "BadRequestError" }],
+  [100100, { name: "EntityTooLarge", category: "BadRequestError" }],
+]);

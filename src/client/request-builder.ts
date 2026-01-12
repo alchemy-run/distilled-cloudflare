@@ -15,6 +15,8 @@ export interface ProtocolRequest {
   query: Record<string, string | string[] | undefined>;
   headers: Record<string, string>;
   body?: unknown;
+  contentType?: string;
+  isFormData?: boolean;
 }
 
 /**
@@ -36,6 +38,7 @@ export const buildRequest = <I>(
   const query: Record<string, string | string[] | undefined> = {};
   const headers: Record<string, string> = {};
   let body: unknown = undefined;
+  let contentType: string | undefined = undefined;
 
   // Get struct properties
   const props = getStructProperties(ast);
@@ -77,6 +80,15 @@ export const buildRequest = <I>(
     // Check for body
     if (T.hasHttpBody(prop)) {
       body = value;
+      // Check for custom content type on the body
+      const propContentType = T.getHttpContentType(prop);
+      if (propContentType) {
+        contentType = propContentType;
+      }
+      // Check if this is FormData
+      if (T.hasHttpFormData(prop)) {
+        contentType = "multipart/form-data";
+      }
       continue;
     }
 
@@ -95,6 +107,7 @@ export const buildRequest = <I>(
     query,
     headers,
     body: body && Object.keys(body as object).length > 0 ? body : undefined,
+    contentType,
   };
 };
 

@@ -136,6 +136,21 @@ const generate = Effect.gen(function* () {
   lines.push(`export type ErrorCodeMap = typeof ERROR_CODE_MAP;`);
   lines.push(``);
 
+  // Generate the error catalog for response parser
+  lines.push(`/**`);
+  lines.push(` * Error catalog for response parser.`);
+  lines.push(` * Maps error codes to their names (matching the class identifiers).`);
+  lines.push(` */`);
+  lines.push(`export const ERROR_CATALOG: Map<number, { name: string; category: string }> = new Map([`);
+  for (const [code, entry] of Object.entries(catalog.codes)) {
+    const className = codeToClassName.get(Number(code));
+    if (className) {
+      lines.push(`  [${code}, { name: "${className}", category: "${entry.category}" }],`);
+    }
+  }
+  lines.push(`]);`);
+  lines.push(``);
+
   // Write the file
   const content = lines.join("\n");
   yield* fs.writeFileString("src/errors/generated.ts", content);

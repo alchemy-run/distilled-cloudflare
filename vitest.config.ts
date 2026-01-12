@@ -2,13 +2,13 @@ import { loadEnv } from "vite";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig(({ mode }) => {
-  // Load .env from repo root
-  const env = loadEnv(mode, "../", "");
+  // Load .env from distilled-cloudflare root
+  const env = loadEnv(mode, ".", "");
 
   return {
     test: {
       include: ["test/**/*.test.ts"],
-      testTimeout: 60000,
+      testTimeout: 120000,
       env,
     },
     resolve: {

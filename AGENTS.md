@@ -58,9 +58,12 @@ bun find dns                    # Find errors for DNS service
 bun find workers                # Find errors for Workers service
 bun find --dry-run dns          # Preview what would be tested
 
-# Testing
-bun test                        # Run all tests
-bun test test/services/dns.test.ts  # Single test file
+# Testing (Vitest)
+bun run test                              # Run all tests
+bun vitest run test/services/dns.test.ts  # Single test file
+
+# Environment setup
+bun run download:env            # Download .env from Doppler (from monorepo root)
 ```
 
 ## KEY FILES
@@ -158,6 +161,133 @@ it.effect("handles not found", () =>
 );
 ```
 
+## TEST-DRIVEN ERROR DISCOVERY
+
+The most effective way to discover errors is by running tests and iterating. This workflow catches errors that the automated `bun find` tool misses.
+
+### Step 1: Run Service Tests
+
+```bash
+bun vitest run ./test/services/r2.test.ts
+```
+
+### Step 2: Identify Unknown Errors
+
+Look for `UnknownCloudflareError` in test output:
+
+```
+(FiberFailure) UnknownCloudflareError: The CORS configuration does not exist.
+```
+
+### Step 3: Get Error Code with DEBUG
+
+Run tests with `DEBUG=1` to see request/response details:
+
+```bash
+DEBUG=1 bun vitest run ./test/services/r2.test.ts -t "CORS"
+```
+
+If the error code isn't visible, create a quick test script to extract it:
+
+```typescript
+const result = yield* someOperation().pipe(Effect.exit);
+console.log("Result:", JSON.stringify(result, null, 2));
+// Output shows: { "failure": { "code": 10059, "message": "...", "_tag": "UnknownCloudflareError" } }
+```
+
+### Step 4: Add Error to Catalog
+
+Add the discovered error code to `spec/error-catalog.json`:
+
+```json
+{
+  "codes": {
+    "10059": { "name": "NoCorsConfiguration", "category": "NotFoundError" }
+  }
+}
+```
+
+### Step 5: Map Errors to Operations
+
+Update `spec/{service}.json` to specify which operations return this error:
+
+```json
+{
+  "operations": {
+    "getBucketCorsPolicy": { "errors": ["NoSuchBucket", "NoCorsConfiguration"] },
+    "deleteBucketCorsPolicy": { "errors": ["NoSuchBucket", "NoCorsConfiguration"] }
+  }
+}
+```
+
+### Step 6: Regenerate SDK
+
+```bash
+# Regenerate error classes from catalog
+bun scripts/generate-errors.ts
+
+# Regenerate service with error mappings
+bun generate --service r2
+```
+
+### Step 7: Update Tests
+
+Update tests to properly handle the new typed errors:
+
+```typescript
+// Test that verifies correct error tag
+test("NoCorsConfiguration error on fresh bucket", () =>
+  withBucket("itty-cf-r2-no-cors", (bucketName) =>
+    R2.getBucketCorsPolicy({
+      account_id: accountId(),
+      bucket_name: bucketName,
+    }).pipe(
+      Effect.matchEffect({
+        onSuccess: () => Effect.die("Expected NoCorsConfiguration error"),
+        onFailure: (error) =>
+          Effect.gen(function* () {
+            expect(error).toBeInstanceOf(NoCorsConfiguration);
+            expect((error as NoCorsConfiguration).code).toBe(10059);
+          }),
+      }),
+    ),
+  ));
+```
+
+### Step 8: Repeat Until All Tests Pass
+
+Run tests again and repeat steps 2-7 for any remaining unknown errors.
+
+### OpenAPI Patches
+
+For response schema issues (not error codes), use `spec/openapi.patch.json` to override incorrect OpenAPI definitions:
+
+```json
+{
+  "paths": {
+    "/accounts/{account_id}/r2/buckets/{bucket_name}": {
+      "delete": {
+        "operationId": "deleteBucket",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
 ## ERROR CATALOG FORMAT
 
 ### Global Catalog (`spec/error-catalog.json`)
@@ -229,7 +359,9 @@ Simpler than distilled-aws since Cloudflare uses only REST JSON:
 | `T.HttpPath(name)` | Path parameter binding |
 | `T.HttpQuery(name)` | Query parameter binding |
 | `T.HttpHeader(name)` | Header binding |
-| `T.HttpBody()` | Request/response body |
+| `T.HttpBody()` | JSON request/response body |
+| `T.HttpTextBody(contentType)` | Plain text body (e.g., `application/javascript`) |
+| `T.HttpFormData()` | Multipart form-data body (e.g., worker uploads) |
 | `T.Http({ method, path })` | Operation metadata |
 
 ### Example
@@ -247,6 +379,8 @@ export class ListDnsRecordsRequest extends Schema.Class<ListDnsRecordsRequest>(
 ```
 
 ## TESTING
+
+**Test runner:** Vitest (via `@effect/vitest`)
 
 **File naming:** `test/services/{service}.test.ts`
 
@@ -271,7 +405,9 @@ This downloads secrets from Doppler to `.env` in the repo root. Tests automatica
 **Running tests:**
 
 ```bash
-cd distilled-cloudflare && bun test
+bun run test                              # Run all tests
+bun vitest run test/services/dns.test.ts  # Single test file
+bun vitest run --watch                    # Watch mode
 ```
 
 **Test Helper:**
@@ -302,6 +438,120 @@ describe.skipIf(!hasCredentials())("KV API", () => {
       console.log(`Found ${result.result.length} KV namespaces`);
     }),
   );
+});
+```
+
+**Resource lifecycle helpers (`withXxx` functions):**
+
+Each test MUST create its own isolated resources. **NEVER** use `getFirstXxx()` patterns that depend on pre-existing resources in the account.
+
+**Why `getFirstXxx` is BAD:**
+- Tests become flaky - they depend on account state
+- Tests can interfere with each other
+- Tests can't run in parallel
+- Tests pollute the account with leftover resources
+- Tests break when run on a clean account
+
+**The `withXxx` pattern:**
+
+Every test should use a `withXxx` helper that:
+1. Cleans up any leftover resources from previous runs (idempotent)
+2. Creates a fresh resource with a deterministic name
+3. Runs the test
+4. Cleans up the resource (using `Effect.ensuring`)
+
+```typescript
+// GOOD: Isolated resource per test
+const withBucket = <A, E, R>(
+  name: string,
+  fn: (bucketName: string) => Effect.Effect<A, E, R>,
+) =>
+  cleanup(name).pipe(
+    Effect.andThen(createBucket({ name })),
+    Effect.andThen(fn(name)),
+    Effect.ensuring(cleanup(name)),
+  );
+
+test("read bucket", () =>
+  withBucket("itty-cf-r2-read", (bucket) =>
+    Effect.gen(function* () {
+      const response = yield* getBucket({ bucket_name: bucket });
+      expect(response.result).toBeDefined();
+    }),
+  ));
+
+// BAD: Depends on pre-existing resources
+const getFirstBucket = () =>
+  Effect.gen(function* () {
+    const response = yield* listBuckets({ account_id: accountId() });
+    if (response.result.length === 0) {
+      return yield* Effect.fail(new NoBucketsAvailable());
+    }
+    return response.result[0]; // What if this is someone else's bucket?
+  });
+```
+
+**Naming convention:**
+- Use deterministic names like `itty-cf-{service}-{testname}`
+- Never use `Date.now()` or random suffixes
+- Same name on every test run enables cleanup of leftovers
+
+**Cleanup helpers:**
+- Always create a `cleanup(name)` helper that deletes and ignores errors
+- Call cleanup BEFORE creating (handles leftover from crashed tests)
+- Call cleanup AFTER via `Effect.ensuring` (handles test failures)
+
+```typescript
+const cleanup = (name: string) =>
+  deleteBucket({ bucket_name: name }).pipe(Effect.ignore);
+```
+
+**Worker and Workflow resources:**
+
+Workers can be uploaded via the API using `FormData`. The SDK supports this via `T.HttpFormData()` trait:
+
+```typescript
+// Create FormData for worker upload
+const createWorkerFormData = (script: string) => {
+  const formData = new FormData();
+  formData.append(
+    "worker.js",
+    new Blob([script], { type: "application/javascript+module" }),
+    "worker.js",
+  );
+  formData.append(
+    "metadata",
+    new Blob([JSON.stringify({
+      main_module: "worker.js",
+      compatibility_date: "2024-01-01",
+    })], { type: "application/json" }),
+  );
+  return formData;
+};
+
+// Upload worker
+yield* Workers.workerScriptUploadWorkerModule({
+  account_id: accountId(),
+  script_name: "my-worker",
+  body: createWorkerFormData(WORKER_SCRIPT),
+});
+```
+
+Workflows require a Worker that exports a Workflow class, then a Workflow resource pointing to it.
+
+**Use `Effect.ensuring` for cleanup, NOT `try/finally`:**
+
+```typescript
+// GOOD: Effect.ensuring guarantees cleanup
+fn(name).pipe(Effect.ensuring(cleanup(name)))
+
+// BAD: try/finally doesn't work in Effect.gen
+Effect.gen(function* () {
+  try {
+    return yield* fn(name);
+  } finally {
+    yield* cleanup(name); // This doesn't work as expected!
+  }
 });
 ```
 

@@ -18,8 +18,15 @@ import {
   CloudflareHttpError,
 } from "../errors.ts";
 import {
+  AuthenticationError,
+  InvalidToken,
+  MissingToken,
   NoSuchKey,
   QueueNotFound,
+  RateLimited,
+  TokenExpired,
+  TooManyRequests,
+  Unauthorized,
   ValidationError,
 } from "../errors/generated.ts";
 
@@ -53,12 +60,12 @@ export const list: (
   input: ListRequest
 ) => Effect.Effect<
   ListResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: ListRequest,
   output: ListResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface CreateRequest {
@@ -95,12 +102,12 @@ export const create: (
   input: CreateRequest
 ) => Effect.Effect<
   CreateResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: CreateRequest,
   output: CreateResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface Get_Request {
@@ -135,12 +142,12 @@ export const get_: (
   input: Get_Request
 ) => Effect.Effect<
   Get_Response,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: Get_Request,
   output: Get_Response,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface UpdateRequest {
@@ -191,12 +198,12 @@ export const update: (
   input: UpdateRequest
 ) => Effect.Effect<
   UpdateResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: UpdateRequest,
   output: UpdateResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface Delete_Request {
@@ -238,12 +245,12 @@ export const delete_: (
   input: Delete_Request
 ) => Effect.Effect<
   Delete_Response,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: Delete_Request,
   output: Delete_Response,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface UpdatePartialRequest {
@@ -294,12 +301,12 @@ export const updatePartial: (
   input: UpdatePartialRequest
 ) => Effect.Effect<
   UpdatePartialResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: UpdatePartialRequest,
   output: UpdatePartialResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface ListConsumersRequest {
@@ -334,12 +341,12 @@ export const listConsumers: (
   input: ListConsumersRequest
 ) => Effect.Effect<
   ListConsumersResponse,
-  QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: ListConsumersRequest,
   output: ListConsumersResponse,
-  errors: [QueueNotFound],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound],
 }));
 
 export interface CreateConsumerRequest {
@@ -376,12 +383,12 @@ export const createConsumer: (
   input: CreateConsumerRequest
 ) => Effect.Effect<
   CreateConsumerResponse,
-  QueueNotFound | ValidationError | NoSuchKey | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | ValidationError | NoSuchKey | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: CreateConsumerRequest,
   output: CreateConsumerResponse,
-  errors: [QueueNotFound, ValidationError, NoSuchKey],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound, ValidationError, NoSuchKey],
 }));
 
 export interface GetConsumerRequest {
@@ -418,12 +425,12 @@ export const getConsumer: (
   input: GetConsumerRequest
 ) => Effect.Effect<
   GetConsumerResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetConsumerRequest,
   output: GetConsumerResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface UpdateConsumerRequest {
@@ -462,12 +469,12 @@ export const updateConsumer: (
   input: UpdateConsumerRequest
 ) => Effect.Effect<
   UpdateConsumerResponse,
-  QueueNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: UpdateConsumerRequest,
   output: UpdateConsumerResponse,
-  errors: [QueueNotFound, ValidationError],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound, ValidationError],
 }));
 
 export interface DeleteConsumerRequest {
@@ -511,12 +518,12 @@ export const deleteConsumer: (
   input: DeleteConsumerRequest
 ) => Effect.Effect<
   DeleteConsumerResponse,
-  QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DeleteConsumerRequest,
   output: DeleteConsumerResponse,
-  errors: [QueueNotFound],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, QueueNotFound],
 }));
 
 export interface QueuesPushMessageRequest {
@@ -562,12 +569,12 @@ export const queuesPushMessage: (
   input: QueuesPushMessageRequest
 ) => Effect.Effect<
   QueuesPushMessageResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPushMessageRequest,
   output: QueuesPushMessageResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface QueuesAckMessagesRequest {
@@ -612,12 +619,12 @@ export const queuesAckMessages: (
   input: QueuesAckMessagesRequest
 ) => Effect.Effect<
   QueuesAckMessagesResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesAckMessagesRequest,
   output: QueuesAckMessagesResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface QueuesPushMessagesRequest {
@@ -666,12 +673,12 @@ export const queuesPushMessages: (
   input: QueuesPushMessagesRequest
 ) => Effect.Effect<
   QueuesPushMessagesResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPushMessagesRequest,
   output: QueuesPushMessagesResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface QueuesPullMessagesRequest {
@@ -711,12 +718,12 @@ export const queuesPullMessages: (
   input: QueuesPullMessagesRequest
 ) => Effect.Effect<
   QueuesPullMessagesResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPullMessagesRequest,
   output: QueuesPullMessagesResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface Get_1Request {
@@ -751,12 +758,12 @@ export const get_1: (
   input: Get_1Request
 ) => Effect.Effect<
   Get_1Response,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: Get_1Request,
   output: Get_1Response,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface QueuesPurgeRequest {
@@ -795,10 +802,10 @@ export const queuesPurge: (
   input: QueuesPurgeRequest
 ) => Effect.Effect<
   QueuesPurgeResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPurgeRequest,
   output: QueuesPurgeResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));

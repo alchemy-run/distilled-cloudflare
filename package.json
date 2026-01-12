@@ -4,13 +4,14 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "generate": "bun scripts/generate-clients.ts",
-    "generate:service": "bun scripts/generate-clients.ts --service",
-    "find": "bun scripts/find-errors/index.ts",
-    "check": "biome check",
     "check:write": "biome check --write",
-    "test": "vitest run",
+    "check": "biome check",
+    "download:env": "doppler secrets download --no-file --format env > .env",
+    "find": "bun scripts/find-errors/index.ts",
+    "generate:service": "bun scripts/generate-clients.ts --service",
+    "generate": "bun scripts/generate-clients.ts",
     "test:watch": "vitest watch",
+    "test": "vitest run",
     "typecheck": "tsc -b"
   },
   "dependencies": {
