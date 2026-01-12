@@ -42,6 +42,7 @@ const SERVICE_PATTERNS: Record<string, RegExp> = {
   workers: /^\/accounts\/\{account_id\}\/workers/,
   kv: /^\/accounts\/\{account_id\}\/storage\/kv/,
   r2: /^\/accounts\/\{account_id\}\/r2/,
+  queues: /^\/accounts\/\{account_id\}\/queues/,
   d1: /^\/accounts\/\{account_id\}\/d1/,
   pages: /^\/accounts\/\{account_id\}\/pages/,
   images: /^\/accounts\/\{account_id\}\/images/,
@@ -51,6 +52,15 @@ const SERVICE_PATTERNS: Record<string, RegExp> = {
   cache: /^\/zones\/\{zone_id\}\/cache/,
   ssl: /^\/zones\/\{zone_id\}\/ssl/,
 };
+
+// Reserved words that cannot be used as function names
+const RESERVED_WORDS = new Set([
+  "delete", "export", "import", "default", "class", "function", "const", "let", "var",
+  "if", "else", "for", "while", "do", "switch", "case", "break", "continue", "return",
+  "try", "catch", "finally", "throw", "new", "this", "super", "extends", "implements",
+  "interface", "type", "enum", "namespace", "module", "declare", "abstract", "async",
+  "await", "yield", "static", "public", "private", "protected", "readonly", "get", "set",
+]);
 
 /**
  * Determine which service a path belongs to.
@@ -74,6 +84,76 @@ function getServiceForPath(path: string): string {
 }
 
 /**
+ * Resolve a schema reference to its actual schema.
+ */
+function resolveSchema(
+  schema: OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference,
+  allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
+): OpenAPI.OpenApiSchemaObject {
+  if (OpenAPI.isJsonReference(schema)) {
+    const refName = OpenAPI.getSchemaName(schema);
+    const resolved = allSchemas[refName];
+    if (resolved && !OpenAPI.isJsonReference(resolved)) {
+      return resolved;
+    }
+    // If still a reference or not found, return empty object schema
+    return { type: "string" }; // Default to string for unresolved refs
+  }
+  return schema as OpenAPI.OpenApiSchemaObject;
+}
+
+/**
+ * Convert a schema to a TypeScript type string.
+ */
+function schemaToTsType(
+  schema: OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference,
+  allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
+): string {
+  // Resolve references first
+  const s = resolveSchema(schema, allSchemas);
+
+  // Handle enum
+  if (s.enum) {
+    return s.enum.map((v) => (typeof v === "string" ? `"${v}"` : String(v))).join(" | ");
+  }
+
+  // Handle type
+  const type = Array.isArray(s.type) ? s.type[0] : s.type;
+
+  switch (type) {
+    case "string":
+      return "string";
+    case "number":
+    case "integer":
+      return "number";
+    case "boolean":
+      return "boolean";
+    case "array":
+      if (s.items) {
+        return `${schemaToTsType(s.items, allSchemas)}[]`;
+      }
+      return "unknown[]";
+    case "object":
+      if (s.properties) {
+        const props = Object.entries(s.properties)
+          .map(([propName, propSchema]) => {
+            const propType = schemaToTsType(propSchema, allSchemas);
+            const isRequired = s.required?.includes(propName);
+            const safeName = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(propName)
+              ? propName
+              : `"${propName}"`;
+            return isRequired ? `${safeName}: ${propType}` : `${safeName}?: ${propType}`;
+          })
+          .join("; ");
+        return `{ ${props} }`;
+      }
+      return "Record<string, unknown>";
+    default:
+      return "unknown";
+  }
+}
+
+/**
  * Generate TypeScript code for a schema.
  */
 function generateSchemaCode(
@@ -81,12 +161,8 @@ function generateSchemaCode(
   schema: OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference,
   allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
 ): string {
-  if (OpenAPI.isJsonReference(schema)) {
-    const refName = OpenAPI.getSchemaName(schema);
-    return OpenAPI.schemaNameToClassName(refName);
-  }
-
-  const s = schema as OpenAPI.OpenApiSchemaObject;
+  // Resolve references - inline the actual schema
+  const s = resolveSchema(schema, allSchemas);
 
   // Handle enum
   if (s.enum) {
@@ -153,13 +229,11 @@ function generateSchemaCode(
     default:
       // Handle allOf
       if (s.allOf && s.allOf.length > 0) {
-        // For simplicity, just use the first non-ref schema or merge refs
         for (const member of s.allOf) {
           if (!OpenAPI.isJsonReference(member)) {
             return generateSchemaCode(name, member, allSchemas);
           }
         }
-        // All refs - use first one
         return generateSchemaCode(name, s.allOf[0]!, allSchemas);
       }
 
@@ -182,8 +256,24 @@ function generateSchemaCode(
   }
 }
 
+interface ServiceSpec {
+  operations: Record<string, { errors?: string[]; aliases?: Array<{ from: number; to: string }> }>;
+}
+
 /**
- * Generate a service file.
+ * Load spec file for a service.
+ */
+async function loadServiceSpec(serviceName: string): Promise<ServiceSpec> {
+  try {
+    const content = await Bun.file(`spec/${serviceName}.json`).text();
+    return JSON.parse(content) as ServiceSpec;
+  } catch {
+    return { operations: {} };
+  }
+}
+
+/**
+ * Generate a service file following the distilled-aws pattern.
  */
 function generateServiceFile(
   serviceName: string,
@@ -194,7 +284,19 @@ function generateServiceFile(
     operation: OpenAPI.OperationObject;
   }>,
   allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
+  serviceSpec: ServiceSpec,
 ): string {
+  // Collect all errors used by this service
+  const allErrorNames = new Set<string>();
+  for (const op of operations) {
+    const funcName = OpenAPI.operationIdToFunctionName(op.operationId);
+    const safeFuncName = RESERVED_WORDS.has(funcName) ? `${funcName}_` : funcName;
+    const errors = serviceSpec.operations[safeFuncName]?.errors ?? [];
+    for (const error of errors) {
+      allErrorNames.add(error);
+    }
+  }
+
   const lines: string[] = [
     "/**",
     ` * Cloudflare ${serviceName.toUpperCase()} API`,
@@ -203,29 +305,65 @@ function generateServiceFile(
     " * DO NOT EDIT - regenerate with: bun generate --service " + serviceName,
     " */",
     "",
+    'import * as Effect from "effect/Effect";',
     'import * as Schema from "effect/Schema";',
+    'import type { HttpClient } from "@effect/platform";',
     'import * as API from "../client/api.ts";',
     'import * as T from "../traits.ts";',
-    "",
+    'import type { ApiToken } from "../auth.ts";',
+    'import {',
+    '  CloudflareError,',
+    '  UnknownCloudflareError,',
+    '  CloudflareNetworkError,',
+    '  CloudflareHttpError,',
+    '} from "../errors.ts";',
   ];
 
-  // Track generated schemas to avoid duplicates
+  // Import specific errors used by this service
+  if (allErrorNames.size > 0) {
+    const sortedErrors = [...allErrorNames].sort();
+    lines.push(`import {`);
+    for (const error of sortedErrors) {
+      lines.push(`  ${error},`);
+    }
+    lines.push(`} from "../errors/generated.ts";`);
+  }
+
+  lines.push("");
+
+  // Track generated schemas and function names to avoid duplicates
   const generatedSchemas = new Set<string>();
+  const generatedFunctions = new Set<string>();
 
   for (const { operationId, method, path, operation } of operations) {
-    const funcName = OpenAPI.operationIdToFunctionName(operationId);
-    const requestClassName = `${funcName.charAt(0).toUpperCase()}${funcName.slice(1)}Request`;
-    const responseClassName = `${funcName.charAt(0).toUpperCase()}${funcName.slice(1)}Response`;
+    let funcName = OpenAPI.operationIdToFunctionName(operationId);
+    let safeFuncName = RESERVED_WORDS.has(funcName) ? `${funcName}_` : funcName;
 
-    // Generate request class
+    // Make function name unique if it already exists
+    let uniqueSuffix = 1;
+    let uniqueFuncName = safeFuncName;
+    while (generatedFunctions.has(uniqueFuncName)) {
+      uniqueFuncName = `${safeFuncName}${uniqueSuffix}`;
+      uniqueSuffix++;
+    }
+    safeFuncName = uniqueFuncName;
+    generatedFunctions.add(safeFuncName);
+
+    const pascalName = safeFuncName.charAt(0).toUpperCase() + safeFuncName.slice(1);
+    const requestClassName = `${pascalName}Request`;
+    const responseClassName = `${pascalName}Response`;
+
+    // Collect parameters
     const params = operation.parameters ?? [];
-    const requestProps: string[] = [];
+    const interfaceFields: string[] = [];
+    const schemaFields: string[] = [];
 
     for (const param of params) {
       if (OpenAPI.isJsonReference(param)) continue;
 
       const p = param as OpenAPI.ParameterObject;
-      const propType = p.schema
+      const tsType = p.schema ? schemaToTsType(p.schema, allSchemas) : "string";
+      const schemaType = p.schema
         ? generateSchemaCode(p.name, p.schema, allSchemas)
         : "Schema.String";
 
@@ -243,9 +381,11 @@ function generateServiceFile(
         : `"${p.name}"`;
 
       if (p.required) {
-        requestProps.push(`  ${safeName}: ${propType}${traitAnnotation}`);
+        interfaceFields.push(`${safeName}: ${tsType}`);
+        schemaFields.push(`  ${safeName}: ${schemaType}${traitAnnotation}`);
       } else {
-        requestProps.push(`  ${safeName}: Schema.optional(${propType})${traitAnnotation}`);
+        interfaceFields.push(`${safeName}?: ${tsType}`);
+        schemaFields.push(`  ${safeName}: Schema.optional(${schemaType})${traitAnnotation}`);
       }
     }
 
@@ -254,48 +394,100 @@ function generateServiceFile(
       const rb = operation.requestBody as OpenAPI.RequestBodyObject;
       const jsonContent = rb.content["application/json"];
       if (jsonContent?.schema) {
-        requestProps.push(
-          `  body: ${generateSchemaCode("body", jsonContent.schema, allSchemas)}.pipe(T.HttpBody())`,
-        );
+        const tsType = schemaToTsType(jsonContent.schema, allSchemas);
+        const schemaType = generateSchemaCode("body", jsonContent.schema, allSchemas);
+        interfaceFields.push(`body: ${tsType}`);
+        schemaFields.push(`  body: ${schemaType}.pipe(T.HttpBody())`);
       }
     }
 
+    // Generate request interface and schema
     if (!generatedSchemas.has(requestClassName)) {
       generatedSchemas.add(requestClassName);
-      lines.push(`export class ${requestClassName} extends Schema.Class<${requestClassName}>("${requestClassName}")({`);
-      lines.push(requestProps.join(",\n"));
-      lines.push(`}, T.all(`);
+
+      // Interface
+      lines.push(`export interface ${requestClassName} {`);
+      for (const field of interfaceFields) {
+        lines.push(`  ${field};`);
+      }
+      lines.push(`}`);
+      lines.push("");
+
+      // Schema
+      lines.push(`export const ${requestClassName} = Schema.Struct({`);
+      lines.push(schemaFields.join(",\n"));
+      lines.push(`}).pipe(`);
       lines.push(`  T.Http({ method: "${method}", path: "${path}" }),`);
-      lines.push(`)) {}`);
+      lines.push(`).annotations({ identifier: "${requestClassName}" }) as unknown as Schema.Schema<${requestClassName}>;`);
       lines.push("");
     }
 
-    // Generate response class (simplified - just wrap result)
+    // Generate response
     if (!generatedSchemas.has(responseClassName)) {
       generatedSchemas.add(responseClassName);
 
-      // Try to find response schema
       const response200 = operation.responses["200"];
       let resultSchema = "Schema.Unknown";
+      let resultTsType = "unknown";
 
       if (response200 && !OpenAPI.isJsonReference(response200)) {
         const r = response200 as OpenAPI.ResponseObject;
         const jsonContent = r.content?.["application/json"];
         if (jsonContent?.schema) {
           resultSchema = generateSchemaCode("result", jsonContent.schema, allSchemas);
+          resultTsType = schemaToTsType(jsonContent.schema, allSchemas);
         }
       }
 
-      lines.push(`export const ${responseClassName} = ${resultSchema};`);
-      lines.push(`export type ${responseClassName} = typeof ${responseClassName}.Type;`);
+      // Response interface
+      lines.push(`export interface ${responseClassName} {`);
+      lines.push(`  result: ${resultTsType};`);
+      lines.push(`  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };`);
+      lines.push(`}`);
+      lines.push("");
+
+      // Response schema
+      lines.push(`export const ${responseClassName} = Schema.Struct({`);
+      lines.push(`  result: ${resultSchema},`);
+      lines.push(`  result_info: Schema.optional(Schema.Struct({`);
+      lines.push(`    page: Schema.optional(Schema.Number),`);
+      lines.push(`    per_page: Schema.optional(Schema.Number),`);
+      lines.push(`    count: Schema.optional(Schema.Number),`);
+      lines.push(`    total_count: Schema.optional(Schema.Number),`);
+      lines.push(`    cursor: Schema.optional(Schema.String),`);
+      lines.push(`  })),`);
+      lines.push(`}).annotations({ identifier: "${responseClassName}" }) as unknown as Schema.Schema<${responseClassName}>;`);
       lines.push("");
     }
 
-    // Generate operation function
-    lines.push(`export const ${funcName} = API.make(() => ({`);
+    // Get errors for this operation
+    const operationErrors = serviceSpec.operations[safeFuncName]?.errors ?? [];
+
+    // Build error union type
+    const errorTypes = [
+      ...operationErrors,
+      "CloudflareError",
+      "UnknownCloudflareError",
+      "CloudflareNetworkError",
+      "CloudflareHttpError",
+    ];
+    const errorUnion = errorTypes.join(" | ");
+
+    // Generate typed API function
+    lines.push(`export const ${safeFuncName}: (`);
+    lines.push(`  input: ${requestClassName}`);
+    lines.push(`) => Effect.Effect<`);
+    lines.push(`  ${responseClassName},`);
+    lines.push(`  ${errorUnion},`);
+    lines.push(`  ApiToken | HttpClient.HttpClient`);
+    lines.push(`> = API.make(() => ({`);
     lines.push(`  input: ${requestClassName},`);
     lines.push(`  output: ${responseClassName},`);
-    lines.push(`  errors: [],`);
+    if (operationErrors.length > 0) {
+      lines.push(`  errors: [${operationErrors.join(", ")}],`);
+    } else {
+      lines.push(`  errors: [],`);
+    }
     lines.push(`}));`);
     lines.push("");
   }
@@ -397,7 +589,10 @@ const generateCommand = Command.make(
       for (const [serviceName, ops] of serviceOps) {
         yield* Console.log(`\n📝 Generating ${serviceName}.ts (${ops.length} operations)...`);
 
-        const content = generateServiceFile(serviceName, ops, allSchemas);
+        // Load service spec for errors
+        const serviceSpec = yield* Effect.tryPromise(() => loadServiceSpec(serviceName));
+
+        const content = generateServiceFile(serviceName, ops, allSchemas, serviceSpec);
         yield* Effect.tryPromise(() =>
           Bun.write(`src/services/${serviceName}.ts`, content),
         );

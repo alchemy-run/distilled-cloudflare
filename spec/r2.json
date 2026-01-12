@@ -1,0 +1,17 @@
+{
+  "operations": {
+    "listBuckets": { "errors": [] },
+    "createBucket": { "errors": ["InvalidBucketName", "BucketConflict", "TooManyBuckets"] },
+    "getBucket": { "errors": ["NoSuchBucket"] },
+    "deleteBucket": { "errors": ["NoSuchBucket", "BucketNotEmpty"] },
+    "getBucketUsage": { "errors": ["NoSuchBucket"] },
+    "listCustomDomains": { "errors": ["NoSuchBucket"] },
+    "addCustomDomain": { "errors": ["NoSuchBucket", "ValidationError"] },
+    "deleteCustomDomain": { "errors": ["NoSuchBucket"] },
+    "getSippy": { "errors": ["NoSuchBucket"] },
+    "updateSippy": { "errors": ["NoSuchBucket", "ValidationError"] },
+    "deleteSippy": { "errors": ["NoSuchBucket"] },
+    "getEventNotifications": { "errors": ["NoSuchBucket"] },
+    "updateEventNotifications": { "errors": ["NoSuchBucket", "ValidationError"] }
+  }
+}

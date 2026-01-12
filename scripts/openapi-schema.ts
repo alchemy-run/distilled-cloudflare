@@ -270,8 +270,11 @@ export interface OpenApiDocument {
  * e.g., "dns-records-for-a-zone-list-dns-records" -> "listDnsRecords"
  */
 export const operationIdToFunctionName = (operationId: string): string => {
+  // First, remove any invalid characters (apostrophes, etc.)
+  const sanitized = operationId.replace(/[^a-zA-Z0-9\-_\s]/g, "");
+
   // Split by common separators
-  const parts = operationId.split(/[-_\s]+/);
+  const parts = sanitized.split(/[-_\s]+/).filter(Boolean);
 
   // Find the last meaningful verb or use all parts
   const verbIndex = parts.findLastIndex((p) =>

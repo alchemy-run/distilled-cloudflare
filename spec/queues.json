@@ -1,0 +1,16 @@
+{
+  "operations": {
+    "listQueues": { "errors": [] },
+    "createQueue": { "errors": ["InvalidQueueName", "ValidationError"] },
+    "getQueue": { "errors": ["QueueNotFound"] },
+    "updateQueue": { "errors": ["QueueNotFound", "InvalidQueueName", "ValidationError"] },
+    "deleteQueue": { "errors": ["QueueNotFound"] },
+    "sendMessages": { "errors": ["QueueNotFound", "ValidationError"] },
+    "pullMessages": { "errors": ["QueueNotFound"] },
+    "ackMessages": { "errors": ["QueueNotFound", "ValidationError"] },
+    "listConsumers": { "errors": ["QueueNotFound"] },
+    "createConsumer": { "errors": ["QueueNotFound", "ValidationError", "NoSuchKey"] },
+    "updateConsumer": { "errors": ["QueueNotFound", "ValidationError"] },
+    "deleteConsumer": { "errors": ["QueueNotFound"] }
+  }
+}

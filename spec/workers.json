@@ -1,0 +1,18 @@
+{
+  "operations": {
+    "listScripts": { "errors": [] },
+    "getScript": { "errors": ["NoSuchKey"] },
+    "uploadScript": { "errors": ["InvalidWorkerName", "WorkerSizeLimitExceeded", "ValidationError", "NoEventHandlers", "UnsupportedEventHandlers"] },
+    "deleteScript": { "errors": ["NoSuchKey"] },
+    "getSettings": { "errors": ["NoSuchKey"] },
+    "updateSettings": { "errors": ["NoSuchKey", "ValidationError", "BindingNotFound", "BindingNameRequired"] },
+    "getBindings": { "errors": ["NoSuchKey"] },
+    "listVersions": { "errors": ["NoSuchKey"] },
+    "getVersion": { "errors": ["NoSuchKey"] },
+    "listDeployments": { "errors": ["NoSuchKey"] },
+    "createDeployment": { "errors": ["NoSuchKey", "ValidationError"] },
+    "getTail": { "errors": ["NoSuchKey"] },
+    "startTail": { "errors": ["NoSuchKey"] },
+    "deleteTail": { "errors": ["NoSuchKey"] }
+  }
+}

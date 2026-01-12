@@ -1,0 +1,15 @@
+{
+  "operations": {
+    "listNamespaces": { "errors": [] },
+    "createNamespace": { "errors": ["NamespaceNameRequired", "ValidationError"] },
+    "getNamespace": { "errors": ["BindingNotFound"] },
+    "deleteNamespace": { "errors": ["BindingNotFound"] },
+    "renameNamespace": { "errors": ["BindingNotFound", "NamespaceNameRequired"] },
+    "listKeys": { "errors": ["BindingNotFound"] },
+    "getValue": { "errors": ["BindingNotFound", "NoSuchKey"] },
+    "putValue": { "errors": ["BindingNotFound", "ValidationError"] },
+    "deleteValue": { "errors": ["BindingNotFound"] },
+    "bulkWrite": { "errors": ["BindingNotFound", "ValidationError"] },
+    "bulkDelete": { "errors": ["BindingNotFound"] }
+  }
+}

@@ -1,256 +1,657 @@
 /**
  * Cloudflare DNS API
  *
- * Operations for managing DNS records in a zone.
- *
- * @example
- * ```typescript
- * import { Effect } from "effect";
- * import * as DNS from "distilled-cloudflare/dns";
- *
- * const program = Effect.gen(function* () {
- *   const records = yield* DNS.listDnsRecords({
- *     zone_id: "your-zone-id",
- *   });
- *   return records;
- * });
- * ```
+ * Generated from Cloudflare OpenAPI specification.
+ * DO NOT EDIT - regenerate with: bun generate --service dns
  */
 
+import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
+import type { HttpClient } from "@effect/platform";
 import * as API from "../client/api.ts";
 import * as T from "../traits.ts";
+import type { ApiToken } from "../auth.ts";
+import {
+  CloudflareError,
+  UnknownCloudflareError,
+  CloudflareNetworkError,
+  CloudflareHttpError,
+} from "../errors.ts";
+import {
+  InvalidRequest,
+  InvalidZone,
+  RecordNotFound,
+  ValidationError,
+} from "../errors/generated.ts";
 
-// =============================================================================
-// Shared Types
-// =============================================================================
-
-export const DnsRecordType = Schema.Literal(
-  "A",
-  "AAAA",
-  "CAA",
-  "CERT",
-  "CNAME",
-  "DNSKEY",
-  "DS",
-  "HTTPS",
-  "LOC",
-  "MX",
-  "NAPTR",
-  "NS",
-  "PTR",
-  "SMIMEA",
-  "SRV",
-  "SSHFP",
-  "SVCB",
-  "TLSA",
-  "TXT",
-  "URI",
-);
-export type DnsRecordType = typeof DnsRecordType.Type;
-
-export const DnsRecordMeta = Schema.Struct({
-  auto_added: Schema.optional(Schema.Boolean),
-  managed_by_apps: Schema.optional(Schema.Boolean),
-  managed_by_argo_tunnel: Schema.optional(Schema.Boolean),
-  source: Schema.optional(Schema.String),
-});
-
-export const DnsRecord = Schema.Struct({
-  id: Schema.String,
-  zone_id: Schema.String,
-  zone_name: Schema.String,
-  name: Schema.String,
-  type: DnsRecordType,
-  content: Schema.String,
-  proxiable: Schema.Boolean,
-  proxied: Schema.optional(Schema.Boolean),
-  ttl: Schema.Number,
-  locked: Schema.optional(Schema.Boolean),
-  meta: Schema.optional(DnsRecordMeta),
-  comment: Schema.optional(Schema.NullOr(Schema.String)),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  created_on: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.String),
-  priority: Schema.optional(Schema.Number),
-});
-export type DnsRecord = typeof DnsRecord.Type;
-
-export const ResultInfo = Schema.Struct({
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.optional(Schema.Number),
-  count: Schema.optional(Schema.Number),
-  total_count: Schema.optional(Schema.Number),
-  total_pages: Schema.optional(Schema.Number),
-});
-export type ResultInfo = typeof ResultInfo.Type;
-
-// =============================================================================
-// List DNS Records
-// =============================================================================
+export interface ListDnsRecordsRequest {
+  zone_id: string;
+  name?: string;
+  "name.exact"?: string;
+  "name.contains"?: string;
+  "name.startswith"?: string;
+  "name.endswith"?: string;
+  type?: "A" | "AAAA" | "CAA" | "CERT" | "CNAME" | "DNSKEY" | "DS" | "HTTPS" | "LOC" | "MX" | "NAPTR" | "NS" | "OPENPGPKEY" | "PTR" | "SMIMEA" | "SRV" | "SSHFP" | "SVCB" | "TLSA" | "TXT" | "URI";
+  content?: string;
+  "content.exact"?: string;
+  "content.contains"?: string;
+  "content.startswith"?: string;
+  "content.endswith"?: string;
+  proxied?: boolean;
+  match?: "any" | "all";
+  comment?: string;
+  "comment.present"?: string;
+  "comment.absent"?: string;
+  "comment.exact"?: string;
+  "comment.contains"?: string;
+  "comment.startswith"?: string;
+  "comment.endswith"?: string;
+  tag?: string;
+  "tag.present"?: string;
+  "tag.absent"?: string;
+  "tag.exact"?: string;
+  "tag.contains"?: string;
+  "tag.startswith"?: string;
+  "tag.endswith"?: string;
+  search?: string;
+  tag_match?: "any" | "all";
+  page?: number;
+  per_page?: number;
+  order?: "type" | "name" | "content" | "ttl" | "proxied";
+  direction?: "asc" | "desc";
+}
 
 export const ListDnsRecordsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   name: Schema.optional(Schema.String).pipe(T.HttpQuery("name")),
-  type: Schema.optional(DnsRecordType).pipe(T.HttpQuery("type")),
+  "name.exact": Schema.optional(Schema.String).pipe(T.HttpQuery("name.exact")),
+  "name.contains": Schema.optional(Schema.String).pipe(T.HttpQuery("name.contains")),
+  "name.startswith": Schema.optional(Schema.String).pipe(T.HttpQuery("name.startswith")),
+  "name.endswith": Schema.optional(Schema.String).pipe(T.HttpQuery("name.endswith")),
+  type: Schema.optional(Schema.Literal("A", "AAAA", "CAA", "CERT", "CNAME", "DNSKEY", "DS", "HTTPS", "LOC", "MX", "NAPTR", "NS", "OPENPGPKEY", "PTR", "SMIMEA", "SRV", "SSHFP", "SVCB", "TLSA", "TXT", "URI")).pipe(T.HttpQuery("type")),
   content: Schema.optional(Schema.String).pipe(T.HttpQuery("content")),
+  "content.exact": Schema.optional(Schema.String).pipe(T.HttpQuery("content.exact")),
+  "content.contains": Schema.optional(Schema.String).pipe(T.HttpQuery("content.contains")),
+  "content.startswith": Schema.optional(Schema.String).pipe(T.HttpQuery("content.startswith")),
+  "content.endswith": Schema.optional(Schema.String).pipe(T.HttpQuery("content.endswith")),
   proxied: Schema.optional(Schema.Boolean).pipe(T.HttpQuery("proxied")),
+  match: Schema.optional(Schema.Literal("any", "all")).pipe(T.HttpQuery("match")),
+  comment: Schema.optional(Schema.String).pipe(T.HttpQuery("comment")),
+  "comment.present": Schema.optional(Schema.String).pipe(T.HttpQuery("comment.present")),
+  "comment.absent": Schema.optional(Schema.String).pipe(T.HttpQuery("comment.absent")),
+  "comment.exact": Schema.optional(Schema.String).pipe(T.HttpQuery("comment.exact")),
+  "comment.contains": Schema.optional(Schema.String).pipe(T.HttpQuery("comment.contains")),
+  "comment.startswith": Schema.optional(Schema.String).pipe(T.HttpQuery("comment.startswith")),
+  "comment.endswith": Schema.optional(Schema.String).pipe(T.HttpQuery("comment.endswith")),
+  tag: Schema.optional(Schema.String).pipe(T.HttpQuery("tag")),
+  "tag.present": Schema.optional(Schema.String).pipe(T.HttpQuery("tag.present")),
+  "tag.absent": Schema.optional(Schema.String).pipe(T.HttpQuery("tag.absent")),
+  "tag.exact": Schema.optional(Schema.String).pipe(T.HttpQuery("tag.exact")),
+  "tag.contains": Schema.optional(Schema.String).pipe(T.HttpQuery("tag.contains")),
+  "tag.startswith": Schema.optional(Schema.String).pipe(T.HttpQuery("tag.startswith")),
+  "tag.endswith": Schema.optional(Schema.String).pipe(T.HttpQuery("tag.endswith")),
+  search: Schema.optional(Schema.String).pipe(T.HttpQuery("search")),
+  tag_match: Schema.optional(Schema.Literal("any", "all")).pipe(T.HttpQuery("tag_match")),
   page: Schema.optional(Schema.Number).pipe(T.HttpQuery("page")),
   per_page: Schema.optional(Schema.Number).pipe(T.HttpQuery("per_page")),
   order: Schema.optional(Schema.Literal("type", "name", "content", "ttl", "proxied")).pipe(T.HttpQuery("order")),
-  direction: Schema.optional(Schema.Literal("asc", "desc")).pipe(T.HttpQuery("direction")),
-  match: Schema.optional(Schema.Literal("any", "all")).pipe(T.HttpQuery("match")),
-  tag: Schema.optional(Schema.String).pipe(T.HttpQuery("tag")),
-  tag_match: Schema.optional(Schema.Literal("any", "all")).pipe(T.HttpQuery("tag-match")),
-  search: Schema.optional(Schema.String).pipe(T.HttpQuery("search")),
-  comment: Schema.optional(Schema.String).pipe(T.HttpQuery("comment")),
-}).pipe(T.Http({ method: "GET", path: "/zones/{zone_id}/dns_records" }));
-export type ListDnsRecordsRequest = typeof ListDnsRecordsRequest.Type;
+  direction: Schema.optional(Schema.Literal("asc", "desc")).pipe(T.HttpQuery("direction"))
+}).pipe(
+  T.Http({ method: "GET", path: "/zones/{zone_id}/dns_records" }),
+).annotations({ identifier: "ListDnsRecordsRequest" }) as unknown as Schema.Schema<ListDnsRecordsRequest>;
+
+export interface ListDnsRecordsResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
 
 export const ListDnsRecordsResponse = Schema.Struct({
-  result: Schema.Array(DnsRecord),
-  result_info: Schema.optional(ResultInfo),
-});
-export type ListDnsRecordsResponse = typeof ListDnsRecordsResponse.Type;
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "ListDnsRecordsResponse" }) as unknown as Schema.Schema<ListDnsRecordsResponse>;
 
-export const listDnsRecords = API.makePaginated(() => ({
+export const listDnsRecords: (
+  input: ListDnsRecordsRequest
+) => Effect.Effect<
+  ListDnsRecordsResponse,
+  InvalidZone | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
   input: ListDnsRecordsRequest,
   output: ListDnsRecordsResponse,
-  errors: [],
-  pagination: {
-    inputToken: "page",
-    outputToken: "result_info.page",
-    items: "result",
-    pageSize: "per_page",
-  },
+  errors: [InvalidZone],
 }));
 
-// =============================================================================
-// Get DNS Record
-// =============================================================================
-
-export const GetDnsRecordRequest = Schema.Struct({
-  zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
-  dns_record_id: Schema.String.pipe(T.HttpPath("dns_record_id")),
-}).pipe(T.Http({ method: "GET", path: "/zones/{zone_id}/dns_records/{dns_record_id}" }));
-export type GetDnsRecordRequest = typeof GetDnsRecordRequest.Type;
-
-export const GetDnsRecordResponse = Schema.Struct({
-  result: DnsRecord,
-});
-export type GetDnsRecordResponse = typeof GetDnsRecordResponse.Type;
-
-export const getDnsRecord = API.make(() => ({
-  input: GetDnsRecordRequest,
-  output: GetDnsRecordResponse,
-  errors: [],
-}));
-
-// =============================================================================
-// Create DNS Record
-// =============================================================================
+export interface CreateDnsRecordRequest {
+  zone_id: string;
+  body: Record<string, unknown>;
+}
 
 export const CreateDnsRecordRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
-  type: DnsRecordType,
-  name: Schema.String,
-  content: Schema.String,
-  ttl: Schema.optional(Schema.Number),
-  proxied: Schema.optional(Schema.Boolean),
-  priority: Schema.optional(Schema.Number),
-  comment: Schema.optional(Schema.String),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-}).pipe(T.Http({ method: "POST", path: "/zones/{zone_id}/dns_records" }));
-export type CreateDnsRecordRequest = typeof CreateDnsRecordRequest.Type;
+  body: Schema.Struct({}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "POST", path: "/zones/{zone_id}/dns_records" }),
+).annotations({ identifier: "CreateDnsRecordRequest" }) as unknown as Schema.Schema<CreateDnsRecordRequest>;
+
+export interface CreateDnsRecordResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
 
 export const CreateDnsRecordResponse = Schema.Struct({
-  result: DnsRecord,
-});
-export type CreateDnsRecordResponse = typeof CreateDnsRecordResponse.Type;
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "CreateDnsRecordResponse" }) as unknown as Schema.Schema<CreateDnsRecordResponse>;
 
-export const createDnsRecord = API.make(() => ({
+export const createDnsRecord: (
+  input: CreateDnsRecordRequest
+) => Effect.Effect<
+  CreateDnsRecordResponse,
+  InvalidZone | ValidationError | InvalidRequest | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
   input: CreateDnsRecordRequest,
   output: CreateDnsRecordResponse,
+  errors: [InvalidZone, ValidationError, InvalidRequest],
+}));
+
+export interface DnsRecordsForAZoneBatchDnsRecordsRequest {
+  zone_id: string;
+  body: { deletes?: Record<string, unknown>[]; patches?: { id: string }[]; posts?: Record<string, unknown>[]; puts?: { id: string }[] };
+}
+
+export const DnsRecordsForAZoneBatchDnsRecordsRequest = Schema.Struct({
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
+  body: Schema.Struct({
+  deletes: Schema.optional(Schema.Array(Schema.Struct({}))),
+  patches: Schema.optional(Schema.Array(Schema.Struct({
+  id: Schema.String
+}))),
+  posts: Schema.optional(Schema.Array(Schema.Struct({}))),
+  puts: Schema.optional(Schema.Array(Schema.Struct({
+  id: Schema.String
+})))
+}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "POST", path: "/zones/{zone_id}/dns_records/batch" }),
+).annotations({ identifier: "DnsRecordsForAZoneBatchDnsRecordsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneBatchDnsRecordsRequest>;
+
+export interface DnsRecordsForAZoneBatchDnsRecordsResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
+
+export const DnsRecordsForAZoneBatchDnsRecordsResponse = Schema.Struct({
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "DnsRecordsForAZoneBatchDnsRecordsResponse" }) as unknown as Schema.Schema<DnsRecordsForAZoneBatchDnsRecordsResponse>;
+
+export const dnsRecordsForAZoneBatchDnsRecords: (
+  input: DnsRecordsForAZoneBatchDnsRecordsRequest
+) => Effect.Effect<
+  DnsRecordsForAZoneBatchDnsRecordsResponse,
+  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
+  input: DnsRecordsForAZoneBatchDnsRecordsRequest,
+  output: DnsRecordsForAZoneBatchDnsRecordsResponse,
   errors: [],
 }));
 
-// =============================================================================
-// Update DNS Record
-// =============================================================================
+export interface DnsRecordsForAZoneExportDnsRecordsRequest {
+  zone_id: string;
+}
+
+export const DnsRecordsForAZoneExportDnsRecordsRequest = Schema.Struct({
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id"))
+}).pipe(
+  T.Http({ method: "GET", path: "/zones/{zone_id}/dns_records/export" }),
+).annotations({ identifier: "DnsRecordsForAZoneExportDnsRecordsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneExportDnsRecordsRequest>;
+
+export interface DnsRecordsForAZoneExportDnsRecordsResponse {
+  result: unknown;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
+
+export const DnsRecordsForAZoneExportDnsRecordsResponse = Schema.Struct({
+  result: Schema.Unknown,
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "DnsRecordsForAZoneExportDnsRecordsResponse" }) as unknown as Schema.Schema<DnsRecordsForAZoneExportDnsRecordsResponse>;
+
+export const dnsRecordsForAZoneExportDnsRecords: (
+  input: DnsRecordsForAZoneExportDnsRecordsRequest
+) => Effect.Effect<
+  DnsRecordsForAZoneExportDnsRecordsResponse,
+  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
+  input: DnsRecordsForAZoneExportDnsRecordsRequest,
+  output: DnsRecordsForAZoneExportDnsRecordsResponse,
+  errors: [],
+}));
+
+export interface DnsRecordsForAZoneImportDnsRecordsRequest {
+  zone_id: string;
+}
+
+export const DnsRecordsForAZoneImportDnsRecordsRequest = Schema.Struct({
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id"))
+}).pipe(
+  T.Http({ method: "POST", path: "/zones/{zone_id}/dns_records/import" }),
+).annotations({ identifier: "DnsRecordsForAZoneImportDnsRecordsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneImportDnsRecordsRequest>;
+
+export interface DnsRecordsForAZoneImportDnsRecordsResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
+
+export const DnsRecordsForAZoneImportDnsRecordsResponse = Schema.Struct({
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "DnsRecordsForAZoneImportDnsRecordsResponse" }) as unknown as Schema.Schema<DnsRecordsForAZoneImportDnsRecordsResponse>;
+
+export const dnsRecordsForAZoneImportDnsRecords: (
+  input: DnsRecordsForAZoneImportDnsRecordsRequest
+) => Effect.Effect<
+  DnsRecordsForAZoneImportDnsRecordsResponse,
+  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
+  input: DnsRecordsForAZoneImportDnsRecordsRequest,
+  output: DnsRecordsForAZoneImportDnsRecordsResponse,
+  errors: [],
+}));
+
+export interface DnsRecordsForAZoneScanDnsRecordsRequest {
+  zone_id: string;
+}
+
+export const DnsRecordsForAZoneScanDnsRecordsRequest = Schema.Struct({
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id"))
+}).pipe(
+  T.Http({ method: "POST", path: "/zones/{zone_id}/dns_records/scan" }),
+).annotations({ identifier: "DnsRecordsForAZoneScanDnsRecordsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneScanDnsRecordsRequest>;
+
+export interface DnsRecordsForAZoneScanDnsRecordsResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
+
+export const DnsRecordsForAZoneScanDnsRecordsResponse = Schema.Struct({
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "DnsRecordsForAZoneScanDnsRecordsResponse" }) as unknown as Schema.Schema<DnsRecordsForAZoneScanDnsRecordsResponse>;
+
+export const dnsRecordsForAZoneScanDnsRecords: (
+  input: DnsRecordsForAZoneScanDnsRecordsRequest
+) => Effect.Effect<
+  DnsRecordsForAZoneScanDnsRecordsResponse,
+  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
+  input: DnsRecordsForAZoneScanDnsRecordsRequest,
+  output: DnsRecordsForAZoneScanDnsRecordsResponse,
+  errors: [],
+}));
+
+export interface DnsRecordsForAZoneReviewDnsScanRequest {
+  zone_id: string;
+}
+
+export const DnsRecordsForAZoneReviewDnsScanRequest = Schema.Struct({
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id"))
+}).pipe(
+  T.Http({ method: "GET", path: "/zones/{zone_id}/dns_records/scan/review" }),
+).annotations({ identifier: "DnsRecordsForAZoneReviewDnsScanRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneReviewDnsScanRequest>;
+
+export interface DnsRecordsForAZoneReviewDnsScanResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
+
+export const DnsRecordsForAZoneReviewDnsScanResponse = Schema.Struct({
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "DnsRecordsForAZoneReviewDnsScanResponse" }) as unknown as Schema.Schema<DnsRecordsForAZoneReviewDnsScanResponse>;
+
+export const dnsRecordsForAZoneReviewDnsScan: (
+  input: DnsRecordsForAZoneReviewDnsScanRequest
+) => Effect.Effect<
+  DnsRecordsForAZoneReviewDnsScanResponse,
+  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
+  input: DnsRecordsForAZoneReviewDnsScanRequest,
+  output: DnsRecordsForAZoneReviewDnsScanResponse,
+  errors: [],
+}));
+
+export interface DnsRecordsForAZoneApplyDnsScanResultsRequest {
+  zone_id: string;
+  body: { accepts?: Record<string, unknown>[]; rejects?: Record<string, unknown>[] };
+}
+
+export const DnsRecordsForAZoneApplyDnsScanResultsRequest = Schema.Struct({
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
+  body: Schema.Struct({
+  accepts: Schema.optional(Schema.Array(Schema.Struct({}))),
+  rejects: Schema.optional(Schema.Array(Schema.Struct({})))
+}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "POST", path: "/zones/{zone_id}/dns_records/scan/review" }),
+).annotations({ identifier: "DnsRecordsForAZoneApplyDnsScanResultsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneApplyDnsScanResultsRequest>;
+
+export interface DnsRecordsForAZoneApplyDnsScanResultsResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
+
+export const DnsRecordsForAZoneApplyDnsScanResultsResponse = Schema.Struct({
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "DnsRecordsForAZoneApplyDnsScanResultsResponse" }) as unknown as Schema.Schema<DnsRecordsForAZoneApplyDnsScanResultsResponse>;
+
+export const dnsRecordsForAZoneApplyDnsScanResults: (
+  input: DnsRecordsForAZoneApplyDnsScanResultsRequest
+) => Effect.Effect<
+  DnsRecordsForAZoneApplyDnsScanResultsResponse,
+  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
+  input: DnsRecordsForAZoneApplyDnsScanResultsRequest,
+  output: DnsRecordsForAZoneApplyDnsScanResultsResponse,
+  errors: [],
+}));
+
+export interface DnsRecordsForAZoneTriggerDnsScanRequest {
+  zone_id: string;
+}
+
+export const DnsRecordsForAZoneTriggerDnsScanRequest = Schema.Struct({
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id"))
+}).pipe(
+  T.Http({ method: "POST", path: "/zones/{zone_id}/dns_records/scan/trigger" }),
+).annotations({ identifier: "DnsRecordsForAZoneTriggerDnsScanRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneTriggerDnsScanRequest>;
+
+export interface DnsRecordsForAZoneTriggerDnsScanResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
+
+export const DnsRecordsForAZoneTriggerDnsScanResponse = Schema.Struct({
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "DnsRecordsForAZoneTriggerDnsScanResponse" }) as unknown as Schema.Schema<DnsRecordsForAZoneTriggerDnsScanResponse>;
+
+export const dnsRecordsForAZoneTriggerDnsScan: (
+  input: DnsRecordsForAZoneTriggerDnsScanRequest
+) => Effect.Effect<
+  DnsRecordsForAZoneTriggerDnsScanResponse,
+  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
+  input: DnsRecordsForAZoneTriggerDnsScanRequest,
+  output: DnsRecordsForAZoneTriggerDnsScanResponse,
+  errors: [],
+}));
+
+export interface GetUsageRequest {
+  zone_id: string;
+}
+
+export const GetUsageRequest = Schema.Struct({
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id"))
+}).pipe(
+  T.Http({ method: "GET", path: "/zones/{zone_id}/dns_records/usage" }),
+).annotations({ identifier: "GetUsageRequest" }) as unknown as Schema.Schema<GetUsageRequest>;
+
+export interface GetUsageResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
+
+export const GetUsageResponse = Schema.Struct({
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "GetUsageResponse" }) as unknown as Schema.Schema<GetUsageResponse>;
+
+export const getUsage: (
+  input: GetUsageRequest
+) => Effect.Effect<
+  GetUsageResponse,
+  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
+  input: GetUsageRequest,
+  output: GetUsageResponse,
+  errors: [],
+}));
+
+export interface DnsRecordsForAZoneDnsRecordDetailsRequest {
+  dns_record_id: string;
+  zone_id: string;
+}
+
+export const DnsRecordsForAZoneDnsRecordDetailsRequest = Schema.Struct({
+  dns_record_id: Schema.String.pipe(T.HttpPath("dns_record_id")),
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id"))
+}).pipe(
+  T.Http({ method: "GET", path: "/zones/{zone_id}/dns_records/{dns_record_id}" }),
+).annotations({ identifier: "DnsRecordsForAZoneDnsRecordDetailsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneDnsRecordDetailsRequest>;
+
+export interface DnsRecordsForAZoneDnsRecordDetailsResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
+
+export const DnsRecordsForAZoneDnsRecordDetailsResponse = Schema.Struct({
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "DnsRecordsForAZoneDnsRecordDetailsResponse" }) as unknown as Schema.Schema<DnsRecordsForAZoneDnsRecordDetailsResponse>;
+
+export const dnsRecordsForAZoneDnsRecordDetails: (
+  input: DnsRecordsForAZoneDnsRecordDetailsRequest
+) => Effect.Effect<
+  DnsRecordsForAZoneDnsRecordDetailsResponse,
+  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
+  input: DnsRecordsForAZoneDnsRecordDetailsRequest,
+  output: DnsRecordsForAZoneDnsRecordDetailsResponse,
+  errors: [],
+}));
+
+export interface UpdateDnsRecordRequest {
+  dns_record_id: string;
+  zone_id: string;
+  body: Record<string, unknown>;
+}
 
 export const UpdateDnsRecordRequest = Schema.Struct({
-  zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   dns_record_id: Schema.String.pipe(T.HttpPath("dns_record_id")),
-  type: DnsRecordType,
-  name: Schema.String,
-  content: Schema.String,
-  ttl: Schema.optional(Schema.Number),
-  proxied: Schema.optional(Schema.Boolean),
-  priority: Schema.optional(Schema.Number),
-  comment: Schema.optional(Schema.String),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-}).pipe(T.Http({ method: "PUT", path: "/zones/{zone_id}/dns_records/{dns_record_id}" }));
-export type UpdateDnsRecordRequest = typeof UpdateDnsRecordRequest.Type;
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
+  body: Schema.Struct({}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "PUT", path: "/zones/{zone_id}/dns_records/{dns_record_id}" }),
+).annotations({ identifier: "UpdateDnsRecordRequest" }) as unknown as Schema.Schema<UpdateDnsRecordRequest>;
+
+export interface UpdateDnsRecordResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
 
 export const UpdateDnsRecordResponse = Schema.Struct({
-  result: DnsRecord,
-});
-export type UpdateDnsRecordResponse = typeof UpdateDnsRecordResponse.Type;
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "UpdateDnsRecordResponse" }) as unknown as Schema.Schema<UpdateDnsRecordResponse>;
 
-export const updateDnsRecord = API.make(() => ({
+export const updateDnsRecord: (
+  input: UpdateDnsRecordRequest
+) => Effect.Effect<
+  UpdateDnsRecordResponse,
+  InvalidZone | RecordNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
   input: UpdateDnsRecordRequest,
   output: UpdateDnsRecordResponse,
-  errors: [],
+  errors: [InvalidZone, RecordNotFound, ValidationError],
 }));
 
-// =============================================================================
-// Patch DNS Record
-// =============================================================================
-
-export const PatchDnsRecordRequest = Schema.Struct({
-  zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
-  dns_record_id: Schema.String.pipe(T.HttpPath("dns_record_id")),
-  type: Schema.optional(DnsRecordType),
-  name: Schema.optional(Schema.String),
-  content: Schema.optional(Schema.String),
-  ttl: Schema.optional(Schema.Number),
-  proxied: Schema.optional(Schema.Boolean),
-  priority: Schema.optional(Schema.Number),
-  comment: Schema.optional(Schema.String),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-}).pipe(T.Http({ method: "PATCH", path: "/zones/{zone_id}/dns_records/{dns_record_id}" }));
-export type PatchDnsRecordRequest = typeof PatchDnsRecordRequest.Type;
-
-export const PatchDnsRecordResponse = Schema.Struct({
-  result: DnsRecord,
-});
-export type PatchDnsRecordResponse = typeof PatchDnsRecordResponse.Type;
-
-export const patchDnsRecord = API.make(() => ({
-  input: PatchDnsRecordRequest,
-  output: PatchDnsRecordResponse,
-  errors: [],
-}));
-
-// =============================================================================
-// Delete DNS Record
-// =============================================================================
+export interface DeleteDnsRecordRequest {
+  dns_record_id: string;
+  zone_id: string;
+}
 
 export const DeleteDnsRecordRequest = Schema.Struct({
-  zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   dns_record_id: Schema.String.pipe(T.HttpPath("dns_record_id")),
-}).pipe(T.Http({ method: "DELETE", path: "/zones/{zone_id}/dns_records/{dns_record_id}" }));
-export type DeleteDnsRecordRequest = typeof DeleteDnsRecordRequest.Type;
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id"))
+}).pipe(
+  T.Http({ method: "DELETE", path: "/zones/{zone_id}/dns_records/{dns_record_id}" }),
+).annotations({ identifier: "DeleteDnsRecordRequest" }) as unknown as Schema.Schema<DeleteDnsRecordRequest>;
+
+export interface DeleteDnsRecordResponse {
+  result: { result?: { id?: string } };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
 
 export const DeleteDnsRecordResponse = Schema.Struct({
   result: Schema.Struct({
-    id: Schema.String,
-  }),
-});
-export type DeleteDnsRecordResponse = typeof DeleteDnsRecordResponse.Type;
+  result: Schema.optional(Schema.Struct({
+  id: Schema.optional(Schema.String)
+}))
+}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "DeleteDnsRecordResponse" }) as unknown as Schema.Schema<DeleteDnsRecordResponse>;
 
-export const deleteDnsRecord = API.make(() => ({
+export const deleteDnsRecord: (
+  input: DeleteDnsRecordRequest
+) => Effect.Effect<
+  DeleteDnsRecordResponse,
+  InvalidZone | RecordNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
   input: DeleteDnsRecordRequest,
   output: DeleteDnsRecordResponse,
-  errors: [],
+  errors: [InvalidZone, RecordNotFound],
+}));
+
+export interface PatchDnsRecordRequest {
+  dns_record_id: string;
+  zone_id: string;
+  body: Record<string, unknown>;
+}
+
+export const PatchDnsRecordRequest = Schema.Struct({
+  dns_record_id: Schema.String.pipe(T.HttpPath("dns_record_id")),
+  zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
+  body: Schema.Struct({}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "PATCH", path: "/zones/{zone_id}/dns_records/{dns_record_id}" }),
+).annotations({ identifier: "PatchDnsRecordRequest" }) as unknown as Schema.Schema<PatchDnsRecordRequest>;
+
+export interface PatchDnsRecordResponse {
+  result: Record<string, unknown>;
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
+}
+
+export const PatchDnsRecordResponse = Schema.Struct({
+  result: Schema.Struct({}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "PatchDnsRecordResponse" }) as unknown as Schema.Schema<PatchDnsRecordResponse>;
+
+export const patchDnsRecord: (
+  input: PatchDnsRecordRequest
+) => Effect.Effect<
+  PatchDnsRecordResponse,
+  InvalidZone | RecordNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  ApiToken | HttpClient.HttpClient
+> = API.make(() => ({
+  input: PatchDnsRecordRequest,
+  output: PatchDnsRecordResponse,
+  errors: [InvalidZone, RecordNotFound, ValidationError],
 }));
