@@ -9,7 +9,6 @@ bun generate                              # Generate all services
 bun generate --service r2                 # Generate single service
 bun generate --fetch                      # Fetch latest spec first
 bun vitest run ./test/services/r2.test.ts # Run tests
-bun scripts/generate-errors.ts            # Regenerate error classes
 ```
 
 ## TDD WORKFLOW
@@ -18,7 +17,7 @@ The Cloudflare OpenAPI spec is incomplete. Tests reveal two types of issues:
 
 | Error Type | Symptom | Fix Location |
 |------------|---------|--------------|
-| `UnknownCloudflareError` | Undocumented error code | `spec/error-catalog.json` + `spec/{service}.json` |
+| `UnknownCloudflareError` | Undocumented error code | `spec/{service}.json` |
 | `Schema decode failed` | Response doesn't match spec | `spec/openapi.patch.jsonc` |
 
 ### The Loop
@@ -86,9 +85,9 @@ Two failure modes:
 
 ---
 
-## STEP 3A: CATALOG THE ERROR
+## STEP 3A: ADD THE ERROR
 
-When you see `UnknownCloudflareError`, the API returned an error code not in our catalog.
+When you see `UnknownCloudflareError`, the API returned an error code not defined in `spec/{service}.json`.
 
 ### Extract the error code
 
@@ -106,39 +105,44 @@ console.log(JSON.stringify(result, null, 2));
 // Shows: { "code": 10059, "message": "The CORS configuration does not exist." }
 ```
 
-### Add to error catalog
+### Define the error in spec/{service}.json
 
-Edit `spec/error-catalog.json`:
-
-```json
-{
-  "codes": {
-    "10059": { "name": "NoCorsConfiguration", "category": "NotFoundError" }
-  }
-}
-```
-
-**Categories:** `AuthError`, `BadRequestError`, `NotFoundError`, `ConflictError`, `ThrottlingError`, `ServerError`
-
-### Map to operations
-
-Edit `spec/{service}.json` (e.g., `spec/r2.json`):
+Errors are defined per-service with matching conditions. Edit `spec/{service}.json` (e.g., `spec/r2.json`):
 
 ```json
 {
+  "errors": {
+    "NoSuchBucket": { "code": 10006, "status": 404 },
+    "NoCorsConfiguration": { "code": 10059 },
+    "ValidationError": { "code": 100021 }
+  },
   "operations": {
-    "getBucketCorsPolicy": { "errors": ["NoSuchBucket", "NoCorsConfiguration"] },
-    "deleteBucketCorsPolicy": { "errors": ["NoSuchBucket", "NoCorsConfiguration"] }
+    "getBucketCorsPolicy": {
+      "errors": { "NoSuchBucket": {}, "NoCorsConfiguration": {} }
+    },
+    "deleteBucketCorsPolicy": {
+      "errors": { "NoSuchBucket": {}, "NoCorsConfiguration": {} }
+    }
   }
 }
 ```
+
+**Error matching supports:**
+- `code` - Single Cloudflare error code
+- `codes` - Array of codes that map to the same error
+- `status` - HTTP status code (optional, for disambiguation)
+- `message` - Substring match on error message (optional)
+
+**Service-level vs operation-level:**
+- Define errors at the service level with their matching conditions
+- Reference errors by name at the operation level with `{}` to use defaults
+- Override matching at the operation level: `{ "NoSuchBucket": { "code": 12345 } }`
 
 **Important:** Use the **generated function name** (check `src/services/{service}.ts`), not the OpenAPI operationId.
 
 ### Regenerate
 
 ```bash
-bun scripts/generate-errors.ts
 bun generate --service r2
 ```
 
@@ -304,32 +308,45 @@ bun vitest run ./test/services/r2.test.ts
 
 | File | Purpose |
 |------|---------|
-| `spec/error-catalog.json` | Global error code → name + category mapping |
-| `spec/{service}.json` | Per-operation error assignments |
+| `spec/{service}.json` | Error definitions and per-operation error assignments |
 | `spec/openapi.patch.jsonc` | RFC 6902 JSON Patches for spec bugs |
 | `src/services/{service}.ts` | Generated client (DO NOT EDIT) |
+| `src/client/response-parser.ts` | Parses responses and matches errors using trait annotations |
+| `src/traits.ts` | Schema annotations for HTTP bindings and error matching |
 | `test/services/{service}.test.ts` | Tests that drive discovery |
 
 ---
 
-## ERROR CATALOG FORMAT
+## SERVICE SPEC FORMAT
+
+Each service has a `spec/{service}.json` that defines errors and their matching conditions:
 
 ```json
 {
-  "codes": {
-    "10006": { "name": "NoSuchBucket", "category": "NotFoundError" },
-    "10059": { "name": "NoCorsConfiguration", "category": "NotFoundError" }
+  "errors": {
+    "NoSuchBucket": { "code": 10006, "status": 404 },
+    "NoCorsConfiguration": { "code": 10059 },
+    "QueueNotFound": { "codes": [11000, 10004], "status": 404 },
+    "ValidationError": { "code": 100021 }
   },
-  "patterns": [
-    { "regex": "not found", "name": "NotFound", "category": "NotFoundError" }
-  ],
-  "codeRanges": [
-    { "min": 10000, "max": 10999, "defaultCategory": "BadRequestError" }
-  ]
+  "operations": {
+    "getBucket": {
+      "errors": { "NoSuchBucket": {} }
+    },
+    "createQueue": {
+      "errors": { "ValidationError": {}, "QueueAlreadyExists": { "code": 10003 } }
+    }
+  }
 }
 ```
 
-**Priority:** Exact code → Pattern match → Code range → `UnknownCloudflareError`
+**Error matcher fields:**
+- `code` — Single Cloudflare error code
+- `codes` — Array of codes (use when multiple codes map to same error)
+- `status` — HTTP status code (helps disambiguate)
+- `message` — Substring match on error message
+
+**Matching priority:** code + status + message > code + status > code only
 
 ---
 
@@ -400,18 +417,19 @@ test("NoSuchBucket on non-existent", () =>
 
 ```
 OpenAPI Spec + Patches → Generator → src/services/*.ts → Runtime
-                                           ↓
-                              Error Catalog + Service Errors
+        ↓                    ↓              ↓               ↓
+spec/openapi.patch.jsonc  spec/{service}.json  Schemas + Traits  Response Parser
 ```
 
 **Generator:** `scripts/generate-clients.ts`
 1. Loads spec from `.cache/openapi.json` (or fetches)
 2. Applies patches from `spec/openapi.patch.jsonc`
-3. Groups operations by service
-4. Generates Effect Schema request/response types
-5. Outputs to `src/services/{service}.ts`
+3. Loads error definitions from `spec/{service}.json`
+4. Groups operations by service
+5. Generates Effect Schema request/response types with trait annotations
+6. Outputs to `src/services/{service}.ts`
 
-**Traits:** HTTP bindings as Schema annotations
+**Traits:** HTTP bindings and error matching as Schema annotations
 
 | Trait | Purpose |
 |-------|---------|
@@ -419,7 +437,19 @@ OpenAPI Spec + Patches → Generator → src/services/*.ts → Runtime
 | `T.HttpQuery(name)` | Query parameter |
 | `T.HttpHeader(name)` | Header |
 | `T.HttpBody()` | JSON body |
-| `T.HttpFormData()` | Multipart form-data |
+| `T.HttpFormData()` | Multipart form-data request |
+| `T.HttpMultipartResponse()` | Multipart form-data response (returns `FormData`) |
+| `T.HttpErrorCode(code)` | Match error by single code |
+| `T.HttpErrorCodes([...])` | Match error by multiple codes |
+| `T.HttpErrorStatus(status)` | Match error by HTTP status |
+| `T.HttpErrorMessage(pattern)` | Match error by message substring |
+
+**Response Parser:** `src/client/response-parser.ts`
+1. Checks for multipart response (returns `FormData` directly)
+2. Parses JSON response envelope `{ success, errors, result }`
+3. On error, iterates error schemas and reads trait annotations
+4. Matches error by code/status/message priority
+5. Instantiates typed error class via `Schema.decodeUnknown`
 
 ---
 
@@ -451,4 +481,31 @@ bun run download:env
 
 **Workers:**
 - Upload via FormData with metadata blob
+- `getContent` returns `FormData` with worker modules as `File` entries
 - Workflows require a worker that exports Workflow class
+
+---
+
+## MULTIPART RESPONSES
+
+Some APIs return `multipart/form-data` instead of JSON (e.g., downloading worker scripts).
+
+These are automatically detected and return `FormData`:
+
+```typescript
+const formData = yield* Workers.getContent({
+  account_id: accountId(),
+  script_name: "my-worker",
+});
+
+// Iterate all modules
+for (const [name, file] of formData.entries()) {
+  const content = yield* Effect.promise(() => (file as File).text());
+  console.log(name, content);
+}
+```
+
+The generator detects `multipart/form-data` response content type and:
+1. Generates `type XxxResponse = FormData`
+2. Annotates schema with `T.HttpMultipartResponse()`
+3. Response parser returns `FormData` instead of decoding JSON
