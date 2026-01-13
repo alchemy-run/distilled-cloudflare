@@ -69,6 +69,89 @@
         "BindingNotFound": {},
         "BindingNameRequired": {}
       }
+    },
+    "getCronTriggers": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "getSubdomain": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "getContent": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "putScriptSecret": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "listScriptSecrets1": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteScriptSecret1": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "workerScriptFetchUsageModel": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "getScriptTags": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "WorkerNotFound": {}
+      }
+    },
+    "putScriptTags": {
+      "errors": {
+        "WorkerNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "deleteScriptTag": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "getVersionDetail": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "updateCronTriggers": {
+      "errors": {
+        "WorkerNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "getSettings1": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "workerScriptListTails": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "workerScriptStartTail": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "workerScriptDeleteTail": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
     }
   }
 }

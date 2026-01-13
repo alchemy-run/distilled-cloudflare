@@ -2399,6 +2399,8 @@ export const getScriptTags: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | NamespaceNotFound
+  | WorkerNotFound
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -2415,6 +2417,8 @@ export const getScriptTags: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    NamespaceNotFound.pipe(T.HttpErrorCode(100119), T.HttpErrorStatus(404)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
   ],
 }));
 
@@ -2478,6 +2482,8 @@ export const putScriptTags: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
+  | ValidationError
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -2494,6 +2500,8 @@ export const putScriptTags: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
+    ValidationError.pipe(T.HttpErrorCode(10021)),
   ],
 }));
 
@@ -2636,6 +2644,7 @@ export const deleteScriptTag: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -2652,6 +2661,7 @@ export const deleteScriptTag: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
   ],
 }));
 
@@ -5935,6 +5945,7 @@ export const getContent: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -5951,6 +5962,7 @@ export const getContent: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
   ],
 }));
 
@@ -6446,6 +6458,7 @@ export const getCronTriggers: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -6462,6 +6475,7 @@ export const getCronTriggers: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
   ],
 }));
 
@@ -6537,6 +6551,8 @@ export const updateCronTriggers: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
+  | ValidationError
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -6553,6 +6569,8 @@ export const updateCronTriggers: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
+    ValidationError.pipe(T.HttpErrorCode(10021)),
   ],
 }));
 
@@ -6827,6 +6845,7 @@ export const listScriptSecrets1: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -6843,6 +6862,7 @@ export const listScriptSecrets1: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
   ],
 }));
 
@@ -6901,6 +6921,7 @@ export const putScriptSecret: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -6917,6 +6938,7 @@ export const putScriptSecret: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
   ],
 }));
 
@@ -7059,6 +7081,7 @@ export const deleteScriptSecret1: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -7075,6 +7098,7 @@ export const deleteScriptSecret1: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
   ],
 }));
 
@@ -7245,6 +7269,7 @@ export const getSettings1: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -7261,6 +7286,7 @@ export const getSettings1: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
   ],
 }));
 
@@ -7511,6 +7537,7 @@ export const getSubdomain: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -7527,6 +7554,7 @@ export const getSubdomain: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
   ],
 }));
 
@@ -7983,6 +8011,7 @@ export const workerScriptFetchUsageModel: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -7999,6 +8028,7 @@ export const workerScriptFetchUsageModel: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
   ],
 }));
 
@@ -8420,6 +8450,7 @@ export const getVersionDetail: (
   | MissingToken
   | TokenExpired
   | Unauthorized
+  | WorkerNotFound
   | CloudflareError
   | UnknownCloudflareError
   | CloudflareNetworkError
@@ -8436,6 +8467,7 @@ export const getVersionDetail: (
     MissingToken.pipe(T.HttpErrorCode(9106)),
     TokenExpired.pipe(T.HttpErrorCode(9109)),
     Unauthorized.pipe(T.HttpErrorCode(9000)),
+    WorkerNotFound.pipe(T.HttpErrorCode(10007), T.HttpErrorStatus(404)),
   ],
 }));
 

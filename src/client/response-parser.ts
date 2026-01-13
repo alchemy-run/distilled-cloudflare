@@ -207,8 +207,13 @@ export const parseResponse = <O>(
     // Check if this is a multipart response (e.g., worker script content)
     const contentType = response.headers["content-type"] ?? "";
     const isMultipart = T.getHttpMultipartResponse(outputSchema.ast) === true;
+    const isActuallyMultipart = contentType.includes("multipart/form-data");
 
-    if (isMultipart || contentType.includes("multipart/form-data")) {
+    // Only treat as multipart if:
+    // 1. Content-type is actually multipart, OR
+    // 2. The operation expects multipart AND response is successful (2xx)
+    // This ensures error responses (404 with JSON) are handled as errors, not wrapped in FormData
+    if (isActuallyMultipart || (isMultipart && response.status >= 200 && response.status < 300)) {
       // For multipart responses, return FormData
       return parseMultipartBody(bodyBytes, contentType) as unknown as O;
     }
