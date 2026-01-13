@@ -9,6 +9,7 @@ import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import type { HttpClient } from "@effect/platform";
 import * as API from "../client/api.ts";
+import * as C from "../category.ts";
 import * as T from "../traits.ts";
 import type { ApiToken } from "../auth.ts";
 import {
@@ -28,28 +29,28 @@ export class AuthenticationError extends Schema.TaggedError<AuthenticationError>
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
 export class InvalidQueueName extends Schema.TaggedError<InvalidQueueName>()("InvalidQueueName", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withBadRequestError) {
   static readonly _tag = "InvalidQueueName";
 }
 
 export class InvalidToken extends Schema.TaggedError<InvalidToken>()("InvalidToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError, C.withBadRequestError) {
   static readonly _tag = "InvalidToken";
 }
 
 export class MissingToken extends Schema.TaggedError<MissingToken>()("MissingToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "MissingToken";
 }
 
@@ -59,49 +60,49 @@ export class QueueAlreadyExists extends Schema.TaggedError<QueueAlreadyExists>()
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withConflictError) {
   static readonly _tag = "QueueAlreadyExists";
 }
 
 export class QueueNotFound extends Schema.TaggedError<QueueNotFound>()("QueueNotFound", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withNotFoundError) {
   static readonly _tag = "QueueNotFound";
 }
 
 export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError) {
   static readonly _tag = "RateLimited";
 }
 
 export class TokenExpired extends Schema.TaggedError<TokenExpired>()("TokenExpired", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "TokenExpired";
 }
 
 export class TooManyRequests extends Schema.TaggedError<TooManyRequests>()("TooManyRequests", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError, C.withQuotaError) {
   static readonly _tag = "TooManyRequests";
 }
 
 export class Unauthorized extends Schema.TaggedError<Unauthorized>()("Unauthorized", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "Unauthorized";
 }
 
 export class ValidationError extends Schema.TaggedError<ValidationError>()("ValidationError", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withBadRequestError) {
   static readonly _tag = "ValidationError";
 }
 
@@ -117,11 +118,42 @@ export const ListRequest = Schema.Struct({
 
 export interface ListResponse {
   result: {
-    consumers?: Record<string, unknown>[];
+    consumers?: (
+      | {
+          consumer_id?: string;
+          created_on?: string;
+          queue_id?: string;
+          script?: Record<string, unknown>;
+          script_name?: Record<string, unknown>;
+          settings?: {
+            batch_size?: number;
+            max_concurrency?: number;
+            max_retries?: number;
+            max_wait_time_ms?: number;
+            retry_delay?: number;
+          };
+          type?: "worker";
+        }
+      | {
+          consumer_id?: string;
+          created_on?: string;
+          queue_id?: string;
+          settings?: {
+            batch_size?: number;
+            max_retries?: number;
+            retry_delay?: number;
+            visibility_timeout_ms?: number;
+          };
+          type?: "http_pull";
+        }
+    )[];
     consumers_total_count?: number;
     created_on?: string;
     modified_on?: string;
-    producers?: Record<string, unknown>[];
+    producers?: (
+      | { script?: string; type?: "worker" }
+      | { bucket_name?: string; type?: "r2_bucket" }
+    )[];
     producers_total_count?: number;
     queue_id?: string;
     queue_name?: string;
@@ -143,11 +175,68 @@ export interface ListResponse {
 export const ListResponse = Schema.Struct({
   result: Schema.Array(
     Schema.Struct({
-      consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+      consumers: Schema.optional(
+        Schema.NullOr(
+          Schema.Array(
+            Schema.Union(
+              Schema.Struct({
+                consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+                created_on: Schema.optional(Schema.NullOr(Schema.String)),
+                queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+                script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+                script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+                settings: Schema.optional(
+                  Schema.NullOr(
+                    Schema.Struct({
+                      batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+                      max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+                      max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+                      max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+                      retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+                    }),
+                  ),
+                ),
+                type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+              }),
+              Schema.Struct({
+                consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+                created_on: Schema.optional(Schema.NullOr(Schema.String)),
+                queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+                settings: Schema.optional(
+                  Schema.NullOr(
+                    Schema.Struct({
+                      batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+                      max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+                      retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+                      visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+                    }),
+                  ),
+                ),
+                type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
+              }),
+            ),
+          ),
+        ),
+      ),
       consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
       created_on: Schema.optional(Schema.NullOr(Schema.String)),
       modified_on: Schema.optional(Schema.NullOr(Schema.String)),
-      producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+      producers: Schema.optional(
+        Schema.NullOr(
+          Schema.Array(
+            Schema.Union(
+              Schema.Struct({
+                script: Schema.optional(Schema.NullOr(Schema.String)),
+                type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+              }),
+              Schema.Struct({
+                bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
+                type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket"))),
+              }),
+            ),
+          ),
+        ),
+      ),
       producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
       queue_id: Schema.optional(Schema.NullOr(Schema.String)),
       queue_name: Schema.optional(Schema.NullOr(Schema.String)),
@@ -219,11 +308,42 @@ export const CreateRequest = Schema.Struct({
 
 export interface CreateResponse {
   result: {
-    consumers?: Record<string, unknown>[];
+    consumers?: (
+      | {
+          consumer_id?: string;
+          created_on?: string;
+          queue_id?: string;
+          script?: Record<string, unknown>;
+          script_name?: Record<string, unknown>;
+          settings?: {
+            batch_size?: number;
+            max_concurrency?: number;
+            max_retries?: number;
+            max_wait_time_ms?: number;
+            retry_delay?: number;
+          };
+          type?: "worker";
+        }
+      | {
+          consumer_id?: string;
+          created_on?: string;
+          queue_id?: string;
+          settings?: {
+            batch_size?: number;
+            max_retries?: number;
+            retry_delay?: number;
+            visibility_timeout_ms?: number;
+          };
+          type?: "http_pull";
+        }
+    )[];
     consumers_total_count?: number;
     created_on?: string;
     modified_on?: string;
-    producers?: Record<string, unknown>[];
+    producers?: (
+      | { script?: string; type?: "worker" }
+      | { bucket_name?: string; type?: "r2_bucket" }
+    )[];
     producers_total_count?: number;
     queue_id?: string;
     queue_name?: string;
@@ -244,11 +364,68 @@ export interface CreateResponse {
 
 export const CreateResponse = Schema.Struct({
   result: Schema.Struct({
-    consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    consumers: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+              created_on: Schema.optional(Schema.NullOr(Schema.String)),
+              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+              script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+              script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+              settings: Schema.optional(
+                Schema.NullOr(
+                  Schema.Struct({
+                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+                  }),
+                ),
+              ),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+            }),
+            Schema.Struct({
+              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+              created_on: Schema.optional(Schema.NullOr(Schema.String)),
+              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+              settings: Schema.optional(
+                Schema.NullOr(
+                  Schema.Struct({
+                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+                    visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+                  }),
+                ),
+              ),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
+            }),
+          ),
+        ),
+      ),
+    ),
     consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
     created_on: Schema.optional(Schema.NullOr(Schema.String)),
     modified_on: Schema.optional(Schema.NullOr(Schema.String)),
-    producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    producers: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              script: Schema.optional(Schema.NullOr(Schema.String)),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+            }),
+            Schema.Struct({
+              bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket"))),
+            }),
+          ),
+        ),
+      ),
+    ),
     producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
     queue_id: Schema.optional(Schema.NullOr(Schema.String)),
     queue_name: Schema.optional(Schema.NullOr(Schema.String)),
@@ -323,11 +500,42 @@ export const Get_Request = Schema.Struct({
 
 export interface Get_Response {
   result: {
-    consumers?: Record<string, unknown>[];
+    consumers?: (
+      | {
+          consumer_id?: string;
+          created_on?: string;
+          queue_id?: string;
+          script?: Record<string, unknown>;
+          script_name?: Record<string, unknown>;
+          settings?: {
+            batch_size?: number;
+            max_concurrency?: number;
+            max_retries?: number;
+            max_wait_time_ms?: number;
+            retry_delay?: number;
+          };
+          type?: "worker";
+        }
+      | {
+          consumer_id?: string;
+          created_on?: string;
+          queue_id?: string;
+          settings?: {
+            batch_size?: number;
+            max_retries?: number;
+            retry_delay?: number;
+            visibility_timeout_ms?: number;
+          };
+          type?: "http_pull";
+        }
+    )[];
     consumers_total_count?: number;
     created_on?: string;
     modified_on?: string;
-    producers?: Record<string, unknown>[];
+    producers?: (
+      | { script?: string; type?: "worker" }
+      | { bucket_name?: string; type?: "r2_bucket" }
+    )[];
     producers_total_count?: number;
     queue_id?: string;
     queue_name?: string;
@@ -348,11 +556,68 @@ export interface Get_Response {
 
 export const Get_Response = Schema.Struct({
   result: Schema.Struct({
-    consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    consumers: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+              created_on: Schema.optional(Schema.NullOr(Schema.String)),
+              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+              script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+              script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+              settings: Schema.optional(
+                Schema.NullOr(
+                  Schema.Struct({
+                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+                  }),
+                ),
+              ),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+            }),
+            Schema.Struct({
+              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+              created_on: Schema.optional(Schema.NullOr(Schema.String)),
+              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+              settings: Schema.optional(
+                Schema.NullOr(
+                  Schema.Struct({
+                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+                    visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+                  }),
+                ),
+              ),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
+            }),
+          ),
+        ),
+      ),
+    ),
     consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
     created_on: Schema.optional(Schema.NullOr(Schema.String)),
     modified_on: Schema.optional(Schema.NullOr(Schema.String)),
-    producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    producers: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              script: Schema.optional(Schema.NullOr(Schema.String)),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+            }),
+            Schema.Struct({
+              bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket"))),
+            }),
+          ),
+        ),
+      ),
+    ),
     producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
     queue_id: Schema.optional(Schema.NullOr(Schema.String)),
     queue_name: Schema.optional(Schema.NullOr(Schema.String)),
@@ -413,11 +678,42 @@ export interface UpdateRequest {
   queue_id: string;
   account_id: string;
   body: {
-    consumers?: Record<string, unknown>[];
+    consumers?: (
+      | {
+          consumer_id?: string;
+          created_on?: string;
+          queue_id?: string;
+          script?: Record<string, unknown>;
+          script_name?: Record<string, unknown>;
+          settings?: {
+            batch_size?: number;
+            max_concurrency?: number;
+            max_retries?: number;
+            max_wait_time_ms?: number;
+            retry_delay?: number;
+          };
+          type?: "worker";
+        }
+      | {
+          consumer_id?: string;
+          created_on?: string;
+          queue_id?: string;
+          settings?: {
+            batch_size?: number;
+            max_retries?: number;
+            retry_delay?: number;
+            visibility_timeout_ms?: number;
+          };
+          type?: "http_pull";
+        }
+    )[];
     consumers_total_count?: number;
     created_on?: string;
     modified_on?: string;
-    producers?: Record<string, unknown>[];
+    producers?: (
+      | { script?: string; type?: "worker" }
+      | { bucket_name?: string; type?: "r2_bucket" }
+    )[];
     producers_total_count?: number;
     queue_id?: string;
     queue_name?: string;
@@ -433,11 +729,68 @@ export const UpdateRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-    consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    consumers: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+              created_on: Schema.optional(Schema.NullOr(Schema.String)),
+              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+              script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+              script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+              settings: Schema.optional(
+                Schema.NullOr(
+                  Schema.Struct({
+                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+                  }),
+                ),
+              ),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+            }),
+            Schema.Struct({
+              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+              created_on: Schema.optional(Schema.NullOr(Schema.String)),
+              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+              settings: Schema.optional(
+                Schema.NullOr(
+                  Schema.Struct({
+                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+                    visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+                  }),
+                ),
+              ),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
+            }),
+          ),
+        ),
+      ),
+    ),
     consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
     created_on: Schema.optional(Schema.NullOr(Schema.String)),
     modified_on: Schema.optional(Schema.NullOr(Schema.String)),
-    producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    producers: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              script: Schema.optional(Schema.NullOr(Schema.String)),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+            }),
+            Schema.Struct({
+              bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket"))),
+            }),
+          ),
+        ),
+      ),
+    ),
     producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
     queue_id: Schema.optional(Schema.NullOr(Schema.String)),
     queue_name: Schema.optional(Schema.NullOr(Schema.String)),
@@ -587,11 +940,42 @@ export interface UpdatePartialRequest {
   queue_id: string;
   account_id: string;
   body: {
-    consumers?: Record<string, unknown>[];
+    consumers?: (
+      | {
+          consumer_id?: string;
+          created_on?: string;
+          queue_id?: string;
+          script?: Record<string, unknown>;
+          script_name?: Record<string, unknown>;
+          settings?: {
+            batch_size?: number;
+            max_concurrency?: number;
+            max_retries?: number;
+            max_wait_time_ms?: number;
+            retry_delay?: number;
+          };
+          type?: "worker";
+        }
+      | {
+          consumer_id?: string;
+          created_on?: string;
+          queue_id?: string;
+          settings?: {
+            batch_size?: number;
+            max_retries?: number;
+            retry_delay?: number;
+            visibility_timeout_ms?: number;
+          };
+          type?: "http_pull";
+        }
+    )[];
     consumers_total_count?: number;
     created_on?: string;
     modified_on?: string;
-    producers?: Record<string, unknown>[];
+    producers?: (
+      | { script?: string; type?: "worker" }
+      | { bucket_name?: string; type?: "r2_bucket" }
+    )[];
     producers_total_count?: number;
     queue_id?: string;
     queue_name?: string;
@@ -607,11 +991,68 @@ export const UpdatePartialRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-    consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    consumers: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+              created_on: Schema.optional(Schema.NullOr(Schema.String)),
+              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+              script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+              script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+              settings: Schema.optional(
+                Schema.NullOr(
+                  Schema.Struct({
+                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+                  }),
+                ),
+              ),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+            }),
+            Schema.Struct({
+              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+              created_on: Schema.optional(Schema.NullOr(Schema.String)),
+              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+              settings: Schema.optional(
+                Schema.NullOr(
+                  Schema.Struct({
+                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+                    visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+                  }),
+                ),
+              ),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
+            }),
+          ),
+        ),
+      ),
+    ),
     consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
     created_on: Schema.optional(Schema.NullOr(Schema.String)),
     modified_on: Schema.optional(Schema.NullOr(Schema.String)),
-    producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    producers: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              script: Schema.optional(Schema.NullOr(Schema.String)),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+            }),
+            Schema.Struct({
+              bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
+              type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket"))),
+            }),
+          ),
+        ),
+      ),
+    ),
     producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
     queue_id: Schema.optional(Schema.NullOr(Schema.String)),
     queue_name: Schema.optional(Schema.NullOr(Schema.String)),
@@ -708,7 +1149,35 @@ export const ListConsumersRequest = Schema.Struct({
   }) as unknown as Schema.Schema<ListConsumersRequest>;
 
 export interface ListConsumersResponse {
-  result: Record<string, unknown>[];
+  result: (
+    | {
+        consumer_id?: string;
+        created_on?: string;
+        queue_id?: string;
+        script?: Record<string, unknown>;
+        script_name?: Record<string, unknown>;
+        settings?: {
+          batch_size?: number;
+          max_concurrency?: number;
+          max_retries?: number;
+          max_wait_time_ms?: number;
+          retry_delay?: number;
+        };
+        type?: "worker";
+      }
+    | {
+        consumer_id?: string;
+        created_on?: string;
+        queue_id?: string;
+        settings?: {
+          batch_size?: number;
+          max_retries?: number;
+          retry_delay?: number;
+          visibility_timeout_ms?: number;
+        };
+        type?: "http_pull";
+      }
+  )[];
   result_info?: {
     page?: number;
     per_page?: number;
@@ -719,7 +1188,45 @@ export interface ListConsumersResponse {
 }
 
 export const ListConsumersResponse = Schema.Struct({
-  result: Schema.Array(Schema.Struct({})),
+  result: Schema.Array(
+    Schema.Union(
+      Schema.Struct({
+        consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+        created_on: Schema.optional(Schema.NullOr(Schema.String)),
+        queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+        script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+        script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+        settings: Schema.optional(
+          Schema.NullOr(
+            Schema.Struct({
+              batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+              max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+              max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+              max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+              retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+            }),
+          ),
+        ),
+        type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+      }),
+      Schema.Struct({
+        consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+        created_on: Schema.optional(Schema.NullOr(Schema.String)),
+        queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+        settings: Schema.optional(
+          Schema.NullOr(
+            Schema.Struct({
+              batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+              max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+              retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+              visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+            }),
+          ),
+        ),
+        type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
+      }),
+    ),
+  ),
   result_info: Schema.optional(
     Schema.Struct({
       page: Schema.optional(Schema.Number),
@@ -782,7 +1289,34 @@ export const CreateConsumerRequest = Schema.Struct({
   }) as unknown as Schema.Schema<CreateConsumerRequest>;
 
 export interface CreateConsumerResponse {
-  result: Record<string, unknown>;
+  result:
+    | {
+        consumer_id?: string;
+        created_on?: string;
+        queue_id?: string;
+        script?: Record<string, unknown>;
+        script_name?: Record<string, unknown>;
+        settings?: {
+          batch_size?: number;
+          max_concurrency?: number;
+          max_retries?: number;
+          max_wait_time_ms?: number;
+          retry_delay?: number;
+        };
+        type?: "worker";
+      }
+    | {
+        consumer_id?: string;
+        created_on?: string;
+        queue_id?: string;
+        settings?: {
+          batch_size?: number;
+          max_retries?: number;
+          retry_delay?: number;
+          visibility_timeout_ms?: number;
+        };
+        type?: "http_pull";
+      };
   result_info?: {
     page?: number;
     per_page?: number;
@@ -793,7 +1327,43 @@ export interface CreateConsumerResponse {
 }
 
 export const CreateConsumerResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Union(
+    Schema.Struct({
+      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+      created_on: Schema.optional(Schema.NullOr(Schema.String)),
+      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+      script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+      script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+      settings: Schema.optional(
+        Schema.NullOr(
+          Schema.Struct({
+            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+          }),
+        ),
+      ),
+      type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+    }),
+    Schema.Struct({
+      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+      created_on: Schema.optional(Schema.NullOr(Schema.String)),
+      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+      settings: Schema.optional(
+        Schema.NullOr(
+          Schema.Struct({
+            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+            visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+          }),
+        ),
+      ),
+      type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
+    }),
+  ),
   result_info: Schema.optional(
     Schema.Struct({
       page: Schema.optional(Schema.Number),
@@ -863,7 +1433,34 @@ export const GetConsumerRequest = Schema.Struct({
   }) as unknown as Schema.Schema<GetConsumerRequest>;
 
 export interface GetConsumerResponse {
-  result: Record<string, unknown>;
+  result:
+    | {
+        consumer_id?: string;
+        created_on?: string;
+        queue_id?: string;
+        script?: Record<string, unknown>;
+        script_name?: Record<string, unknown>;
+        settings?: {
+          batch_size?: number;
+          max_concurrency?: number;
+          max_retries?: number;
+          max_wait_time_ms?: number;
+          retry_delay?: number;
+        };
+        type?: "worker";
+      }
+    | {
+        consumer_id?: string;
+        created_on?: string;
+        queue_id?: string;
+        settings?: {
+          batch_size?: number;
+          max_retries?: number;
+          retry_delay?: number;
+          visibility_timeout_ms?: number;
+        };
+        type?: "http_pull";
+      };
   result_info?: {
     page?: number;
     per_page?: number;
@@ -874,7 +1471,43 @@ export interface GetConsumerResponse {
 }
 
 export const GetConsumerResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Union(
+    Schema.Struct({
+      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+      created_on: Schema.optional(Schema.NullOr(Schema.String)),
+      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+      script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+      script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+      settings: Schema.optional(
+        Schema.NullOr(
+          Schema.Struct({
+            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+          }),
+        ),
+      ),
+      type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+    }),
+    Schema.Struct({
+      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+      created_on: Schema.optional(Schema.NullOr(Schema.String)),
+      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+      settings: Schema.optional(
+        Schema.NullOr(
+          Schema.Struct({
+            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+            visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+          }),
+        ),
+      ),
+      type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
+    }),
+  ),
   result_info: Schema.optional(
     Schema.Struct({
       page: Schema.optional(Schema.Number),
@@ -944,7 +1577,34 @@ export const UpdateConsumerRequest = Schema.Struct({
   }) as unknown as Schema.Schema<UpdateConsumerRequest>;
 
 export interface UpdateConsumerResponse {
-  result: Record<string, unknown>;
+  result:
+    | {
+        consumer_id?: string;
+        created_on?: string;
+        queue_id?: string;
+        script?: Record<string, unknown>;
+        script_name?: Record<string, unknown>;
+        settings?: {
+          batch_size?: number;
+          max_concurrency?: number;
+          max_retries?: number;
+          max_wait_time_ms?: number;
+          retry_delay?: number;
+        };
+        type?: "worker";
+      }
+    | {
+        consumer_id?: string;
+        created_on?: string;
+        queue_id?: string;
+        settings?: {
+          batch_size?: number;
+          max_retries?: number;
+          retry_delay?: number;
+          visibility_timeout_ms?: number;
+        };
+        type?: "http_pull";
+      };
   result_info?: {
     page?: number;
     per_page?: number;
@@ -955,7 +1615,43 @@ export interface UpdateConsumerResponse {
 }
 
 export const UpdateConsumerResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Union(
+    Schema.Struct({
+      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+      created_on: Schema.optional(Schema.NullOr(Schema.String)),
+      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+      script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+      script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+      settings: Schema.optional(
+        Schema.NullOr(
+          Schema.Struct({
+            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+          }),
+        ),
+      ),
+      type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
+    }),
+    Schema.Struct({
+      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+      created_on: Schema.optional(Schema.NullOr(Schema.String)),
+      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+      settings: Schema.optional(
+        Schema.NullOr(
+          Schema.Struct({
+            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+            visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+          }),
+        ),
+      ),
+      type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
+    }),
+  ),
   result_info: Schema.optional(
     Schema.Struct({
       page: Schema.optional(Schema.Number),

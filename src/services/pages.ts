@@ -9,6 +9,7 @@ import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import type { HttpClient } from "@effect/platform";
 import * as API from "../client/api.ts";
+import * as C from "../category.ts";
 import * as T from "../traits.ts";
 import type { ApiToken } from "../auth.ts";
 import {
@@ -28,49 +29,49 @@ export class AuthenticationError extends Schema.TaggedError<AuthenticationError>
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
 export class InvalidToken extends Schema.TaggedError<InvalidToken>()("InvalidToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError, C.withBadRequestError) {
   static readonly _tag = "InvalidToken";
 }
 
 export class MissingToken extends Schema.TaggedError<MissingToken>()("MissingToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "MissingToken";
 }
 
 export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError) {
   static readonly _tag = "RateLimited";
 }
 
 export class TokenExpired extends Schema.TaggedError<TokenExpired>()("TokenExpired", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "TokenExpired";
 }
 
 export class TooManyRequests extends Schema.TaggedError<TooManyRequests>()("TooManyRequests", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError, C.withQuotaError) {
   static readonly _tag = "TooManyRequests";
 }
 
 export class Unauthorized extends Schema.TaggedError<Unauthorized>()("Unauthorized", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "Unauthorized";
 }
 
@@ -208,7 +209,21 @@ export const GetProjectsResponse = Schema.Struct({
               }),
             ),
           ),
-          env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+          env_vars: Schema.NullOr(
+            Schema.Record({
+              key: Schema.String,
+              value: Schema.Union(
+                Schema.Struct({
+                  type: Schema.Literal("plain_text"),
+                  value: Schema.String,
+                }),
+                Schema.Struct({
+                  type: Schema.Literal("secret_text"),
+                  value: Schema.String,
+                }),
+              ),
+            }),
+          ),
           fail_open: Schema.Boolean,
           hyperdrive_bindings: Schema.optional(
             Schema.NullOr(
@@ -348,7 +363,21 @@ export const GetProjectsResponse = Schema.Struct({
               }),
             ),
           ),
-          env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+          env_vars: Schema.NullOr(
+            Schema.Record({
+              key: Schema.String,
+              value: Schema.Union(
+                Schema.Struct({
+                  type: Schema.Literal("plain_text"),
+                  value: Schema.String,
+                }),
+                Schema.Struct({
+                  type: Schema.Literal("secret_text"),
+                  value: Schema.String,
+                }),
+              ),
+            }),
+          ),
           fail_open: Schema.Boolean,
           hyperdrive_bindings: Schema.optional(
             Schema.NullOr(
@@ -625,7 +654,21 @@ export const CreateProjectRequest = Schema.Struct({
                   ),
                 ),
                 env_vars: Schema.optional(
-                  Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+                  Schema.NullOr(
+                    Schema.Record({
+                      key: Schema.String,
+                      value: Schema.Union(
+                        Schema.Struct({
+                          type: Schema.Literal("plain_text"),
+                          value: Schema.String,
+                        }),
+                        Schema.Struct({
+                          type: Schema.Literal("secret_text"),
+                          value: Schema.String,
+                        }),
+                      ),
+                    }),
+                  ),
                 ),
                 fail_open: Schema.optional(Schema.NullOr(Schema.Boolean)),
                 hyperdrive_bindings: Schema.optional(
@@ -775,7 +818,21 @@ export const CreateProjectRequest = Schema.Struct({
                   ),
                 ),
                 env_vars: Schema.optional(
-                  Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+                  Schema.NullOr(
+                    Schema.Record({
+                      key: Schema.String,
+                      value: Schema.Union(
+                        Schema.Struct({
+                          type: Schema.Literal("plain_text"),
+                          value: Schema.String,
+                        }),
+                        Schema.Struct({
+                          type: Schema.Literal("secret_text"),
+                          value: Schema.String,
+                        }),
+                      ),
+                    }),
+                  ),
                 ),
                 fail_open: Schema.optional(Schema.NullOr(Schema.Boolean)),
                 hyperdrive_bindings: Schema.optional(
@@ -1025,7 +1082,21 @@ export const CreateProjectResponse = Schema.Struct({
             }),
           ),
         ),
-        env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+        env_vars: Schema.NullOr(
+          Schema.Record({
+            key: Schema.String,
+            value: Schema.Union(
+              Schema.Struct({
+                type: Schema.Literal("plain_text"),
+                value: Schema.String,
+              }),
+              Schema.Struct({
+                type: Schema.Literal("secret_text"),
+                value: Schema.String,
+              }),
+            ),
+          }),
+        ),
         fail_open: Schema.Boolean,
         hyperdrive_bindings: Schema.optional(
           Schema.NullOr(
@@ -1165,7 +1236,21 @@ export const CreateProjectResponse = Schema.Struct({
             }),
           ),
         ),
-        env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+        env_vars: Schema.NullOr(
+          Schema.Record({
+            key: Schema.String,
+            value: Schema.Union(
+              Schema.Struct({
+                type: Schema.Literal("plain_text"),
+                value: Schema.String,
+              }),
+              Schema.Struct({
+                type: Schema.Literal("secret_text"),
+                value: Schema.String,
+              }),
+            ),
+          }),
+        ),
         fail_open: Schema.Boolean,
         hyperdrive_bindings: Schema.optional(
           Schema.NullOr(
@@ -1464,7 +1549,21 @@ export const GetProjectResponse = Schema.Struct({
             }),
           ),
         ),
-        env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+        env_vars: Schema.NullOr(
+          Schema.Record({
+            key: Schema.String,
+            value: Schema.Union(
+              Schema.Struct({
+                type: Schema.Literal("plain_text"),
+                value: Schema.String,
+              }),
+              Schema.Struct({
+                type: Schema.Literal("secret_text"),
+                value: Schema.String,
+              }),
+            ),
+          }),
+        ),
         fail_open: Schema.Boolean,
         hyperdrive_bindings: Schema.optional(
           Schema.NullOr(
@@ -1604,7 +1703,21 @@ export const GetProjectResponse = Schema.Struct({
             }),
           ),
         ),
-        env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+        env_vars: Schema.NullOr(
+          Schema.Record({
+            key: Schema.String,
+            value: Schema.Union(
+              Schema.Struct({
+                type: Schema.Literal("plain_text"),
+                value: Schema.String,
+              }),
+              Schema.Struct({
+                type: Schema.Literal("secret_text"),
+                value: Schema.String,
+              }),
+            ),
+          }),
+        ),
         fail_open: Schema.Boolean,
         hyperdrive_bindings: Schema.optional(
           Schema.NullOr(
@@ -1952,7 +2065,21 @@ export const UpdateProjectRequest = Schema.Struct({
                   ),
                 ),
                 env_vars: Schema.optional(
-                  Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+                  Schema.NullOr(
+                    Schema.Record({
+                      key: Schema.String,
+                      value: Schema.Union(
+                        Schema.Struct({
+                          type: Schema.Literal("plain_text"),
+                          value: Schema.String,
+                        }),
+                        Schema.Struct({
+                          type: Schema.Literal("secret_text"),
+                          value: Schema.String,
+                        }),
+                      ),
+                    }),
+                  ),
                 ),
                 fail_open: Schema.optional(Schema.NullOr(Schema.Boolean)),
                 hyperdrive_bindings: Schema.optional(
@@ -2102,7 +2229,21 @@ export const UpdateProjectRequest = Schema.Struct({
                   ),
                 ),
                 env_vars: Schema.optional(
-                  Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+                  Schema.NullOr(
+                    Schema.Record({
+                      key: Schema.String,
+                      value: Schema.Union(
+                        Schema.Struct({
+                          type: Schema.Literal("plain_text"),
+                          value: Schema.String,
+                        }),
+                        Schema.Struct({
+                          type: Schema.Literal("secret_text"),
+                          value: Schema.String,
+                        }),
+                      ),
+                    }),
+                  ),
                 ),
                 fail_open: Schema.optional(Schema.NullOr(Schema.Boolean)),
                 hyperdrive_bindings: Schema.optional(
@@ -2352,7 +2493,21 @@ export const UpdateProjectResponse = Schema.Struct({
             }),
           ),
         ),
-        env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+        env_vars: Schema.NullOr(
+          Schema.Record({
+            key: Schema.String,
+            value: Schema.Union(
+              Schema.Struct({
+                type: Schema.Literal("plain_text"),
+                value: Schema.String,
+              }),
+              Schema.Struct({
+                type: Schema.Literal("secret_text"),
+                value: Schema.String,
+              }),
+            ),
+          }),
+        ),
         fail_open: Schema.Boolean,
         hyperdrive_bindings: Schema.optional(
           Schema.NullOr(
@@ -2492,7 +2647,21 @@ export const UpdateProjectResponse = Schema.Struct({
             }),
           ),
         ),
-        env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+        env_vars: Schema.NullOr(
+          Schema.Record({
+            key: Schema.String,
+            value: Schema.Union(
+              Schema.Struct({
+                type: Schema.Literal("plain_text"),
+                value: Schema.String,
+              }),
+              Schema.Struct({
+                type: Schema.Literal("secret_text"),
+                value: Schema.String,
+              }),
+            ),
+          }),
+        ),
         fail_open: Schema.Boolean,
         hyperdrive_bindings: Schema.optional(
           Schema.NullOr(
@@ -2780,7 +2949,21 @@ export const GetDeploymentsResponse = Schema.Struct({
         }),
         type: Schema.Literal("github:push", "ad_hoc", "deploy_hook"),
       }),
-      env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+      env_vars: Schema.NullOr(
+        Schema.Record({
+          key: Schema.String,
+          value: Schema.Union(
+            Schema.Struct({
+              type: Schema.Literal("plain_text"),
+              value: Schema.String,
+            }),
+            Schema.Struct({
+              type: Schema.Literal("secret_text"),
+              value: Schema.String,
+            }),
+          ),
+        }),
+      ),
       environment: Schema.Literal("preview", "production"),
       id: Schema.String,
       is_skipped: Schema.Boolean,
@@ -2980,7 +3163,21 @@ export const CreateDeploymentResponse = Schema.Struct({
       }),
       type: Schema.Literal("github:push", "ad_hoc", "deploy_hook"),
     }),
-    env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+    env_vars: Schema.NullOr(
+      Schema.Record({
+        key: Schema.String,
+        value: Schema.Union(
+          Schema.Struct({
+            type: Schema.Literal("plain_text"),
+            value: Schema.String,
+          }),
+          Schema.Struct({
+            type: Schema.Literal("secret_text"),
+            value: Schema.String,
+          }),
+        ),
+      }),
+    ),
     environment: Schema.Literal("preview", "production"),
     id: Schema.String,
     is_skipped: Schema.Boolean,
@@ -3179,7 +3376,21 @@ export const GetDeploymentInfoResponse = Schema.Struct({
       }),
       type: Schema.Literal("github:push", "ad_hoc", "deploy_hook"),
     }),
-    env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+    env_vars: Schema.NullOr(
+      Schema.Record({
+        key: Schema.String,
+        value: Schema.Union(
+          Schema.Struct({
+            type: Schema.Literal("plain_text"),
+            value: Schema.String,
+          }),
+          Schema.Struct({
+            type: Schema.Literal("secret_text"),
+            value: Schema.String,
+          }),
+        ),
+      }),
+    ),
     environment: Schema.Literal("preview", "production"),
     id: Schema.String,
     is_skipped: Schema.Boolean,
@@ -3541,7 +3752,21 @@ export const PagesDeploymentRetryDeploymentResponse = Schema.Struct({
       }),
       type: Schema.Literal("github:push", "ad_hoc", "deploy_hook"),
     }),
-    env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+    env_vars: Schema.NullOr(
+      Schema.Record({
+        key: Schema.String,
+        value: Schema.Union(
+          Schema.Struct({
+            type: Schema.Literal("plain_text"),
+            value: Schema.String,
+          }),
+          Schema.Struct({
+            type: Schema.Literal("secret_text"),
+            value: Schema.String,
+          }),
+        ),
+      }),
+    ),
     environment: Schema.Literal("preview", "production"),
     id: Schema.String,
     is_skipped: Schema.Boolean,
@@ -3740,7 +3965,21 @@ export const PagesDeploymentRollbackDeploymentResponse = Schema.Struct({
       }),
       type: Schema.Literal("github:push", "ad_hoc", "deploy_hook"),
     }),
-    env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+    env_vars: Schema.NullOr(
+      Schema.Record({
+        key: Schema.String,
+        value: Schema.Union(
+          Schema.Struct({
+            type: Schema.Literal("plain_text"),
+            value: Schema.String,
+          }),
+          Schema.Struct({
+            type: Schema.Literal("secret_text"),
+            value: Schema.String,
+          }),
+        ),
+      }),
+    ),
     environment: Schema.Literal("preview", "production"),
     id: Schema.String,
     is_skipped: Schema.Boolean,

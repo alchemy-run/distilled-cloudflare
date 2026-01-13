@@ -9,6 +9,7 @@ import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import type { HttpClient } from "@effect/platform";
 import * as API from "../client/api.ts";
+import * as C from "../category.ts";
 import * as T from "../traits.ts";
 import type { ApiToken } from "../auth.ts";
 import {
@@ -28,49 +29,49 @@ export class AuthenticationError extends Schema.TaggedError<AuthenticationError>
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
 export class InvalidToken extends Schema.TaggedError<InvalidToken>()("InvalidToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError, C.withBadRequestError) {
   static readonly _tag = "InvalidToken";
 }
 
 export class MissingToken extends Schema.TaggedError<MissingToken>()("MissingToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "MissingToken";
 }
 
 export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError) {
   static readonly _tag = "RateLimited";
 }
 
 export class TokenExpired extends Schema.TaggedError<TokenExpired>()("TokenExpired", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "TokenExpired";
 }
 
 export class TooManyRequests extends Schema.TaggedError<TooManyRequests>()("TooManyRequests", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError, C.withQuotaError) {
   static readonly _tag = "TooManyRequests";
 }
 
 export class Unauthorized extends Schema.TaggedError<Unauthorized>()("Unauthorized", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "Unauthorized";
 }
 
@@ -145,13 +146,13 @@ export const listHyperdrive: (
 export interface CreateHyperdriveRequest {
   account_id: string;
   body: {
-    caching?: Record<string, unknown>;
+    caching?: Record<string, unknown> | Record<string, unknown>;
     created_on?: string;
     id: string;
     modified_on?: string;
     mtls?: { ca_certificate_id?: string; mtls_certificate_id?: string; sslmode?: string };
     name: string;
-    origin: Record<string, unknown>;
+    origin: unknown | unknown;
     origin_connection_limit?: number;
   };
 }
@@ -159,7 +160,7 @@ export interface CreateHyperdriveRequest {
 export const CreateHyperdriveRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-    caching: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+    caching: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({}), Schema.Struct({})))),
     created_on: Schema.optional(Schema.NullOr(Schema.Date)),
     id: Schema.String,
     modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
@@ -173,7 +174,7 @@ export const CreateHyperdriveRequest = Schema.Struct({
       ),
     ),
     name: Schema.String,
-    origin: Schema.Struct({}),
+    origin: Schema.Union(Schema.Struct({}), Schema.Struct({})),
     origin_connection_limit: Schema.optional(Schema.NullOr(Schema.Number)),
   }).pipe(T.HttpBody()),
 })
@@ -314,13 +315,13 @@ export interface UpdateHyperdriveRequest {
   account_id: string;
   hyperdrive_id: string;
   body: {
-    caching?: Record<string, unknown>;
+    caching?: Record<string, unknown> | Record<string, unknown>;
     created_on?: string;
     id: string;
     modified_on?: string;
     mtls?: { ca_certificate_id?: string; mtls_certificate_id?: string; sslmode?: string };
     name: string;
-    origin: Record<string, unknown>;
+    origin: unknown | unknown;
     origin_connection_limit?: number;
   };
 }
@@ -329,7 +330,7 @@ export const UpdateHyperdriveRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   hyperdrive_id: Schema.String.pipe(T.HttpPath("hyperdrive_id")),
   body: Schema.Struct({
-    caching: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+    caching: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({}), Schema.Struct({})))),
     created_on: Schema.optional(Schema.NullOr(Schema.Date)),
     id: Schema.String,
     modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
@@ -343,7 +344,7 @@ export const UpdateHyperdriveRequest = Schema.Struct({
       ),
     ),
     name: Schema.String,
-    origin: Schema.Struct({}),
+    origin: Schema.Union(Schema.Struct({}), Schema.Struct({})),
     origin_connection_limit: Schema.optional(Schema.NullOr(Schema.Number)),
   }).pipe(T.HttpBody()),
 })
@@ -486,10 +487,17 @@ export interface PatchHyperdriveRequest {
   account_id: string;
   hyperdrive_id: string;
   body: {
-    caching?: Record<string, unknown>;
+    caching?: Record<string, unknown> | Record<string, unknown>;
     mtls?: { ca_certificate_id?: string; mtls_certificate_id?: string; sslmode?: string };
     name?: string;
-    origin?: Record<string, unknown>;
+    origin?:
+      | {
+          database?: string;
+          password?: string;
+          scheme?: "postgres" | "postgresql" | "mysql";
+          user?: string;
+        }
+      | unknown;
     origin_connection_limit?: number;
   };
 }
@@ -498,7 +506,7 @@ export const PatchHyperdriveRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   hyperdrive_id: Schema.String.pipe(T.HttpPath("hyperdrive_id")),
   body: Schema.Struct({
-    caching: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+    caching: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({}), Schema.Struct({})))),
     mtls: Schema.optional(
       Schema.NullOr(
         Schema.Struct({
@@ -509,7 +517,31 @@ export const PatchHyperdriveRequest = Schema.Struct({
       ),
     ),
     name: Schema.optional(Schema.NullOr(Schema.String)),
-    origin: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+    origin: Schema.optional(
+      Schema.NullOr(
+        Schema.Union(
+          Schema.Struct({
+            database: Schema.optional(Schema.NullOr(Schema.String)),
+            password: Schema.optional(Schema.NullOr(Schema.String)),
+            scheme: Schema.optional(
+              Schema.NullOr(Schema.Literal("postgres", "postgresql", "mysql")),
+            ),
+            user: Schema.optional(Schema.NullOr(Schema.String)),
+          }),
+          Schema.Union(
+            Schema.Struct({
+              host: Schema.String,
+              port: Schema.Number,
+            }),
+            Schema.Struct({
+              access_client_id: Schema.String,
+              access_client_secret: Schema.optional(Schema.NullOr(Schema.String)),
+              host: Schema.String,
+            }),
+          ),
+        ),
+      ),
+    ),
     origin_connection_limit: Schema.optional(Schema.NullOr(Schema.Number)),
   }).pipe(T.HttpBody()),
 })

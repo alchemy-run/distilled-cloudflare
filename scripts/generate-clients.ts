@@ -220,7 +220,12 @@ function schemaToTsType(
       return "boolean";
     case "array":
       if (s.items) {
-        return `${schemaToTsType(s.items, allSchemas, visited)}[]`;
+        const itemType = schemaToTsType(s.items, allSchemas, visited);
+        // Wrap union types in parentheses for array notation
+        if (itemType.includes(" | ")) {
+          return `(${itemType})[]`;
+        }
+        return `${itemType}[]`;
       }
       return "unknown[]";
     case "object":
@@ -236,6 +241,15 @@ function schemaToTsType(
           })
           .join("; ");
         return `{ ${props} }`;
+      }
+      // Check for oneOf/anyOf on object types without properties (discriminated unions)
+      if (s.oneOf && s.oneOf.length > 0) {
+        const members = s.oneOf.map((m) => schemaToTsType(m, allSchemas, visited));
+        return members.join(" | ");
+      }
+      if (s.anyOf && s.anyOf.length > 0) {
+        const members = s.anyOf.map((m) => schemaToTsType(m, allSchemas, visited));
+        return members.join(" | ");
       }
       return "Record<string, unknown>";
     default:
@@ -604,15 +618,19 @@ function generateSchemaCode(
             // Check if property is nullable (OpenAPI 3.0 style)
             const resolved = resolveSchema(propSchema, allSchemas);
             const isNullable = resolved.nullable === true;
+            // Check if property is writeOnly (only present in requests, not responses)
+            const isWriteOnly = resolved.writeOnly === true;
 
-            if (isRequired) {
+            // writeOnly properties should be optional in the schema (for response decoding)
+            // but required in the TypeScript interface (for request type safety)
+            if (isRequired && !isWriteOnly) {
               // Required but nullable: use NullOr
               if (isNullable) {
                 return `  ${safeName}: Schema.NullOr(${propType})`;
               }
               return `  ${safeName}: ${propType}`;
             }
-            // Optional: use Schema.optional to allow missing keys, and Schema.NullOr to allow null values
+            // Optional or writeOnly: use Schema.optional to allow missing keys, and Schema.NullOr to allow null values
             // This handles Cloudflare's API which often returns null for optional fields or omits them entirely
             return `  ${safeName}: Schema.optional(Schema.NullOr(${propType}))`;
           })
@@ -632,6 +650,37 @@ function generateSchemaCode(
           visited,
         );
         return `Schema.Record({ key: Schema.String, value: ${valueType} })`;
+      }
+      // Check for oneOf/anyOf on object types without properties (discriminated unions)
+      if (s.oneOf && s.oneOf.length > 0) {
+        const members = s.oneOf
+          .map((m) =>
+            generateSchemaCode(
+              "member",
+              m,
+              allSchemas,
+              generatedSchemaNames,
+              cyclicSchemas,
+              visited,
+            ),
+          )
+          .join(", ");
+        return `Schema.Union(${members})`;
+      }
+      if (s.anyOf && s.anyOf.length > 0) {
+        const members = s.anyOf
+          .map((m) =>
+            generateSchemaCode(
+              "member",
+              m,
+              allSchemas,
+              generatedSchemaNames,
+              cyclicSchemas,
+              visited,
+            ),
+          )
+          .join(", ");
+        return `Schema.Union(${members})`;
       }
       return "Schema.Struct({})";
 
@@ -717,11 +766,14 @@ interface ErrorMatcher {
 }
 
 /**
- * Service-level error definition with optional default matcher.
+ * Service-level error definition with optional default matcher and categories.
  * If a matcher is provided, it applies to all operations that include this error
  * unless overridden at the operation level.
  */
-type ErrorDefinition = ErrorMatcher;
+interface ErrorDefinition extends ErrorMatcher {
+  /** Error categories for retry/handling logic (e.g., ["ThrottlingError", "RetryableError"]) */
+  categories?: string[];
+}
 
 interface ServiceSpec {
   /** Declares error classes with optional default matchers */
@@ -740,13 +792,13 @@ interface ServiceSpec {
 // Common errors that apply to all services (auth, rate limiting)
 // These are just declared here - matching is done per-operation
 const COMMON_ERRORS: Record<string, ErrorDefinition> = {
-  RateLimited: {},
-  TooManyRequests: {},
-  AuthenticationError: {},
-  InvalidToken: {},
-  MissingToken: {},
-  TokenExpired: {},
-  Unauthorized: {},
+  RateLimited: { categories: ["ThrottlingError", "RetryableError"] },
+  TooManyRequests: { categories: ["ThrottlingError", "RetryableError"] },
+  AuthenticationError: { categories: ["AuthError"] },
+  InvalidToken: { categories: ["AuthError"] },
+  MissingToken: { categories: ["AuthError"] },
+  TokenExpired: { categories: ["AuthError"] },
+  Unauthorized: { categories: ["AuthError"] },
 };
 
 // Common error matchers - reusable across operations
@@ -773,17 +825,97 @@ async function loadServiceSpec(serviceName: string): Promise<ServiceSpec> {
 }
 
 /**
+ * Infer categories from error name and status code patterns.
+ * This supplements explicit categories from spec files.
+ */
+function inferCategories(name: string, def: ErrorDefinition): string[] {
+  const categories = [...(def.categories ?? [])];
+  const nameLower = name.toLowerCase();
+
+  // Infer from HTTP status codes
+  if (def.status === 429) {
+    if (!categories.includes("ThrottlingError")) categories.push("ThrottlingError");
+    if (!categories.includes("RetryableError")) categories.push("RetryableError");
+  } else if (def.status === 401 || def.status === 403) {
+    if (!categories.includes("AuthError")) categories.push("AuthError");
+  } else if (def.status === 404) {
+    if (!categories.includes("NotFoundError")) categories.push("NotFoundError");
+  } else if (def.status === 409) {
+    if (!categories.includes("ConflictError")) categories.push("ConflictError");
+  } else if (def.status !== undefined && def.status >= 500 && def.status < 600) {
+    if (!categories.includes("ServerError")) categories.push("ServerError");
+    if (!categories.includes("RetryableError")) categories.push("RetryableError");
+  }
+
+  // Infer from error name patterns
+  if (
+    nameLower.includes("ratelimit") ||
+    nameLower.includes("throttl") ||
+    nameLower === "toomanyrequests"
+  ) {
+    if (!categories.includes("ThrottlingError")) categories.push("ThrottlingError");
+    if (!categories.includes("RetryableError")) categories.push("RetryableError");
+  }
+  if (
+    nameLower.includes("notfound") ||
+    nameLower.includes("nosuch") ||
+    (nameLower.includes("invalid") && nameLower.includes("zone"))
+  ) {
+    if (!categories.includes("NotFoundError")) categories.push("NotFoundError");
+  }
+  if (
+    nameLower.includes("auth") ||
+    nameLower.includes("unauthorized") ||
+    nameLower.includes("token")
+  ) {
+    if (!categories.includes("AuthError")) categories.push("AuthError");
+  }
+  if (
+    nameLower.includes("conflict") ||
+    nameLower.includes("alreadyexists") ||
+    nameLower.includes("notempty")
+  ) {
+    if (!categories.includes("ConflictError")) categories.push("ConflictError");
+  }
+  if (
+    nameLower.includes("validation") ||
+    nameLower.includes("invalid") ||
+    nameLower.includes("parse")
+  ) {
+    if (!categories.includes("BadRequestError")) categories.push("BadRequestError");
+  }
+  if (
+    nameLower.includes("quota") ||
+    (nameLower.includes("limit") && nameLower.includes("exceeded")) ||
+    nameLower.includes("toomany")
+  ) {
+    if (!categories.includes("QuotaError")) categories.push("QuotaError");
+  }
+  if (nameLower.includes("internal") || nameLower.includes("server")) {
+    if (!categories.includes("ServerError")) categories.push("ServerError");
+  }
+
+  return categories;
+}
+
+/**
  * Generate an error class.
  * Error classes are simple tagged errors with code and message fields.
  * Matching is configured per-operation using annotations at the API.make call site.
+ * Categories are applied via .pipe() for retry logic.
  */
-function generateErrorClass(name: string, _def: ErrorDefinition): string[] {
+function generateErrorClass(name: string, def: ErrorDefinition): string[] {
   const lines: string[] = [];
+  const categories = inferCategories(name, def);
+
+  // Build the .pipe() chain if we have categories
+  const categoryPipes = categories.map((cat) => `C.with${cat}`);
+  const pipeChain = categoryPipes.length > 0 ? `.pipe(${categoryPipes.join(", ")})` : "";
 
   lines.push(`export class ${name} extends Schema.TaggedError<${name}>()("${name}", {`);
   lines.push(`  code: Schema.Number,`);
   lines.push(`  message: Schema.String,`);
-  lines.push(`}) {`);
+  lines.push(`})${pipeChain} {`);
   lines.push(`  static readonly _tag = "${name}";`);
   lines.push(`}`);
 
@@ -936,6 +1068,7 @@ function generateServiceFile(
     'import * as Schema from "effect/Schema";',
     'import type { HttpClient } from "@effect/platform";',
     'import * as API from "../client/api.ts";',
+    'import * as C from "../category.ts";',
     'import * as T from "../traits.ts";',
     'import type { ApiToken } from "../auth.ts";',
     "import {",
@@ -1351,6 +1484,9 @@ const generateCommand = Command.make(
           continue;
         }
 
+        // Get path-level parameters (applies to all operations in this path)
+        const pathLevelParams = (pathItem.parameters ?? []) as OpenAPI.ParameterObject[];
+
         const methods = ["get", "post", "put", "delete", "patch"] as const;
         for (const method of methods) {
           const operation = pathItem[method] as OpenAPI.OperationObject | undefined;
@@ -1358,6 +1494,27 @@ const generateCommand = Command.make(
 
           const operationId =
             operation.operationId ?? `${method}_${path.replace(/[^a-zA-Z0-9]/g, "_")}`;
+
+          // Merge path-level parameters with operation-level parameters
+          // Operation-level parameters override path-level parameters with the same name
+          const operationParams = (operation.parameters ?? []) as OpenAPI.ParameterObject[];
+          const operationParamNames = new Set(
+            operationParams
+              .filter((p) => !OpenAPI.isJsonReference(p))
+              .map((p) => (p as OpenAPI.ParameterObject).name),
+          );
+          const mergedParams = [
+            ...pathLevelParams.filter(
+              (p) => !OpenAPI.isJsonReference(p) && !operationParamNames.has(p.name),
+            ),
+            ...operationParams,
+          ];
+
+          // Create a new operation object with merged parameters
+          const mergedOperation: OpenAPI.OperationObject = {
+            ...operation,
+            parameters: mergedParams,
+          };
 
           if (!serviceOps.has(serviceName)) {
             serviceOps.set(serviceName, []);
@@ -1367,7 +1524,7 @@ const generateCommand = Command.make(
             operationId,
             method: method.toUpperCase(),
             path,
-            operation,
+            operation: mergedOperation,
           });
         }
       }

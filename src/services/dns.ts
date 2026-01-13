@@ -9,6 +9,7 @@ import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import type { HttpClient } from "@effect/platform";
 import * as API from "../client/api.ts";
+import * as C from "../category.ts";
 import * as T from "../traits.ts";
 import type { ApiToken } from "../auth.ts";
 import {
@@ -28,77 +29,77 @@ export class AuthenticationError extends Schema.TaggedError<AuthenticationError>
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
 export class InvalidRequest extends Schema.TaggedError<InvalidRequest>()("InvalidRequest", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withBadRequestError) {
   static readonly _tag = "InvalidRequest";
 }
 
 export class InvalidToken extends Schema.TaggedError<InvalidToken>()("InvalidToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError, C.withBadRequestError) {
   static readonly _tag = "InvalidToken";
 }
 
 export class InvalidZone extends Schema.TaggedError<InvalidZone>()("InvalidZone", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withNotFoundError, C.withBadRequestError) {
   static readonly _tag = "InvalidZone";
 }
 
 export class MissingToken extends Schema.TaggedError<MissingToken>()("MissingToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "MissingToken";
 }
 
 export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError) {
   static readonly _tag = "RateLimited";
 }
 
 export class RecordNotFound extends Schema.TaggedError<RecordNotFound>()("RecordNotFound", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withNotFoundError) {
   static readonly _tag = "RecordNotFound";
 }
 
 export class TokenExpired extends Schema.TaggedError<TokenExpired>()("TokenExpired", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "TokenExpired";
 }
 
 export class TooManyRequests extends Schema.TaggedError<TooManyRequests>()("TooManyRequests", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError, C.withQuotaError) {
   static readonly _tag = "TooManyRequests";
 }
 
 export class Unauthorized extends Schema.TaggedError<Unauthorized>()("Unauthorized", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "Unauthorized";
 }
 
 export class ValidationError extends Schema.TaggedError<ValidationError>()("ValidationError", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withBadRequestError) {
   static readonly _tag = "ValidationError";
 }
 
@@ -287,12 +288,59 @@ export const listDnsRecords: (
 
 export interface CreateDnsRecordRequest {
   zone_id: string;
-  body: Record<string, unknown>;
+  body:
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>;
 }
 
 export const CreateDnsRecordRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
-  body: Schema.Struct({}).pipe(T.HttpBody()),
+  body: Schema.Union(
+    Schema.Union(
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+    ),
+    Schema.Union(
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+    ),
+  ).pipe(T.HttpBody()),
 })
   .pipe(T.Http({ method: "POST", path: "/zones/{zone_id}/dns_records" }))
   .annotations({
@@ -1031,13 +1079,60 @@ export const dnsRecordsForAZoneDnsRecordDetails: (
 export interface UpdateDnsRecordRequest {
   dns_record_id: string;
   zone_id: string;
-  body: Record<string, unknown>;
+  body:
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>;
 }
 
 export const UpdateDnsRecordRequest = Schema.Struct({
   dns_record_id: Schema.String.pipe(T.HttpPath("dns_record_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
-  body: Schema.Struct({}).pipe(T.HttpBody()),
+  body: Schema.Union(
+    Schema.Union(
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+    ),
+    Schema.Union(
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+    ),
+  ).pipe(T.HttpBody()),
 })
   .pipe(T.Http({ method: "PUT", path: "/zones/{zone_id}/dns_records/{dns_record_id}" }))
   .annotations({
@@ -1185,13 +1280,60 @@ export const deleteDnsRecord: (
 export interface PatchDnsRecordRequest {
   dns_record_id: string;
   zone_id: string;
-  body: Record<string, unknown>;
+  body:
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>;
 }
 
 export const PatchDnsRecordRequest = Schema.Struct({
   dns_record_id: Schema.String.pipe(T.HttpPath("dns_record_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
-  body: Schema.Struct({}).pipe(T.HttpBody()),
+  body: Schema.Union(
+    Schema.Union(
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+    ),
+    Schema.Union(
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+      Schema.Struct({}),
+    ),
+  ).pipe(T.HttpBody()),
 })
   .pipe(T.Http({ method: "PATCH", path: "/zones/{zone_id}/dns_records/{dns_record_id}" }))
   .annotations({

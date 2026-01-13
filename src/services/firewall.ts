@@ -9,6 +9,7 @@ import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import type { HttpClient } from "@effect/platform";
 import * as API from "../client/api.ts";
+import * as C from "../category.ts";
 import * as T from "../traits.ts";
 import type { ApiToken } from "../auth.ts";
 import {
@@ -28,49 +29,49 @@ export class AuthenticationError extends Schema.TaggedError<AuthenticationError>
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
 export class InvalidToken extends Schema.TaggedError<InvalidToken>()("InvalidToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError, C.withBadRequestError) {
   static readonly _tag = "InvalidToken";
 }
 
 export class MissingToken extends Schema.TaggedError<MissingToken>()("MissingToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "MissingToken";
 }
 
 export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError) {
   static readonly _tag = "RateLimited";
 }
 
 export class TokenExpired extends Schema.TaggedError<TokenExpired>()("TokenExpired", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "TokenExpired";
 }
 
 export class TooManyRequests extends Schema.TaggedError<TooManyRequests>()("TooManyRequests", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError, C.withQuotaError) {
   static readonly _tag = "TooManyRequests";
 }
 
 export class Unauthorized extends Schema.TaggedError<Unauthorized>()("Unauthorized", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "Unauthorized";
 }
 
@@ -112,8 +113,13 @@ export const ListIpAccessRulesRequest = Schema.Struct({
 
 export interface ListIpAccessRulesResponse {
   result: {
-    allowed_modes: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge"[];
-    configuration: Record<string, unknown>;
+    allowed_modes: ("block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge")[];
+    configuration:
+      | { target?: "ip"; value?: string }
+      | { target?: "ip6"; value?: string }
+      | { target?: "ip_range"; value?: string }
+      | { target?: "asn"; value?: string }
+      | { target?: "country"; value?: string };
     created_on?: string;
     id: string;
     mode: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge";
@@ -135,7 +141,28 @@ export const ListIpAccessRulesResponse = Schema.Struct({
       allowed_modes: Schema.Array(
         Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
       ),
-      configuration: Schema.Struct({}),
+      configuration: Schema.Union(
+        Schema.Struct({
+          target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+          value: Schema.optional(Schema.NullOr(Schema.String)),
+        }),
+        Schema.Struct({
+          target: Schema.optional(Schema.NullOr(Schema.Literal("ip6"))),
+          value: Schema.optional(Schema.NullOr(Schema.String)),
+        }),
+        Schema.Struct({
+          target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+          value: Schema.optional(Schema.NullOr(Schema.String)),
+        }),
+        Schema.Struct({
+          target: Schema.optional(Schema.NullOr(Schema.Literal("asn"))),
+          value: Schema.optional(Schema.NullOr(Schema.String)),
+        }),
+        Schema.Struct({
+          target: Schema.optional(Schema.NullOr(Schema.Literal("country"))),
+          value: Schema.optional(Schema.NullOr(Schema.String)),
+        }),
+      ),
       created_on: Schema.optional(Schema.NullOr(Schema.Date)),
       id: Schema.String,
       mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
@@ -189,7 +216,12 @@ export const listIpAccessRules: (
 export interface CreateAnIpAccessRuleRequest {
   zone_id: string;
   body: {
-    configuration: Record<string, unknown>;
+    configuration:
+      | { target?: "ip"; value?: string }
+      | { target?: "ip6"; value?: string }
+      | { target?: "ip_range"; value?: string }
+      | { target?: "asn"; value?: string }
+      | { target?: "country"; value?: string };
     mode: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge";
     notes?: unknown;
   };
@@ -198,7 +230,28 @@ export interface CreateAnIpAccessRuleRequest {
 export const CreateAnIpAccessRuleRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-    configuration: Schema.Struct({}),
+    configuration: Schema.Union(
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip6"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("asn"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("country"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+    ),
     mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
     notes: Schema.optional(Schema.NullOr(Schema.Unknown)),
   }).pipe(T.HttpBody()),
@@ -210,8 +263,13 @@ export const CreateAnIpAccessRuleRequest = Schema.Struct({
 
 export interface CreateAnIpAccessRuleResponse {
   result: {
-    allowed_modes: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge"[];
-    configuration: Record<string, unknown>;
+    allowed_modes: ("block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge")[];
+    configuration:
+      | { target?: "ip"; value?: string }
+      | { target?: "ip6"; value?: string }
+      | { target?: "ip_range"; value?: string }
+      | { target?: "asn"; value?: string }
+      | { target?: "country"; value?: string };
     created_on?: string;
     id: string;
     mode: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge";
@@ -232,7 +290,28 @@ export const CreateAnIpAccessRuleResponse = Schema.Struct({
     allowed_modes: Schema.Array(
       Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
     ),
-    configuration: Schema.Struct({}),
+    configuration: Schema.Union(
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip6"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("asn"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("country"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+    ),
     created_on: Schema.optional(Schema.NullOr(Schema.Date)),
     id: Schema.String,
     mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
@@ -388,8 +467,13 @@ export const UpdateAnIpAccessRuleRequest = Schema.Struct({
 
 export interface UpdateAnIpAccessRuleResponse {
   result: {
-    allowed_modes: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge"[];
-    configuration: Record<string, unknown>;
+    allowed_modes: ("block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge")[];
+    configuration:
+      | { target?: "ip"; value?: string }
+      | { target?: "ip6"; value?: string }
+      | { target?: "ip_range"; value?: string }
+      | { target?: "asn"; value?: string }
+      | { target?: "country"; value?: string };
     created_on?: string;
     id: string;
     mode: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge";
@@ -410,7 +494,28 @@ export const UpdateAnIpAccessRuleResponse = Schema.Struct({
     allowed_modes: Schema.Array(
       Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
     ),
-    configuration: Schema.Struct({}),
+    configuration: Schema.Union(
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip6"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("asn"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("country"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+    ),
     created_on: Schema.optional(Schema.NullOr(Schema.Date)),
     id: Schema.String,
     mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
@@ -1064,7 +1169,11 @@ export const listFirewallRules: (
 export interface CreateFirewallRulesRequest {
   zone_id: string;
   body: {
-    action: Record<string, unknown>;
+    action: {
+      mode?: "simulate" | "ban" | "challenge" | "js_challenge" | "managed_challenge";
+      response?: { body?: string; content_type?: string };
+      timeout?: number;
+    };
     filter: {
       description?: string;
       expression?: string;
@@ -1078,7 +1187,26 @@ export interface CreateFirewallRulesRequest {
 export const CreateFirewallRulesRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-    action: Schema.Struct({}),
+    action: Schema.Union(
+      Schema.Struct({
+        mode: Schema.optional(
+          Schema.NullOr(
+            Schema.Literal("simulate", "ban", "challenge", "js_challenge", "managed_challenge"),
+          ),
+        ),
+        response: Schema.optional(
+          Schema.NullOr(
+            Schema.Union(
+              Schema.Struct({
+                body: Schema.optional(Schema.NullOr(Schema.String)),
+                content_type: Schema.optional(Schema.NullOr(Schema.String)),
+              }),
+            ),
+          ),
+        ),
+        timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+      }),
+    ),
     filter: Schema.Struct({
       description: Schema.optional(Schema.NullOr(Schema.String)),
       expression: Schema.optional(Schema.NullOr(Schema.String)),
@@ -1437,7 +1565,11 @@ export interface UpdateAFirewallRuleRequest {
   rule_id: string;
   zone_id: string;
   body: {
-    action: Record<string, unknown>;
+    action: {
+      mode?: "simulate" | "ban" | "challenge" | "js_challenge" | "managed_challenge";
+      response?: { body?: string; content_type?: string };
+      timeout?: number;
+    };
     filter: {
       description?: string;
       expression?: string;
@@ -1453,7 +1585,26 @@ export const UpdateAFirewallRuleRequest = Schema.Struct({
   rule_id: Schema.String.pipe(T.HttpPath("rule_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-    action: Schema.Struct({}),
+    action: Schema.Union(
+      Schema.Struct({
+        mode: Schema.optional(
+          Schema.NullOr(
+            Schema.Literal("simulate", "ban", "challenge", "js_challenge", "managed_challenge"),
+          ),
+        ),
+        response: Schema.optional(
+          Schema.NullOr(
+            Schema.Union(
+              Schema.Struct({
+                body: Schema.optional(Schema.NullOr(Schema.String)),
+                content_type: Schema.optional(Schema.NullOr(Schema.String)),
+              }),
+            ),
+          ),
+        ),
+        timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+      }),
+    ),
     filter: Schema.Struct({
       description: Schema.optional(Schema.NullOr(Schema.String)),
       expression: Schema.optional(Schema.NullOr(Schema.String)),
@@ -1908,7 +2059,12 @@ export interface UpdateAUserAgentBlockingRuleRequest {
   ua_rule_id: string;
   zone_id: string;
   body: {
-    configuration: Record<string, unknown>;
+    configuration:
+      | { target?: "ip"; value?: string }
+      | { target?: "ip6"; value?: string }
+      | { target?: "ip_range"; value?: string }
+      | { target?: "asn"; value?: string }
+      | { target?: "country"; value?: string };
     description?: string;
     id: string;
     mode: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge";
@@ -1920,7 +2076,28 @@ export const UpdateAUserAgentBlockingRuleRequest = Schema.Struct({
   ua_rule_id: Schema.String.pipe(T.HttpPath("ua_rule_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-    configuration: Schema.Struct({}),
+    configuration: Schema.Union(
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip6"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("asn"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("country"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+    ),
     description: Schema.optional(Schema.NullOr(Schema.String)),
     id: Schema.String,
     mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),

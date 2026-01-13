@@ -1,9 +1,16 @@
 {
   "errors": {
-    "InvalidZone": { "code": 1003, "status": 404 },
-    "RecordNotFound": { "code": 81044, "status": 404 },
-    "ValidationError": { "code": 10021 },
-    "InvalidRequest": { "code": 6003 }
+    "InvalidZone": { "code": 1003, "status": 404, "categories": ["NotFoundError"] },
+    "RecordNotFound": { "code": 81044, "status": 404, "categories": ["NotFoundError"] },
+    "ValidationError": { "code": 10021, "categories": ["BadRequestError"] },
+    "InvalidRequest": { "code": 6003, "categories": ["BadRequestError"] },
+    "RateLimited": { "code": 971, "categories": ["ThrottlingError", "RetryableError"] },
+    "TooManyRequests": { "code": 6100, "categories": ["ThrottlingError", "RetryableError"] },
+    "AuthenticationError": { "code": 10000, "categories": ["AuthError"] },
+    "InvalidToken": { "code": 9103, "categories": ["AuthError"] },
+    "MissingToken": { "code": 9106, "categories": ["AuthError"] },
+    "TokenExpired": { "code": 9109, "categories": ["AuthError"] },
+    "Unauthorized": { "code": 9000, "categories": ["AuthError"] }
   },
   "operations": {
     "listDnsRecords": {

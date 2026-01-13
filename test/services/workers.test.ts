@@ -741,6 +741,225 @@ describe("Workers", () => {
         });
         yield* cleanupNamespace(nsName);
       }));
+
+    test("list script secrets in namespace", () =>
+      Effect.gen(function* () {
+        const nsName = "itty-cf-workers-ns-list-secrets";
+        const scriptName = "itty-cf-ns-list-secrets-worker";
+        yield* cleanupNamespace(nsName);
+
+        // Create namespace
+        yield* Workers.create({
+          account_id: accountId(),
+          body: { name: nsName },
+        });
+
+        yield* Effect.sleep(Duration.seconds(1));
+
+        // Upload worker to namespace
+        yield* Workers.namespaceWorkerScriptUploadWorkerModule({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+          body: createWorkerFormData(SIMPLE_WORKER_SCRIPT),
+        });
+
+        // List secrets (should be empty initially)
+        const secrets = yield* Workers.listScriptSecrets({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+        });
+        expect(secrets.result).toBeDefined();
+
+        // Cleanup
+        yield* Workers.deleteWorker({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+        });
+        yield* cleanupNamespace(nsName);
+      }));
+
+    test("delete script secret in namespace", () =>
+      Effect.gen(function* () {
+        const nsName = "itty-cf-workers-ns-del-secret";
+        const scriptName = "itty-cf-ns-del-secret-worker";
+        yield* cleanupNamespace(nsName);
+
+        // Create namespace
+        yield* Workers.create({
+          account_id: accountId(),
+          body: { name: nsName },
+        });
+
+        yield* Effect.sleep(Duration.seconds(1));
+
+        // Upload worker to namespace
+        yield* Workers.namespaceWorkerScriptUploadWorkerModule({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+          body: createWorkerFormData(SIMPLE_WORKER_SCRIPT),
+        });
+
+        // Note: Can't easily put a secret without using account-level API
+        // Just test that delete doesn't crash on non-existent secret
+        yield* Workers.deleteScriptSecret({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+          secret_name: "NONEXISTENT_SECRET",
+        }).pipe(Effect.ignore);
+
+        // Cleanup
+        yield* Workers.deleteWorker({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+        });
+        yield* cleanupNamespace(nsName);
+      }));
+
+    test("put single script tag in namespace", () =>
+      Effect.gen(function* () {
+        const nsName = "itty-cf-workers-ns-put-tag";
+        const scriptName = "itty-cf-ns-put-tag-worker";
+        yield* cleanupNamespace(nsName);
+
+        // Create namespace
+        yield* Workers.create({
+          account_id: accountId(),
+          body: { name: nsName },
+        });
+
+        yield* Effect.sleep(Duration.seconds(1));
+
+        // Upload worker to namespace
+        yield* Workers.namespaceWorkerScriptUploadWorkerModule({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+          body: createWorkerFormData(SIMPLE_WORKER_SCRIPT),
+        });
+
+        // Put a single tag
+        yield* Workers.putScriptTag({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+          tag: "env:production",
+        });
+
+        // Get tags to verify
+        const tags = yield* Workers.getScriptTags({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+        });
+        expect(tags.result).toBeDefined();
+
+        // Cleanup
+        yield* Workers.deleteWorker({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+        });
+        yield* cleanupNamespace(nsName);
+      }));
+
+    test("delete script tag in namespace", () =>
+      Effect.gen(function* () {
+        const nsName = "itty-cf-workers-ns-del-tag";
+        const scriptName = "itty-cf-ns-del-tag-worker";
+        yield* cleanupNamespace(nsName);
+
+        // Create namespace
+        yield* Workers.create({
+          account_id: accountId(),
+          body: { name: nsName },
+        });
+
+        yield* Effect.sleep(Duration.seconds(1));
+
+        // Upload worker to namespace
+        yield* Workers.namespaceWorkerScriptUploadWorkerModule({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+          body: createWorkerFormData(SIMPLE_WORKER_SCRIPT),
+        });
+
+        // Put tags first
+        yield* Workers.putScriptTags({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+          body: ["env:test", "to-delete"],
+        });
+
+        // Delete a single tag
+        yield* Workers.deleteScriptTag({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+          tag: "to-delete",
+        });
+
+        // Cleanup
+        yield* Workers.deleteWorker({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+        });
+        yield* cleanupNamespace(nsName);
+      }));
+
+    test("put script content in namespace", () =>
+      Effect.gen(function* () {
+        const nsName = "itty-cf-workers-ns-put-content";
+        const scriptName = "itty-cf-ns-put-content-worker";
+        yield* cleanupNamespace(nsName);
+
+        // Create namespace
+        yield* Workers.create({
+          account_id: accountId(),
+          body: { name: nsName },
+        });
+
+        yield* Effect.sleep(Duration.seconds(1));
+
+        // Upload worker to namespace first
+        yield* Workers.namespaceWorkerScriptUploadWorkerModule({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+          body: createWorkerFormData(SIMPLE_WORKER_SCRIPT),
+        });
+
+        // Put updated content
+        const updatedScript = `
+export default {
+  async fetch(request, env, ctx) {
+    return new Response("Updated namespace worker!");
+  }
+};
+`;
+        yield* Workers.putScriptContent({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+          body: createWorkerFormData(updatedScript),
+        });
+
+        // Cleanup
+        yield* Workers.deleteWorker({
+          account_id: accountId(),
+          dispatch_namespace: nsName,
+          script_name: scriptName,
+        });
+        yield* cleanupNamespace(nsName);
+      }));
   });
 
   describe("Durable Objects", () => {
@@ -956,6 +1175,732 @@ describe("Workers", () => {
           expect(error._tag).toBe("NamespaceNotFound");
           if (error._tag === "NamespaceNotFound") {
             expect(error.code).toBe(100119);
+          }
+        }),
+      ));
+
+    test("WorkerNotFound error when downloading non-existent worker", () =>
+      Workers.workerScriptDownloadWorker({
+        account_id: accountId(),
+        script_name: "itty-cf-nonexistent-download",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("WorkerNotFound");
+        }),
+      ));
+
+    // Note: putContent creates a worker if it doesn't exist (PUT semantics), so no WorkerNotFound test
+    // Instead test with invalid name
+    test("InvalidWorkerName error when putting content with invalid name", () =>
+      Workers.putContent({
+        account_id: accountId(),
+        script_name: "INVALID_NAME!@#$%",
+        body: createWorkerFormData(SIMPLE_WORKER_SCRIPT),
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("InvalidWorkerName");
+        }),
+        Effect.ensuring(cleanup("INVALID_NAME!@#$%")),
+      ));
+
+    test("WorkerNotFound error when creating deployment for non-existent worker", () =>
+      Workers.createDeployment({
+        account_id: accountId(),
+        script_name: "itty-cf-nonexistent-deploy",
+        body: {
+          strategy: "percentage",
+          versions: [{ version_id: "00000000-0000-0000-0000-000000000000", percentage: 100 }],
+        },
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("WorkerNotFound");
+        }),
+      ));
+
+    test("WorkerNotFound error when getting deployment of non-existent worker", () =>
+      Workers.getDeployment({
+        account_id: accountId(),
+        script_name: "itty-cf-nonexistent-get-deploy",
+        deployment_id: "00000000-0000-0000-0000-000000000000",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("WorkerNotFound");
+        }),
+      ));
+
+    test("WorkerNotFound error when deleting deployment of non-existent worker", () =>
+      Workers.deleteDeployment({
+        account_id: accountId(),
+        script_name: "itty-cf-nonexistent-del-deploy",
+        deployment_id: "00000000-0000-0000-0000-000000000000",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("WorkerNotFound");
+        }),
+      ));
+
+    test("WorkerNotFound error when posting subdomain for non-existent worker", () =>
+      Workers.postSubdomain({
+        account_id: accountId(),
+        script_name: "itty-cf-nonexistent-subdomain-post",
+        body: { enabled: true },
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("WorkerNotFound");
+        }),
+      ));
+
+    test("WorkerNotFound error when deleting subdomain of non-existent worker", () =>
+      Workers.deleteSubdomain({
+        account_id: accountId(),
+        script_name: "itty-cf-nonexistent-subdomain-del",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("WorkerNotFound");
+        }),
+      ));
+
+    test("WorkerNotFound error when updating usage model of non-existent worker", () =>
+      Workers.updateUsageModel({
+        account_id: accountId(),
+        script_name: "itty-cf-nonexistent-usage-update",
+        body: { usage_model: "bundled" },
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("WorkerNotFound");
+        }),
+      ));
+
+    test("WorkerNotFound error when uploading version to non-existent worker", () =>
+      Workers.workerVersionsUploadVersion({
+        account_id: accountId(),
+        script_name: "itty-cf-nonexistent-version-upload",
+        body: createWorkerFormData(SIMPLE_WORKER_SCRIPT),
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("WorkerNotFound");
+        }),
+      ));
+
+    test("WorkerNotFound error when patching settings1 of non-existent worker", () => {
+      // Create proper settings FormData
+      const settingsFormData = new FormData();
+      settingsFormData.append(
+        "settings",
+        new Blob([JSON.stringify({ logpush: false })], { type: "application/json" }),
+      );
+      return Workers.patchSettings1({
+        account_id: accountId(),
+        script_name: "itty-cf-nonexistent-settings1",
+        body: settingsFormData,
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("WorkerNotFound");
+        }),
+      );
+    });
+
+    test("WorkerNotFound error when getting secret of non-existent worker", () =>
+      Workers.getScriptSecret({
+        account_id: accountId(),
+        script_name: "itty-cf-nonexistent-get-secret",
+        secret_name: "MY_SECRET",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("WorkerNotFound");
+        }),
+      ));
+  });
+
+  describe("Priority 1 - Core Worker Operations", () => {
+    test("download worker script", () =>
+      withWorker("itty-cf-workers-download-script", (scriptName) =>
+        Effect.gen(function* () {
+          const response = yield* Workers.workerScriptDownloadWorker({
+            account_id: accountId(),
+            script_name: scriptName,
+          });
+          // Response should be the script content
+          expect(response).toBeDefined();
+        }),
+      ));
+
+    test("put worker content", () =>
+      withWorker("itty-cf-workers-put-content", (scriptName) =>
+        Effect.gen(function* () {
+          const updatedScript = `
+export default {
+  async fetch(request, env, ctx) {
+    return new Response("Updated content!");
+  }
+};
+`;
+          const response = yield* Workers.putContent({
+            account_id: accountId(),
+            script_name: scriptName,
+            body: createWorkerFormData(updatedScript),
+          });
+          expect(response.result).toBeDefined();
+        }),
+      ));
+
+    test("create and get deployment", () =>
+      withWorker("itty-cf-workers-deployment", (scriptName) =>
+        Effect.gen(function* () {
+          // List deployments first to get the current state
+          const deployments = yield* Workers.listDeployments({
+            account_id: accountId(),
+            script_name: scriptName,
+          });
+          expect(deployments.result).toBeDefined();
+
+          // Create a new deployment using the current versions
+          const versions = yield* Workers.listVersions({
+            account_id: accountId(),
+            script_name: scriptName,
+          });
+          const currentVersion = versions.result?.items?.[0];
+
+          if (currentVersion?.id) {
+            const created = yield* Workers.createDeployment({
+              account_id: accountId(),
+              script_name: scriptName,
+              body: {
+                strategy: "percentage",
+                versions: [{ version_id: currentVersion.id, percentage: 100 }],
+              },
+            });
+            expect(created.result).toBeDefined();
+          }
+        }),
+      ));
+
+    test("post and get subdomain", () =>
+      withWorker("itty-cf-workers-subdomain-crud", (scriptName) =>
+        Effect.gen(function* () {
+          // Enable subdomain
+          yield* Workers.postSubdomain({
+            account_id: accountId(),
+            script_name: scriptName,
+            body: { enabled: true },
+          });
+
+          // Get subdomain
+          const subdomain = yield* Workers.getSubdomain({
+            account_id: accountId(),
+            script_name: scriptName,
+          });
+          expect(subdomain.result).toBeDefined();
+        }),
+      ));
+
+    test("get and update usage model", () =>
+      withWorker("itty-cf-workers-usage-model", (scriptName) =>
+        Effect.gen(function* () {
+          // Get current usage model
+          const current = yield* Workers.workerScriptFetchUsageModel({
+            account_id: accountId(),
+            script_name: scriptName,
+          });
+          expect(current.result).toBeDefined();
+
+          // Update usage model
+          const updated = yield* Workers.updateUsageModel({
+            account_id: accountId(),
+            script_name: scriptName,
+            body: { usage_model: "bundled" },
+          });
+          expect(updated.result).toBeDefined();
+        }),
+      ));
+
+    test("upload new version", () =>
+      withWorker("itty-cf-workers-upload-version", (scriptName) =>
+        Effect.gen(function* () {
+          const newVersionScript = `
+export default {
+  async fetch(request, env, ctx) {
+    return new Response("Version 2!");
+  }
+};
+`;
+          const response = yield* Workers.workerVersionsUploadVersion({
+            account_id: accountId(),
+            script_name: scriptName,
+            body: createWorkerFormData(newVersionScript),
+          });
+          expect(response.result).toBeDefined();
+        }),
+      ));
+
+    test("patch settings with bindings", () =>
+      withWorker("itty-cf-workers-patch-settings1", (scriptName) =>
+        Effect.gen(function* () {
+          // Create FormData for settings
+          const settingsFormData = new FormData();
+          settingsFormData.append(
+            "settings",
+            new Blob([JSON.stringify({ logpush: false })], { type: "application/json" }),
+          );
+
+          const response = yield* Workers.patchSettings1({
+            account_id: accountId(),
+            script_name: scriptName,
+            body: settingsFormData,
+          });
+          expect(response.result).toBeDefined();
+        }),
+      ));
+
+    test("put and get secret", () =>
+      withWorker("itty-cf-workers-get-secret", (scriptName) =>
+        Effect.gen(function* () {
+          const secretName = "TEST_SECRET_GET";
+
+          // Put a secret first
+          yield* Workers.putScriptSecret({
+            account_id: accountId(),
+            script_name: scriptName,
+            body: { name: secretName, text: "secret-value", type: "secret_text" },
+          });
+
+          // Get the secret metadata
+          const secret = yield* Workers.getScriptSecret({
+            account_id: accountId(),
+            script_name: scriptName,
+            secret_name: secretName,
+          });
+          expect(secret.result).toBeDefined();
+        }),
+      ));
+  });
+
+  describe("Priority 3 - Advanced APIs", () => {
+    test("create worker account settings", () =>
+      Effect.gen(function* () {
+        // createWorkerAccountSettings - update account-level default settings
+        const settings = yield* Workers.createWorkerAccountSettings({
+          account_id: accountId(),
+          body: { default_usage_model: "bundled" },
+        });
+        expect(settings.result).toBeDefined();
+      }));
+
+    test("create assets upload session for worker", () =>
+      withWorker("itty-cf-workers-assets-sess", (scriptName) =>
+        Effect.gen(function* () {
+          // Create an assets upload session for an existing worker
+          const session = yield* Workers.createAssetsUploadSession1({
+            account_id: accountId(),
+            script_name: scriptName,
+            body: {
+              manifest: {},
+            },
+          });
+          expect(session.result).toBeDefined();
+        }),
+      ));
+  });
+
+  describe("Priority 4 - Telemetry & Destinations", () => {
+    // Destinations are for Workers Observability - logpush endpoints for traces/logs
+    const destName = "itty-cf-workers-dest";
+
+    // Helper to clean up destination by slug/name (finds it first)
+    const cleanupDestination = (name: string) =>
+      Workers.destinationlist({ account_id: accountId() }).pipe(
+        Effect.flatMap((response) => {
+          const dest = (response.result as Array<{ slug: string; name: string }>)?.find(
+            (d) => d.name === name,
+          );
+          if (dest?.slug) {
+            return Workers.destinationsdelete({
+              account_id: accountId(),
+              slug: dest.slug,
+            });
+          }
+          return Effect.succeed(undefined);
+        }),
+        Effect.ignore,
+      );
+
+    // Helper to create a destination, run test, and cleanup
+    const withDestination = <A, E, R>(
+      name: string,
+      fn: (slug: string) => Effect.Effect<A, E, R>,
+    ) =>
+      cleanupDestination(name).pipe(
+        Effect.andThen(
+          Workers.destinationcreate({
+            account_id: accountId(),
+            body: {
+              name,
+              enabled: true,
+              configuration: {
+                type: "logpush",
+                logpushDataset: "opentelemetry-traces",
+                url: "https://example.com/logpush", // Test endpoint
+                headers: {},
+              },
+            },
+          }),
+        ),
+        Effect.flatMap((response) => {
+          const slug = (response.result as { slug: string })?.slug;
+          if (!slug) {
+            return Effect.die(new Error("Failed to create destination"));
+          }
+          return fn(slug);
+        }),
+        Effect.ensuring(cleanupDestination(name)),
+      );
+
+    test("list destinations", () =>
+      Effect.gen(function* () {
+        const destinations = yield* Workers.destinationlist({ account_id: accountId() });
+        expect(destinations.result).toBeDefined();
+        expect(Array.isArray(destinations.result)).toBe(true);
+      }));
+
+    // Note: Destination create/delete requires specific account configuration for Workers Observability
+    // This test is skipped as the logpush destination configuration requires additional setup
+    test.skip("create and delete destination", () =>
+      withDestination(destName, (slug) =>
+        Effect.gen(function* () {
+          // Verify the destination exists in the list
+          const destinations = yield* Workers.destinationlist({ account_id: accountId() });
+          const dest = (destinations.result as Array<{ slug: string; name: string }>)?.find(
+            (d) => d.slug === slug,
+          );
+          expect(dest).toBeDefined();
+          expect(dest?.name).toBe(destName);
+        }),
+      ));
+
+    test("list telemetry keys", () =>
+      withWorker("itty-cf-workers-telemetry-keys", (_scriptName) =>
+        Effect.gen(function* () {
+          // List telemetry keys for the account
+          const keys = yield* Workers.telemetrykeyslist({
+            account_id: accountId(),
+            body: {
+              datasets: ["workers-invocations"],
+            },
+          });
+          expect(keys.result).toBeDefined();
+        }),
+      ));
+
+    test("query telemetry", () =>
+      withWorker("itty-cf-workers-telemetry-query", (_scriptName) =>
+        Effect.gen(function* () {
+          // Query telemetry data - requires queryId and timeframe
+          const now = Date.now();
+          const telemetry = yield* Workers.telemetryquery({
+            account_id: accountId(),
+            body: {
+              queryId: `itty-cf-workers-telemetry-query-${now}`,
+              timeframe: {
+                from: now - 24 * 60 * 60 * 1000, // 24 hours ago
+                to: now,
+              },
+              limit: 10,
+              parameters: {
+                datasets: ["workers-invocations"],
+                calculations: [{ operator: "count" }],
+              },
+            },
+          });
+          expect(telemetry.result).toBeDefined();
+        }),
+      ));
+
+    test("list telemetry values", () =>
+      withWorker("itty-cf-workers-telemetry-values", (_scriptName) =>
+        Effect.gen(function* () {
+          // List telemetry values - requires key, datasets, type, and timeframe
+          const now = Date.now();
+          const values = yield* Workers.telemetryvalueslist({
+            account_id: accountId(),
+            body: {
+              datasets: ["workers-invocations"],
+              key: "scriptName",
+              type: "string",
+              timeframe: {
+                from: now - 24 * 60 * 60 * 1000, // 24 hours ago
+                to: now,
+              },
+            },
+          });
+          expect(values.result).toBeDefined();
+        }),
+      ));
+  });
+
+  describe("Priority 5 - Domains & Regions", () => {
+    // Note: Smart Placement is an account feature that may not be enabled
+    // This test requires Workers Smart Placement to be enabled on the account
+    test.skip("list regions for smart placement", () =>
+      Effect.gen(function* () {
+        // List all available regions for smart placement
+        const regions = yield* Workers.listRegions({
+          account_id: accountId(),
+        });
+        expect(regions.result).toBeDefined();
+        expect(regions.result.providers).toBeDefined();
+        expect(Array.isArray(regions.result.providers)).toBe(true);
+      }));
+
+    // Note: Domain attach/detach requires a zone_id which is environment-specific
+    // We test with a worker but skip actual attachment since we don't have a zone
+    test("list domains for account", () =>
+      Effect.gen(function* () {
+        // List domains attached to workers in this account
+        const domains = yield* Workers.listDomains({
+          account_id: accountId(),
+        });
+        expect(domains.result).toBeDefined();
+        expect(Array.isArray(domains.result)).toBe(true);
+      }));
+  });
+
+  describe("Priority 6 - Durable Objects", () => {
+    // Worker script with a Durable Object class
+    const DO_WORKER_SCRIPT = `
+export class Counter {
+  constructor(state, env) {
+    this.state = state;
+  }
+
+  async fetch(request) {
+    let count = (await this.state.storage.get("count")) || 0;
+    count++;
+    await this.state.storage.put("count", count);
+    return new Response(JSON.stringify({ count }));
+  }
+}
+
+export default {
+  async fetch(request, env, ctx) {
+    const id = env.COUNTER.idFromName("test");
+    const stub = env.COUNTER.get(id);
+    return stub.fetch(request);
+  }
+};
+`;
+
+    // Create worker FormData with DO bindings
+    const createDOWorkerFormData = (script: string, mainModule: string = "worker.js") => {
+      const formData = new FormData();
+
+      formData.append(
+        mainModule,
+        new Blob([script], { type: "application/javascript+module" }),
+        mainModule,
+      );
+
+      formData.append(
+        "metadata",
+        new Blob(
+          [
+            JSON.stringify({
+              main_module: mainModule,
+              compatibility_date: "2024-01-01",
+              compatibility_flags: [],
+              bindings: [
+                {
+                  name: "COUNTER",
+                  type: "durable_object_namespace",
+                  class_name: "Counter",
+                },
+              ],
+              migrations: {
+                new_classes: ["Counter"],
+              },
+            }),
+          ],
+          { type: "application/json" },
+        ),
+        "metadata",
+      );
+
+      return formData;
+    };
+
+    // Helper to create a worker with DO bindings
+    const withDOWorker = <A, E, R>(
+      name: string,
+      fn: (scriptName: string, namespaceId: string) => Effect.Effect<A, E, R>,
+    ) =>
+      cleanup(name).pipe(
+        Effect.andThen(
+          Workers.workerScriptUploadWorkerModule({
+            account_id: accountId(),
+            script_name: name,
+            body: createDOWorkerFormData(DO_WORKER_SCRIPT),
+          }),
+        ),
+        // Wait for DO namespace to be created (may take some time to propagate)
+        Effect.andThen(Effect.sleep(Duration.seconds(5))),
+        Effect.andThen(
+          Workers.listNamespaces({
+            account_id: accountId(),
+          }),
+        ),
+        Effect.flatMap((namespaces) => {
+          // Find the namespace for our worker's Counter class
+          const ns = namespaces.result?.find(
+            (n) => n.script === name && n.class === "Counter",
+          );
+          if (!ns?.id) {
+            return Effect.die(new Error(`No DO namespace found for worker ${name}`));
+          }
+          return fn(name, ns.id);
+        }),
+        Effect.ensuring(cleanup(name)),
+      );
+
+    test("list durable object namespaces", () =>
+      Effect.gen(function* () {
+        // List all Durable Object namespaces in the account
+        const namespaces = yield* Workers.listNamespaces({
+          account_id: accountId(),
+        });
+        expect(namespaces.result).toBeDefined();
+        expect(Array.isArray(namespaces.result)).toBe(true);
+      }));
+
+    test("list durable object namespaces and objects with worker", () =>
+      withDOWorker("itty-cf-workers-do", (_scriptName, namespaceId) =>
+        Effect.gen(function* () {
+          // List objects in the namespace (should be empty initially)
+          const objects = yield* Workers.listObjects({
+            account_id: accountId(),
+            id: namespaceId,
+          });
+          expect(objects.result).toBeDefined();
+          expect(Array.isArray(objects.result)).toBe(true);
+        }),
+      ));
+  });
+
+  describe("Priority 7 - Workflows", () => {
+    // Workflows require a worker with a Workflow class export
+    // The workflow APIs operate on workflow metadata, not the worker script itself
+    const WORKFLOW_WORKER_SCRIPT = `
+import { WorkflowEntrypoint } from 'cloudflare:workers';
+
+export class MyWorkflow extends WorkflowEntrypoint {
+  async run(event, step) {
+    await step.do('step1', async () => {
+      return { message: 'Hello from step 1' };
+    });
+    
+    return { success: true };
+  }
+}
+
+export default {
+  async fetch(request, env, ctx) {
+    return new Response('Workflow worker');
+  }
+};
+`;
+
+    const createWorkflowWorkerFormData = (script: string, mainModule: string = "worker.js") => {
+      const formData = new FormData();
+
+      formData.append(
+        mainModule,
+        new Blob([script], { type: "application/javascript+module" }),
+        mainModule,
+      );
+
+      formData.append(
+        "metadata",
+        new Blob(
+          [
+            JSON.stringify({
+              main_module: mainModule,
+              compatibility_date: "2024-01-01",
+              compatibility_flags: [],
+              // Workflows are configured via workflow bindings
+              workflow_bindings: [
+                {
+                  name: "MY_WORKFLOW",
+                  class_name: "MyWorkflow",
+                },
+              ],
+            }),
+          ],
+          { type: "application/json" },
+        ),
+        "metadata",
+      );
+
+      return formData;
+    };
+
+    // Helper to create a workflow worker and run test
+    const withWorkflowWorker = <A, E, R>(
+      name: string,
+      fn: (scriptName: string) => Effect.Effect<A, E, R>,
+    ) =>
+      cleanup(name).pipe(
+        Effect.andThen(
+          Workers.workerScriptUploadWorkerModule({
+            account_id: accountId(),
+            script_name: name,
+            body: createWorkflowWorkerFormData(WORKFLOW_WORKER_SCRIPT),
+          }),
+        ),
+        // Wait for workflow registration
+        Effect.andThen(Effect.sleep(Duration.seconds(2))),
+        Effect.andThen(fn(name)),
+        Effect.ensuring(cleanup(name)),
+      );
+
+    test("list workflows", () =>
+      Effect.gen(function* () {
+        // List all workflows in the account
+        const workflows = yield* Workers.listworkers({
+          account_id: accountId(),
+        });
+        expect(workflows.result).toBeDefined();
+        expect(Array.isArray(workflows.result)).toBe(true);
+      }));
+
+    test("create and manage workflow worker", () =>
+      withWorkflowWorker("itty-cf-workers-workflow", (scriptName) =>
+        Effect.gen(function* () {
+          // List workflows - our new workflow should appear
+          const workflows = yield* Workers.listworkers({
+            account_id: accountId(),
+          });
+          expect(workflows.result).toBeDefined();
+
+          // Get the workflow if it was created
+          const workflowList = workflows.result as Array<{ id: string; name: string }>;
+          const ourWorkflow = workflowList.find((w) => w.name === scriptName);
+
+          if (ourWorkflow) {
+            // Get specific workflow details
+            const workflow = yield* Workers.getworker({
+              account_id: accountId(),
+              worker_id: ourWorkflow.id,
+            });
+            expect(workflow.result).toBeDefined();
           }
         }),
       ));

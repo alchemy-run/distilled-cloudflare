@@ -9,6 +9,7 @@ import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import type { HttpClient } from "@effect/platform";
 import * as API from "../client/api.ts";
+import * as C from "../category.ts";
 import * as T from "../traits.ts";
 import type { ApiToken } from "../auth.ts";
 import {
@@ -28,49 +29,49 @@ export class AuthenticationError extends Schema.TaggedError<AuthenticationError>
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
 export class InvalidToken extends Schema.TaggedError<InvalidToken>()("InvalidToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError, C.withBadRequestError) {
   static readonly _tag = "InvalidToken";
 }
 
 export class MissingToken extends Schema.TaggedError<MissingToken>()("MissingToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "MissingToken";
 }
 
 export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError) {
   static readonly _tag = "RateLimited";
 }
 
 export class TokenExpired extends Schema.TaggedError<TokenExpired>()("TokenExpired", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "TokenExpired";
 }
 
 export class TooManyRequests extends Schema.TaggedError<TooManyRequests>()("TooManyRequests", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError, C.withQuotaError) {
   static readonly _tag = "TooManyRequests";
 }
 
 export class Unauthorized extends Schema.TaggedError<Unauthorized>()("Unauthorized", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "Unauthorized";
 }
 
@@ -4420,12 +4421,112 @@ export const ListAccessGroupsRequest = Schema.Struct({
 export interface ListAccessGroupsResponse {
   result: {
     created_at?: unknown;
-    exclude?: Record<string, unknown>[];
+    exclude?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
     id?: string;
-    include?: Record<string, unknown>[];
-    is_default?: Record<string, unknown>[];
+    include?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
+    is_default?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
     name?: string;
-    require?: Record<string, unknown>[];
+    require?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
     updated_at?: unknown;
   }[];
   result_info?: {
@@ -4441,12 +4542,544 @@ export const ListAccessGroupsResponse = Schema.Struct({
   result: Schema.Array(
     Schema.Struct({
       created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
-      exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+      exclude: Schema.optional(
+        Schema.NullOr(
+          Schema.Array(
+            Schema.Union(
+              Schema.Struct({
+                group: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                any_valid_service_token: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                auth_context: Schema.Struct({
+                  ac_id: Schema.String,
+                  id: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                auth_method: Schema.Struct({
+                  auth_method: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                azureAD: Schema.Struct({
+                  id: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                certificate: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                common_name: Schema.Struct({
+                  common_name: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                geo: Schema.Struct({
+                  country_code: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                device_posture: Schema.Struct({
+                  integration_uid: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email_domain: Schema.Struct({
+                  domain: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email_list: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email: Schema.Struct({
+                  email: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                everyone: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                external_evaluation: Schema.Struct({
+                  evaluate_url: Schema.String,
+                  keys_url: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                "github-organization": Schema.Struct({
+                  identity_provider_id: Schema.String,
+                  name: Schema.String,
+                  team: Schema.optional(Schema.NullOr(Schema.String)),
+                }),
+              }),
+              Schema.Struct({
+                gsuite: Schema.Struct({
+                  email: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                login_method: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                ip_list: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                ip: Schema.Struct({
+                  ip: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                okta: Schema.Struct({
+                  identity_provider_id: Schema.String,
+                  name: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                saml: Schema.Struct({
+                  attribute_name: Schema.String,
+                  attribute_value: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                oidc: Schema.Struct({
+                  claim_name: Schema.String,
+                  claim_value: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                service_token: Schema.Struct({
+                  token_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                linked_app_token: Schema.Struct({
+                  app_uid: Schema.String,
+                }),
+              }),
+            ),
+          ),
+        ),
+      ),
       id: Schema.optional(Schema.NullOr(Schema.String)),
-      include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
-      is_default: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+      include: Schema.optional(
+        Schema.NullOr(
+          Schema.Array(
+            Schema.Union(
+              Schema.Struct({
+                group: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                any_valid_service_token: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                auth_context: Schema.Struct({
+                  ac_id: Schema.String,
+                  id: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                auth_method: Schema.Struct({
+                  auth_method: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                azureAD: Schema.Struct({
+                  id: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                certificate: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                common_name: Schema.Struct({
+                  common_name: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                geo: Schema.Struct({
+                  country_code: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                device_posture: Schema.Struct({
+                  integration_uid: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email_domain: Schema.Struct({
+                  domain: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email_list: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email: Schema.Struct({
+                  email: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                everyone: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                external_evaluation: Schema.Struct({
+                  evaluate_url: Schema.String,
+                  keys_url: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                "github-organization": Schema.Struct({
+                  identity_provider_id: Schema.String,
+                  name: Schema.String,
+                  team: Schema.optional(Schema.NullOr(Schema.String)),
+                }),
+              }),
+              Schema.Struct({
+                gsuite: Schema.Struct({
+                  email: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                login_method: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                ip_list: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                ip: Schema.Struct({
+                  ip: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                okta: Schema.Struct({
+                  identity_provider_id: Schema.String,
+                  name: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                saml: Schema.Struct({
+                  attribute_name: Schema.String,
+                  attribute_value: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                oidc: Schema.Struct({
+                  claim_name: Schema.String,
+                  claim_value: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                service_token: Schema.Struct({
+                  token_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                linked_app_token: Schema.Struct({
+                  app_uid: Schema.String,
+                }),
+              }),
+            ),
+          ),
+        ),
+      ),
+      is_default: Schema.optional(
+        Schema.NullOr(
+          Schema.Array(
+            Schema.Union(
+              Schema.Struct({
+                group: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                any_valid_service_token: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                auth_context: Schema.Struct({
+                  ac_id: Schema.String,
+                  id: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                auth_method: Schema.Struct({
+                  auth_method: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                azureAD: Schema.Struct({
+                  id: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                certificate: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                common_name: Schema.Struct({
+                  common_name: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                geo: Schema.Struct({
+                  country_code: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                device_posture: Schema.Struct({
+                  integration_uid: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email_domain: Schema.Struct({
+                  domain: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email_list: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email: Schema.Struct({
+                  email: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                everyone: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                external_evaluation: Schema.Struct({
+                  evaluate_url: Schema.String,
+                  keys_url: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                "github-organization": Schema.Struct({
+                  identity_provider_id: Schema.String,
+                  name: Schema.String,
+                  team: Schema.optional(Schema.NullOr(Schema.String)),
+                }),
+              }),
+              Schema.Struct({
+                gsuite: Schema.Struct({
+                  email: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                login_method: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                ip_list: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                ip: Schema.Struct({
+                  ip: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                okta: Schema.Struct({
+                  identity_provider_id: Schema.String,
+                  name: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                saml: Schema.Struct({
+                  attribute_name: Schema.String,
+                  attribute_value: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                oidc: Schema.Struct({
+                  claim_name: Schema.String,
+                  claim_value: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                service_token: Schema.Struct({
+                  token_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                linked_app_token: Schema.Struct({
+                  app_uid: Schema.String,
+                }),
+              }),
+            ),
+          ),
+        ),
+      ),
       name: Schema.optional(Schema.NullOr(Schema.String)),
-      require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+      require: Schema.optional(
+        Schema.NullOr(
+          Schema.Array(
+            Schema.Union(
+              Schema.Struct({
+                group: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                any_valid_service_token: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                auth_context: Schema.Struct({
+                  ac_id: Schema.String,
+                  id: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                auth_method: Schema.Struct({
+                  auth_method: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                azureAD: Schema.Struct({
+                  id: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                certificate: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                common_name: Schema.Struct({
+                  common_name: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                geo: Schema.Struct({
+                  country_code: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                device_posture: Schema.Struct({
+                  integration_uid: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email_domain: Schema.Struct({
+                  domain: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email_list: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                email: Schema.Struct({
+                  email: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                everyone: Schema.Struct({}),
+              }),
+              Schema.Struct({
+                external_evaluation: Schema.Struct({
+                  evaluate_url: Schema.String,
+                  keys_url: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                "github-organization": Schema.Struct({
+                  identity_provider_id: Schema.String,
+                  name: Schema.String,
+                  team: Schema.optional(Schema.NullOr(Schema.String)),
+                }),
+              }),
+              Schema.Struct({
+                gsuite: Schema.Struct({
+                  email: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                login_method: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                ip_list: Schema.Struct({
+                  id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                ip: Schema.Struct({
+                  ip: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                okta: Schema.Struct({
+                  identity_provider_id: Schema.String,
+                  name: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                saml: Schema.Struct({
+                  attribute_name: Schema.String,
+                  attribute_value: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                oidc: Schema.Struct({
+                  claim_name: Schema.String,
+                  claim_value: Schema.String,
+                  identity_provider_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                service_token: Schema.Struct({
+                  token_id: Schema.String,
+                }),
+              }),
+              Schema.Struct({
+                linked_app_token: Schema.Struct({
+                  app_uid: Schema.String,
+                }),
+              }),
+            ),
+          ),
+        ),
+      ),
       updated_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
     }),
   ),
@@ -4580,12 +5213,112 @@ export const GetAnAccessGroupRequest = Schema.Struct({
 export interface GetAnAccessGroupResponse {
   result: {
     created_at?: unknown;
-    exclude?: Record<string, unknown>[];
+    exclude?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
     id?: string;
-    include?: Record<string, unknown>[];
-    is_default?: Record<string, unknown>[];
+    include?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
+    is_default?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
     name?: string;
-    require?: Record<string, unknown>[];
+    require?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
     updated_at?: unknown;
   };
   result_info?: {
@@ -4600,12 +5333,544 @@ export interface GetAnAccessGroupResponse {
 export const GetAnAccessGroupResponse = Schema.Struct({
   result: Schema.Struct({
     created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
-    exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    exclude: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              group: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              any_valid_service_token: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              auth_context: Schema.Struct({
+                ac_id: Schema.String,
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              auth_method: Schema.Struct({
+                auth_method: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              azureAD: Schema.Struct({
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              certificate: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              common_name: Schema.Struct({
+                common_name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              geo: Schema.Struct({
+                country_code: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              device_posture: Schema.Struct({
+                integration_uid: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_domain: Schema.Struct({
+                domain: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email: Schema.Struct({
+                email: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              everyone: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              external_evaluation: Schema.Struct({
+                evaluate_url: Schema.String,
+                keys_url: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              "github-organization": Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+                team: Schema.optional(Schema.NullOr(Schema.String)),
+              }),
+            }),
+            Schema.Struct({
+              gsuite: Schema.Struct({
+                email: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              login_method: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip: Schema.Struct({
+                ip: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              okta: Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              saml: Schema.Struct({
+                attribute_name: Schema.String,
+                attribute_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              oidc: Schema.Struct({
+                claim_name: Schema.String,
+                claim_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              service_token: Schema.Struct({
+                token_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              linked_app_token: Schema.Struct({
+                app_uid: Schema.String,
+              }),
+            }),
+          ),
+        ),
+      ),
+    ),
     id: Schema.optional(Schema.NullOr(Schema.String)),
-    include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
-    is_default: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    include: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              group: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              any_valid_service_token: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              auth_context: Schema.Struct({
+                ac_id: Schema.String,
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              auth_method: Schema.Struct({
+                auth_method: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              azureAD: Schema.Struct({
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              certificate: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              common_name: Schema.Struct({
+                common_name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              geo: Schema.Struct({
+                country_code: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              device_posture: Schema.Struct({
+                integration_uid: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_domain: Schema.Struct({
+                domain: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email: Schema.Struct({
+                email: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              everyone: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              external_evaluation: Schema.Struct({
+                evaluate_url: Schema.String,
+                keys_url: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              "github-organization": Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+                team: Schema.optional(Schema.NullOr(Schema.String)),
+              }),
+            }),
+            Schema.Struct({
+              gsuite: Schema.Struct({
+                email: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              login_method: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip: Schema.Struct({
+                ip: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              okta: Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              saml: Schema.Struct({
+                attribute_name: Schema.String,
+                attribute_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              oidc: Schema.Struct({
+                claim_name: Schema.String,
+                claim_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              service_token: Schema.Struct({
+                token_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              linked_app_token: Schema.Struct({
+                app_uid: Schema.String,
+              }),
+            }),
+          ),
+        ),
+      ),
+    ),
+    is_default: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              group: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              any_valid_service_token: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              auth_context: Schema.Struct({
+                ac_id: Schema.String,
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              auth_method: Schema.Struct({
+                auth_method: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              azureAD: Schema.Struct({
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              certificate: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              common_name: Schema.Struct({
+                common_name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              geo: Schema.Struct({
+                country_code: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              device_posture: Schema.Struct({
+                integration_uid: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_domain: Schema.Struct({
+                domain: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email: Schema.Struct({
+                email: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              everyone: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              external_evaluation: Schema.Struct({
+                evaluate_url: Schema.String,
+                keys_url: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              "github-organization": Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+                team: Schema.optional(Schema.NullOr(Schema.String)),
+              }),
+            }),
+            Schema.Struct({
+              gsuite: Schema.Struct({
+                email: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              login_method: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip: Schema.Struct({
+                ip: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              okta: Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              saml: Schema.Struct({
+                attribute_name: Schema.String,
+                attribute_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              oidc: Schema.Struct({
+                claim_name: Schema.String,
+                claim_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              service_token: Schema.Struct({
+                token_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              linked_app_token: Schema.Struct({
+                app_uid: Schema.String,
+              }),
+            }),
+          ),
+        ),
+      ),
+    ),
     name: Schema.optional(Schema.NullOr(Schema.String)),
-    require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    require: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              group: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              any_valid_service_token: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              auth_context: Schema.Struct({
+                ac_id: Schema.String,
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              auth_method: Schema.Struct({
+                auth_method: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              azureAD: Schema.Struct({
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              certificate: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              common_name: Schema.Struct({
+                common_name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              geo: Schema.Struct({
+                country_code: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              device_posture: Schema.Struct({
+                integration_uid: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_domain: Schema.Struct({
+                domain: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email: Schema.Struct({
+                email: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              everyone: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              external_evaluation: Schema.Struct({
+                evaluate_url: Schema.String,
+                keys_url: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              "github-organization": Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+                team: Schema.optional(Schema.NullOr(Schema.String)),
+              }),
+            }),
+            Schema.Struct({
+              gsuite: Schema.Struct({
+                email: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              login_method: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip: Schema.Struct({
+                ip: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              okta: Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              saml: Schema.Struct({
+                attribute_name: Schema.String,
+                attribute_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              oidc: Schema.Struct({
+                claim_name: Schema.String,
+                claim_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              service_token: Schema.Struct({
+                token_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              linked_app_token: Schema.Struct({
+                app_uid: Schema.String,
+              }),
+            }),
+          ),
+        ),
+      ),
+    ),
     updated_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
   }),
   result_info: Schema.optional(
@@ -4670,12 +5935,112 @@ export const UpdateAnAccessGroupRequest = Schema.Struct({
 export interface UpdateAnAccessGroupResponse {
   result: {
     created_at?: unknown;
-    exclude?: Record<string, unknown>[];
+    exclude?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
     id?: string;
-    include?: Record<string, unknown>[];
-    is_default?: Record<string, unknown>[];
+    include?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
+    is_default?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
     name?: string;
-    require?: Record<string, unknown>[];
+    require?: (
+      | { group: { id: string } }
+      | { any_valid_service_token: Record<string, unknown> }
+      | { auth_context: { ac_id: string; id: string; identity_provider_id: string } }
+      | { auth_method: { auth_method: string } }
+      | { azureAD: { id: string; identity_provider_id: string } }
+      | { certificate: Record<string, unknown> }
+      | { common_name: { common_name: string } }
+      | { geo: { country_code: string } }
+      | { device_posture: { integration_uid: string } }
+      | { email_domain: { domain: string } }
+      | { email_list: { id: string } }
+      | { email: { email: string } }
+      | { everyone: Record<string, unknown> }
+      | { external_evaluation: { evaluate_url: string; keys_url: string } }
+      | { "github-organization": { identity_provider_id: string; name: string; team?: string } }
+      | { gsuite: { email: string; identity_provider_id: string } }
+      | { login_method: { id: string } }
+      | { ip_list: { id: string } }
+      | { ip: { ip: string } }
+      | { okta: { identity_provider_id: string; name: string } }
+      | { saml: { attribute_name: string; attribute_value: string; identity_provider_id: string } }
+      | { oidc: { claim_name: string; claim_value: string; identity_provider_id: string } }
+      | { service_token: { token_id: string } }
+      | { linked_app_token: { app_uid: string } }
+    )[];
     updated_at?: unknown;
   };
   result_info?: {
@@ -4690,12 +6055,544 @@ export interface UpdateAnAccessGroupResponse {
 export const UpdateAnAccessGroupResponse = Schema.Struct({
   result: Schema.Struct({
     created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
-    exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    exclude: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              group: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              any_valid_service_token: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              auth_context: Schema.Struct({
+                ac_id: Schema.String,
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              auth_method: Schema.Struct({
+                auth_method: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              azureAD: Schema.Struct({
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              certificate: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              common_name: Schema.Struct({
+                common_name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              geo: Schema.Struct({
+                country_code: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              device_posture: Schema.Struct({
+                integration_uid: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_domain: Schema.Struct({
+                domain: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email: Schema.Struct({
+                email: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              everyone: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              external_evaluation: Schema.Struct({
+                evaluate_url: Schema.String,
+                keys_url: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              "github-organization": Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+                team: Schema.optional(Schema.NullOr(Schema.String)),
+              }),
+            }),
+            Schema.Struct({
+              gsuite: Schema.Struct({
+                email: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              login_method: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip: Schema.Struct({
+                ip: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              okta: Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              saml: Schema.Struct({
+                attribute_name: Schema.String,
+                attribute_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              oidc: Schema.Struct({
+                claim_name: Schema.String,
+                claim_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              service_token: Schema.Struct({
+                token_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              linked_app_token: Schema.Struct({
+                app_uid: Schema.String,
+              }),
+            }),
+          ),
+        ),
+      ),
+    ),
     id: Schema.optional(Schema.NullOr(Schema.String)),
-    include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
-    is_default: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    include: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              group: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              any_valid_service_token: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              auth_context: Schema.Struct({
+                ac_id: Schema.String,
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              auth_method: Schema.Struct({
+                auth_method: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              azureAD: Schema.Struct({
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              certificate: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              common_name: Schema.Struct({
+                common_name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              geo: Schema.Struct({
+                country_code: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              device_posture: Schema.Struct({
+                integration_uid: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_domain: Schema.Struct({
+                domain: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email: Schema.Struct({
+                email: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              everyone: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              external_evaluation: Schema.Struct({
+                evaluate_url: Schema.String,
+                keys_url: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              "github-organization": Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+                team: Schema.optional(Schema.NullOr(Schema.String)),
+              }),
+            }),
+            Schema.Struct({
+              gsuite: Schema.Struct({
+                email: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              login_method: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip: Schema.Struct({
+                ip: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              okta: Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              saml: Schema.Struct({
+                attribute_name: Schema.String,
+                attribute_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              oidc: Schema.Struct({
+                claim_name: Schema.String,
+                claim_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              service_token: Schema.Struct({
+                token_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              linked_app_token: Schema.Struct({
+                app_uid: Schema.String,
+              }),
+            }),
+          ),
+        ),
+      ),
+    ),
+    is_default: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              group: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              any_valid_service_token: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              auth_context: Schema.Struct({
+                ac_id: Schema.String,
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              auth_method: Schema.Struct({
+                auth_method: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              azureAD: Schema.Struct({
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              certificate: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              common_name: Schema.Struct({
+                common_name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              geo: Schema.Struct({
+                country_code: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              device_posture: Schema.Struct({
+                integration_uid: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_domain: Schema.Struct({
+                domain: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email: Schema.Struct({
+                email: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              everyone: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              external_evaluation: Schema.Struct({
+                evaluate_url: Schema.String,
+                keys_url: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              "github-organization": Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+                team: Schema.optional(Schema.NullOr(Schema.String)),
+              }),
+            }),
+            Schema.Struct({
+              gsuite: Schema.Struct({
+                email: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              login_method: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip: Schema.Struct({
+                ip: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              okta: Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              saml: Schema.Struct({
+                attribute_name: Schema.String,
+                attribute_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              oidc: Schema.Struct({
+                claim_name: Schema.String,
+                claim_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              service_token: Schema.Struct({
+                token_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              linked_app_token: Schema.Struct({
+                app_uid: Schema.String,
+              }),
+            }),
+          ),
+        ),
+      ),
+    ),
     name: Schema.optional(Schema.NullOr(Schema.String)),
-    require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+    require: Schema.optional(
+      Schema.NullOr(
+        Schema.Array(
+          Schema.Union(
+            Schema.Struct({
+              group: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              any_valid_service_token: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              auth_context: Schema.Struct({
+                ac_id: Schema.String,
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              auth_method: Schema.Struct({
+                auth_method: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              azureAD: Schema.Struct({
+                id: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              certificate: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              common_name: Schema.Struct({
+                common_name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              geo: Schema.Struct({
+                country_code: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              device_posture: Schema.Struct({
+                integration_uid: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_domain: Schema.Struct({
+                domain: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              email: Schema.Struct({
+                email: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              everyone: Schema.Struct({}),
+            }),
+            Schema.Struct({
+              external_evaluation: Schema.Struct({
+                evaluate_url: Schema.String,
+                keys_url: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              "github-organization": Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+                team: Schema.optional(Schema.NullOr(Schema.String)),
+              }),
+            }),
+            Schema.Struct({
+              gsuite: Schema.Struct({
+                email: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              login_method: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip_list: Schema.Struct({
+                id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              ip: Schema.Struct({
+                ip: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              okta: Schema.Struct({
+                identity_provider_id: Schema.String,
+                name: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              saml: Schema.Struct({
+                attribute_name: Schema.String,
+                attribute_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              oidc: Schema.Struct({
+                claim_name: Schema.String,
+                claim_value: Schema.String,
+                identity_provider_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              service_token: Schema.Struct({
+                token_id: Schema.String,
+              }),
+            }),
+            Schema.Struct({
+              linked_app_token: Schema.Struct({
+                app_uid: Schema.String,
+              }),
+            }),
+          ),
+        ),
+      ),
+    ),
     updated_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
   }),
   result_info: Schema.optional(
@@ -4901,12 +6798,41 @@ export const listAccessIdentityProviders: (
 
 export interface AccessIdentityProvidersAddAnAccessIdentityProviderRequest {
   account_id: string;
-  body: Record<string, unknown>;
+  body:
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>;
 }
 
 export const AccessIdentityProvidersAddAnAccessIdentityProviderRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
-  body: Schema.Struct({}).pipe(T.HttpBody()),
+  body: Schema.Union(
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+  ).pipe(T.HttpBody()),
 })
   .pipe(T.Http({ method: "POST", path: "/accounts/{account_id}/access/identity_providers" }))
   .annotations({
@@ -4989,7 +6915,21 @@ export const GetAnAccessIdentityProviderRequest = Schema.Struct({
   }) as unknown as Schema.Schema<GetAnAccessIdentityProviderRequest>;
 
 export interface GetAnAccessIdentityProviderResponse {
-  result: Record<string, unknown>;
+  result:
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>;
   result_info?: {
     page?: number;
     per_page?: number;
@@ -5000,7 +6940,22 @@ export interface GetAnAccessIdentityProviderResponse {
 }
 
 export const GetAnAccessIdentityProviderResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Union(
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+  ),
   result_info: Schema.optional(
     Schema.Struct({
       page: Schema.optional(Schema.Number),
@@ -5047,13 +7002,42 @@ export const getAnAccessIdentityProvider: (
 export interface UpdateAnAccessIdentityProviderRequest {
   identity_provider_id: string;
   account_id: string;
-  body: Record<string, unknown>;
+  body:
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>;
 }
 
 export const UpdateAnAccessIdentityProviderRequest = Schema.Struct({
   identity_provider_id: Schema.String.pipe(T.HttpPath("identity_provider_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
-  body: Schema.Struct({}).pipe(T.HttpBody()),
+  body: Schema.Union(
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+  ).pipe(T.HttpBody()),
 })
   .pipe(
     T.Http({
@@ -5066,7 +7050,21 @@ export const UpdateAnAccessIdentityProviderRequest = Schema.Struct({
   }) as unknown as Schema.Schema<UpdateAnAccessIdentityProviderRequest>;
 
 export interface UpdateAnAccessIdentityProviderResponse {
-  result: Record<string, unknown>;
+  result:
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>
+    | Record<string, unknown>;
   result_info?: {
     page?: number;
     per_page?: number;
@@ -5077,7 +7075,22 @@ export interface UpdateAnAccessIdentityProviderResponse {
 }
 
 export const UpdateAnAccessIdentityProviderResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Union(
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+    Schema.Struct({}),
+  ),
   result_info: Schema.optional(
     Schema.Struct({
       page: Schema.optional(Schema.Number),
@@ -5765,9 +7778,9 @@ export interface UpdateLogsRequest {
   since?: string;
   until?: string;
   idp_id: string[];
-  status?: "FAILURE" | "SUCCESS"[];
-  resource_type?: "USER" | "GROUP"[];
-  request_method?: "DELETE" | "PATCH" | "POST" | "PUT"[];
+  status?: ("FAILURE" | "SUCCESS")[];
+  resource_type?: ("USER" | "GROUP")[];
+  request_method?: ("DELETE" | "PATCH" | "POST" | "PUT")[];
   resource_user_email?: string;
   resource_group_name?: string;
   cf_resource_id?: string;

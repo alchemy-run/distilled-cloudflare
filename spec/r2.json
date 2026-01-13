@@ -1,12 +1,19 @@
 {
   "errors": {
-    "NoSuchBucket": { "code": 10006, "status": 404 },
-    "InvalidBucketName": { "code": 10005 },
-    "BucketConflict": { "code": 10073, "status": 409 },
-    "BucketNotEmpty": { "code": 10008, "status": 409 },
-    "TooManyBuckets": { "code": 10009 },
-    "NoCorsConfiguration": { "code": 10059, "status": 404, "message": "CORS configuration does not exist" },
-    "ValidationError": { "code": 10021 }
+    "NoSuchBucket": { "code": 10006, "status": 404, "categories": ["NotFoundError"] },
+    "InvalidBucketName": { "code": 10005, "categories": ["BadRequestError"] },
+    "BucketConflict": { "code": 10073, "status": 409, "categories": ["ConflictError"] },
+    "BucketNotEmpty": { "code": 10008, "status": 409, "categories": ["ConflictError"] },
+    "TooManyBuckets": { "code": 10009, "categories": ["QuotaError"] },
+    "NoCorsConfiguration": { "code": 10059, "status": 404, "message": "CORS configuration does not exist", "categories": ["NotFoundError"] },
+    "ValidationError": { "code": 10021, "categories": ["BadRequestError"] },
+    "RateLimited": { "code": 971, "categories": ["ThrottlingError", "RetryableError"] },
+    "TooManyRequests": { "code": 6100, "categories": ["ThrottlingError", "RetryableError"] },
+    "AuthenticationError": { "code": 10000, "categories": ["AuthError"] },
+    "InvalidToken": { "code": 9103, "categories": ["AuthError"] },
+    "MissingToken": { "code": 9106, "categories": ["AuthError"] },
+    "TokenExpired": { "code": 9109, "categories": ["AuthError"] },
+    "Unauthorized": { "code": 9000, "categories": ["AuthError"] }
   },
   "operations": {
     "listBuckets": { "errors": {} },

@@ -7,8 +7,9 @@ import * as Layer from "effect/Layer";
 import * as Logger from "effect/Logger";
 import * as Scope from "effect/Scope";
 import * as Auth from "../src/auth.ts";
+import * as Retry from "../src/retry.ts";
 
-type Provided = Scope.Scope | HttpClient.HttpClient | Auth.ApiToken;
+type Provided = Scope.Scope | HttpClient.HttpClient | Auth.ApiToken | Retry.Retry;
 
 const platform = Layer.mergeAll(NodeContext.layer, FetchHttpClient.layer, Logger.pretty);
 
@@ -57,6 +58,9 @@ function provideTestEnv<A, E, R extends Provided>(effect: Effect.Effect<A, E, R>
   return effect.pipe(
     Logger.withMinimumLogLevel(process.env.DEBUG ? LogLevel.Debug : LogLevel.Info),
     Effect.provide(TestLayer),
+    // Retry all transient errors (throttling, server errors, network errors) indefinitely
+    // This ensures tests are resilient to temporary API issues
+    Retry.transient,
   );
 }
 

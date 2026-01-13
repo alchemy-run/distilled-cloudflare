@@ -9,6 +9,7 @@ import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import type { HttpClient } from "@effect/platform";
 import * as API from "../client/api.ts";
+import * as C from "../category.ts";
 import * as T from "../traits.ts";
 import type { ApiToken } from "../auth.ts";
 import {
@@ -28,21 +29,21 @@ export class AuthenticationError extends Schema.TaggedError<AuthenticationError>
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
 export class BucketConflict extends Schema.TaggedError<BucketConflict>()("BucketConflict", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withConflictError) {
   static readonly _tag = "BucketConflict";
 }
 
 export class BucketNotEmpty extends Schema.TaggedError<BucketNotEmpty>()("BucketNotEmpty", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withConflictError) {
   static readonly _tag = "BucketNotEmpty";
 }
 
@@ -52,21 +53,21 @@ export class InvalidBucketName extends Schema.TaggedError<InvalidBucketName>()(
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withBadRequestError) {
   static readonly _tag = "InvalidBucketName";
 }
 
 export class InvalidToken extends Schema.TaggedError<InvalidToken>()("InvalidToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError, C.withBadRequestError) {
   static readonly _tag = "InvalidToken";
 }
 
 export class MissingToken extends Schema.TaggedError<MissingToken>()("MissingToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "MissingToken";
 }
 
@@ -76,56 +77,56 @@ export class NoCorsConfiguration extends Schema.TaggedError<NoCorsConfiguration>
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withNotFoundError) {
   static readonly _tag = "NoCorsConfiguration";
 }
 
 export class NoSuchBucket extends Schema.TaggedError<NoSuchBucket>()("NoSuchBucket", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withNotFoundError) {
   static readonly _tag = "NoSuchBucket";
 }
 
 export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError) {
   static readonly _tag = "RateLimited";
 }
 
 export class TokenExpired extends Schema.TaggedError<TokenExpired>()("TokenExpired", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "TokenExpired";
 }
 
 export class TooManyBuckets extends Schema.TaggedError<TooManyBuckets>()("TooManyBuckets", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withQuotaError) {
   static readonly _tag = "TooManyBuckets";
 }
 
 export class TooManyRequests extends Schema.TaggedError<TooManyRequests>()("TooManyRequests", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError, C.withQuotaError) {
   static readonly _tag = "TooManyRequests";
 }
 
 export class Unauthorized extends Schema.TaggedError<Unauthorized>()("Unauthorized", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "Unauthorized";
 }
 
 export class ValidationError extends Schema.TaggedError<ValidationError>()("ValidationError", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withBadRequestError) {
   static readonly _tag = "ValidationError";
 }
 
@@ -1837,7 +1838,7 @@ export interface GetBucketCorsPolicyResponse {
     rules?: {
       allowed: {
         headers?: string[];
-        methods: "GET" | "PUT" | "POST" | "DELETE" | "HEAD"[];
+        methods: ("GET" | "PUT" | "POST" | "DELETE" | "HEAD")[];
         origins: string[];
       };
       exposeHeaders?: string[];
@@ -1932,7 +1933,7 @@ export interface PutBucketCorsPolicyRequest {
     rules?: {
       allowed: {
         headers?: string[];
-        methods: "GET" | "PUT" | "POST" | "DELETE" | "HEAD"[];
+        methods: ("GET" | "PUT" | "POST" | "DELETE" | "HEAD")[];
         origins: string[];
       };
       exposeHeaders?: string[];

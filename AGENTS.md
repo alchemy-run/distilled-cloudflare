@@ -9,26 +9,95 @@ bun generate                              # Generate all services
 bun generate --service r2                 # Generate single service
 bun generate --fetch                      # Fetch latest spec first
 bun vitest run ./test/services/r2.test.ts # Run tests
+bun tsc -b                                # Type check (run before committing)
 ```
 
 ## TDD WORKFLOW
 
-The Cloudflare OpenAPI spec is incomplete. Tests reveal two types of issues:
+The Cloudflare OpenAPI spec is incomplete. Tests reveal three types of issues:
 
 | Error Type | Symptom | Fix Location |
 |------------|---------|--------------|
 | `UnknownCloudflareError` | Undocumented error code | `spec/{service}.json` |
 | `Schema decode failed` | Response doesn't match spec | `spec/openapi.patch.jsonc` |
+| Type error in test | Generator bug | `scripts/generate-clients.ts` |
 
-### The Loop
+### The Complete Loop
 
 ```
-Write Test → Run Test → Identify Failure → Patch → Regenerate → Repeat
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  PHASE 0: PLAN                                                              │
+│  ────────────────                                                           │
+│  For each API, document:                                                    │
+│  • Happy path test description                                              │
+│  • Error cases to probe (with expected error tags)                          │
+│  • Whether error tags exist in spec/{service}.json                          │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  PHASE 1: WRITE TESTS                                                       │
+│  ────────────────────                                                       │
+│  Write both happy path AND error path tests for each API                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  PHASE 2: CHECK LSP ERRORS                                                  │
+│  ─────────────────────────                                                  │
+│  Run: ReadLints on the test file                                            │
+│                                                                             │
+│  If type errors exist:                                                      │
+│  • Wrong args? → Fix the test                                               │
+│  • Missing required field that shouldn't be required? → Patch OpenAPI spec  │
+│  • Type is Record<string,unknown> but should be union? → Fix generator      │
+│  Regenerate and repeat until no LSP errors                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  PHASE 3: RUN TESTS                                                         │
+│  ──────────────────                                                         │
+│  Run: bun vitest run ./test/services/{service}.test.ts -t "test name"       │
+│                                                                             │
+│  If UnknownCloudflareError:                                                 │
+│  • Add error to spec/{service}.json → Regenerate → Repeat                   │
+│                                                                             │
+│  If Schema decode failed:                                                   │
+│  • Check response body for actual structure                                 │
+│  • Patch spec/openapi.patch.jsonc → Regenerate → Repeat                     │
+│                                                                             │
+│  If test passes: Move to next test                                          │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## STEP 1: WRITE A TEST
+## PHASE 0: PLAN API TEST COVERAGE
+
+Before writing tests, document what needs testing for each API:
+
+```markdown
+### API: putScriptSecret
+
+**Happy Path:**
+- Create worker, put secret, verify secret appears in list
+
+**Error Cases:**
+| Error Tag | Trigger | In spec? |
+|-----------|---------|----------|
+| WorkerNotFound | Put secret on non-existent worker | ✅ Yes |
+| InvalidSecretName | Use invalid characters in name | ❌ No |
+
+**Notes:**
+- Response omits `text` field (writeOnly)
+```
+
+This planning reveals:
+1. Which error tags already exist in `spec/{service}.json`
+2. Which need to be discovered via testing
+3. Special behaviors to watch for (writeOnly fields, etc.)
+
+---
+
+## PHASE 1: WRITE TESTS
 
 Create isolated tests using `withXxx` helpers:
 
@@ -270,6 +339,66 @@ bun generate --service r2
 
 ---
 
+## STEP 3C: FIX THE GENERATOR
+
+Sometimes the issue isn't the OpenAPI spec — it's how we generate code from it. These require fixes to `scripts/generate-clients.ts`.
+
+### Symptoms of generator bugs
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `body: Record<string, unknown>` when it should be a union | `oneOf` not handled in `type: "object"` case | Add `oneOf` check before returning `Schema.Struct({})` |
+| `A \| B[]` instead of `(A \| B)[]` | Array of union types not parenthesized | Wrap union types in parentheses for array notation |
+| Schema decode fails on response with missing field | `writeOnly` property treated as required | Make `writeOnly` properties optional in schema |
+| Interface type differs from Schema | `schemaToTsType` and `generateSchemaCode` diverge | Apply same fix to both functions |
+
+### Generator fix workflow
+
+1. **Identify the root cause** - Is it a spec issue or generator issue?
+   - Spec issue: The OpenAPI spec is wrong → patch `openapi.patch.jsonc`
+   - Generator issue: We're not handling a valid OpenAPI pattern → fix generator
+
+2. **Fix both type generation AND schema generation**
+   - `schemaToTsType()` - Generates TypeScript interface types
+   - `generateSchemaCode()` - Generates Effect Schema code
+   - These MUST stay in sync
+
+3. **Regenerate and verify**
+   ```bash
+   bun generate --service {service}
+   # Check the generated types in src/services/{service}.ts
+   # Run tests to verify runtime behavior
+   ```
+
+### Example: Fixing oneOf in object types
+
+The OpenAPI spec:
+```json
+{
+  "type": "object",
+  "oneOf": [
+    { "$ref": "#/components/schemas/secret_text" },
+    { "$ref": "#/components/schemas/secret_key" }
+  ]
+}
+```
+
+**Before fix:** Generated `Schema.Struct({})` and `Record<string, unknown>`
+**After fix:** Generated `Schema.Union(...)` and `{ ... } | { ... }`
+
+Fix in `generateSchemaCode()`:
+```typescript
+case "object":
+  if (s.properties) { ... }
+  // ADD: Check for oneOf before returning empty struct
+  if (s.oneOf && s.oneOf.length > 0) {
+    return `Schema.Union(${s.oneOf.map(m => generateSchemaCode(...)).join(", ")})`;
+  }
+  return "Schema.Struct({})";
+```
+
+---
+
 ## STEP 4: UPDATE THE TEST
 
 After patching, update tests to use typed errors:
@@ -366,6 +495,58 @@ Each service has a `spec/{service}.json` that defines errors and their matching 
 
 ## TEST PATTERNS
 
+### Test Organization Convention
+
+**Tests are organized by API operation, not by feature or priority.** Each API gets its own `describe` block containing both happy path and error tests:
+
+```typescript
+describe("Workers", () => {
+  // Each API operation gets its own describe block
+  describe("listWorkers", () => {
+    test("happy path - lists workers in account", () =>
+      Effect.gen(function* () {
+        const result = yield* Workers.listWorkers({ account_id: accountId() });
+        expect(result.result).toBeDefined();
+        expect(Array.isArray(result.result)).toBe(true);
+      }));
+    
+    // Error tests for this specific API go in the same describe
+    test("error - returns empty array for valid account", () =>
+      // ... error case tests
+    );
+  });
+
+  describe("getWorkerSettings", () => {
+    test("happy path - gets settings for existing worker", () =>
+      withWorker("itty-cf-workers-settings", (scriptName) =>
+        Effect.gen(function* () {
+          const settings = yield* Workers.getWorkerSettings({
+            account_id: accountId(),
+            script_name: scriptName,
+          });
+          expect(settings.result).toBeDefined();
+        }),
+      ));
+
+    test("error - WorkerNotFound for non-existent worker", () =>
+      Workers.getWorkerSettings({
+        account_id: accountId(),
+        script_name: "non-existent-worker-xyz",
+      }).pipe(
+        Effect.flip,
+        Effect.map((e) => expect(e._tag).toBe("WorkerNotFound")),
+      ));
+  });
+});
+```
+
+**Key principles:**
+1. **One describe per API** - All tests for `listWorkers` go under `describe("listWorkers")`
+2. **Happy path first** - Start with the success case
+3. **Error cases second** - Follow with error scenarios for the same API
+4. **Use `withXxx` helpers** - Create resources with deterministic names and `Effect.ensuring` for cleanup
+5. **Group related APIs** - When APIs are tightly coupled (e.g., `createWorker`/`deleteWorker`), they can share a describe
+
 ### Resource lifecycle helper
 
 ```typescript
@@ -406,10 +587,86 @@ test("NoSuchBucket on non-existent", () =>
 1. Generate: `bun generate --fetch --service myservice`
 2. Write tests in `test/services/myservice.test.ts`
 3. Run tests, discover failures
-4. For `UnknownCloudflareError`: catalog in `error-catalog.json` + `myservice.json`
+4. For `UnknownCloudflareError`: catalog in `spec/myservice.json`
 5. For `Schema decode failed`: patch in `openapi.patch.jsonc`
-6. Regenerate: `bun generate --service myservice`
-7. Repeat until all tests pass
+6. For type errors: fix `scripts/generate-clients.ts`
+7. Regenerate: `bun generate --service myservice`
+8. Repeat until all tests pass
+
+---
+
+## COMPREHENSIVE TEST COVERAGE WORKFLOW
+
+When adding full test coverage to an existing service, follow this systematic approach:
+
+### Step 1: Enumerate all APIs
+
+```bash
+# List all exported functions
+grep "^export const" src/services/{service}.ts | head -100
+```
+
+### Step 2: Cross-reference with existing tests
+
+Check which APIs already have tests:
+```bash
+grep -E "(test|it)\(" test/services/{service}.test.ts
+```
+
+### Step 3: Prioritize missing APIs
+
+Group by complexity:
+1. **Priority 1 - Core CRUD**: Basic create/read/update/delete operations
+2. **Priority 2 - Nested Resources**: Operations on child resources (e.g., secrets in workers)
+3. **Priority 3 - Advanced Features**: Complex operations (assets, versions, deployments)
+4. **Priority 4 - Specialized**: Operations requiring special setup (telemetry, domains)
+
+### Step 4: Document test cases for each API
+
+For each API, create a test plan:
+
+```markdown
+### API: createDeployment
+
+**Happy Path:**
+- Create worker with version, create deployment, verify deployment ID returned
+
+**Error Cases:**
+| Error Tag | Trigger | In spec? |
+|-----------|---------|----------|
+| WorkerNotFound | Deploy non-existent worker | ✅ |
+| InvalidVersionId | Use malformed version UUID | ❌ |
+
+**Request Schema Issues:**
+- Body requires `strategy` and `versions` but spec incorrectly marks response fields as required
+```
+
+### Step 5: Implement iteratively
+
+For each priority group:
+
+1. **Add tests** (happy path + error paths)
+2. **Check LSP errors** (`ReadLints` tool)
+3. **Fix type issues**:
+   - Wrong test args → Fix test
+   - Spec bug → Patch `openapi.patch.jsonc`
+   - Generator bug → Fix `generate-clients.ts`
+4. **Regenerate**: `bun generate --service {service}`
+5. **Run tests**: `bun vitest run ./test/services/{service}.test.ts -t "test name"`
+6. **Handle failures**:
+   - `UnknownCloudflareError` → Add to `spec/{service}.json`
+   - `Schema decode failed` → Patch `openapi.patch.jsonc`
+7. **Verify all tests pass** before moving to next group
+
+### Step 6: Final verification
+
+```bash
+# Run all tests for the service
+bun vitest run ./test/services/{service}.test.ts
+
+# Type check
+bun tsc -b
+```
 
 ---
 

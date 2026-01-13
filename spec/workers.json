@@ -1,14 +1,21 @@
 {
   "errors": {
-    "WorkerNotFound": { "code": 10007, "status": 404 },
-    "NamespaceNotFound": { "code": 100119, "status": 404 },
-    "InvalidWorkerName": { "code": 10016 },
-    "WorkerSizeLimitExceeded": { "code": 10027 },
-    "ValidationError": { "code": 10021 },
-    "NoEventHandlers": { "code": 10068 },
-    "UnsupportedEventHandlers": { "code": 10069 },
-    "BindingNotFound": { "code": 10056 },
-    "BindingNameRequired": { "code": 10052 }
+    "WorkerNotFound": { "code": 10007, "status": 404, "categories": ["NotFoundError"] },
+    "NamespaceNotFound": { "code": 100119, "status": 404, "categories": ["NotFoundError"] },
+    "InvalidWorkerName": { "code": 10016, "categories": ["BadRequestError"] },
+    "WorkerSizeLimitExceeded": { "code": 10027, "categories": ["QuotaError"] },
+    "ValidationError": { "code": 10021, "categories": ["BadRequestError"] },
+    "NoEventHandlers": { "code": 10068, "categories": ["BadRequestError"] },
+    "UnsupportedEventHandlers": { "code": 10069, "categories": ["BadRequestError"] },
+    "BindingNotFound": { "code": 10056, "categories": ["NotFoundError"] },
+    "BindingNameRequired": { "code": 10052, "categories": ["BadRequestError"] },
+    "RateLimited": { "code": 971, "categories": ["ThrottlingError", "RetryableError"] },
+    "TooManyRequests": { "code": 6100, "categories": ["ThrottlingError", "RetryableError"] },
+    "AuthenticationError": { "code": 10000, "categories": ["AuthError"] },
+    "InvalidToken": { "code": 9103, "categories": ["AuthError"] },
+    "MissingToken": { "code": 9106, "categories": ["AuthError"] },
+    "TokenExpired": { "code": 9109, "categories": ["AuthError"] },
+    "Unauthorized": { "code": 9000, "categories": ["AuthError"] }
   },
   "operations": {
     "listScripts": { "errors": {} },
@@ -149,6 +156,75 @@
       }
     },
     "workerScriptDeleteTail": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "workerScriptDownloadWorker": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "putContent": {
+      "errors": {
+        "InvalidWorkerName": {},
+        "NoEventHandlers": {},
+        "ValidationError": {}
+      }
+    },
+    "createDeployment": {
+      "errors": {
+        "WorkerNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "getDeployment": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteDeployment": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "postSubdomain": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteSubdomain": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "updateUsageModel": {
+      "errors": {
+        "WorkerNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "workerVersionsUploadVersion": {
+      "errors": {
+        "WorkerNotFound": {},
+        "NoEventHandlers": {},
+        "ValidationError": {}
+      }
+    },
+    "patchSettings1": {
+      "errors": {
+        "WorkerNotFound": {},
+        "ValidationError": {},
+        "BindingNotFound": {},
+        "BindingNameRequired": {}
+      }
+    },
+    "getScriptSecret": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteWorker1": {
       "errors": {
         "WorkerNotFound": {}
       }

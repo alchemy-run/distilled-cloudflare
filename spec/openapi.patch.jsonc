@@ -1246,6 +1246,64 @@
     "value": {
       "$ref": "#/components/schemas/workers_api-response-null-result"
     }
+  },
+
+  // Workers: Fix createDeployment response to match actual API response.
+  //
+  // Problem: API returns {"result":{"id":"..."}} with only id field.
+  // Discovered: Schema decode failed on createDeployment response.
+  {
+    "op": "replace",
+    "path": "/paths/~1accounts~1{account_id}~1workers~1scripts~1{script_name}~1deployments/post/responses/200/content/application~1json/schema",
+    "value": {
+      "type": "object",
+      "properties": {
+        "success": { "type": "boolean" },
+        "errors": { "type": "array", "items": { "type": "object" } },
+        "messages": { "type": "array", "items": { "type": "object" } },
+        "result": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+
+  // Workers: Fix createDeployment request body - make response fields optional.
+  //
+  // Problem: Request body schema incorrectly requires id, created_on, source which are response fields.
+  // Discovered: Type error when calling createDeployment - body requires fields that shouldn't be required.
+  {
+    "op": "replace",
+    "path": "/paths/~1accounts~1{account_id}~1workers~1scripts~1{script_name}~1deployments/post/requestBody/content/application~1json/schema",
+    "value": {
+      "type": "object",
+      "required": ["strategy", "versions"],
+      "properties": {
+        "strategy": { "type": "string", "enum": ["percentage"] },
+        "versions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["version_id", "percentage"],
+            "properties": {
+              "version_id": { "type": "string", "format": "uuid" },
+              "percentage": { "type": "number" }
+            }
+          }
+        },
+        "annotations": {
+          "type": "object",
+          "properties": {
+            "workers/message": { "type": "string" },
+            "workers/triggered_by": { "type": "string" }
+          }
+        },
+        "author_email": { "type": "string" }
+      }
+    }
   }
 
 ]

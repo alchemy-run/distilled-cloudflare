@@ -2,12 +2,14 @@
  * API client factory for Cloudflare operations.
  *
  * Creates Effect-returning functions from operation definitions.
- * Handles request building, authentication, and response parsing.
+ * Handles request building, authentication, response parsing, and retries.
  */
 
 import { HttpClient, HttpClientRequest, HttpBody } from "@effect/platform";
 import * as Effect from "effect/Effect";
+import * as Option from "effect/Option";
 import * as Redacted from "effect/Redacted";
+import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
 import type * as AST from "effect/SchemaAST";
 import * as Stream from "effect/Stream";
@@ -19,6 +21,7 @@ import {
   UnknownCloudflareError,
   CloudflareHttpError,
 } from "../errors.ts";
+import { Retry, makeDefault } from "../retry.ts";
 import * as T from "../traits.ts";
 import { buildRequest } from "./request-builder.ts";
 import { parseResponse } from "./response-parser.ts";
@@ -94,125 +97,151 @@ export const make = <I extends Schema.Schema.AnyNoContext, O extends Schema.Sche
   ): Effect.Effect<
     Output,
     CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
-    ApiToken | HttpClient.HttpClient
+    ApiToken | HttpClient.HttpClient | Retry
   > =>
     Effect.gen(function* () {
-      // Build the request
-      const request = buildRequest(op.input, payload);
+      // Get retry policy from context (defaults to the standard policy)
+      const retryPolicyOption = yield* Effect.serviceOption(Retry);
+      const lastErrorRef = yield* Ref.make<unknown>(null);
 
-      // Get auth token
-      const auth = yield* ApiToken;
-
-      // Build full URL
-      const queryString = Object.entries(request.query)
-        .filter(([_, v]) => v !== undefined)
-        .flatMap(([k, v]) => {
-          if (Array.isArray(v)) {
-            return v.map((item) => `${encodeURIComponent(k)}=${encodeURIComponent(item)}`);
-          }
-          return `${encodeURIComponent(k)}=${encodeURIComponent(v!)}`;
-        })
-        .join("&");
-
-      const fullUrl = queryString
-        ? `${CLOUDFLARE_API_BASE}${request.path}?${queryString}`
-        : `${CLOUDFLARE_API_BASE}${request.path}`;
-
-      // Determine content type (default to JSON, but respect custom content type)
-      const contentType = request.contentType ?? "application/json";
-      const isFormData = request.body instanceof FormData;
-
-      // Build headers with auth
-      const headers: Record<string, string> = {
-        ...request.headers,
-      };
-
-      // Don't set Content-Type for FormData - let the runtime set it with boundary
-      if (!isFormData) {
-        headers["Content-Type"] = contentType;
-      }
-
-      // Add authentication headers
-      if (auth.auth.type === "token") {
-        headers["Authorization"] = `Bearer ${Redacted.value(auth.auth.token)}`;
-      } else if (auth.auth.type === "oauth") {
-        headers["Authorization"] = `Bearer ${Redacted.value(auth.auth.accessToken)}`;
-      } else {
-        headers["X-Auth-Key"] = Redacted.value(auth.auth.apiKey);
-        headers["X-Auth-Email"] = auth.auth.email;
-      }
-
-      // Build HTTP request
-      let httpRequest = HttpClientRequest.make(
-        request.method as "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
-      )(fullUrl);
-      httpRequest = HttpClientRequest.setHeaders(headers)(httpRequest);
-
-      if (request.body !== undefined) {
-        if (isFormData) {
-          // FormData body - use formData body type
-          httpRequest = HttpClientRequest.setBody(HttpBody.formData(request.body as FormData))(
-            httpRequest,
-          );
-        } else {
-          // Serialize body based on content type
-          const bodyText =
-            contentType === "application/json"
-              ? JSON.stringify(request.body)
-              : String(request.body);
-
-          httpRequest = HttpClientRequest.setBody(HttpBody.text(bodyText, contentType))(
-            httpRequest,
-          );
-        }
-      }
-
-      yield* Effect.logDebug(httpRequest);
-
-      // Execute request
-      const client = yield* HttpClient.HttpClient;
-      const rawResponse = yield* client.execute(httpRequest).pipe(
-        Effect.mapError(
-          (error) =>
-            new CloudflareNetworkError({
-              message: String(error),
-              cause: error,
-            }),
-        ),
-      );
-
-      yield* Effect.logDebug({
-        status: rawResponse.status,
-        headers: rawResponse.headers,
-        // can't log body because it's a stream
+      // Resolve policy - could be static Options or a Factory function
+      const retryPolicy = Option.match(retryPolicyOption, {
+        onNone: () => makeDefault(lastErrorRef),
+        onSome: (policy) => (typeof policy === "function" ? policy(lastErrorRef) : policy),
       });
 
-      // Convert response headers to Record
-      const responseHeaders = rawResponse.headers as Record<string, string>;
+      // The core operation that may be retried
+      const operation = Effect.gen(function* () {
+        // Build the request
+        const request = buildRequest(op.input, payload);
 
-      // Create response body stream
-      // Convert Effect Stream to ReadableStream for the response parser
-      const contentLength = responseHeaders["content-length"];
-      const isEmptyBody =
-        request.method === "HEAD" || contentLength === "0" || rawResponse.status === 204;
+        // Get auth token
+        const auth = yield* ApiToken;
 
-      const responseBody = isEmptyBody
-        ? new ReadableStream<Uint8Array>({ start: (c) => c.close() })
-        : yield* Stream.toReadableStreamEffect(rawResponse.stream);
+        // Build full URL
+        const queryString = Object.entries(request.query)
+          .filter(([_, v]) => v !== undefined)
+          .flatMap(([k, v]) => {
+            if (Array.isArray(v)) {
+              return v.map((item) => `${encodeURIComponent(k)}=${encodeURIComponent(item)}`);
+            }
+            return `${encodeURIComponent(k)}=${encodeURIComponent(v!)}`;
+          })
+          .join("&");
 
-      // Parse response
-      const result = yield* parseResponse(
-        {
+        const fullUrl = queryString
+          ? `${CLOUDFLARE_API_BASE}${request.path}?${queryString}`
+          : `${CLOUDFLARE_API_BASE}${request.path}`;
+
+        // Determine content type (default to JSON, but respect custom content type)
+        const contentType = request.contentType ?? "application/json";
+        const isFormData = request.body instanceof FormData;
+
+        // Build headers with auth
+        const headers: Record<string, string> = {
+          ...request.headers,
+        };
+
+        // Don't set Content-Type for FormData - let the runtime set it with boundary
+        if (!isFormData) {
+          headers["Content-Type"] = contentType;
+        }
+
+        // Add authentication headers
+        if (auth.auth.type === "token") {
+          headers["Authorization"] = `Bearer ${Redacted.value(auth.auth.token)}`;
+        } else if (auth.auth.type === "oauth") {
+          headers["Authorization"] = `Bearer ${Redacted.value(auth.auth.accessToken)}`;
+        } else {
+          headers["X-Auth-Key"] = Redacted.value(auth.auth.apiKey);
+          headers["X-Auth-Email"] = auth.auth.email;
+        }
+
+        // Build HTTP request
+        let httpRequest = HttpClientRequest.make(
+          request.method as "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
+        )(fullUrl);
+        httpRequest = HttpClientRequest.setHeaders(headers)(httpRequest);
+
+        if (request.body !== undefined) {
+          if (isFormData) {
+            // FormData body - use formData body type
+            httpRequest = HttpClientRequest.setBody(HttpBody.formData(request.body as FormData))(
+              httpRequest,
+            );
+          } else {
+            // Serialize body based on content type
+            const bodyText =
+              contentType === "application/json"
+                ? JSON.stringify(request.body)
+                : String(request.body);
+
+            httpRequest = HttpClientRequest.setBody(HttpBody.text(bodyText, contentType))(
+              httpRequest,
+            );
+          }
+        }
+
+        yield* Effect.logDebug(httpRequest);
+
+        // Execute request
+        const client = yield* HttpClient.HttpClient;
+        const rawResponse = yield* client.execute(httpRequest).pipe(
+          Effect.mapError(
+            (error) =>
+              new CloudflareNetworkError({
+                message: String(error),
+                cause: error,
+              }),
+          ),
+        );
+
+        yield* Effect.logDebug({
           status: rawResponse.status,
-          statusText: "OK",
-          headers: responseHeaders,
-          body: responseBody,
-        },
-        op.output,
-        errorSchemas,
-      );
+          headers: rawResponse.headers,
+          // can't log body because it's a stream
+        });
 
-      return result as Output;
+        // Convert response headers to Record
+        const responseHeaders = rawResponse.headers as Record<string, string>;
+
+        // Create response body stream
+        // Convert Effect Stream to ReadableStream for the response parser
+        const contentLength = responseHeaders["content-length"];
+        const isEmptyBody =
+          request.method === "HEAD" || contentLength === "0" || rawResponse.status === 204;
+
+        const responseBody = isEmptyBody
+          ? new ReadableStream<Uint8Array>({ start: (c) => c.close() })
+          : yield* Stream.toReadableStreamEffect(rawResponse.stream);
+
+        // Parse response
+        const result = yield* parseResponse(
+          {
+            status: rawResponse.status,
+            statusText: "OK",
+            headers: responseHeaders,
+            body: responseBody,
+          },
+          op.output,
+          errorSchemas,
+        );
+
+        return result as Output;
+      });
+
+      // Apply retry policy if configured
+      if (retryPolicy.while && retryPolicy.schedule) {
+        return yield* operation.pipe(
+          Effect.tapError((error) => Ref.set(lastErrorRef, error)),
+          Effect.retry({
+            while: retryPolicy.while,
+            schedule: retryPolicy.schedule,
+          }),
+        );
+      }
+
+      return yield* operation;
     });
 
   return Object.assign(fn, {

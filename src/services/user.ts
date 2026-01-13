@@ -9,6 +9,7 @@ import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import type { HttpClient } from "@effect/platform";
 import * as API from "../client/api.ts";
+import * as C from "../category.ts";
 import * as T from "../traits.ts";
 import type { ApiToken } from "../auth.ts";
 import {
@@ -28,49 +29,49 @@ export class AuthenticationError extends Schema.TaggedError<AuthenticationError>
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
 export class InvalidToken extends Schema.TaggedError<InvalidToken>()("InvalidToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError, C.withBadRequestError) {
   static readonly _tag = "InvalidToken";
 }
 
 export class MissingToken extends Schema.TaggedError<MissingToken>()("MissingToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "MissingToken";
 }
 
 export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError) {
   static readonly _tag = "RateLimited";
 }
 
 export class TokenExpired extends Schema.TaggedError<TokenExpired>()("TokenExpired", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "TokenExpired";
 }
 
 export class TooManyRequests extends Schema.TaggedError<TooManyRequests>()("TooManyRequests", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError, C.withQuotaError) {
   static readonly _tag = "TooManyRequests";
 }
 
 export class Unauthorized extends Schema.TaggedError<Unauthorized>()("Unauthorized", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "Unauthorized";
 }
 
@@ -674,8 +675,13 @@ export const ListIpAccessRulesRequest = Schema.Struct({
 
 export interface ListIpAccessRulesResponse {
   result: {
-    allowed_modes: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge"[];
-    configuration: Record<string, unknown>;
+    allowed_modes: ("block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge")[];
+    configuration:
+      | { target?: "ip"; value?: string }
+      | { target?: "ip6"; value?: string }
+      | { target?: "ip_range"; value?: string }
+      | { target?: "asn"; value?: string }
+      | { target?: "country"; value?: string };
     created_on?: string;
     id: string;
     mode: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge";
@@ -697,7 +703,28 @@ export const ListIpAccessRulesResponse = Schema.Struct({
       allowed_modes: Schema.Array(
         Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
       ),
-      configuration: Schema.Struct({}),
+      configuration: Schema.Union(
+        Schema.Struct({
+          target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+          value: Schema.optional(Schema.NullOr(Schema.String)),
+        }),
+        Schema.Struct({
+          target: Schema.optional(Schema.NullOr(Schema.Literal("ip6"))),
+          value: Schema.optional(Schema.NullOr(Schema.String)),
+        }),
+        Schema.Struct({
+          target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+          value: Schema.optional(Schema.NullOr(Schema.String)),
+        }),
+        Schema.Struct({
+          target: Schema.optional(Schema.NullOr(Schema.Literal("asn"))),
+          value: Schema.optional(Schema.NullOr(Schema.String)),
+        }),
+        Schema.Struct({
+          target: Schema.optional(Schema.NullOr(Schema.Literal("country"))),
+          value: Schema.optional(Schema.NullOr(Schema.String)),
+        }),
+      ),
       created_on: Schema.optional(Schema.NullOr(Schema.Date)),
       id: Schema.String,
       mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
@@ -750,7 +777,12 @@ export const listIpAccessRules: (
 
 export interface CreateAnIpAccessRuleRequest {
   body: {
-    configuration: Record<string, unknown>;
+    configuration:
+      | { target?: "ip"; value?: string }
+      | { target?: "ip6"; value?: string }
+      | { target?: "ip_range"; value?: string }
+      | { target?: "asn"; value?: string }
+      | { target?: "country"; value?: string };
     mode: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge";
     notes?: unknown;
   };
@@ -758,7 +790,28 @@ export interface CreateAnIpAccessRuleRequest {
 
 export const CreateAnIpAccessRuleRequest = Schema.Struct({
   body: Schema.Struct({
-    configuration: Schema.Struct({}),
+    configuration: Schema.Union(
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip6"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("asn"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("country"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+    ),
     mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
     notes: Schema.optional(Schema.NullOr(Schema.Unknown)),
   }).pipe(T.HttpBody()),
@@ -770,8 +823,13 @@ export const CreateAnIpAccessRuleRequest = Schema.Struct({
 
 export interface CreateAnIpAccessRuleResponse {
   result: {
-    allowed_modes: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge"[];
-    configuration: Record<string, unknown>;
+    allowed_modes: ("block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge")[];
+    configuration:
+      | { target?: "ip"; value?: string }
+      | { target?: "ip6"; value?: string }
+      | { target?: "ip_range"; value?: string }
+      | { target?: "asn"; value?: string }
+      | { target?: "country"; value?: string };
     created_on?: string;
     id: string;
     mode: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge";
@@ -792,7 +850,28 @@ export const CreateAnIpAccessRuleResponse = Schema.Struct({
     allowed_modes: Schema.Array(
       Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
     ),
-    configuration: Schema.Struct({}),
+    configuration: Schema.Union(
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip6"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("asn"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("country"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+    ),
     created_on: Schema.optional(Schema.NullOr(Schema.Date)),
     id: Schema.String,
     mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
@@ -938,8 +1017,13 @@ export const UpdateAnIpAccessRuleRequest = Schema.Struct({
 
 export interface UpdateAnIpAccessRuleResponse {
   result: {
-    allowed_modes: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge"[];
-    configuration: Record<string, unknown>;
+    allowed_modes: ("block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge")[];
+    configuration:
+      | { target?: "ip"; value?: string }
+      | { target?: "ip6"; value?: string }
+      | { target?: "ip_range"; value?: string }
+      | { target?: "asn"; value?: string }
+      | { target?: "country"; value?: string };
     created_on?: string;
     id: string;
     mode: "block" | "challenge" | "whitelist" | "js_challenge" | "managed_challenge";
@@ -960,7 +1044,28 @@ export const UpdateAnIpAccessRuleResponse = Schema.Struct({
     allowed_modes: Schema.Array(
       Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
     ),
-    configuration: Schema.Struct({}),
+    configuration: Schema.Union(
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip6"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("asn"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+      Schema.Struct({
+        target: Schema.optional(Schema.NullOr(Schema.Literal("country"))),
+        value: Schema.optional(Schema.NullOr(Schema.String)),
+      }),
+    ),
     created_on: Schema.optional(Schema.NullOr(Schema.Date)),
     id: Schema.String,
     mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
@@ -1977,7 +2082,7 @@ export const ListPoolsRequest = Schema.Struct({
 
 export interface ListPoolsResponse {
   result: {
-    check_regions?:
+    check_regions?: (
       | "WNAM"
       | "ENAM"
       | "WEU"
@@ -1991,7 +2096,8 @@ export interface ListPoolsResponse {
       | "SAS"
       | "SEAS"
       | "NEAS"
-      | "ALL_REGIONS"[];
+      | "ALL_REGIONS"
+    )[];
     created_on?: string;
     description?: string;
     disabled_at?: string;
@@ -2188,7 +2294,7 @@ export const listPools: (
 
 export interface CreatePoolRequest {
   body: {
-    check_regions?:
+    check_regions?: (
       | "WNAM"
       | "ENAM"
       | "WEU"
@@ -2202,7 +2308,8 @@ export interface CreatePoolRequest {
       | "SAS"
       | "SEAS"
       | "NEAS"
-      | "ALL_REGIONS"[];
+      | "ALL_REGIONS"
+    )[];
     description?: string;
     enabled?: boolean;
     latitude?: number;
@@ -2341,7 +2448,7 @@ export const CreatePoolRequest = Schema.Struct({
 
 export interface CreatePoolResponse {
   result: {
-    check_regions?:
+    check_regions?: (
       | "WNAM"
       | "ENAM"
       | "WEU"
@@ -2355,7 +2462,8 @@ export interface CreatePoolResponse {
       | "SAS"
       | "SEAS"
       | "NEAS"
-      | "ALL_REGIONS"[];
+      | "ALL_REGIONS"
+    )[];
     created_on?: string;
     description?: string;
     disabled_at?: string;
@@ -2562,7 +2670,7 @@ export const PatchPoolsRequest = Schema.Struct({
 
 export interface PatchPoolsResponse {
   result: {
-    check_regions?:
+    check_regions?: (
       | "WNAM"
       | "ENAM"
       | "WEU"
@@ -2576,7 +2684,8 @@ export interface PatchPoolsResponse {
       | "SAS"
       | "SEAS"
       | "NEAS"
-      | "ALL_REGIONS"[];
+      | "ALL_REGIONS"
+    )[];
     created_on?: string;
     description?: string;
     disabled_at?: string;
@@ -2787,7 +2896,7 @@ export const LoadBalancerPoolsPoolDetailsRequest = Schema.Struct({
 
 export interface LoadBalancerPoolsPoolDetailsResponse {
   result: {
-    check_regions?:
+    check_regions?: (
       | "WNAM"
       | "ENAM"
       | "WEU"
@@ -2801,7 +2910,8 @@ export interface LoadBalancerPoolsPoolDetailsResponse {
       | "SAS"
       | "SEAS"
       | "NEAS"
-      | "ALL_REGIONS"[];
+      | "ALL_REGIONS"
+    )[];
     created_on?: string;
     description?: string;
     disabled_at?: string;
@@ -2999,7 +3109,7 @@ export const loadBalancerPoolsPoolDetails: (
 export interface UpdatePoolRequest {
   pool_id: string;
   body: {
-    check_regions?:
+    check_regions?: (
       | "WNAM"
       | "ENAM"
       | "WEU"
@@ -3013,7 +3123,8 @@ export interface UpdatePoolRequest {
       | "SAS"
       | "SEAS"
       | "NEAS"
-      | "ALL_REGIONS"[];
+      | "ALL_REGIONS"
+    )[];
     description?: string;
     disabled_at?: string;
     enabled?: boolean;
@@ -3155,7 +3266,7 @@ export const UpdatePoolRequest = Schema.Struct({
 
 export interface UpdatePoolResponse {
   result: {
-    check_regions?:
+    check_regions?: (
       | "WNAM"
       | "ENAM"
       | "WEU"
@@ -3169,7 +3280,8 @@ export interface UpdatePoolResponse {
       | "SAS"
       | "SEAS"
       | "NEAS"
-      | "ALL_REGIONS"[];
+      | "ALL_REGIONS"
+    )[];
     created_on?: string;
     description?: string;
     disabled_at?: string;
@@ -3435,7 +3547,7 @@ export const deletePool: (
 export interface PatchPoolRequest {
   pool_id: string;
   body: {
-    check_regions?:
+    check_regions?: (
       | "WNAM"
       | "ENAM"
       | "WEU"
@@ -3449,7 +3561,8 @@ export interface PatchPoolRequest {
       | "SAS"
       | "SEAS"
       | "NEAS"
-      | "ALL_REGIONS"[];
+      | "ALL_REGIONS"
+    )[];
     description?: string;
     disabled_at?: string;
     enabled?: boolean;
@@ -3593,7 +3706,7 @@ export const PatchPoolRequest = Schema.Struct({
 
 export interface PatchPoolResponse {
   result: {
-    check_regions?:
+    check_regions?: (
       | "WNAM"
       | "ENAM"
       | "WEU"
@@ -3607,7 +3720,8 @@ export interface PatchPoolResponse {
       | "SAS"
       | "SEAS"
       | "NEAS"
-      | "ALL_REGIONS"[];
+      | "ALL_REGIONS"
+    )[];
     created_on?: string;
     description?: string;
     disabled_at?: string;
@@ -5080,11 +5194,12 @@ export interface ListPermissionGroupsResponse {
   result: {
     id?: string;
     name?: string;
-    scopes?:
+    scopes?: (
       | "com.cloudflare.api.account"
       | "com.cloudflare.api.account.zone"
       | "com.cloudflare.api.user"
-      | "com.cloudflare.edge.r2.bucket"[];
+      | "com.cloudflare.edge.r2.bucket"
+    )[];
   }[];
   result_info?: {
     page?: number;

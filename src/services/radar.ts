@@ -9,6 +9,7 @@ import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import type { HttpClient } from "@effect/platform";
 import * as API from "../client/api.ts";
+import * as C from "../category.ts";
 import * as T from "../traits.ts";
 import type { ApiToken } from "../auth.ts";
 import {
@@ -28,49 +29,49 @@ export class AuthenticationError extends Schema.TaggedError<AuthenticationError>
     code: Schema.Number,
     message: Schema.String,
   },
-) {
+).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
 export class InvalidToken extends Schema.TaggedError<InvalidToken>()("InvalidToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError, C.withBadRequestError) {
   static readonly _tag = "InvalidToken";
 }
 
 export class MissingToken extends Schema.TaggedError<MissingToken>()("MissingToken", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "MissingToken";
 }
 
 export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError) {
   static readonly _tag = "RateLimited";
 }
 
 export class TokenExpired extends Schema.TaggedError<TokenExpired>()("TokenExpired", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "TokenExpired";
 }
 
 export class TooManyRequests extends Schema.TaggedError<TooManyRequests>()("TooManyRequests", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withThrottlingError, C.withRetryableError, C.withQuotaError) {
   static readonly _tag = "TooManyRequests";
 }
 
 export class Unauthorized extends Schema.TaggedError<Unauthorized>()("Unauthorized", {
   code: Schema.Number,
   message: Schema.String,
-}) {
+}).pipe(C.withAuthError) {
   static readonly _tag = "Unauthorized";
 }
 
@@ -3018,7 +3019,7 @@ export interface GetDnsAs112TimeseriesByDnssecRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -3106,9 +3107,10 @@ export interface GetDnsAs112TimeseriesByDnssecRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -3127,7 +3129,8 @@ export interface GetDnsAs112TimeseriesByDnssecRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -3466,7 +3469,7 @@ export interface GetDnsAs112TimeseriesByEdnsRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -3554,9 +3557,10 @@ export interface GetDnsAs112TimeseriesByEdnsRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -3575,7 +3579,8 @@ export interface GetDnsAs112TimeseriesByEdnsRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -3914,7 +3919,7 @@ export interface GetDnsAs112TimeseriesByIpVersionRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -4002,9 +4007,10 @@ export interface GetDnsAs112TimeseriesByIpVersionRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -4023,7 +4029,8 @@ export interface GetDnsAs112TimeseriesByIpVersionRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -4362,7 +4369,7 @@ export interface GetDnsAs112TimeseriesByProtocolRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -4450,8 +4457,9 @@ export interface GetDnsAs112TimeseriesByProtocolRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -4470,7 +4478,8 @@ export interface GetDnsAs112TimeseriesByProtocolRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -4808,8 +4817,8 @@ export interface GetDnsAs112TimeseriesByQueryTypeRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -4828,7 +4837,8 @@ export interface GetDnsAs112TimeseriesByQueryTypeRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -5072,7 +5082,7 @@ export interface GetDnsAs112TimeseriesByResponseCodesRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -5160,8 +5170,9 @@ export interface GetDnsAs112TimeseriesByResponseCodesRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -5475,7 +5486,7 @@ export interface GetDnsAs112SummaryRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -5563,9 +5574,10 @@ export interface GetDnsAs112SummaryRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -5584,7 +5596,8 @@ export interface GetDnsAs112SummaryRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -5931,7 +5944,7 @@ export interface GetDnsAs112TimeseriesRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -6019,9 +6032,10 @@ export interface GetDnsAs112TimeseriesRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -6040,7 +6054,8 @@ export interface GetDnsAs112TimeseriesRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -6386,7 +6401,7 @@ export interface GetDnsAs112TimeseriesGroupByDnssecRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -6474,9 +6489,10 @@ export interface GetDnsAs112TimeseriesGroupByDnssecRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -6495,7 +6511,8 @@ export interface GetDnsAs112TimeseriesGroupByDnssecRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -6846,7 +6863,7 @@ export interface GetDnsAs112TimeseriesGroupByEdnsRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -6934,9 +6951,10 @@ export interface GetDnsAs112TimeseriesGroupByEdnsRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -6955,7 +6973,8 @@ export interface GetDnsAs112TimeseriesGroupByEdnsRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -7306,7 +7325,7 @@ export interface GetDnsAs112TimeseriesGroupByIpVersionRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -7394,9 +7413,10 @@ export interface GetDnsAs112TimeseriesGroupByIpVersionRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -7415,7 +7435,8 @@ export interface GetDnsAs112TimeseriesGroupByIpVersionRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -7766,7 +7787,7 @@ export interface GetDnsAs112TimeseriesGroupByProtocolRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -7854,8 +7875,9 @@ export interface GetDnsAs112TimeseriesGroupByProtocolRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -7874,7 +7896,8 @@ export interface GetDnsAs112TimeseriesGroupByProtocolRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -8224,8 +8247,8 @@ export interface GetDnsAs112TimeseriesGroupByQueryTypeRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -8244,7 +8267,8 @@ export interface GetDnsAs112TimeseriesGroupByQueryTypeRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -8502,7 +8526,7 @@ export interface GetDnsAs112TimeseriesGroupByResponseCodesRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -8590,8 +8614,9 @@ export interface GetDnsAs112TimeseriesGroupByResponseCodesRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -8919,7 +8944,7 @@ export interface GetDnsAs112TimeseriesGroupRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -9007,9 +9032,10 @@ export interface GetDnsAs112TimeseriesGroupRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -9028,7 +9054,8 @@ export interface GetDnsAs112TimeseriesGroupRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -10285,8 +10312,8 @@ export interface GetAttacksLayer3SummaryByBitrateRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   direction?: "ORIGIN" | "TARGET";
   format?: "JSON" | "CSV";
 }
@@ -10520,8 +10547,8 @@ export interface GetAttacksLayer3SummaryByDurationRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   direction?: "ORIGIN" | "TARGET";
   format?: "JSON" | "CSV";
 }
@@ -10757,8 +10784,8 @@ export interface GetAttacksLayer3SummaryByIndustryRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   direction?: "ORIGIN" | "TARGET";
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -10982,7 +11009,7 @@ export interface GetAttacksLayer3SummaryByIpVersionRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   direction?: "ORIGIN" | "TARGET";
   format?: "JSON" | "CSV";
 }
@@ -11204,7 +11231,7 @@ export interface GetAttacksLayer3SummaryByProtocolRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
   direction?: "ORIGIN" | "TARGET";
   format?: "JSON" | "CSV";
 }
@@ -11428,8 +11455,8 @@ export interface GetAttacksLayer3SummaryByVectorRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   direction?: "ORIGIN" | "TARGET";
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -11653,8 +11680,8 @@ export interface GetAttacksLayer3SummaryByVerticalRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   direction?: "ORIGIN" | "TARGET";
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -11886,8 +11913,8 @@ export interface GetAttacksLayer3SummaryRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   direction?: "ORIGIN" | "TARGET";
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -12122,8 +12149,8 @@ export interface GetAttacksLayer3TimeseriesByBytesRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   normalization?: "PERCENTAGE_CHANGE" | "MIN0_MAX";
   metric?: "BYTES" | "BYTES_OLD";
   direction?: "ORIGIN" | "TARGET";
@@ -12362,8 +12389,8 @@ export interface GetAttacksLayer3TimeseriesGroupByBitrateRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   direction?: "ORIGIN" | "TARGET";
   format?: "JSON" | "CSV";
@@ -12615,8 +12642,8 @@ export interface GetAttacksLayer3TimeseriesGroupByDurationRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   direction?: "ORIGIN" | "TARGET";
   format?: "JSON" | "CSV";
@@ -12870,8 +12897,8 @@ export interface GetAttacksLayer3TimeseriesGroupByIndustryRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   direction?: "ORIGIN" | "TARGET";
   limitPerGroup?: number;
@@ -13113,7 +13140,7 @@ export interface GetAttacksLayer3TimeseriesGroupByIpVersionRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   direction?: "ORIGIN" | "TARGET";
   format?: "JSON" | "CSV";
@@ -13352,7 +13379,7 @@ export interface GetAttacksLayer3TimeseriesGroupByProtocolRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   direction?: "ORIGIN" | "TARGET";
   format?: "JSON" | "CSV";
@@ -13593,8 +13620,8 @@ export interface GetAttacksLayer3TimeseriesGroupByVectorRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   direction?: "ORIGIN" | "TARGET";
   limitPerGroup?: number;
@@ -13836,8 +13863,8 @@ export interface GetAttacksLayer3TimeseriesGroupByVerticalRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   direction?: "ORIGIN" | "TARGET";
   limitPerGroup?: number;
@@ -14087,8 +14114,8 @@ export interface GetAttacksLayer3TimeseriesGroupRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   direction?: "ORIGIN" | "TARGET";
   limitPerGroup?: number;
@@ -14339,8 +14366,8 @@ export interface GetAttacksLayer3TopAttacksRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   limitDirection?: "ORIGIN" | "TARGET";
   limitPerLocation?: number;
   magnitude?: "MITIGATED_BYTES" | "MITIGATED_ATTACKS";
@@ -14584,8 +14611,8 @@ export interface GetAttacksLayer3TopIndustriesRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   format?: "JSON" | "CSV";
 }
 
@@ -14814,8 +14841,8 @@ export interface GetAttacksLayer3TopOriginLocationsRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   format?: "JSON" | "CSV";
 }
 
@@ -15051,8 +15078,8 @@ export interface GetAttacksLayer3TopTargetLocationsRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   format?: "JSON" | "CSV";
 }
 
@@ -15288,8 +15315,8 @@ export interface GetAttacksLayer3TopVerticalsRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  protocol?: "UDP" | "TCP" | "ICMP" | "GRE"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  protocol?: ("UDP" | "TCP" | "ICMP" | "GRE")[];
   format?: "JSON" | "CSV";
 }
 
@@ -15518,16 +15545,17 @@ export interface GetAttacksLayer7SummaryByHttpMethodRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  mitigationProduct?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -15764,8 +15792,8 @@ export interface GetAttacksLayer7SummaryByHttpVersionRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -15811,15 +15839,17 @@ export interface GetAttacksLayer7SummaryByHttpVersionRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -16107,9 +16137,9 @@ export interface GetAttacksLayer7SummaryByIndustryRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -16155,15 +16185,17 @@ export interface GetAttacksLayer7SummaryByIndustryRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -16452,8 +16484,8 @@ export interface GetAttacksLayer7SummaryByIpVersionRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -16499,15 +16531,17 @@ export interface GetAttacksLayer7SummaryByIpVersionRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -16794,9 +16828,9 @@ export interface GetAttacksLayer7SummaryByManagedRulesRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -16842,15 +16876,17 @@ export interface GetAttacksLayer7SummaryByManagedRulesRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -17139,9 +17175,9 @@ export interface GetAttacksLayer7SummaryByMitigationProductRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -17187,7 +17223,8 @@ export interface GetAttacksLayer7SummaryByMitigationProductRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
+    | "TRACK"
+  )[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -17463,9 +17500,9 @@ export interface GetAttacksLayer7SummaryByVerticalRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -17511,15 +17548,17 @@ export interface GetAttacksLayer7SummaryByVerticalRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -17816,9 +17855,9 @@ export interface GetAttacksLayer7SummaryRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -17864,15 +17903,17 @@ export interface GetAttacksLayer7SummaryRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -18172,9 +18213,9 @@ export interface GetAttacksLayer7TimeseriesRequest {
   location?: string[];
   continent?: string[];
   normalization?: "PERCENTAGE_CHANGE" | "MIN0_MAX";
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -18220,15 +18261,17 @@ export interface GetAttacksLayer7TimeseriesRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -18533,16 +18576,17 @@ export interface GetAttacksLayer7TimeseriesGroupByHttpMethodRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  mitigationProduct?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -18797,8 +18841,8 @@ export interface GetAttacksLayer7TimeseriesGroupByHttpVersionRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -18844,15 +18888,17 @@ export interface GetAttacksLayer7TimeseriesGroupByHttpVersionRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   format?: "JSON" | "CSV";
 }
@@ -19157,9 +19203,9 @@ export interface GetAttacksLayer7TimeseriesGroupByIndustryRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -19205,15 +19251,17 @@ export interface GetAttacksLayer7TimeseriesGroupByIndustryRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -19520,8 +19568,8 @@ export interface GetAttacksLayer7TimeseriesGroupByIpVersionRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -19567,15 +19615,17 @@ export interface GetAttacksLayer7TimeseriesGroupByIpVersionRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   format?: "JSON" | "CSV";
 }
@@ -19879,9 +19929,9 @@ export interface GetAttacksLayer7TimeseriesGroupByManagedRulesRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -19927,15 +19977,17 @@ export interface GetAttacksLayer7TimeseriesGroupByManagedRulesRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -20242,9 +20294,9 @@ export interface GetAttacksLayer7TimeseriesGroupByMitigationProductRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -20290,7 +20342,8 @@ export interface GetAttacksLayer7TimeseriesGroupByMitigationProductRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
+    | "TRACK"
+  )[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -20586,9 +20639,9 @@ export interface GetAttacksLayer7TimeseriesGroupByVerticalRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -20634,15 +20687,17 @@ export interface GetAttacksLayer7TimeseriesGroupByVerticalRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -20957,9 +21012,9 @@ export interface GetAttacksLayer7TimeseriesGroupRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -21005,15 +21060,17 @@ export interface GetAttacksLayer7TimeseriesGroupRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -21328,9 +21385,9 @@ export interface GetAttacksLayer7TopOriginAsRequest {
   dateEnd?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -21376,15 +21433,17 @@ export interface GetAttacksLayer7TopOriginAsRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -21681,14 +21740,15 @@ export interface GetAttacksLayer7TopAttacksRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  mitigationProduct?:
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   limitDirection?: "ORIGIN" | "TARGET";
   limitPerLocation?: number;
   normalization?: "PERCENTAGE" | "MIN_MAX";
@@ -21945,9 +22005,9 @@ export interface GetAttacksLayer7TopIndustriesRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -21993,15 +22053,17 @@ export interface GetAttacksLayer7TopIndustriesRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -22296,9 +22358,9 @@ export interface GetAttacksLayer7TopOriginLocationRequest {
   dateEnd?: string[];
   asn?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -22344,15 +22406,17 @@ export interface GetAttacksLayer7TopOriginLocationRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -22652,14 +22716,15 @@ export interface GetAttacksLayer7TopTargetLocationRequest {
   dateStart?: string[];
   dateEnd?: string[];
   continent?: string[];
-  mitigationProduct?:
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -22902,9 +22967,9 @@ export interface GetAttacksLayer7TopVerticalsRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  httpMethod?:
+  ipVersion?: ("IPv4" | "IPv6")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  httpMethod?: (
     | "GET"
     | "POST"
     | "DELETE"
@@ -22950,15 +23015,17 @@ export interface GetAttacksLayer7TopVerticalsRequest {
     | "RPC_IN_DATA"
     | "JSON"
     | "COOK"
-    | "TRACK"[];
-  mitigationProduct?:
+    | "TRACK"
+  )[];
+  mitigationProduct?: (
     | "DDOS"
     | "WAF"
     | "BOT_MANAGEMENT"
     | "ACCESS_RULES"
     | "IP_REPUTATION"
     | "API_SHIELD"
-    | "DATA_LOSS_PREVENTION"[];
+    | "DATA_LOSS_PREVENTION"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -23409,7 +23476,7 @@ export interface GetBgpIpsTimeseriesRequest {
   dateEnd?: string[];
   asn?: string[];
   location?: string[];
-  ipVersion?: "IPv4" | "IPv6"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
   includeDelay?: boolean;
   format?: "JSON" | "CSV";
 }
@@ -24397,7 +24464,7 @@ export interface GetBgpTimeseriesRequest {
   dateStart?: string[];
   dateEnd?: string[];
   prefix?: string[];
-  updateType?: "ANNOUNCEMENT" | "WITHDRAWAL"[];
+  updateType?: ("ANNOUNCEMENT" | "WITHDRAWAL")[];
   asn?: string[];
   format?: "JSON" | "CSV";
 }
@@ -24598,7 +24665,7 @@ export interface GetBgpTopAsesRequest {
   dateEnd?: string[];
   asn?: string[];
   prefix?: string[];
-  updateType?: "ANNOUNCEMENT" | "WITHDRAWAL"[];
+  updateType?: ("ANNOUNCEMENT" | "WITHDRAWAL")[];
   format?: "JSON" | "CSV";
 }
 
@@ -24791,7 +24858,7 @@ export interface GetBgpTopPrefixesRequest {
   dateStart?: string[];
   dateEnd?: string[];
   asn?: string[];
-  updateType?: "ANNOUNCEMENT" | "WITHDRAWAL"[];
+  updateType?: ("ANNOUNCEMENT" | "WITHDRAWAL")[];
   format?: "JSON" | "CSV";
 }
 
@@ -25037,7 +25104,7 @@ export interface GetCrawlersSummaryRequest {
   botOperator?: string[];
   vertical?: string[];
   industry?: string[];
-  clientType?: "HUMAN" | "NON_AI_BOT" | "AI_BOT" | "MIXED_PURPOSE"[];
+  clientType?: ("HUMAN" | "NON_AI_BOT" | "AI_BOT" | "MIXED_PURPOSE")[];
   format?: "JSON" | "CSV";
 }
 
@@ -25274,7 +25341,7 @@ export interface GetCrawlersTimeseriesGroupRequest {
   botOperator?: string[];
   vertical?: string[];
   industry?: string[];
-  clientType?: "HUMAN" | "NON_AI_BOT" | "AI_BOT" | "MIXED_PURPOSE"[];
+  clientType?: ("HUMAN" | "NON_AI_BOT" | "AI_BOT" | "MIXED_PURPOSE")[];
   format?: "JSON" | "CSV";
 }
 
@@ -25519,7 +25586,7 @@ export interface GetBotsSummaryRequest {
   limitPerGroup?: number;
   bot?: string[];
   botOperator?: string[];
-  botCategory?:
+  botCategory?: (
     | "SEARCH_ENGINE_CRAWLER"
     | "SEARCH_ENGINE_OPTIMIZATION"
     | "MONITORING_AND_ANALYTICS"
@@ -25535,8 +25602,9 @@ export interface GetBotsSummaryRequest {
     | "AGGREGATOR"
     | "AI_ASSISTANT"
     | "AI_SEARCH"
-    | "ARCHIVER"[];
-  botKind?: "AGENT" | "BOT"[];
+    | "ARCHIVER"
+  )[];
+  botKind?: ("AGENT" | "BOT")[];
   botVerificationStatus?: "VERIFIED"[];
   format?: "JSON" | "CSV";
 }
@@ -25790,7 +25858,7 @@ export interface GetBotsTimeseriesRequest {
   continent?: string[];
   bot?: string[];
   botOperator?: string[];
-  botCategory?:
+  botCategory?: (
     | "SEARCH_ENGINE_CRAWLER"
     | "SEARCH_ENGINE_OPTIMIZATION"
     | "MONITORING_AND_ANALYTICS"
@@ -25806,8 +25874,9 @@ export interface GetBotsTimeseriesRequest {
     | "AGGREGATOR"
     | "AI_ASSISTANT"
     | "AI_SEARCH"
-    | "ARCHIVER"[];
-  botKind?: "AGENT" | "BOT"[];
+    | "ARCHIVER"
+  )[];
+  botKind?: ("AGENT" | "BOT")[];
   botVerificationStatus?: "VERIFIED"[];
   format?: "JSON" | "CSV";
 }
@@ -26068,7 +26137,7 @@ export interface GetBotsTimeseriesGroupRequest {
   limitPerGroup?: number;
   bot?: string[];
   botOperator?: string[];
-  botCategory?:
+  botCategory?: (
     | "SEARCH_ENGINE_CRAWLER"
     | "SEARCH_ENGINE_OPTIMIZATION"
     | "MONITORING_AND_ANALYTICS"
@@ -26084,8 +26153,9 @@ export interface GetBotsTimeseriesGroupRequest {
     | "AGGREGATOR"
     | "AI_ASSISTANT"
     | "AI_SEARCH"
-    | "ARCHIVER"[];
-  botKind?: "AGENT" | "BOT"[];
+    | "ARCHIVER"
+  )[];
+  botKind?: ("AGENT" | "BOT")[];
   botVerificationStatus?: "VERIFIED"[];
   format?: "JSON" | "CSV";
 }
@@ -27000,23 +27070,24 @@ export interface GetCtSummaryRequest {
   limitPerGroup?: number;
   ca?: string[];
   caOwner?: string[];
-  duration?:
+  duration?: (
     | "LTE_3D"
     | "GT_3D_LTE_7D"
     | "GT_7D_LTE_10D"
     | "GT_10D_LTE_47D"
     | "GT_47D_LTE_100D"
     | "GT_100D_LTE_200D"
-    | "GT_200D"[];
-  entryType?: "PRECERTIFICATE" | "CERTIFICATE"[];
-  expirationStatus?: "EXPIRED" | "VALID"[];
+    | "GT_200D"
+  )[];
+  entryType?: ("PRECERTIFICATE" | "CERTIFICATE")[];
+  expirationStatus?: ("EXPIRED" | "VALID")[];
   hasIps?: boolean[];
   hasWildcards?: boolean[];
   log?: string[];
-  logApi?: "RFC6962" | "STATIC"[];
+  logApi?: ("RFC6962" | "STATIC")[];
   logOperator?: string[];
-  publicKeyAlgorithm?: "DSA" | "ECDSA" | "RSA"[];
-  signatureAlgorithm?:
+  publicKeyAlgorithm?: ("DSA" | "ECDSA" | "RSA")[];
+  signatureAlgorithm?: (
     | "DSA_SHA_1"
     | "DSA_SHA_256"
     | "ECDSA_SHA_1"
@@ -27031,10 +27102,11 @@ export interface GetCtSummaryRequest {
     | "RSA_SHA_1"
     | "RSA_SHA_256"
     | "RSA_SHA_384"
-    | "RSA_SHA_512"[];
+    | "RSA_SHA_512"
+  )[];
   tld?: string[];
-  validationLevel?: "DOMAIN" | "ORGANIZATION" | "EXTENDED"[];
-  uniqueEntries?: "true" | "false"[];
+  validationLevel?: ("DOMAIN" | "ORGANIZATION" | "EXTENDED")[];
+  uniqueEntries?: ("true" | "false")[];
   normalization?: "RAW_VALUES" | "PERCENTAGE";
   format?: "JSON" | "CSV";
 }
@@ -27364,23 +27436,24 @@ export interface GetCtTimeseriesRequest {
   dateEnd?: string[];
   ca?: string[];
   caOwner?: string[];
-  duration?:
+  duration?: (
     | "LTE_3D"
     | "GT_3D_LTE_7D"
     | "GT_7D_LTE_10D"
     | "GT_10D_LTE_47D"
     | "GT_47D_LTE_100D"
     | "GT_100D_LTE_200D"
-    | "GT_200D"[];
-  entryType?: "PRECERTIFICATE" | "CERTIFICATE"[];
-  expirationStatus?: "EXPIRED" | "VALID"[];
+    | "GT_200D"
+  )[];
+  entryType?: ("PRECERTIFICATE" | "CERTIFICATE")[];
+  expirationStatus?: ("EXPIRED" | "VALID")[];
   hasIps?: boolean[];
   hasWildcards?: boolean[];
   log?: string[];
-  logApi?: "RFC6962" | "STATIC"[];
+  logApi?: ("RFC6962" | "STATIC")[];
   logOperator?: string[];
-  publicKeyAlgorithm?: "DSA" | "ECDSA" | "RSA"[];
-  signatureAlgorithm?:
+  publicKeyAlgorithm?: ("DSA" | "ECDSA" | "RSA")[];
+  signatureAlgorithm?: (
     | "DSA_SHA_1"
     | "DSA_SHA_256"
     | "ECDSA_SHA_1"
@@ -27395,10 +27468,11 @@ export interface GetCtTimeseriesRequest {
     | "RSA_SHA_1"
     | "RSA_SHA_256"
     | "RSA_SHA_384"
-    | "RSA_SHA_512"[];
+    | "RSA_SHA_512"
+  )[];
   tld?: string[];
-  validationLevel?: "DOMAIN" | "ORGANIZATION" | "EXTENDED"[];
-  uniqueEntries?: "true" | "false"[];
+  validationLevel?: ("DOMAIN" | "ORGANIZATION" | "EXTENDED")[];
+  uniqueEntries?: ("true" | "false")[];
   format?: "JSON" | "CSV";
 }
 
@@ -27695,23 +27769,24 @@ export interface GetCtTimeseriesGroupRequest {
   limitPerGroup?: number;
   ca?: string[];
   caOwner?: string[];
-  duration?:
+  duration?: (
     | "LTE_3D"
     | "GT_3D_LTE_7D"
     | "GT_7D_LTE_10D"
     | "GT_10D_LTE_47D"
     | "GT_47D_LTE_100D"
     | "GT_100D_LTE_200D"
-    | "GT_200D"[];
-  entryType?: "PRECERTIFICATE" | "CERTIFICATE"[];
-  expirationStatus?: "EXPIRED" | "VALID"[];
+    | "GT_200D"
+  )[];
+  entryType?: ("PRECERTIFICATE" | "CERTIFICATE")[];
+  expirationStatus?: ("EXPIRED" | "VALID")[];
   hasIps?: boolean[];
   hasWildcards?: boolean[];
   log?: string[];
-  logApi?: "RFC6962" | "STATIC"[];
+  logApi?: ("RFC6962" | "STATIC")[];
   logOperator?: string[];
-  publicKeyAlgorithm?: "DSA" | "ECDSA" | "RSA"[];
-  signatureAlgorithm?:
+  publicKeyAlgorithm?: ("DSA" | "ECDSA" | "RSA")[];
+  signatureAlgorithm?: (
     | "DSA_SHA_1"
     | "DSA_SHA_256"
     | "ECDSA_SHA_1"
@@ -27726,11 +27801,12 @@ export interface GetCtTimeseriesGroupRequest {
     | "RSA_SHA_1"
     | "RSA_SHA_256"
     | "RSA_SHA_384"
-    | "RSA_SHA_512"[];
-  validationLevel?: "DOMAIN" | "ORGANIZATION" | "EXTENDED"[];
+    | "RSA_SHA_512"
+  )[];
+  validationLevel?: ("DOMAIN" | "ORGANIZATION" | "EXTENDED")[];
   tld?: string[];
   normalization?: "RAW_VALUES" | "PERCENTAGE";
-  uniqueEntries?: "true" | "false"[];
+  uniqueEntries?: ("true" | "false")[];
   format?: "JSON" | "CSV";
 }
 
@@ -28315,7 +28391,7 @@ export interface GetDnsSummaryByCacheHitStatusRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -28403,9 +28479,10 @@ export interface GetDnsSummaryByCacheHitStatusRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -28424,7 +28501,8 @@ export interface GetDnsSummaryByCacheHitStatusRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -28769,7 +28847,7 @@ export interface GetDnsSummaryByDnssecRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -28857,9 +28935,10 @@ export interface GetDnsSummaryByDnssecRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -28878,7 +28957,8 @@ export interface GetDnsSummaryByDnssecRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -29225,7 +29305,7 @@ export interface GetDnsSummaryByDnssecAwarenessRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -29313,9 +29393,10 @@ export interface GetDnsSummaryByDnssecAwarenessRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -29334,7 +29415,8 @@ export interface GetDnsSummaryByDnssecAwarenessRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -29679,7 +29761,7 @@ export interface GetDnsSummaryByDnssecE2eVersionRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -29767,9 +29849,10 @@ export interface GetDnsSummaryByDnssecE2eVersionRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -29788,7 +29871,8 @@ export interface GetDnsSummaryByDnssecE2eVersionRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -30133,7 +30217,7 @@ export interface GetDnsSummaryByIpVersionRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -30221,9 +30305,10 @@ export interface GetDnsSummaryByIpVersionRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -30242,7 +30327,8 @@ export interface GetDnsSummaryByIpVersionRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -30587,7 +30673,7 @@ export interface GetDnsSummaryByMatchingAnswerStatusRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -30675,9 +30761,10 @@ export interface GetDnsSummaryByMatchingAnswerStatusRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -30696,7 +30783,8 @@ export interface GetDnsSummaryByMatchingAnswerStatusRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -31041,7 +31129,7 @@ export interface GetDnsSummaryByProtocolRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -31129,8 +31217,9 @@ export interface GetDnsSummaryByProtocolRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -31149,7 +31238,8 @@ export interface GetDnsSummaryByProtocolRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -31493,8 +31583,8 @@ export interface GetDnsSummaryByQueryTypeRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -31513,7 +31603,8 @@ export interface GetDnsSummaryByQueryTypeRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -31763,7 +31854,7 @@ export interface GetDnsSummaryByResponseCodeRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -31851,8 +31942,9 @@ export interface GetDnsSummaryByResponseCodeRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
   nodata?: boolean[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -32171,7 +32263,7 @@ export interface GetDnsSummaryByResponseTtlRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -32259,9 +32351,10 @@ export interface GetDnsSummaryByResponseTtlRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -32280,7 +32373,8 @@ export interface GetDnsSummaryByResponseTtlRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -32652,8 +32746,8 @@ export interface GetDnsSummaryRequest {
   continent?: string[];
   cacheHit?: boolean[];
   nodata?: boolean[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  queryType?:
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -32741,8 +32835,9 @@ export interface GetDnsSummaryRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -32761,19 +32856,21 @@ export interface GetDnsSummaryRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
-  responseTtl?:
+    | "BADCOOKIE"
+  )[];
+  responseTtl?: (
     | "LTE_1M"
     | "GT_1M_LTE_5M"
     | "GT_5M_LTE_15M"
     | "GT_15M_LTE_1H"
     | "GT_1H_LTE_1D"
     | "GT_1D_LTE_1W"
-    | "GT_1W"[];
-  dnssec?: "INVALID" | "INSECURE" | "SECURE" | "OTHER"[];
-  dnssecAware?: "SUPPORTED" | "NOT_SUPPORTED"[];
+    | "GT_1W"
+  )[];
+  dnssec?: ("INVALID" | "INSECURE" | "SECURE" | "OTHER")[];
+  dnssecAware?: ("SUPPORTED" | "NOT_SUPPORTED")[];
   dnssecE2e?: boolean[];
-  ipVersion?: "IPv4" | "IPv6"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
   limitPerGroup?: number;
   matchingAnswer?: boolean[];
   tld?: string[];
@@ -33159,8 +33256,8 @@ export interface GetDnsTimeseriesRequest {
   continent?: string[];
   cacheHit?: boolean[];
   nodata?: boolean[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  queryType?:
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -33248,8 +33345,9 @@ export interface GetDnsTimeseriesRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -33268,19 +33366,21 @@ export interface GetDnsTimeseriesRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
-  responseTtl?:
+    | "BADCOOKIE"
+  )[];
+  responseTtl?: (
     | "LTE_1M"
     | "GT_1M_LTE_5M"
     | "GT_5M_LTE_15M"
     | "GT_15M_LTE_1H"
     | "GT_1H_LTE_1D"
     | "GT_1D_LTE_1W"
-    | "GT_1W"[];
-  dnssec?: "INVALID" | "INSECURE" | "SECURE" | "OTHER"[];
-  dnssecAware?: "SUPPORTED" | "NOT_SUPPORTED"[];
+    | "GT_1W"
+  )[];
+  dnssec?: ("INVALID" | "INSECURE" | "SECURE" | "OTHER")[];
+  dnssecAware?: ("SUPPORTED" | "NOT_SUPPORTED")[];
   dnssecE2e?: boolean[];
-  ipVersion?: "IPv4" | "IPv6"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
   matchingAnswer?: boolean[];
   tld?: string[];
   format?: "JSON" | "CSV";
@@ -33658,7 +33758,7 @@ export interface GetDnsTimeseriesGroupByCacheHitStatusRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -33746,9 +33846,10 @@ export interface GetDnsTimeseriesGroupByCacheHitStatusRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -33767,7 +33868,8 @@ export interface GetDnsTimeseriesGroupByCacheHitStatusRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -34124,7 +34226,7 @@ export interface GetDnsTimeseriesGroupByDnssecRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -34212,9 +34314,10 @@ export interface GetDnsTimeseriesGroupByDnssecRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -34233,7 +34336,8 @@ export interface GetDnsTimeseriesGroupByDnssecRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -34592,7 +34696,7 @@ export interface GetDnsTimeseriesGroupByDnssecAwarenessRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -34680,9 +34784,10 @@ export interface GetDnsTimeseriesGroupByDnssecAwarenessRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -34701,7 +34806,8 @@ export interface GetDnsTimeseriesGroupByDnssecAwarenessRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -35058,7 +35164,7 @@ export interface GetDnsTimeseriesGroupByDnssecE2eVersionRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -35146,9 +35252,10 @@ export interface GetDnsTimeseriesGroupByDnssecE2eVersionRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -35167,7 +35274,8 @@ export interface GetDnsTimeseriesGroupByDnssecE2eVersionRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -35524,7 +35632,7 @@ export interface GetDnsTimeseriesGroupByIpVersionRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -35612,9 +35720,10 @@ export interface GetDnsTimeseriesGroupByIpVersionRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -35633,7 +35742,8 @@ export interface GetDnsTimeseriesGroupByIpVersionRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -35990,7 +36100,7 @@ export interface GetDnsTimeseriesGroupByMatchingAnswerStatusRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -36078,9 +36188,10 @@ export interface GetDnsTimeseriesGroupByMatchingAnswerStatusRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -36099,7 +36210,8 @@ export interface GetDnsTimeseriesGroupByMatchingAnswerStatusRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -36456,7 +36568,7 @@ export interface GetDnsTimeseriesGroupByProtocolRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -36544,8 +36656,9 @@ export interface GetDnsTimeseriesGroupByProtocolRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -36564,7 +36677,8 @@ export interface GetDnsTimeseriesGroupByProtocolRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -36920,8 +37034,8 @@ export interface GetDnsTimeseriesGroupByQueryTypeRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -36940,7 +37054,8 @@ export interface GetDnsTimeseriesGroupByQueryTypeRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -37204,7 +37319,7 @@ export interface GetDnsTimeseriesGroupByResponseCodeRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -37292,8 +37407,9 @@ export interface GetDnsTimeseriesGroupByResponseCodeRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
   nodata?: boolean[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
@@ -37626,7 +37742,7 @@ export interface GetDnsTimeseriesGroupByResponseTtlRequest {
   location?: string[];
   continent?: string[];
   tld?: string[];
-  queryType?:
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -37714,9 +37830,10 @@ export interface GetDnsTimeseriesGroupByResponseTtlRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -37735,7 +37852,8 @@ export interface GetDnsTimeseriesGroupByResponseTtlRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
+    | "BADCOOKIE"
+  )[];
   nodata?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -38118,8 +38236,8 @@ export interface GetDnsTimeseriesGroupRequest {
   continent?: string[];
   cacheHit?: boolean[];
   nodata?: boolean[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  queryType?:
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -38207,8 +38325,9 @@ export interface GetDnsTimeseriesGroupRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -38227,19 +38346,21 @@ export interface GetDnsTimeseriesGroupRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
-  responseTtl?:
+    | "BADCOOKIE"
+  )[];
+  responseTtl?: (
     | "LTE_1M"
     | "GT_1M_LTE_5M"
     | "GT_5M_LTE_15M"
     | "GT_15M_LTE_1H"
     | "GT_1H_LTE_1D"
     | "GT_1D_LTE_1W"
-    | "GT_1W"[];
-  dnssec?: "INVALID" | "INSECURE" | "SECURE" | "OTHER"[];
-  dnssecAware?: "SUPPORTED" | "NOT_SUPPORTED"[];
+    | "GT_1W"
+  )[];
+  dnssec?: ("INVALID" | "INSECURE" | "SECURE" | "OTHER")[];
+  dnssecAware?: ("SUPPORTED" | "NOT_SUPPORTED")[];
   dnssecE2e?: boolean[];
-  ipVersion?: "IPv4" | "IPv6"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
   limitPerGroup?: number;
   matchingAnswer?: boolean[];
   tld?: string[];
@@ -38642,8 +38763,8 @@ export interface GetDnsTopAsesRequest {
   domain?: string[];
   cacheHit?: boolean[];
   nodata?: boolean[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  queryType?:
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -38731,8 +38852,9 @@ export interface GetDnsTopAsesRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -38751,19 +38873,21 @@ export interface GetDnsTopAsesRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
-  responseTtl?:
+    | "BADCOOKIE"
+  )[];
+  responseTtl?: (
     | "LTE_1M"
     | "GT_1M_LTE_5M"
     | "GT_5M_LTE_15M"
     | "GT_15M_LTE_1H"
     | "GT_1H_LTE_1D"
     | "GT_1D_LTE_1W"
-    | "GT_1W"[];
-  dnssec?: "INVALID" | "INSECURE" | "SECURE" | "OTHER"[];
-  dnssecAware?: "SUPPORTED" | "NOT_SUPPORTED"[];
+    | "GT_1W"
+  )[];
+  dnssec?: ("INVALID" | "INSECURE" | "SECURE" | "OTHER")[];
+  dnssecAware?: ("SUPPORTED" | "NOT_SUPPORTED")[];
   dnssecE2e?: boolean[];
-  ipVersion?: "IPv4" | "IPv6"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
   matchingAnswer?: boolean[];
   format?: "JSON" | "CSV";
 }
@@ -39142,8 +39266,8 @@ export interface GetDnsTopLocationsRequest {
   domain?: string[];
   cacheHit?: boolean[];
   nodata?: boolean[];
-  protocol?: "UDP" | "TCP" | "HTTPS" | "TLS"[];
-  queryType?:
+  protocol?: ("UDP" | "TCP" | "HTTPS" | "TLS")[];
+  queryType?: (
     | "A"
     | "AAAA"
     | "A6"
@@ -39231,8 +39355,9 @@ export interface GetDnsTopLocationsRequest {
     | "URI"
     | "WKS"
     | "X25"
-    | "ZONEMD"[];
-  responseCode?:
+    | "ZONEMD"
+  )[];
+  responseCode?: (
     | "NOERROR"
     | "FORMERR"
     | "SERVFAIL"
@@ -39251,19 +39376,21 @@ export interface GetDnsTopLocationsRequest {
     | "BADNAME"
     | "BADALG"
     | "BADTRUNC"
-    | "BADCOOKIE"[];
-  responseTtl?:
+    | "BADCOOKIE"
+  )[];
+  responseTtl?: (
     | "LTE_1M"
     | "GT_1M_LTE_5M"
     | "GT_5M_LTE_15M"
     | "GT_15M_LTE_1H"
     | "GT_1H_LTE_1D"
     | "GT_1D_LTE_1W"
-    | "GT_1W"[];
-  dnssec?: "INVALID" | "INSECURE" | "SECURE" | "OTHER"[];
-  dnssecAware?: "SUPPORTED" | "NOT_SUPPORTED"[];
+    | "GT_1W"
+  )[];
+  dnssec?: ("INVALID" | "INSECURE" | "SECURE" | "OTHER")[];
+  dnssecAware?: ("SUPPORTED" | "NOT_SUPPORTED")[];
   dnssecE2e?: boolean[];
-  ipVersion?: "IPv4" | "IPv6"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
   matchingAnswer?: boolean[];
   tld?: string[];
   format?: "JSON" | "CSV";
@@ -39637,11 +39764,11 @@ export interface GetEmailRoutingSummaryByArcRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -39870,11 +39997,11 @@ export interface GetEmailRoutingSummaryByDkimRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -40103,11 +40230,11 @@ export interface GetEmailRoutingSummaryByDmarcRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -40336,11 +40463,11 @@ export interface GetEmailRoutingSummaryByEncryptedRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
   format?: "JSON" | "CSV";
 }
 
@@ -40568,11 +40695,11 @@ export interface GetEmailRoutingSummaryByIpVersionRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -40800,11 +40927,11 @@ export interface GetEmailRoutingSummaryBySpfRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -41034,12 +41161,12 @@ export interface GetEmailRoutingSummaryRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -41273,11 +41400,11 @@ export interface GetEmailRoutingTimeseriesGroupByArcRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -41518,11 +41645,11 @@ export interface GetEmailRoutingTimeseriesGroupByDkimRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -41763,11 +41890,11 @@ export interface GetEmailRoutingTimeseriesGroupByDmarcRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -42008,11 +42135,11 @@ export interface GetEmailRoutingTimeseriesGroupByEncryptedRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
   format?: "JSON" | "CSV";
 }
 
@@ -42252,11 +42379,11 @@ export interface GetEmailRoutingTimeseriesGroupByIpVersionRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -42496,11 +42623,11 @@ export interface GetEmailRoutingTimeseriesGroupBySpfRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -42742,12 +42869,12 @@ export interface GetEmailRoutingTimeseriesGroupRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  encrypted?: "ENCRYPTED" | "NOT_ENCRYPTED"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  encrypted?: ("ENCRYPTED" | "NOT_ENCRYPTED")[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -42993,10 +43120,10 @@ export interface GetEmailSecuritySummaryByArcRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -43222,10 +43349,10 @@ export interface GetEmailSecuritySummaryByDkimRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -43451,10 +43578,10 @@ export interface GetEmailSecuritySummaryByDmarcRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -43680,11 +43807,11 @@ export interface GetEmailSecuritySummaryByMaliciousRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -43912,11 +44039,11 @@ export interface GetEmailSecuritySummaryBySpamRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -44144,10 +44271,10 @@ export interface GetEmailSecuritySummaryBySpfRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -44373,11 +44500,11 @@ export interface GetEmailSecuritySummaryBySpoofRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -44605,11 +44732,11 @@ export interface GetEmailSecuritySummaryByThreatCategoryRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -44844,10 +44971,10 @@ export interface GetEmailSecuritySummaryByTlsVersionRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
   format?: "JSON" | "CSV";
 }
 
@@ -45084,11 +45211,11 @@ export interface GetEmailSecuritySummaryRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -45327,10 +45454,10 @@ export interface GetEmailSecurityTimeseriesGroupByArcRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -45568,10 +45695,10 @@ export interface GetEmailSecurityTimeseriesGroupByDkimRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -45809,10 +45936,10 @@ export interface GetEmailSecurityTimeseriesGroupByDmarcRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -46050,11 +46177,11 @@ export interface GetEmailSecurityTimeseriesGroupByMaliciousRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -46294,11 +46421,11 @@ export interface GetEmailSecurityTimeseriesGroupBySpamRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -46538,10 +46665,10 @@ export interface GetEmailSecurityTimeseriesGroupBySpfRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -46779,11 +46906,11 @@ export interface GetEmailSecurityTimeseriesGroupBySpoofRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -47023,11 +47150,11 @@ export interface GetEmailSecurityTimeseriesGroupByThreatCategoryRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   format?: "JSON" | "CSV";
 }
 
@@ -47274,10 +47401,10 @@ export interface GetEmailSecurityTimeseriesGroupByTlsVersionRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
   format?: "JSON" | "CSV";
 }
 
@@ -47526,11 +47653,11 @@ export interface GetEmailSecurityTimeseriesGroupRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -47782,11 +47909,11 @@ export interface GetEmailSecurityTopTldsByMessagesRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   tldCategory?: "CLASSIC" | "COUNTRY";
   format?: "JSON" | "CSV";
 }
@@ -48025,11 +48152,11 @@ export interface GetEmailSecurityTopTldsByMaliciousRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   tldCategory?: "CLASSIC" | "COUNTRY";
   format?: "JSON" | "CSV";
 }
@@ -48269,11 +48396,11 @@ export interface GetEmailSecurityTopTldsBySpamRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   tldCategory?: "CLASSIC" | "COUNTRY";
   format?: "JSON" | "CSV";
 }
@@ -48513,11 +48640,11 @@ export interface GetEmailSecurityTopTldsBySpoofRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  arc?: "PASS" | "NONE" | "FAIL"[];
-  dkim?: "PASS" | "NONE" | "FAIL"[];
-  dmarc?: "PASS" | "NONE" | "FAIL"[];
-  spf?: "PASS" | "NONE" | "FAIL"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3"[];
+  arc?: ("PASS" | "NONE" | "FAIL")[];
+  dkim?: ("PASS" | "NONE" | "FAIL")[];
+  dmarc?: ("PASS" | "NONE" | "FAIL")[];
+  spf?: ("PASS" | "NONE" | "FAIL")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3")[];
   tldCategory?: "CLASSIC" | "COUNTRY";
   format?: "JSON" | "CSV";
 }
@@ -49784,13 +49911,13 @@ export interface GetHttpSummaryByBotClassRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -50034,13 +50161,13 @@ export interface GetHttpSummaryByDeviceTypeRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -50285,13 +50412,13 @@ export interface GetHttpSummaryByHttpProtocolRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -50535,13 +50662,13 @@ export interface GetHttpSummaryByHttpVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -50786,13 +50913,13 @@ export interface GetHttpSummaryByIpVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -51036,13 +51163,13 @@ export interface GetHttpSummaryByOperatingSystemRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -51284,14 +51411,14 @@ export interface PostQuantumRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -51538,13 +51665,13 @@ export interface GetHttpSummaryByTlsVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -51809,13 +51936,13 @@ export interface GetHttpSummaryRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -52073,14 +52200,14 @@ export interface GetHttpTimeseriesRequest {
   continent?: string[];
   geoId?: string[];
   normalization?: "PERCENTAGE_CHANGE" | "MIN0_MAX";
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -52337,13 +52464,13 @@ export interface GetHttpTimeseriesGroupByBotClassRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -52600,14 +52727,14 @@ export interface GetHttpTimeseriesGroupByBrowsersRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -52867,13 +52994,13 @@ export interface GetHttpTimeseriesGroupByBrowserFamiliesRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -53130,13 +53257,13 @@ export interface GetHttpTimeseriesGroupByDeviceTypeRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -53394,13 +53521,13 @@ export interface GetHttpTimeseriesGroupByHttpProtocolRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -53657,13 +53784,13 @@ export interface GetHttpTimeseriesGroupByHttpVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -53921,13 +54048,13 @@ export interface GetHttpTimeseriesGroupByIpVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -54184,13 +54311,13 @@ export interface GetHttpTimeseriesGroupByOperatingSystemRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -54443,14 +54570,14 @@ export interface PostQuantum1Request {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -54710,13 +54837,13 @@ export interface GetHttpTimeseriesGroupByTlsVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -54996,14 +55123,14 @@ export interface GetHttpTimeseriesGroupRequest {
   continent?: string[];
   geoId?: string[];
   limitPerGroup?: number;
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
   normalization?: "PERCENTAGE" | "MIN0_MAX";
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
   format?: "JSON" | "CSV";
 }
 
@@ -55275,14 +55402,14 @@ export interface GetHttpTopAsesByHttpRequestsRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -55537,13 +55664,13 @@ export interface GetHttpTopAsesByBotClassRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -55796,13 +55923,13 @@ export interface GetHttpTopAsesByBrowserFamilyRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
   format?: "JSON" | "CSV";
 }
 
@@ -56057,13 +56184,13 @@ export interface GetHttpTopAsesByDeviceTypeRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -56316,13 +56443,13 @@ export interface GetHttpTopAsesByHttpProtocolRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -56575,13 +56702,13 @@ export interface GetHttpTopAsesByHttpVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -56834,13 +56961,13 @@ export interface GetHttpTopAsesByIpVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -57093,13 +57220,13 @@ export interface GetHttpTopAsesByOperatingSystemRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -57352,13 +57479,13 @@ export interface GetHttpTopAsesByTlsVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -57612,14 +57739,14 @@ export interface GetHttpTopBrowsersRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -57872,13 +57999,13 @@ export interface GetHttpTopBrowserFamiliesRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
   format?: "JSON" | "CSV";
 }
 
@@ -58128,14 +58255,14 @@ export interface GetHttpTopLocationsByHttpRequestsRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -58390,13 +58517,13 @@ export interface GetHttpTopLocationsByBotClassRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -58649,13 +58776,13 @@ export interface GetHttpTopLocationsByBrowserFamilyRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
   format?: "JSON" | "CSV";
 }
 
@@ -58912,13 +59039,13 @@ export interface GetHttpTopLocationsByDeviceTypeRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -59171,13 +59298,13 @@ export interface GetHttpTopLocationsByHttpProtocolRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -59430,13 +59557,13 @@ export interface GetHttpTopLocationsByHttpVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -59689,13 +59816,13 @@ export interface GetHttpTopLocationsByIpVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -59948,13 +60075,13 @@ export interface GetHttpTopLocationsByOperatingSystemRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  tlsVersion?: "TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  tlsVersion?: ("TLSv1_0" | "TLSv1_1" | "TLSv1_2" | "TLSv1_3" | "TLSvQUIC")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -60207,13 +60334,13 @@ export interface GetHttpTopLocationsByTlsVersionRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  deviceType?: "DESKTOP" | "MOBILE" | "OTHER"[];
-  httpProtocol?: "HTTP" | "HTTPS"[];
-  httpVersion?: "HTTPv1" | "HTTPv2" | "HTTPv3"[];
-  ipVersion?: "IPv4" | "IPv6"[];
-  os?: "WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV"[];
-  browserFamily?: "CHROME" | "EDGE" | "FIREFOX" | "SAFARI"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  deviceType?: ("DESKTOP" | "MOBILE" | "OTHER")[];
+  httpProtocol?: ("HTTP" | "HTTPS")[];
+  httpVersion?: ("HTTPv1" | "HTTPv2" | "HTTPv3")[];
+  ipVersion?: ("IPv4" | "IPv6")[];
+  os?: ("WINDOWS" | "MACOSX" | "IOS" | "ANDROID" | "CHROMEOS" | "LINUX" | "SMART_TV")[];
+  browserFamily?: ("CHROME" | "EDGE" | "FIREFOX" | "SAFARI")[];
   format?: "JSON" | "CSV";
 }
 
@@ -60462,7 +60589,7 @@ export interface GetLeakedCredentialChecksSummaryByBotClassRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  compromised?: "CLEAN" | "COMPROMISED"[];
+  compromised?: ("CLEAN" | "COMPROMISED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -60678,7 +60805,7 @@ export interface GetLeakedCredentialChecksSummaryByCompromisedRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
   format?: "JSON" | "CSV";
 }
 
@@ -60898,8 +61025,8 @@ export interface GetLeakedCredentialChecksSummaryRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  compromised?: "CLEAN" | "COMPROMISED"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  compromised?: ("CLEAN" | "COMPROMISED")[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -61122,7 +61249,7 @@ export interface GetLeakedCredentialChecksTimeseriesGroupByBotClassRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  compromised?: "CLEAN" | "COMPROMISED"[];
+  compromised?: ("CLEAN" | "COMPROMISED")[];
   format?: "JSON" | "CSV";
 }
 
@@ -61353,7 +61480,7 @@ export interface GetLeakedCredentialChecksTimeseriesGroupByCompromisedRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
   format?: "JSON" | "CSV";
 }
 
@@ -61591,14 +61718,15 @@ export interface GetLeakedCredentialChecksTimeseriesGroupRequest {
   asn?: string[];
   location?: string[];
   continent?: string[];
-  botClass?: "LIKELY_AUTOMATED" | "LIKELY_HUMAN"[];
-  compromised?: "CLEAN" | "COMPROMISED"[];
-  checkResult?:
+  botClass?: ("LIKELY_AUTOMATED" | "LIKELY_HUMAN")[];
+  compromised?: ("CLEAN" | "COMPROMISED")[];
+  checkResult?: (
     | "CLEAN"
     | "USERNAME_LEAKED"
     | "USERNAME_PASSWORD_SIMILAR"
     | "USERNAME_AND_PASSWORD_LEAKED"
-    | "PASSWORD_LEAKED"[];
+    | "PASSWORD_LEAKED"
+  )[];
   limitPerGroup?: number;
   normalization?: "PERCENTAGE_CHANGE" | "MIN0_MAX";
   format?: "JSON" | "CSV";
@@ -62078,7 +62206,7 @@ export interface GetNetflowsSummaryRequest {
   location?: string[];
   continent?: string[];
   geoId?: string[];
-  product?: "HTTP" | "ALL"[];
+  product?: ("HTTP" | "ALL")[];
   limitPerGroup?: number;
   format?: "JSON" | "CSV";
 }
@@ -62299,7 +62427,7 @@ export interface GetNetflowsTimeseriesRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  product?: "HTTP" | "ALL"[];
+  product?: ("HTTP" | "ALL")[];
   asn?: string[];
   location?: string[];
   continent?: string[];
@@ -62546,7 +62674,7 @@ export interface GetNetflowsTimeseriesGroupRequest {
   geoId?: string[];
   limitPerGroup?: number;
   normalization?: "PERCENTAGE" | "MIN0_MAX";
-  product?: "HTTP" | "ALL"[];
+  product?: ("HTTP" | "ALL")[];
   format?: "JSON" | "CSV";
 }
 
@@ -63318,7 +63446,7 @@ export interface GetOriginsSummaryRequest {
   dateStart?: string[];
   dateEnd?: string[];
   limitPerGroup?: number;
-  origin: "AMAZON" | "GOOGLE" | "MICROSOFT" | "ORACLE"[];
+  origin: ("AMAZON" | "GOOGLE" | "MICROSOFT" | "ORACLE")[];
   metric:
     | "CONNECTION_FAILURES"
     | "REQUESTS"
@@ -63551,7 +63679,7 @@ export interface GetOriginsTimeseriesRequest {
   dateRange?: string[];
   dateStart?: string[];
   dateEnd?: string[];
-  origin: "AMAZON" | "GOOGLE" | "MICROSOFT" | "ORACLE"[];
+  origin: ("AMAZON" | "GOOGLE" | "MICROSOFT" | "ORACLE")[];
   metric:
     | "CONNECTION_FAILURES"
     | "REQUESTS"
@@ -63793,7 +63921,7 @@ export interface GetOriginsTimeseriesGroupRequest {
   dateStart?: string[];
   dateEnd?: string[];
   limitPerGroup?: number;
-  origin: "AMAZON" | "GOOGLE" | "MICROSOFT" | "ORACLE"[];
+  origin: ("AMAZON" | "GOOGLE" | "MICROSOFT" | "ORACLE")[];
   metric:
     | "CONNECTION_FAILURES"
     | "REQUESTS"
@@ -67093,7 +67221,7 @@ export interface GetSearchGlobalRequest {
   limit?: number;
   limitPerGroup?: number;
   query: string;
-  include?:
+  include?: (
     | "ADM1S"
     | "ASNS"
     | "BOTS"
@@ -67105,8 +67233,9 @@ export interface GetSearchGlobalRequest {
     | "LOCATIONS"
     | "NOTEBOOKS"
     | "TLDS"
-    | "VERTICALS"[];
-  exclude?:
+    | "VERTICALS"
+  )[];
+  exclude?: (
     | "ADM1S"
     | "ASNS"
     | "BOTS"
@@ -67118,7 +67247,8 @@ export interface GetSearchGlobalRequest {
     | "LOCATIONS"
     | "NOTEBOOKS"
     | "TLDS"
-    | "VERTICALS"[];
+    | "VERTICALS"
+  )[];
   format?: "JSON" | "CSV";
 }
 
@@ -67868,7 +67998,7 @@ export interface GetTrafficAnomaliesRequest {
   dateStart?: string;
   dateEnd?: string;
   status?: "VERIFIED" | "UNVERIFIED";
-  type?: "LOCATION" | "AS" | "ORIGIN"[];
+  type?: ("LOCATION" | "AS" | "ORIGIN")[];
   asn?: number;
   location?: string;
   origin?: string;
