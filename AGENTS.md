@@ -1,203 +1,114 @@
 # distilled-cloudflare
 
-An Effect-native Cloudflare SDK generated from the [Cloudflare OpenAPI specification](https://github.com/cloudflare/api-schemas).
-
-## ARCHITECTURE
-
-```
-OpenAPI Spec → scripts/generate-clients.ts → src/services/*.ts → Runtime
-     ↓                    ↓                        ↓                ↓
-  Endpoints         Code Generator            Effect Schemas    Protocol
-  (paths)           (parse, group,            (T.HttpPath,      (REST JSON)
-                    transform)                 T.HttpQuery)
-```
-
-**Trait System:** OpenAPI parameter bindings become Schema annotations at codegen. At runtime, the client reads annotations to serialize requests and parse responses.
-
-**Effect-Native:** All operations return `Effect<A, E, R>` with typed errors. Error categories (throttling, not found, auth) enable pattern-based error handling.
-
-## KEY DIFFERENCES FROM distilled-aws
-
-| Aspect | distilled-aws | distilled-cloudflare |
-|--------|---------------|---------------------|
-| Model Source | Smithy JSON | OpenAPI 3.x |
-| Protocol | Multiple | REST JSON only |
-| Authentication | AWS SigV4 | API Token |
-| Errors | Named types + HTTP status | Numeric codes in body |
-| Error Location | HTTP status + body | Always JSON with `success: false` |
-
-## CLOUDFLARE ERROR STRUCTURE
-
-All Cloudflare API responses follow this pattern:
-
-```typescript
-interface CloudflareResponse<T> {
-  success: boolean;
-  errors: Array<{ code: number; message: string }>;
-  messages: Array<{ code: number; message: string }>;
-  result: T | null;
-}
-```
-
-Errors can arrive via:
-- HTTP 4XX/5XX with `success: false`
-- HTTP 200 with `success: false` (common pattern)
-
-The OpenAPI spec only defines generic `4XX` responses with no specific error codes.
+Effect-native Cloudflare SDK generated from the [Cloudflare OpenAPI spec](https://github.com/cloudflare/api-schemas).
 
 ## COMMANDS
 
 ```bash
-# Generate SDK from OpenAPI spec
-bun generate                    # All services
-bun generate --service dns      # Single service
-bun generate --fetch            # Fetch latest spec first
-
-# Discover undocumented errors
-bun find dns                    # Find errors for DNS service
-bun find workers                # Find errors for Workers service
-bun find --dry-run dns          # Preview what would be tested
-
-# Testing (Vitest)
-bun run test                              # Run all tests
-bun vitest run test/services/dns.test.ts  # Single test file
-
-# Environment setup
-bun run download:env            # Download .env from Doppler (from monorepo root)
+bun generate                              # Generate all services
+bun generate --service r2                 # Generate single service
+bun generate --fetch                      # Fetch latest spec first
+bun vitest run ./test/services/r2.test.ts # Run tests
+bun scripts/generate-errors.ts            # Regenerate error classes
 ```
 
-## KEY FILES
+## TDD WORKFLOW
 
-| What | Where |
-|------|-------|
-| API client factory | `src/client/api.ts` |
-| Request builder | `src/client/request-builder.ts` |
-| Response parser | `src/client/response-parser.ts` |
-| HTTP binding traits | `src/traits.ts` |
-| Authentication | `src/auth.ts` |
-| Error types | `src/errors.ts` |
-| Error categories | `src/category.ts` |
-| Error catalog | `spec/error-catalog.json` |
-| Code generator | `scripts/generate-clients.ts` |
-| OpenAPI schema | `scripts/openapi-schema.ts` |
-| Error discovery | `scripts/find-errors/` |
-| Service modules | `src/services/*.ts` |
+The Cloudflare OpenAPI spec is incomplete. Tests reveal two types of issues:
 
-## ERROR DISCOVERY WORKFLOW
+| Error Type | Symptom | Fix Location |
+|------------|---------|--------------|
+| `UnknownCloudflareError` | Undocumented error code | `spec/error-catalog.json` + `spec/{service}.json` |
+| `Schema decode failed` | Response doesn't match spec | `spec/openapi.patch.jsonc` |
 
-Cloudflare's OpenAPI spec lacks specific error codes. We discover them iteratively:
+### The Loop
 
-### 1. Run Error Discovery
-
-```bash
-# Set your API token
-export CLOUDFLARE_API_TOKEN="your-token"
-
-# Discover errors for a service
-bun find dns
+```
+Write Test → Run Test → Identify Failure → Patch → Regenerate → Repeat
 ```
 
-The tool calls API endpoints with fake/invalid inputs to trigger errors. Each new error code is recorded to `spec/error-catalog.json`.
+---
 
-### 2. Review and Classify Errors
+## STEP 1: WRITE A TEST
 
-Open `spec/error-catalog.json` and review new entries:
-
-```json
-{
-  "codes": {
-    "1003": { "name": "InvalidZone", "category": "NotFoundError" },
-    "9103": { "name": "InvalidToken", "category": "AuthError" }
-  }
-}
-```
-
-Assign meaningful names and categories to new error codes.
-
-### 3. Add Per-Operation Errors
-
-Create `spec/{service}.json` to specify which errors each operation can return:
-
-```json
-{
-  "operations": {
-    "listDnsRecords": {
-      "errors": ["InvalidZone", "AuthenticationError"]
-    },
-    "deleteDnsRecord": {
-      "errors": ["RecordNotFound", "InvalidZone"]
-    }
-  }
-}
-```
-
-### 4. Regenerate SDK
-
-```bash
-bun generate --service dns
-```
-
-The generator will include typed error classes in the generated service file.
-
-### 5. Write Tests
-
-Tests also help discover errors:
+Create isolated tests using `withXxx` helpers:
 
 ```typescript
-it.effect("handles not found", () =>
-  Effect.gen(function* () {
-    const exit = yield* Effect.exit(
-      dns.getDnsRecord({
-        zone_id: zoneId,
-        dns_record_id: "nonexistent",
-      }),
-    );
+const withBucket = <A, E, R>(
+  name: string,
+  fn: (bucket: string) => Effect.Effect<A, E, R>,
+) =>
+  cleanup(name).pipe(
+    Effect.andThen(R2.createBucket({ account_id: accountId(), name })),
+    Effect.andThen(fn(name)),
+    Effect.ensuring(cleanup(name)),
+  );
 
-    if (Exit.isFailure(exit)) {
-      // Log for discovery
-      console.log("Error:", exit.cause);
-    }
-  }),
-);
+test("get lifecycle configuration", () =>
+  withBucket("itty-cf-r2-lifecycle", (bucket) =>
+    Effect.gen(function* () {
+      const result = yield* R2.getBucketLifecycleConfiguration({
+        account_id: accountId(),
+        bucket_name: bucket,
+      });
+      expect(result.result).toBeDefined();
+    }),
+  ));
 ```
 
-## TEST-DRIVEN ERROR DISCOVERY
+**Naming:** Use `itty-cf-{service}-{test}` — deterministic, no random suffixes.
 
-The most effective way to discover errors is by running tests and iterating. This workflow catches errors that the automated `bun find` tool misses.
+---
 
-### Step 1: Run Service Tests
+## STEP 2: RUN THE TEST
 
 ```bash
-bun vitest run ./test/services/r2.test.ts
+bun vitest run ./test/services/r2.test.ts -t "lifecycle"
 ```
 
-### Step 2: Identify Unknown Errors
+Two failure modes:
 
-Look for `UnknownCloudflareError` in test output:
+### Failure A: `UnknownCloudflareError`
 
 ```
 (FiberFailure) UnknownCloudflareError: The CORS configuration does not exist.
 ```
 
-### Step 3: Get Error Code with DEBUG
+→ Go to [Step 3A: Catalog the Error](#step-3a-catalog-the-error)
 
-Run tests with `DEBUG=1` to see request/response details:
+### Failure B: `Schema decode failed`
+
+```
+(FiberFailure) CloudflareHttpError: { "status": 200, "statusText": "Schema decode failed", "body": "{...}" }
+```
+
+→ Go to [Step 3B: Patch the Schema](#step-3b-patch-the-schema)
+
+---
+
+## STEP 3A: CATALOG THE ERROR
+
+When you see `UnknownCloudflareError`, the API returned an error code not in our catalog.
+
+### Extract the error code
+
+Run with DEBUG to see the full response:
 
 ```bash
 DEBUG=1 bun vitest run ./test/services/r2.test.ts -t "CORS"
 ```
 
-If the error code isn't visible, create a quick test script to extract it:
+Or log it in the test:
 
 ```typescript
 const result = yield* someOperation().pipe(Effect.exit);
-console.log("Result:", JSON.stringify(result, null, 2));
-// Output shows: { "failure": { "code": 10059, "message": "...", "_tag": "UnknownCloudflareError" } }
+console.log(JSON.stringify(result, null, 2));
+// Shows: { "code": 10059, "message": "The CORS configuration does not exist." }
 ```
 
-### Step 4: Add Error to Catalog
+### Add to error catalog
 
-Add the discovered error code to `spec/error-catalog.json`:
+Edit `spec/error-catalog.json`:
 
 ```json
 {
@@ -207,9 +118,11 @@ Add the discovered error code to `spec/error-catalog.json`:
 }
 ```
 
-### Step 5: Map Errors to Operations
+**Categories:** `AuthError`, `BadRequestError`, `NotFoundError`, `ConflictError`, `ThrottlingError`, `ServerError`
 
-Update `spec/{service}.json` to specify which operations return this error:
+### Map to operations
+
+Edit `spec/{service}.json` (e.g., `spec/r2.json`):
 
 ```json
 {
@@ -220,80 +133,51 @@ Update `spec/{service}.json` to specify which operations return this error:
 }
 ```
 
-### Step 6: Regenerate SDK
+**Important:** Use the **generated function name** (check `src/services/{service}.ts`), not the OpenAPI operationId.
+
+### Regenerate
 
 ```bash
-# Regenerate error classes from catalog
 bun scripts/generate-errors.ts
-
-# Regenerate service with error mappings
 bun generate --service r2
 ```
 
-### Step 7: Update Tests
+→ Go to [Step 4: Update the Test](#step-4-update-the-test)
 
-Update tests to properly handle the new typed errors:
+---
 
-```typescript
-// Test that verifies correct error tag
-test("NoCorsConfiguration error on fresh bucket", () =>
-  withBucket("itty-cf-r2-no-cors", (bucketName) =>
-    R2.getBucketCorsPolicy({
-      account_id: accountId(),
-      bucket_name: bucketName,
-    }).pipe(
-      Effect.matchEffect({
-        onSuccess: () => Effect.die("Expected NoCorsConfiguration error"),
-        onFailure: (error) =>
-          Effect.gen(function* () {
-            expect(error).toBeInstanceOf(NoCorsConfiguration);
-            expect((error as NoCorsConfiguration).code).toBe(10059);
-          }),
-      }),
-    ),
-  ));
-```
+## STEP 3B: PATCH THE SCHEMA
 
-### Step 8: Repeat Until All Tests Pass
+When you see `Schema decode failed`, the API response doesn't match the OpenAPI spec.
 
-Run tests again and repeat steps 2-7 for any remaining unknown errors.
+### Identify the mismatch
 
-### OpenAPI Schema Patches
+The error body shows the actual response. Compare with the generated schema in `src/services/{service}.ts`.
 
-The Cloudflare OpenAPI spec has bugs. Use `spec/openapi.patch.jsonc` to fix them.
+Common issues:
 
-**Format:** RFC 6902 JSON Patch stored as JSONC (JSON with comments).
+| Problem | Example |
+|---------|---------|
+| Enum case mismatch | API returns `"WNAM"`, spec has `"wnam"` |
+| Required field missing | Spec requires `prefix`, API returns `{}` |
+| Null not allowed | API returns `null`, spec expects object |
+| Missing endpoint | API exists but not in spec |
 
-**Every patch MUST have a comment** explaining:
-- What the patch fixes
-- Why the original spec is wrong
-- How the issue was discovered
+### Add a JSON Patch
 
-#### JSON Pointer Escaping
+Edit `spec/openapi.patch.jsonc`. **Every patch MUST have a comment.**
 
-JSON Patch uses JSON Pointer (RFC 6901) for paths. Special characters must be escaped:
-- `/` becomes `~1`
-- `~` becomes `~0`
+**JSON Pointer escaping:** `/` → `~1`, `~` → `~0`
 
-Example: `/accounts/{account_id}/workers` becomes `/paths/~1accounts~1{account_id}~1workers`
+Example: `/accounts/{account_id}/r2` → `/paths/~1accounts~1{account_id}~1r2`
 
-#### Patch Operations
-
-| Operation | Use Case |
-|-----------|----------|
-| `add` | Add new paths, schemas, or properties |
-| `replace` | Fix existing values (enums, required arrays) |
-| `remove` | Remove incorrect constraints |
-
-#### Common Spec Bugs
-
-1. **Enum case mismatch**: API returns uppercase, spec has lowercase
+#### Fix enum values
 
 ```jsonc
 // R2: Add uppercase location enum values.
 //
-// Problem: The API returns uppercase values (WNAM, EEUR, etc.) but the
-// OpenAPI spec only defines lowercase values (wnam, eeur, etc.).
+// Problem: API returns uppercase (WNAM), spec only has lowercase (wnam).
+// Discovered: Schema decode failed on createBucket response.
 {
   "op": "replace",
   "path": "/components/schemas/r2_bucket_location/enum",
@@ -301,13 +185,13 @@ Example: `/accounts/{account_id}/workers` becomes `/paths/~1accounts~1{account_i
 }
 ```
 
-2. **Required fields that are optional**: Spec marks fields required but API returns empty objects
+#### Remove required constraint
 
 ```jsonc
 // R2: Make conditions optional in lifecycle rules.
 //
-// Problem: The spec marks 'conditions' as required, but the API returns
-// lifecycle rules with empty/missing conditions objects.
+// Problem: Spec requires 'conditions', but API returns rules with empty conditions.
+// Discovered: Schema decode failed on getBucketLifecycleConfiguration.
 {
   "op": "replace",
   "path": "/components/schemas/r2_lifecycle-rule/required",
@@ -315,26 +199,45 @@ Example: `/accounts/{account_id}/workers` becomes `/paths/~1accounts~1{account_i
 }
 ```
 
-3. **Remove incorrect constraints**: Spec requires a field the API doesn't return
+#### Remove nested required
 
 ```jsonc
-// Workers: Make startup_time_ms optional in upload response.
+// R2: Remove prefix requirement from conditions.
 //
-// Problem: The spec marks 'startup_time_ms' as required in the upload
-// response, but the API doesn't always return this field.
+// Problem: Spec requires conditions.prefix, but API returns conditions: {}.
+// Discovered: Schema decode failed on getBucketLifecycleConfiguration.
 {
   "op": "remove",
-  "path": "/components/schemas/workers_script-response-upload/allOf/1/required"
+  "path": "/components/schemas/r2_lifecycle-rule/properties/conditions/required"
 }
 ```
 
-4. **Add undocumented endpoints**: Add entirely new paths for undocumented APIs
+#### Allow null values
 
 ```jsonc
-// Containers API: List and create applications (undocumented).
+// KV: Allow null result in delete responses.
 //
-// The Containers API is not included in the official OpenAPI spec.
-// Schema reverse-engineered from API responses.
+// Problem: API returns result: null, but spec expects object.
+// Discovered: Schema decode failed on deleteKeyValuePair.
+{
+  "op": "replace",
+  "path": "/components/schemas/workers-kv_api-response-common-no-result/allOf/1/properties/result",
+  "value": {
+    "oneOf": [
+      { "type": "null" },
+      { "type": "object" }
+    ]
+  }
+}
+```
+
+#### Add undocumented endpoint
+
+```jsonc
+// Containers: Add list applications endpoint (undocumented).
+//
+// Problem: Containers API not in OpenAPI spec.
+// Discovered: Reverse-engineered from Cloudflare dashboard.
 {
   "op": "add",
   "path": "/paths/~1accounts~1{account_id}~1containers~1applications",
@@ -345,248 +248,113 @@ Example: `/accounts/{account_id}/workers` becomes `/paths/~1accounts~1{account_i
       "parameters": [
         { "name": "account_id", "in": "path", "required": true, "schema": { "type": "string" } }
       ],
-      "responses": { "200": { "content": { "application/json": { "schema": { "type": "object" } } } } }
+      "responses": {
+        "200": { "content": { "application/json": { "schema": { "type": "object" } } } }
+      }
     }
   }
 }
 ```
 
-#### Debugging Schema Decode Failures
+### Regenerate
 
-When you see `CloudflareHttpError: Schema decode failed`:
+```bash
+bun generate --service r2
+```
 
-1. The error body shows the actual API response
-2. Compare with the generated schema in `src/services/{service}.ts`
-3. Identify the mismatch (wrong enum values, required fields, type differences)
-4. Add a minimal patch to `spec/openapi.patch.jsonc` with a comment explaining the fix
-5. Regenerate: `bun generate --service {service}`
+→ Go to [Step 4: Update the Test](#step-4-update-the-test)
+
+---
+
+## STEP 4: UPDATE THE TEST
+
+After patching, update tests to use typed errors:
+
+```typescript
+test("NoCorsConfiguration error on fresh bucket", () =>
+  withBucket("itty-cf-r2-no-cors", (bucket) =>
+    R2.getBucketCorsPolicy({
+      account_id: accountId(),
+      bucket_name: bucket,
+    }).pipe(
+      Effect.matchEffect({
+        onSuccess: () => Effect.die("Expected NoCorsConfiguration"),
+        onFailure: (error) =>
+          Effect.gen(function* () {
+            expect(error._tag).toBe("NoCorsConfiguration");
+          }),
+      }),
+    ),
+  ));
+```
+
+---
+
+## STEP 5: REPEAT
+
+Run tests again. If new failures appear, go back to Step 2.
+
+```bash
+bun vitest run ./test/services/r2.test.ts
+```
+
+---
+
+## KEY FILES
+
+| File | Purpose |
+|------|---------|
+| `spec/error-catalog.json` | Global error code → name + category mapping |
+| `spec/{service}.json` | Per-operation error assignments |
+| `spec/openapi.patch.jsonc` | RFC 6902 JSON Patches for spec bugs |
+| `src/services/{service}.ts` | Generated client (DO NOT EDIT) |
+| `test/services/{service}.test.ts` | Tests that drive discovery |
+
+---
 
 ## ERROR CATALOG FORMAT
-
-### Global Catalog (`spec/error-catalog.json`)
 
 ```json
 {
   "codes": {
-    "1000": { "name": "InvalidRequest", "category": "BadRequestError" },
-    "9103": { "name": "InvalidToken", "category": "AuthError" }
+    "10006": { "name": "NoSuchBucket", "category": "NotFoundError" },
+    "10059": { "name": "NoCorsConfiguration", "category": "NotFoundError" }
   },
   "patterns": [
-    { "regex": "not found", "name": "NotFound", "category": "NotFoundError" },
-    { "regex": "already exists", "name": "AlreadyExists", "category": "ConflictError" }
+    { "regex": "not found", "name": "NotFound", "category": "NotFoundError" }
   ],
   "codeRanges": [
-    { "min": 1000, "max": 1999, "defaultCategory": "BadRequestError" },
-    { "min": 9000, "max": 9999, "defaultCategory": "AuthError" }
+    { "min": 10000, "max": 10999, "defaultCategory": "BadRequestError" }
   ]
 }
 ```
 
-### Error Classification Priority
+**Priority:** Exact code → Pattern match → Code range → `UnknownCloudflareError`
 
-1. **Exact code match** - Check `codes` map
-2. **Message patterns** - Match against `patterns` regexes
-3. **Code ranges** - Fall back to `codeRanges` defaults
-4. **Unknown** - Return `UnknownCloudflareError`
+---
 
-### Categories
+## JSON PATCH FORMAT
 
-| Category | Description |
-|----------|-------------|
-| `AuthError` | Authentication/authorization failures |
-| `BadRequestError` | Invalid parameters |
-| `NotFoundError` | Resource not found |
-| `ConflictError` | Resource state conflicts |
-| `ThrottlingError` | Rate limiting |
-| `ServerError` | Cloudflare service errors |
-| `UnknownError` | Unclassified errors |
+`spec/openapi.patch.jsonc` uses RFC 6902 JSON Patch in JSONC (allows comments).
 
-## CODE GENERATOR
+| Operation | Use Case |
+|-----------|----------|
+| `add` | New paths, schemas, properties |
+| `replace` | Fix enums, required arrays, property types |
+| `remove` | Delete incorrect constraints |
 
-`scripts/generate-clients.ts`:
+**Comment requirement:** Every patch must explain what it fixes and how the issue was discovered.
 
-1. Loads OpenAPI spec (fetches or uses cache)
-2. Applies patches from `spec/openapi.patch.jsonc` using RFC 6902 JSON Patch
-3. Groups operations by service (based on path patterns)
-4. Generates Effect Schema classes for request/response types
-5. Applies HTTP binding traits from parameter definitions
-6. Outputs to `src/services/{service}.ts`
+---
 
-### Response Schema Generation
+## TEST PATTERNS
 
-Cloudflare APIs return responses in this envelope format:
-
-```json
-{ "success": true, "errors": [], "messages": [], "result": <actual data> }
-```
-
-The OpenAPI spec often uses `allOf` to combine a common wrapper with the actual result:
-
-```json
-{
-  "allOf": [
-    { "$ref": "#/components/schemas/api-response-common" },
-    { "properties": { "result": { "$ref": "#/components/schemas/MyData" } } }
-  ]
-}
-```
-
-The generator:
-1. **Recursively merges all `allOf` schemas** to build the complete response structure
-2. **Extracts the `result` property** to generate the response schema
-3. **Defaults to `Schema.NullOr(Schema.Unknown)`** when no `result` property is found (e.g., DELETE operations)
-
-### Operation ID to Function Name Mapping
-
-OpenAPI operation IDs are transformed to function names via `scripts/openapi-schema.ts`:
-
-| Operation ID | Function Name |
-|--------------|---------------|
-| `queues-create` | `create` |
-| `queues-get` | `get_` (underscore for reserved words) |
-| `queues-delete` | `delete_` |
-| `queues-purge-get` | `get_1` (collision with `queues-get`) |
-
-**Important:** When adding errors to `spec/{service}.json`, use the **generated function name**, not the operation ID:
-
-```json
-{
-  "operations": {
-    "create": { "errors": ["QueueAlreadyExists", "InvalidQueueName"] },
-    "get_": { "errors": ["QueueNotFound"] },
-    "delete_": { "errors": ["QueueNotFound"] }
-  }
-}
-```
-
-### Service Grouping
-
-Operations are grouped by path prefix:
-
-| Pattern | Service |
-|---------|---------|
-| `/zones/{zone_id}/dns_records` | `dns` |
-| `/accounts/{account_id}/workers` | `workers` |
-| `/accounts/{account_id}/storage/kv` | `kv` |
-| `/accounts/{account_id}/r2` | `r2` |
-| `/accounts/{account_id}/d1` | `d1` |
-| `/accounts/{account_id}/queues` | `queues` |
-
-## TRAITS SYSTEM
-
-Simpler than distilled-aws since Cloudflare uses only REST JSON:
-
-| Trait | Purpose |
-|-------|---------|
-| `T.HttpPath(name)` | Path parameter binding |
-| `T.HttpQuery(name)` | Query parameter binding |
-| `T.HttpHeader(name)` | Header binding |
-| `T.HttpBody()` | JSON request/response body |
-| `T.HttpTextBody(contentType)` | Plain text body (e.g., `application/javascript`) |
-| `T.HttpFormData()` | Multipart form-data body (e.g., worker uploads) |
-| `T.Http({ method, path })` | Operation metadata |
-
-### Example
+### Resource lifecycle helper
 
 ```typescript
-export class ListDnsRecordsRequest extends Schema.Class<ListDnsRecordsRequest>(
-  "ListDnsRecordsRequest",
-)({
-  zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
-  name: Schema.optional(Schema.String).pipe(T.HttpQuery("name")),
-  per_page: Schema.optional(Schema.Number).pipe(T.HttpQuery("per_page")),
-}, T.all(
-  T.Http({ method: "GET", path: "/zones/{zone_id}/dns_records" }),
-)) {}
-```
-
-## TESTING
-
-**Test runner:** Vitest (via `@effect/vitest`)
-
-**File naming:** `test/services/{service}.test.ts`
-
-**Environment variables (choose one auth method):**
-- `CLOUDFLARE_API_TOKEN` - Scoped API token (preferred)
-- OR `CLOUDFLARE_API_KEY` + `CLOUDFLARE_EMAIL` - Global API key
-
-**Required for tests:**
-- `CLOUDFLARE_ACCOUNT_ID` - Account ID for account-scoped tests
-- `CLOUDFLARE_ZONE_ID` - Zone ID for zone-scoped tests (optional, some tests skip)
-
-**Getting credentials via Doppler:**
-
-From the monorepo root:
-
-```bash
-bun run download:env
-```
-
-This downloads secrets from Doppler to `.env` in the repo root. Tests automatically load this file via `vitest.config.ts`.
-
-**Running tests:**
-
-```bash
-bun run test                              # Run all tests
-bun vitest run test/services/dns.test.ts  # Single test file
-bun vitest run --watch                    # Watch mode
-```
-
-**Test Helper:**
-
-The project includes a test helper at `test/test.ts` that provides:
-- Common Effect layers (HTTP client, auth, logging)
-- Helper functions (`getAccountId()`, `getZoneId()`, `hasCredentials()`)
-- Consistent test timeout handling
-
-**Test patterns:**
-
-```typescript
-import { describe } from "@effect/vitest";
-import { expect } from "vitest";
-import * as Effect from "effect/Effect";
-import * as KV from "../../src/services/kv.ts";
-import { test, getAccountId, hasCredentials } from "../test.ts";
-
-describe.skipIf(!hasCredentials())("KV API", () => {
-  test("should list KV namespaces", () =>
-    Effect.gen(function* () {
-      const result = yield* KV.listNamespaces({
-        account_id: getAccountId(),
-      });
-
-      expect(result).toBeDefined();
-      expect(result.result).toBeInstanceOf(Array);
-      console.log(`Found ${result.result.length} KV namespaces`);
-    }),
-  );
-});
-```
-
-**Resource lifecycle helpers (`withXxx` functions):**
-
-Each test MUST create its own isolated resources. **NEVER** use `getFirstXxx()` patterns that depend on pre-existing resources in the account.
-
-**Why `getFirstXxx` is BAD:**
-- Tests become flaky - they depend on account state
-- Tests can interfere with each other
-- Tests can't run in parallel
-- Tests pollute the account with leftover resources
-- Tests break when run on a clean account
-
-**The `withXxx` pattern:**
-
-Every test should use a `withXxx` helper that:
-1. Cleans up any leftover resources from previous runs (idempotent)
-2. Creates a fresh resource with a deterministic name
-3. Runs the test
-4. Cleans up the resource (using `Effect.ensuring`)
-
-```typescript
-// GOOD: Isolated resource per test
 const withBucket = <A, E, R>(
   name: string,
-  fn: (bucketName: string) => Effect.Effect<A, E, R>,
+  fn: (bucket: string) => Effect.Effect<A, E, R>,
 ) =>
   cleanup(name).pipe(
     Effect.andThen(createBucket({ name })),
@@ -594,211 +362,93 @@ const withBucket = <A, E, R>(
     Effect.ensuring(cleanup(name)),
   );
 
-test("read bucket", () =>
-  withBucket("itty-cf-r2-read", (bucket) =>
-    Effect.gen(function* () {
-      const response = yield* getBucket({ bucket_name: bucket });
-      expect(response.result).toBeDefined();
-    }),
-  ));
-
-// BAD: Depends on pre-existing resources
-const getFirstBucket = () =>
-  Effect.gen(function* () {
-    const response = yield* listBuckets({ account_id: accountId() });
-    if (response.result.length === 0) {
-      return yield* Effect.fail(new NoBucketsAvailable());
-    }
-    return response.result[0]; // What if this is someone else's bucket?
-  });
-```
-
-**Naming convention:**
-- Use deterministic names like `itty-cf-{service}-{testname}`
-- Never use `Date.now()` or random suffixes
-- Same name on every test run enables cleanup of leftovers
-
-**Cleanup helpers:**
-- Always create a `cleanup(name)` helper that deletes and ignores errors
-- Call cleanup BEFORE creating (handles leftover from crashed tests)
-- Call cleanup AFTER via `Effect.ensuring` (handles test failures)
-
-```typescript
 const cleanup = (name: string) =>
   deleteBucket({ bucket_name: name }).pipe(Effect.ignore);
 ```
 
-**Worker and Workflow resources:**
-
-Workers can be uploaded via the API using `FormData`. The SDK supports this via `T.HttpFormData()` trait:
+### Error expectation
 
 ```typescript
-// Create FormData for worker upload
-const createWorkerFormData = (script: string) => {
-  const formData = new FormData();
-  formData.append(
-    "worker.js",
-    new Blob([script], { type: "application/javascript+module" }),
-    "worker.js",
-  );
-  formData.append(
-    "metadata",
-    new Blob([JSON.stringify({
-      main_module: "worker.js",
-      compatibility_date: "2024-01-01",
-    })], { type: "application/json" }),
-  );
-  return formData;
-};
-
-// Upload worker
-yield* Workers.workerScriptUploadWorkerModule({
-  account_id: accountId(),
-  script_name: "my-worker",
-  body: createWorkerFormData(WORKER_SCRIPT),
-});
+test("NoSuchBucket on non-existent", () =>
+  R2.getBucket({ account_id: accountId(), bucket_name: "does-not-exist" }).pipe(
+    Effect.flip,
+    Effect.map((e) => expect(e._tag).toBe("NoSuchBucket")),
+  ));
 ```
 
-Workflows require a Worker that exports a Workflow class, then a Workflow resource pointing to it.
+### Naming convention
 
-**Queue-specific patterns:**
+- `itty-cf-{service}-{testname}`
+- Deterministic — same on every run
+- Enables cleanup of leftovers from crashed tests
 
-Queues require special setup for certain operations:
-
-```typescript
-// To pull messages via HTTP, you MUST create an http_pull consumer first
-yield* Queues.createConsumer({
-  account_id: accountId(),
-  queue_id: queueId,
-  body: {
-    type: "http_pull",
-    settings: {
-      batch_size: 10,
-      visibility_timeout_ms: 30000,
-    },
-  },
-});
-
-// Now you can pull messages
-const messages = yield* Queues.queuesPullMessages({
-  account_id: accountId(),
-  queue_id: queueId,
-  body: { batch_size: 10, visibility_timeout_ms: 30000 },
-});
-
-// Push messages require body and content_type
-yield* Queues.queuesPushMessage({
-  account_id: accountId(),
-  queue_id: queueId,
-  body: { body: "message content", content_type: "text" },
-});
-```
-
-**Queue test helper pattern:**
-
-```typescript
-const withQueue = <A, E, R>(
-  name: string,
-  fn: (queueId: string) => Effect.Effect<A, E, R>,
-) =>
-  Effect.gen(function* () {
-    yield* cleanupByName(name);
-    
-    const created = yield* Queues.create({
-      account_id: accountId(),
-      body: { queue_name: name },
-    });
-    
-    const queueId = (created.result as { queue_id: string }).queue_id;
-    return yield* fn(queueId);
-  }).pipe(Effect.ensuring(cleanupByName(name)));
-```
-
-**Use `Effect.ensuring` for cleanup, NOT `try/finally`:**
-
-```typescript
-// GOOD: Effect.ensuring guarantees cleanup
-fn(name).pipe(Effect.ensuring(cleanup(name)))
-
-// BAD: try/finally doesn't work in Effect.gen
-Effect.gen(function* () {
-  try {
-    return yield* fn(name);
-  } finally {
-    yield* cleanup(name); // This doesn't work as expected!
-  }
-});
-```
-
-## CONVENTIONS
-
-**Code:**
-- `const` arrow functions, `Effect.gen` + `pipe`
-- `Effect.retry` + `Schedule` for retries
-- Commits: `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, `test:`
-
-**Services:**
-- One file per Cloudflare service
-- Export operation functions as named exports
-- Export request/response classes for consumers
-- Include JSDoc with usage examples
-
-**Errors:**
-- Use semantic names (not just codes)
-- Classify into categories for pattern matching
-- Document which operations return which errors
+---
 
 ## ADDING A NEW SERVICE
 
-1. **Generate from OpenAPI:**
-   ```bash
-   bun generate --fetch --service myservice
-   ```
+1. Generate: `bun generate --fetch --service myservice`
+2. Write tests in `test/services/myservice.test.ts`
+3. Run tests, discover failures
+4. For `UnknownCloudflareError`: catalog in `error-catalog.json` + `myservice.json`
+5. For `Schema decode failed`: patch in `openapi.patch.jsonc`
+6. Regenerate: `bun generate --service myservice`
+7. Repeat until all tests pass
 
-2. **Run error discovery:**
-   ```bash
-   bun find myservice
-   ```
+---
 
-3. **Review and classify errors** in `spec/error-catalog.json`
+## ARCHITECTURE
 
-4. **Create per-operation error patches** in `spec/myservice.json`
+```
+OpenAPI Spec + Patches → Generator → src/services/*.ts → Runtime
+                                           ↓
+                              Error Catalog + Service Errors
+```
 
-5. **Regenerate with errors:**
-   ```bash
-   bun generate --service myservice
-   ```
+**Generator:** `scripts/generate-clients.ts`
+1. Loads spec from `.cache/openapi.json` (or fetches)
+2. Applies patches from `spec/openapi.patch.jsonc`
+3. Groups operations by service
+4. Generates Effect Schema request/response types
+5. Outputs to `src/services/{service}.ts`
 
-6. **Write tests** in `test/services/myservice.test.ts`
+**Traits:** HTTP bindings as Schema annotations
 
-7. **Update exports** in `src/index.ts` if needed
+| Trait | Purpose |
+|-------|---------|
+| `T.HttpPath(name)` | Path parameter |
+| `T.HttpQuery(name)` | Query parameter |
+| `T.HttpHeader(name)` | Header |
+| `T.HttpBody()` | JSON body |
+| `T.HttpFormData()` | Multipart form-data |
 
-## AVAILABLE SERVICES
+---
 
-| Service | File | Description |
-|---------|------|-------------|
-| Workers | `src/services/workers.ts` | Worker scripts, settings, deployments, versions, cron triggers |
-| KV | `src/services/kv.ts` | Workers KV namespaces and key-value operations |
-| R2 | `src/services/r2.ts` | R2 object storage buckets, CORS, lifecycle, public access |
-| Queues | `src/services/queues.ts` | Queue CRUD, consumers (http_pull), message push/pull, purge |
-| Workflows | `src/services/workflows.ts` | Workflow definitions, instances, versions |
-| DNS | `src/services/dns.ts` | DNS record management (zone-scoped) |
+## ENVIRONMENT
 
-### Service-Specific Notes
+```bash
+# Required
+CLOUDFLARE_API_TOKEN=xxx
+CLOUDFLARE_ACCOUNT_ID=xxx
+
+# Optional (for zone-scoped tests)
+CLOUDFLARE_ZONE_ID=xxx
+
+# Download from Doppler
+bun run download:env
+```
+
+---
+
+## SERVICE NOTES
 
 **Queues:**
-- Use `create`, `get_`, `delete_`, `update` for queue CRUD
-- Create `http_pull` consumer before calling `queuesPullMessages`
-- Message push requires `body` and `content_type` fields
-- Purge status (`get_1`) returns null until a purge is triggered
+- Create `http_pull` consumer before pulling messages
+- Function names: `create`, `get_`, `delete_`, `update`
 
 **R2:**
-- Bucket location enum: API returns uppercase (`WNAM`), spec has lowercase
-- Lifecycle rules: `conditions` object may be empty (no prefix)
-- Fresh buckets have no CORS config (returns `NoCorsConfiguration` error)
+- Location enum has uppercase/lowercase variants
+- Fresh buckets return `NoCorsConfiguration` (not 404)
 
-## EXTERNAL REFERENCES
-
-- [Cloudflare API Documentation](https://developers.cloudflare.com/api/)
-- [Cloudflare OpenAPI Schema](https://github.com/cloudflare/api-schemas)
-- [Effect Documentation](https://effect.website/)
+**Workers:**
+- Upload via FormData with metadata blob
+- Workflows require a worker that exports Workflow class
