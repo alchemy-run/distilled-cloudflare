@@ -132,11 +132,7 @@ function generateErrorName(code: number, message: string): string {
 /**
  * Suggest a category based on code ranges and message.
  */
-function suggestCategory(
-  code: number,
-  message: string,
-  catalog: ErrorCatalogData,
-): string {
+function suggestCategory(code: number, message: string, catalog: ErrorCatalogData): string {
   const lowerMessage = message.toLowerCase();
 
   // Check message patterns first

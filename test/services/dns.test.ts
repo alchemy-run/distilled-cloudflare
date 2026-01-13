@@ -33,7 +33,9 @@ const findRecord = (name: string, type: string) =>
       name,
       type: type as "A" | "AAAA" | "CNAME" | "TXT",
     });
-    const result = response.result as { result?: Array<{ id: string; name: string; type: string }> };
+    const result = response.result as {
+      result?: Array<{ id: string; name: string; type: string }>;
+    };
     const records = result.result ?? [];
     return records.find((r) => r.name === name && r.type === type);
   });
@@ -145,71 +147,59 @@ describe.skipIf(!hasZone())("DNS", () => {
       }));
 
     test("create TXT record", () =>
-      withRecord(
-        "itty-cf-dns-txt",
-        "TXT",
-        "v=spf1 -all",
-        (recordId) =>
-          Effect.gen(function* () {
-            const fetched = yield* DNS.dnsRecordsForAZoneDnsRecordDetails({
-              zone_id: zoneId(),
-              dns_record_id: recordId,
-            });
-            expect(fetched.result).toBeDefined();
-          }),
+      withRecord("itty-cf-dns-txt", "TXT", "v=spf1 -all", (recordId) =>
+        Effect.gen(function* () {
+          const fetched = yield* DNS.dnsRecordsForAZoneDnsRecordDetails({
+            zone_id: zoneId(),
+            dns_record_id: recordId,
+          });
+          expect(fetched.result).toBeDefined();
+        }),
       ));
 
     test("update DNS record", () =>
-      withRecord(
-        "itty-cf-dns-update",
-        "A",
-        "192.0.2.1",
-        (recordId) =>
-          Effect.gen(function* () {
-            // Update the record
-            yield* DNS.updateDnsRecord({
-              zone_id: zoneId(),
-              dns_record_id: recordId,
-              body: {
-                type: "A",
-                name: "itty-cf-dns-update",
-                content: "192.0.2.2",
-                ttl: 600,
-              } as Record<string, unknown>,
-            });
+      withRecord("itty-cf-dns-update", "A", "192.0.2.1", (recordId) =>
+        Effect.gen(function* () {
+          // Update the record
+          yield* DNS.updateDnsRecord({
+            zone_id: zoneId(),
+            dns_record_id: recordId,
+            body: {
+              type: "A",
+              name: "itty-cf-dns-update",
+              content: "192.0.2.2",
+              ttl: 600,
+            } as Record<string, unknown>,
+          });
 
-            // Verify update
-            const fetched = yield* DNS.dnsRecordsForAZoneDnsRecordDetails({
-              zone_id: zoneId(),
-              dns_record_id: recordId,
-            });
-            expect(fetched.result).toBeDefined();
-          }),
+          // Verify update
+          const fetched = yield* DNS.dnsRecordsForAZoneDnsRecordDetails({
+            zone_id: zoneId(),
+            dns_record_id: recordId,
+          });
+          expect(fetched.result).toBeDefined();
+        }),
       ));
 
     test("patch DNS record", () =>
-      withRecord(
-        "itty-cf-dns-patch",
-        "A",
-        "192.0.2.1",
-        (recordId) =>
-          Effect.gen(function* () {
-            // Patch the record (partial update)
-            yield* DNS.patchDnsRecord({
-              zone_id: zoneId(),
-              dns_record_id: recordId,
-              body: {
-                ttl: 900,
-              } as Record<string, unknown>,
-            });
+      withRecord("itty-cf-dns-patch", "A", "192.0.2.1", (recordId) =>
+        Effect.gen(function* () {
+          // Patch the record (partial update)
+          yield* DNS.patchDnsRecord({
+            zone_id: zoneId(),
+            dns_record_id: recordId,
+            body: {
+              ttl: 900,
+            } as Record<string, unknown>,
+          });
 
-            // Verify patch
-            const fetched = yield* DNS.dnsRecordsForAZoneDnsRecordDetails({
-              zone_id: zoneId(),
-              dns_record_id: recordId,
-            });
-            expect(fetched.result).toBeDefined();
-          }),
+          // Verify patch
+          const fetched = yield* DNS.dnsRecordsForAZoneDnsRecordDetails({
+            zone_id: zoneId(),
+            dns_record_id: recordId,
+          });
+          expect(fetched.result).toBeDefined();
+        }),
       ));
   });
 

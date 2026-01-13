@@ -1,6 +1,64 @@
 {
   "$schema": "./openapi.patch.schema.json",
   "paths": {
+    "/accounts/{account_id}/workers/scripts-search": {
+      "get": {
+        "operationId": "worker-script-search-workers",
+        "summary": "Search workers scripts",
+        "tags": ["Workers"],
+        "parameters": [
+          { "name": "account_id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "name", "in": "query", "schema": { "type": "string" } },
+          { "name": "id", "in": "query", "schema": { "type": "string" } },
+          { "name": "page", "in": "query", "schema": { "type": "integer" } },
+          { "name": "per_page", "in": "query", "schema": { "type": "integer" } },
+          { "name": "order_by", "in": "query", "schema": { "type": "string" } },
+          { "name": "direction", "in": "query", "schema": { "type": "string", "enum": ["asc", "desc"] } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "errors": { "type": "array", "items": { "type": "object" } },
+                    "messages": { "type": "array", "items": { "type": "object" } },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string", "description": "Script tag identifier" },
+                          "script_name": { "type": "string" },
+                          "created_on": { "type": "string", "format": "date-time" },
+                          "modified_on": { "type": "string", "format": "date-time" },
+                          "environment_is_default": { "type": "boolean" },
+                          "environment_name": { "type": "string" },
+                          "service_name": { "type": "string" }
+                        },
+                        "required": ["id", "script_name", "created_on", "modified_on"]
+                      }
+                    },
+                    "result_info": {
+                      "type": "object",
+                      "properties": {
+                        "page": { "type": "integer" },
+                        "per_page": { "type": "integer" },
+                        "count": { "type": "integer" },
+                        "total_count": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/accounts/{account_id}/containers/applications": {
       "get": {
         "operationId": "listContainerApplications",
@@ -593,6 +651,30 @@
               "memory_mib": { "type": "integer" },
               "memory": { "type": "string" },
               "disk_mb": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "workers_script-response-upload": {
+        "description": "Worker upload response. Patched: API only returns id, not startup_time_ms.",
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "entry_point": { "type": "string" },
+          "startup_time_ms": { "type": "integer" }
+        }
+      },
+      "workers_api-response-null-result": {
+        "description": "Delete response. Patched: API returns {id} not null.",
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "errors": { "type": "array", "items": { "type": "object" } },
+          "messages": { "type": "array", "items": { "type": "object" } },
+          "result": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" }
             }
           }
         }

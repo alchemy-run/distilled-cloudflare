@@ -25,6 +25,7 @@
     "10007": { "name": "NoSuchKey", "category": "NotFoundError" },
     "10008": { "name": "BucketNotEmpty", "category": "ConflictError" },
     "10009": { "name": "TooManyBuckets", "category": "ThrottlingError" },
+    "10010": { "name": "ParseError", "category": "BadRequestError" },
     "10011": { "name": "EntityTooSmall", "category": "BadRequestError" },
     "10012": { "name": "MetadataTooLarge", "category": "BadRequestError" },
     "10013": { "name": "IncompleteBody", "category": "BadRequestError" },

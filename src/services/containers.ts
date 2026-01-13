@@ -17,6 +17,15 @@ import {
   CloudflareNetworkError,
   CloudflareHttpError,
 } from "../errors.ts";
+import {
+  AuthenticationError,
+  InvalidToken,
+  MissingToken,
+  RateLimited,
+  TokenExpired,
+  TooManyRequests,
+  Unauthorized,
+} from "../errors/generated.ts";
 
 export interface PubliclistapplicationsRequest {
   name?: string;
@@ -31,12 +40,12 @@ export const PubliclistapplicationsRequest = Schema.Struct({
 ).annotations({ identifier: "PubliclistapplicationsRequest" }) as unknown as Schema.Schema<PubliclistapplicationsRequest>;
 
 export interface PubliclistapplicationsResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PubliclistapplicationsResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -50,12 +59,12 @@ export const publiclistapplications: (
   input: PubliclistapplicationsRequest
 ) => Effect.Effect<
   PubliclistapplicationsResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: PubliclistapplicationsRequest,
   output: PubliclistapplicationsResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface GenerateimageregistrycredentialsRequest {
@@ -74,12 +83,12 @@ export const GenerateimageregistrycredentialsRequest = Schema.Struct({
 ).annotations({ identifier: "GenerateimageregistrycredentialsRequest" }) as unknown as Schema.Schema<GenerateimageregistrycredentialsRequest>;
 
 export interface GenerateimageregistrycredentialsResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GenerateimageregistrycredentialsResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -93,12 +102,12 @@ export const generateimageregistrycredentials: (
   input: GenerateimageregistrycredentialsRequest
 ) => Effect.Effect<
   GenerateimageregistrycredentialsResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GenerateimageregistrycredentialsRequest,
   output: GenerateimageregistrycredentialsResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface ListcontainerapplicationsRequest {
@@ -112,13 +121,12 @@ export const ListcontainerapplicationsRequest = Schema.Struct({
 ).annotations({ identifier: "ListcontainerapplicationsRequest" }) as unknown as Schema.Schema<ListcontainerapplicationsRequest>;
 
 export interface ListcontainerapplicationsResponse {
-  result: { result?: { id?: string; name?: string; account_id?: string; scheduling_policy?: string; instances?: number; max_instances?: number; created_at?: string; version?: number; durable_object_namespace_id?: string; constraints?: { tier?: number }; configuration?: { image: string; instance_type?: string; vcpu?: number; memory?: string; observability?: { logs?: { enabled?: boolean } }; ssh_public_key_ids?: string[]; secrets?: { name?: string; type?: "env"; secret?: string }[]; disk?: { size?: string }; environment_variables?: { name?: string; value?: string }[]; labels?: { name?: string; value?: string }[]; network?: { assign_ipv4?: "none" | "predefined" | "account"; assign_ipv6?: "none" | "predefined" | "account"; mode?: "public" | "private" }; command?: string[]; entrypoint?: string[]; dns?: { servers?: string[]; searches?: string[] }; ports?: { name?: string; port?: number }[]; checks?: { name?: string; type?: "http" | "tcp"; tls?: boolean; port?: string; http?: { method?: string; body?: string; path?: string; headers?: Record<string, unknown> }; interval?: string; timeout?: string; retries?: number; kind?: "health" | "ready" }[] }; durable_objects?: { namespace_id?: string }; health?: { instances?: Record<string, unknown> } }[] };
+  result: { id?: string; name?: string; account_id?: string; scheduling_policy?: string; instances?: number; max_instances?: number; created_at?: string; version?: number; durable_object_namespace_id?: string; constraints?: { tier?: number }; configuration?: { image: string; instance_type?: string; vcpu?: number; memory?: string; observability?: { logs?: { enabled?: boolean } }; ssh_public_key_ids?: string[]; secrets?: { name?: string; type?: "env"; secret?: string }[]; disk?: { size?: string }; environment_variables?: { name?: string; value?: string }[]; labels?: { name?: string; value?: string }[]; network?: { assign_ipv4?: "none" | "predefined" | "account"; assign_ipv6?: "none" | "predefined" | "account"; mode?: "public" | "private" }; command?: string[]; entrypoint?: string[]; dns?: { servers?: string[]; searches?: string[] }; ports?: { name?: string; port?: number }[]; checks?: { name?: string; type?: "http" | "tcp"; tls?: boolean; port?: string; http?: { method?: string; body?: string; path?: string; headers?: Record<string, unknown> }; interval?: string; timeout?: string; retries?: number; kind?: "health" | "ready" }[] }; durable_objects?: { namespace_id?: string }; health?: { instances?: Record<string, unknown> } }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListcontainerapplicationsResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Array(Schema.Struct({
+  result: Schema.Array(Schema.Struct({
   id: Schema.optional(Schema.String),
   name: Schema.optional(Schema.String),
   account_id: Schema.optional(Schema.String),
@@ -196,8 +204,7 @@ export const ListcontainerapplicationsResponse = Schema.Struct({
   health: Schema.optional(Schema.Struct({
   instances: Schema.optional(Schema.Struct({}))
 }))
-})))
-}),
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -211,12 +218,12 @@ export const listcontainerapplications: (
   input: ListcontainerapplicationsRequest
 ) => Effect.Effect<
   ListcontainerapplicationsResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: ListcontainerapplicationsRequest,
   output: ListcontainerapplicationsResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface CreatecontainerapplicationRequest {
@@ -305,13 +312,12 @@ export const CreatecontainerapplicationRequest = Schema.Struct({
 ).annotations({ identifier: "CreatecontainerapplicationRequest" }) as unknown as Schema.Schema<CreatecontainerapplicationRequest>;
 
 export interface CreatecontainerapplicationResponse {
-  result: { result?: { id?: string; name?: string; account_id?: string; scheduling_policy?: string; instances?: number; max_instances?: number; created_at?: string; version?: number; durable_object_namespace_id?: string; constraints?: { tier?: number }; configuration?: { image: string; instance_type?: string; vcpu?: number; memory?: string; observability?: { logs?: { enabled?: boolean } }; ssh_public_key_ids?: string[]; secrets?: { name?: string; type?: "env"; secret?: string }[]; disk?: { size?: string }; environment_variables?: { name?: string; value?: string }[]; labels?: { name?: string; value?: string }[]; network?: { assign_ipv4?: "none" | "predefined" | "account"; assign_ipv6?: "none" | "predefined" | "account"; mode?: "public" | "private" }; command?: string[]; entrypoint?: string[]; dns?: { servers?: string[]; searches?: string[] }; ports?: { name?: string; port?: number }[]; checks?: { name?: string; type?: "http" | "tcp"; tls?: boolean; port?: string; http?: { method?: string; body?: string; path?: string; headers?: Record<string, unknown> }; interval?: string; timeout?: string; retries?: number; kind?: "health" | "ready" }[] }; durable_objects?: { namespace_id?: string }; health?: { instances?: Record<string, unknown> } } };
+  result: { id?: string; name?: string; account_id?: string; scheduling_policy?: string; instances?: number; max_instances?: number; created_at?: string; version?: number; durable_object_namespace_id?: string; constraints?: { tier?: number }; configuration?: { image: string; instance_type?: string; vcpu?: number; memory?: string; observability?: { logs?: { enabled?: boolean } }; ssh_public_key_ids?: string[]; secrets?: { name?: string; type?: "env"; secret?: string }[]; disk?: { size?: string }; environment_variables?: { name?: string; value?: string }[]; labels?: { name?: string; value?: string }[]; network?: { assign_ipv4?: "none" | "predefined" | "account"; assign_ipv6?: "none" | "predefined" | "account"; mode?: "public" | "private" }; command?: string[]; entrypoint?: string[]; dns?: { servers?: string[]; searches?: string[] }; ports?: { name?: string; port?: number }[]; checks?: { name?: string; type?: "http" | "tcp"; tls?: boolean; port?: string; http?: { method?: string; body?: string; path?: string; headers?: Record<string, unknown> }; interval?: string; timeout?: string; retries?: number; kind?: "health" | "ready" }[] }; durable_objects?: { namespace_id?: string }; health?: { instances?: Record<string, unknown> } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreatecontainerapplicationResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   id: Schema.optional(Schema.String),
   name: Schema.optional(Schema.String),
   account_id: Schema.optional(Schema.String),
@@ -388,7 +394,6 @@ export const CreatecontainerapplicationResponse = Schema.Struct({
 })),
   health: Schema.optional(Schema.Struct({
   instances: Schema.optional(Schema.Struct({}))
-}))
 }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -404,12 +409,12 @@ export const createcontainerapplication: (
   input: CreatecontainerapplicationRequest
 ) => Effect.Effect<
   CreatecontainerapplicationResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: CreatecontainerapplicationRequest,
   output: CreatecontainerapplicationResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface GetcontainerapplicationRequest {
@@ -425,13 +430,12 @@ export const GetcontainerapplicationRequest = Schema.Struct({
 ).annotations({ identifier: "GetcontainerapplicationRequest" }) as unknown as Schema.Schema<GetcontainerapplicationRequest>;
 
 export interface GetcontainerapplicationResponse {
-  result: { result?: { id?: string; name?: string; account_id?: string; scheduling_policy?: string; instances?: number; max_instances?: number; created_at?: string; version?: number; durable_object_namespace_id?: string; constraints?: { tier?: number }; configuration?: { image: string; instance_type?: string; vcpu?: number; memory?: string; observability?: { logs?: { enabled?: boolean } }; ssh_public_key_ids?: string[]; secrets?: { name?: string; type?: "env"; secret?: string }[]; disk?: { size?: string }; environment_variables?: { name?: string; value?: string }[]; labels?: { name?: string; value?: string }[]; network?: { assign_ipv4?: "none" | "predefined" | "account"; assign_ipv6?: "none" | "predefined" | "account"; mode?: "public" | "private" }; command?: string[]; entrypoint?: string[]; dns?: { servers?: string[]; searches?: string[] }; ports?: { name?: string; port?: number }[]; checks?: { name?: string; type?: "http" | "tcp"; tls?: boolean; port?: string; http?: { method?: string; body?: string; path?: string; headers?: Record<string, unknown> }; interval?: string; timeout?: string; retries?: number; kind?: "health" | "ready" }[] }; durable_objects?: { namespace_id?: string }; health?: { instances?: Record<string, unknown> } } };
+  result: { id?: string; name?: string; account_id?: string; scheduling_policy?: string; instances?: number; max_instances?: number; created_at?: string; version?: number; durable_object_namespace_id?: string; constraints?: { tier?: number }; configuration?: { image: string; instance_type?: string; vcpu?: number; memory?: string; observability?: { logs?: { enabled?: boolean } }; ssh_public_key_ids?: string[]; secrets?: { name?: string; type?: "env"; secret?: string }[]; disk?: { size?: string }; environment_variables?: { name?: string; value?: string }[]; labels?: { name?: string; value?: string }[]; network?: { assign_ipv4?: "none" | "predefined" | "account"; assign_ipv6?: "none" | "predefined" | "account"; mode?: "public" | "private" }; command?: string[]; entrypoint?: string[]; dns?: { servers?: string[]; searches?: string[] }; ports?: { name?: string; port?: number }[]; checks?: { name?: string; type?: "http" | "tcp"; tls?: boolean; port?: string; http?: { method?: string; body?: string; path?: string; headers?: Record<string, unknown> }; interval?: string; timeout?: string; retries?: number; kind?: "health" | "ready" }[] }; durable_objects?: { namespace_id?: string }; health?: { instances?: Record<string, unknown> } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetcontainerapplicationResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   id: Schema.optional(Schema.String),
   name: Schema.optional(Schema.String),
   account_id: Schema.optional(Schema.String),
@@ -509,7 +513,6 @@ export const GetcontainerapplicationResponse = Schema.Struct({
   health: Schema.optional(Schema.Struct({
   instances: Schema.optional(Schema.Struct({}))
 }))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -524,12 +527,12 @@ export const getcontainerapplication: (
   input: GetcontainerapplicationRequest
 ) => Effect.Effect<
   GetcontainerapplicationResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetcontainerapplicationRequest,
   output: GetcontainerapplicationResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface DeletecontainerapplicationRequest {
@@ -545,14 +548,12 @@ export const DeletecontainerapplicationRequest = Schema.Struct({
 ).annotations({ identifier: "DeletecontainerapplicationRequest" }) as unknown as Schema.Schema<DeletecontainerapplicationRequest>;
 
 export interface DeletecontainerapplicationResponse {
-  result: { result?: Record<string, unknown> };
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeletecontainerapplicationResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -566,12 +567,12 @@ export const deletecontainerapplication: (
   input: DeletecontainerapplicationRequest
 ) => Effect.Effect<
   DeletecontainerapplicationResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DeletecontainerapplicationRequest,
   output: DeletecontainerapplicationResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface UpdatecontainerapplicationRequest {
@@ -661,13 +662,12 @@ export const UpdatecontainerapplicationRequest = Schema.Struct({
 ).annotations({ identifier: "UpdatecontainerapplicationRequest" }) as unknown as Schema.Schema<UpdatecontainerapplicationRequest>;
 
 export interface UpdatecontainerapplicationResponse {
-  result: { result?: { id?: string; name?: string; account_id?: string; scheduling_policy?: string; instances?: number; max_instances?: number; created_at?: string; version?: number; durable_object_namespace_id?: string; constraints?: { tier?: number }; configuration?: { image: string; instance_type?: string; vcpu?: number; memory?: string; observability?: { logs?: { enabled?: boolean } }; ssh_public_key_ids?: string[]; secrets?: { name?: string; type?: "env"; secret?: string }[]; disk?: { size?: string }; environment_variables?: { name?: string; value?: string }[]; labels?: { name?: string; value?: string }[]; network?: { assign_ipv4?: "none" | "predefined" | "account"; assign_ipv6?: "none" | "predefined" | "account"; mode?: "public" | "private" }; command?: string[]; entrypoint?: string[]; dns?: { servers?: string[]; searches?: string[] }; ports?: { name?: string; port?: number }[]; checks?: { name?: string; type?: "http" | "tcp"; tls?: boolean; port?: string; http?: { method?: string; body?: string; path?: string; headers?: Record<string, unknown> }; interval?: string; timeout?: string; retries?: number; kind?: "health" | "ready" }[] }; durable_objects?: { namespace_id?: string }; health?: { instances?: Record<string, unknown> } } };
+  result: { id?: string; name?: string; account_id?: string; scheduling_policy?: string; instances?: number; max_instances?: number; created_at?: string; version?: number; durable_object_namespace_id?: string; constraints?: { tier?: number }; configuration?: { image: string; instance_type?: string; vcpu?: number; memory?: string; observability?: { logs?: { enabled?: boolean } }; ssh_public_key_ids?: string[]; secrets?: { name?: string; type?: "env"; secret?: string }[]; disk?: { size?: string }; environment_variables?: { name?: string; value?: string }[]; labels?: { name?: string; value?: string }[]; network?: { assign_ipv4?: "none" | "predefined" | "account"; assign_ipv6?: "none" | "predefined" | "account"; mode?: "public" | "private" }; command?: string[]; entrypoint?: string[]; dns?: { servers?: string[]; searches?: string[] }; ports?: { name?: string; port?: number }[]; checks?: { name?: string; type?: "http" | "tcp"; tls?: boolean; port?: string; http?: { method?: string; body?: string; path?: string; headers?: Record<string, unknown> }; interval?: string; timeout?: string; retries?: number; kind?: "health" | "ready" }[] }; durable_objects?: { namespace_id?: string }; health?: { instances?: Record<string, unknown> } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const UpdatecontainerapplicationResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   id: Schema.optional(Schema.String),
   name: Schema.optional(Schema.String),
   account_id: Schema.optional(Schema.String),
@@ -745,7 +745,6 @@ export const UpdatecontainerapplicationResponse = Schema.Struct({
   health: Schema.optional(Schema.Struct({
   instances: Schema.optional(Schema.Struct({}))
 }))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -760,12 +759,12 @@ export const updatecontainerapplication: (
   input: UpdatecontainerapplicationRequest
 ) => Effect.Effect<
   UpdatecontainerapplicationResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: UpdatecontainerapplicationRequest,
   output: UpdatecontainerapplicationResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface CreatecontainerapplicationrolloutRequest {
@@ -847,13 +846,12 @@ export const CreatecontainerapplicationrolloutRequest = Schema.Struct({
 ).annotations({ identifier: "CreatecontainerapplicationrolloutRequest" }) as unknown as Schema.Schema<CreatecontainerapplicationrolloutRequest>;
 
 export interface CreatecontainerapplicationrolloutResponse {
-  result: { result?: { id?: string; created_at?: string; last_updated_at?: string; description?: string; status?: string; kind?: string; strategy?: string; current_version?: number; target_version?: number; health?: { instances?: { healthy?: number; failed?: number; starting?: number; scheduling?: number } }; current_configuration?: { image?: string; observability?: Record<string, unknown> }; target_configuration?: { image: string; instance_type?: string; vcpu?: number; memory?: string; observability?: { logs?: { enabled?: boolean } }; ssh_public_key_ids?: string[]; secrets?: { name?: string; type?: "env"; secret?: string }[]; disk?: { size?: string }; environment_variables?: { name?: string; value?: string }[]; labels?: { name?: string; value?: string }[]; network?: { assign_ipv4?: "none" | "predefined" | "account"; assign_ipv6?: "none" | "predefined" | "account"; mode?: "public" | "private" }; command?: string[]; entrypoint?: string[]; dns?: { servers?: string[]; searches?: string[] }; ports?: { name?: string; port?: number }[]; checks?: { name?: string; type?: "http" | "tcp"; tls?: boolean; port?: string; http?: { method?: string; body?: string; path?: string; headers?: Record<string, unknown> }; interval?: string; timeout?: string; retries?: number; kind?: "health" | "ready" }[] }; steps?: { id?: number; status?: string; step_size?: { percentage?: number }; description?: string; started_at?: string }[]; progress?: { total_steps?: number; current_step?: number; updated_instances?: number; total_instances?: number } } };
+  result: { id?: string; created_at?: string; last_updated_at?: string; description?: string; status?: string; kind?: string; strategy?: string; current_version?: number; target_version?: number; health?: { instances?: { healthy?: number; failed?: number; starting?: number; scheduling?: number } }; current_configuration?: { image?: string; observability?: Record<string, unknown> }; target_configuration?: { image: string; instance_type?: string; vcpu?: number; memory?: string; observability?: { logs?: { enabled?: boolean } }; ssh_public_key_ids?: string[]; secrets?: { name?: string; type?: "env"; secret?: string }[]; disk?: { size?: string }; environment_variables?: { name?: string; value?: string }[]; labels?: { name?: string; value?: string }[]; network?: { assign_ipv4?: "none" | "predefined" | "account"; assign_ipv6?: "none" | "predefined" | "account"; mode?: "public" | "private" }; command?: string[]; entrypoint?: string[]; dns?: { servers?: string[]; searches?: string[] }; ports?: { name?: string; port?: number }[]; checks?: { name?: string; type?: "http" | "tcp"; tls?: boolean; port?: string; http?: { method?: string; body?: string; path?: string; headers?: Record<string, unknown> }; interval?: string; timeout?: string; retries?: number; kind?: "health" | "ready" }[] }; steps?: { id?: number; status?: string; step_size?: { percentage?: number }; description?: string; started_at?: string }[]; progress?: { total_steps?: number; current_step?: number; updated_instances?: number; total_instances?: number } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreatecontainerapplicationrolloutResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   id: Schema.optional(Schema.String),
   created_at: Schema.optional(Schema.String),
   last_updated_at: Schema.optional(Schema.String),
@@ -949,7 +947,6 @@ export const CreatecontainerapplicationrolloutResponse = Schema.Struct({
   updated_instances: Schema.optional(Schema.Number),
   total_instances: Schema.optional(Schema.Number)
 }))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -964,12 +961,12 @@ export const createcontainerapplicationrollout: (
   input: CreatecontainerapplicationrolloutRequest
 ) => Effect.Effect<
   CreatecontainerapplicationrolloutResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: CreatecontainerapplicationrolloutRequest,
   output: CreatecontainerapplicationrolloutResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface GetcontaineridentityRequest {
@@ -983,13 +980,12 @@ export const GetcontaineridentityRequest = Schema.Struct({
 ).annotations({ identifier: "GetcontaineridentityRequest" }) as unknown as Schema.Schema<GetcontaineridentityRequest>;
 
 export interface GetcontaineridentityResponse {
-  result: { result?: { account_id?: string; external_account_id?: string; legacy_identity?: string; capabilities?: string[]; limits?: { account_id?: string; vcpu_per_deployment?: number; memory_mib_per_deployment?: number; memory_per_deployment?: string; disk_per_deployment?: string; disk_mb_per_deployment?: number; total_vcpu?: number; total_memory_mib?: number; node_group?: string; ipv4s?: number; network_modes?: string[]; total_disk_mb?: number; total_memory?: string }; locations?: Record<string, unknown>[]; defaults?: { vcpus?: number; memory_mib?: number; memory?: string; disk_mb?: number } } };
+  result: { account_id?: string; external_account_id?: string; legacy_identity?: string; capabilities?: string[]; limits?: { account_id?: string; vcpu_per_deployment?: number; memory_mib_per_deployment?: number; memory_per_deployment?: string; disk_per_deployment?: string; disk_mb_per_deployment?: number; total_vcpu?: number; total_memory_mib?: number; node_group?: string; ipv4s?: number; network_modes?: string[]; total_disk_mb?: number; total_memory?: string }; locations?: Record<string, unknown>[]; defaults?: { vcpus?: number; memory_mib?: number; memory?: string; disk_mb?: number } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetcontaineridentityResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   account_id: Schema.optional(Schema.String),
   external_account_id: Schema.optional(Schema.String),
   legacy_identity: Schema.optional(Schema.String),
@@ -1016,7 +1012,6 @@ export const GetcontaineridentityResponse = Schema.Struct({
   memory: Schema.optional(Schema.String),
   disk_mb: Schema.optional(Schema.Number)
 }))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1031,10 +1026,10 @@ export const getcontaineridentity: (
   input: GetcontaineridentityRequest
 ) => Effect.Effect<
   GetcontaineridentityResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetcontaineridentityRequest,
   output: GetcontaineridentityResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));

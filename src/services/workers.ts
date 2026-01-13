@@ -40,16 +40,14 @@ export const WorkerAccountSettingsFetchWorkerAccountSettingsRequest = Schema.Str
 ).annotations({ identifier: "WorkerAccountSettingsFetchWorkerAccountSettingsRequest" }) as unknown as Schema.Schema<WorkerAccountSettingsFetchWorkerAccountSettingsRequest>;
 
 export interface WorkerAccountSettingsFetchWorkerAccountSettingsResponse {
-  result: unknown;
+  result: { default_usage_model?: string; green_compute?: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkerAccountSettingsFetchWorkerAccountSettingsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  default_usage_model: Schema.optional(Schema.String),
-  green_compute: Schema.optional(Schema.Boolean)
-})
+  default_usage_model: Schema.optional(Schema.NullOr(Schema.String)),
+  green_compute: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -80,24 +78,22 @@ export interface CreateWorkerAccountSettingsRequest {
 export const CreateWorkerAccountSettingsRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  default_usage_model: Schema.optional(Schema.String),
-  green_compute: Schema.optional(Schema.Boolean)
+  default_usage_model: Schema.optional(Schema.NullOr(Schema.String)),
+  green_compute: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/workers/account-settings" }),
 ).annotations({ identifier: "CreateWorkerAccountSettingsRequest" }) as unknown as Schema.Schema<CreateWorkerAccountSettingsRequest>;
 
 export interface CreateWorkerAccountSettingsResponse {
-  result: unknown;
+  result: { default_usage_model?: string; green_compute?: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateWorkerAccountSettingsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  default_usage_model: Schema.optional(Schema.String),
-  green_compute: Schema.optional(Schema.Boolean)
-})
+  default_usage_model: Schema.optional(Schema.NullOr(Schema.String)),
+  green_compute: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -135,12 +131,12 @@ export const WorkerAssetsUploadRequest = Schema.Struct({
 ).annotations({ identifier: "WorkerAssetsUploadRequest" }) as unknown as Schema.Schema<WorkerAssetsUploadRequest>;
 
 export interface WorkerAssetsUploadResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkerAssetsUploadResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -173,23 +169,21 @@ export const ListRequest = Schema.Struct({
 ).annotations({ identifier: "ListRequest" }) as unknown as Schema.Schema<ListRequest>;
 
 export interface ListResponse {
-  result: unknown;
+  result: { created_by?: string; created_on?: string; modified_by?: string; modified_on?: string; namespace_id?: string; namespace_name?: string; script_count?: number; trusted_workers?: boolean }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Array(Schema.Struct({
-  created_by: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  namespace_id: Schema.optional(Schema.String),
-  namespace_name: Schema.optional(Schema.String),
-  script_count: Schema.optional(Schema.Number),
-  trusted_workers: Schema.optional(Schema.Boolean)
-})))
-}),
+  result: Schema.Array(Schema.Struct({
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  namespace_id: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace_name: Schema.optional(Schema.NullOr(Schema.String)),
+  script_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  trusted_workers: Schema.optional(Schema.NullOr(Schema.Boolean))
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -219,29 +213,27 @@ export interface CreateRequest {
 export const CreateRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  name: Schema.optional(Schema.String)
+  name: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/workers/dispatch/namespaces" }),
 ).annotations({ identifier: "CreateRequest" }) as unknown as Schema.Schema<CreateRequest>;
 
 export interface CreateResponse {
-  result: unknown;
+  result: { created_by?: string; created_on?: string; modified_by?: string; modified_on?: string; namespace_id?: string; namespace_name?: string; script_count?: number; trusted_workers?: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
-  created_by: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  namespace_id: Schema.optional(Schema.String),
-  namespace_name: Schema.optional(Schema.String),
-  script_count: Schema.optional(Schema.Number),
-  trusted_workers: Schema.optional(Schema.Boolean)
-}))
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  namespace_id: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace_name: Schema.optional(Schema.NullOr(Schema.String)),
+  script_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  trusted_workers: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -277,22 +269,20 @@ export const GetNamespaceRequest = Schema.Struct({
 ).annotations({ identifier: "GetNamespaceRequest" }) as unknown as Schema.Schema<GetNamespaceRequest>;
 
 export interface GetNamespaceResponse {
-  result: unknown;
+  result: { created_by?: string; created_on?: string; modified_by?: string; modified_on?: string; namespace_id?: string; namespace_name?: string; script_count?: number; trusted_workers?: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetNamespaceResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
-  created_by: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  namespace_id: Schema.optional(Schema.String),
-  namespace_name: Schema.optional(Schema.String),
-  script_count: Schema.optional(Schema.Number),
-  trusted_workers: Schema.optional(Schema.Boolean)
-}))
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  namespace_id: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace_name: Schema.optional(Schema.NullOr(Schema.String)),
+  script_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  trusted_workers: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -325,30 +315,28 @@ export const PutNamespaceRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   dispatch_namespace: Schema.String.pipe(T.HttpPath("dispatch_namespace")),
   body: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  trusted_workers: Schema.optional(Schema.Boolean)
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  trusted_workers: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}" }),
 ).annotations({ identifier: "PutNamespaceRequest" }) as unknown as Schema.Schema<PutNamespaceRequest>;
 
 export interface PutNamespaceResponse {
-  result: unknown;
+  result: { created_by?: string; created_on?: string; modified_by?: string; modified_on?: string; namespace_id?: string; namespace_name?: string; script_count?: number; trusted_workers?: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PutNamespaceResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
-  created_by: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  namespace_id: Schema.optional(Schema.String),
-  namespace_name: Schema.optional(Schema.String),
-  script_count: Schema.optional(Schema.Number),
-  trusted_workers: Schema.optional(Schema.Boolean)
-}))
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  namespace_id: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace_name: Schema.optional(Schema.NullOr(Schema.String)),
+  script_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  trusted_workers: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -384,13 +372,13 @@ export const DeleteNamespaceRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteNamespaceRequest" }) as unknown as Schema.Schema<DeleteNamespaceRequest>;
 
 export interface DeleteNamespaceResponse {
-  result: unknown;
+  result: { id?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteNamespaceResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Literal(null))
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -423,30 +411,28 @@ export const PatchNamespaceRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   dispatch_namespace: Schema.String.pipe(T.HttpPath("dispatch_namespace")),
   body: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  trusted_workers: Schema.optional(Schema.Boolean)
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  trusted_workers: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}" }),
 ).annotations({ identifier: "PatchNamespaceRequest" }) as unknown as Schema.Schema<PatchNamespaceRequest>;
 
 export interface PatchNamespaceResponse {
-  result: unknown;
+  result: { created_by?: string; created_on?: string; modified_by?: string; modified_on?: string; namespace_id?: string; namespace_name?: string; script_count?: number; trusted_workers?: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PatchNamespaceResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
-  created_by: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  namespace_id: Schema.optional(Schema.String),
-  namespace_name: Schema.optional(Schema.String),
-  script_count: Schema.optional(Schema.Number),
-  trusted_workers: Schema.optional(Schema.Boolean)
-}))
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  namespace_id: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace_name: Schema.optional(Schema.NullOr(Schema.String)),
+  script_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  trusted_workers: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -484,19 +470,17 @@ export const ListScriptsRequest = Schema.Struct({
 ).annotations({ identifier: "ListScriptsRequest" }) as unknown as Schema.Schema<ListScriptsRequest>;
 
 export interface ListScriptsResponse {
-  result: unknown;
+  result: { created_on?: string; dispatch_namespace?: string; modified_on?: string; script?: unknown }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListScriptsResponse = Schema.Struct({
-  result: Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  dispatch_namespace: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  script: Schema.optional(Schema.Unknown)
-}))
-}),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  dispatch_namespace: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  script: Schema.optional(Schema.NullOr(Schema.Unknown))
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -535,18 +519,12 @@ export const DeleteScriptsRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteScriptsRequest" }) as unknown as Schema.Schema<DeleteScriptsRequest>;
 
 export interface DeleteScriptsResponse {
-  result: { deleted?: { id?: string }[]; deleted_count?: number; has_more?: boolean };
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteScriptsResponse = Schema.Struct({
-  result: Schema.Struct({
-  deleted: Schema.optional(Schema.Array(Schema.Struct({
-  id: Schema.optional(Schema.String)
-}))),
-  deleted_count: Schema.optional(Schema.Number),
-  has_more: Schema.optional(Schema.Boolean)
-}),
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -583,18 +561,16 @@ export const NamespaceWorkerScriptWorkerDetailsRequest = Schema.Struct({
 ).annotations({ identifier: "NamespaceWorkerScriptWorkerDetailsRequest" }) as unknown as Schema.Schema<NamespaceWorkerScriptWorkerDetailsRequest>;
 
 export interface NamespaceWorkerScriptWorkerDetailsResponse {
-  result: unknown;
+  result: { created_on?: string; dispatch_namespace?: string; modified_on?: string; script?: unknown };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const NamespaceWorkerScriptWorkerDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  dispatch_namespace: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  script: Schema.optional(Schema.Unknown)
-})
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  dispatch_namespace: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  script: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -634,12 +610,12 @@ export const NamespaceWorkerScriptUploadWorkerModuleRequest = Schema.Struct({
 ).annotations({ identifier: "NamespaceWorkerScriptUploadWorkerModuleRequest" }) as unknown as Schema.Schema<NamespaceWorkerScriptUploadWorkerModuleRequest>;
 
 export interface NamespaceWorkerScriptUploadWorkerModuleResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const NamespaceWorkerScriptUploadWorkerModuleResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -678,13 +654,13 @@ export const DeleteWorkerRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteWorkerRequest" }) as unknown as Schema.Schema<DeleteWorkerRequest>;
 
 export interface DeleteWorkerResponse {
-  result: unknown;
+  result: { id?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteWorkerResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Literal(null))
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -729,16 +705,14 @@ export const CreateAssetsUploadSessionRequest = Schema.Struct({
 ).annotations({ identifier: "CreateAssetsUploadSessionRequest" }) as unknown as Schema.Schema<CreateAssetsUploadSessionRequest>;
 
 export interface CreateAssetsUploadSessionResponse {
-  result: unknown;
+  result: { buckets?: string[][]; jwt?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateAssetsUploadSessionResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
-  buckets: Schema.optional(Schema.Array(Schema.Array(Schema.String))),
-  jwt: Schema.optional(Schema.String)
-}))
+  buckets: Schema.optional(Schema.NullOr(Schema.Array(Schema.Array(Schema.String)))),
+  jwt: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -776,14 +750,12 @@ export const GetScriptBindingsRequest = Schema.Struct({
 ).annotations({ identifier: "GetScriptBindingsRequest" }) as unknown as Schema.Schema<GetScriptBindingsRequest>;
 
 export interface GetScriptBindingsResponse {
-  result: unknown;
+  result: Record<string, unknown>[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetScriptBindingsResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.Array(Schema.Struct({}))
-}),
+  result: Schema.Array(Schema.Struct({})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -820,12 +792,12 @@ export const GetScriptContentRequest = Schema.Struct({
 ).annotations({ identifier: "GetScriptContentRequest" }) as unknown as Schema.Schema<GetScriptContentRequest>;
 
 export interface GetScriptContentResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetScriptContentResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -873,9 +845,7 @@ export interface PutScriptContentResponse {
 }
 
 export const PutScriptContentResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.Unknown
-}),
+  result: Schema.Unknown,
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -912,14 +882,12 @@ export const ListScriptSecretsRequest = Schema.Struct({
 ).annotations({ identifier: "ListScriptSecretsRequest" }) as unknown as Schema.Schema<ListScriptSecretsRequest>;
 
 export interface ListScriptSecretsResponse {
-  result: unknown;
+  result: Record<string, unknown>[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListScriptSecretsResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.Array(Schema.Struct({}))
-}),
+  result: Schema.Array(Schema.Struct({})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -958,14 +926,12 @@ export const PutScriptSecretsRequest = Schema.Struct({
 ).annotations({ identifier: "PutScriptSecretsRequest" }) as unknown as Schema.Schema<PutScriptSecretsRequest>;
 
 export interface PutScriptSecretsResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PutScriptSecretsResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.Struct({})
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -1006,14 +972,12 @@ export const GetScriptSecretsRequest = Schema.Struct({
 ).annotations({ identifier: "GetScriptSecretsRequest" }) as unknown as Schema.Schema<GetScriptSecretsRequest>;
 
 export interface GetScriptSecretsResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetScriptSecretsResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.Struct({})
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -1054,13 +1018,13 @@ export const DeleteScriptSecretRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteScriptSecretRequest" }) as unknown as Schema.Schema<DeleteScriptSecretRequest>;
 
 export interface DeleteScriptSecretResponse {
-  result: unknown;
+  result: { id?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteScriptSecretResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Literal(null))
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1098,59 +1062,57 @@ export const GetScriptSettingsRequest = Schema.Struct({
 ).annotations({ identifier: "GetScriptSettingsRequest" }) as unknown as Schema.Schema<GetScriptSettingsRequest>;
 
 export interface GetScriptSettingsResponse {
-  result: unknown;
+  result: { bindings?: unknown; compatibility_date?: unknown; compatibility_flags?: unknown; limits?: { cpu_ms?: number }; logpush?: boolean; migrations?: unknown; observability?: { enabled: boolean; head_sampling_rate?: number; logs?: { destinations?: string[]; enabled: boolean; head_sampling_rate?: number; invocation_logs: boolean; persist?: boolean } }; placement?: unknown; tags?: unknown; tail_consumers?: unknown; usage_model?: "standard" | "bundled" | "unbound" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetScriptSettingsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
-  bindings: Schema.optional(Schema.Array(Schema.Struct({}))),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
-  limits: Schema.optional(Schema.Struct({
-  cpu_ms: Schema.optional(Schema.Number)
-})),
-  logpush: Schema.optional(Schema.Boolean),
-  migrations: Schema.optional(Schema.Union(Schema.Struct({
-  new_tag: Schema.optional(Schema.String),
-  old_tag: Schema.optional(Schema.String)
+  bindings: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
+  cpu_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  logpush: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  migrations: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  new_tag: Schema.optional(Schema.NullOr(Schema.String)),
+  old_tag: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  steps: Schema.optional(Schema.Array(Schema.Struct({
-  deleted_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_sqlite_classes: Schema.optional(Schema.Array(Schema.String)),
-  renamed_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-}))),
-  transferred_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  from_script: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-})))
-})))
-}))),
-  observability: Schema.optional(Schema.Struct({
+  steps: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  deleted_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_sqlite_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  renamed_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  transferred_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  from_script: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+}))))
+}))))
+})))),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
   enabled: Schema.Boolean,
-  head_sampling_rate: Schema.optional(Schema.Number),
-  logs: Schema.optional(Schema.Struct({
-  destinations: Schema.optional(Schema.Array(Schema.String)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  destinations: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   enabled: Schema.Boolean,
-  head_sampling_rate: Schema.optional(Schema.Number),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
   invocation_logs: Schema.Boolean,
-  persist: Schema.optional(Schema.Boolean)
-}))
-})),
-  placement: Schema.optional(Schema.Struct({})),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  tail_consumers: Schema.optional(Schema.Array(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  namespace: Schema.optional(Schema.String),
-  service: Schema.String
+  persist: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
 }))),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound"))
-}))
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  tags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tail_consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace: Schema.optional(Schema.NullOr(Schema.String)),
+  service: Schema.String
+})))),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1190,59 +1152,57 @@ export const PatchScriptSettingsRequest = Schema.Struct({
 ).annotations({ identifier: "PatchScriptSettingsRequest" }) as unknown as Schema.Schema<PatchScriptSettingsRequest>;
 
 export interface PatchScriptSettingsResponse {
-  result: unknown;
+  result: { bindings?: unknown; compatibility_date?: unknown; compatibility_flags?: unknown; limits?: { cpu_ms?: number }; logpush?: boolean; migrations?: unknown; observability?: { enabled: boolean; head_sampling_rate?: number; logs?: { destinations?: string[]; enabled: boolean; head_sampling_rate?: number; invocation_logs: boolean; persist?: boolean } }; placement?: unknown; tags?: unknown; tail_consumers?: unknown; usage_model?: "standard" | "bundled" | "unbound" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PatchScriptSettingsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
-  bindings: Schema.optional(Schema.Array(Schema.Struct({}))),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
-  limits: Schema.optional(Schema.Struct({
-  cpu_ms: Schema.optional(Schema.Number)
-})),
-  logpush: Schema.optional(Schema.Boolean),
-  migrations: Schema.optional(Schema.Union(Schema.Struct({
-  new_tag: Schema.optional(Schema.String),
-  old_tag: Schema.optional(Schema.String)
+  bindings: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
+  cpu_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  logpush: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  migrations: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  new_tag: Schema.optional(Schema.NullOr(Schema.String)),
+  old_tag: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  steps: Schema.optional(Schema.Array(Schema.Struct({
-  deleted_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_sqlite_classes: Schema.optional(Schema.Array(Schema.String)),
-  renamed_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-}))),
-  transferred_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  from_script: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-})))
-})))
-}))),
-  observability: Schema.optional(Schema.Struct({
+  steps: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  deleted_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_sqlite_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  renamed_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  transferred_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  from_script: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+}))))
+}))))
+})))),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
   enabled: Schema.Boolean,
-  head_sampling_rate: Schema.optional(Schema.Number),
-  logs: Schema.optional(Schema.Struct({
-  destinations: Schema.optional(Schema.Array(Schema.String)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  destinations: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   enabled: Schema.Boolean,
-  head_sampling_rate: Schema.optional(Schema.Number),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
   invocation_logs: Schema.Boolean,
-  persist: Schema.optional(Schema.Boolean)
-}))
-})),
-  placement: Schema.optional(Schema.Struct({})),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  tail_consumers: Schema.optional(Schema.Array(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  namespace: Schema.optional(Schema.String),
-  service: Schema.String
+  persist: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
 }))),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound"))
-}))
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  tags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tail_consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace: Schema.optional(Schema.NullOr(Schema.String)),
+  service: Schema.String
+})))),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1280,14 +1240,12 @@ export const GetScriptTagsRequest = Schema.Struct({
 ).annotations({ identifier: "GetScriptTagsRequest" }) as unknown as Schema.Schema<GetScriptTagsRequest>;
 
 export interface GetScriptTagsResponse {
-  result: unknown;
+  result: string[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetScriptTagsResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Array(Schema.String))
-}),
+  result: Schema.Array(Schema.String),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -1326,14 +1284,12 @@ export const PutScriptTagsRequest = Schema.Struct({
 ).annotations({ identifier: "PutScriptTagsRequest" }) as unknown as Schema.Schema<PutScriptTagsRequest>;
 
 export interface PutScriptTagsResponse {
-  result: unknown;
+  result: string[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PutScriptTagsResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.Array(Schema.String)
-}),
+  result: Schema.Array(Schema.String),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -1372,13 +1328,13 @@ export const PutScriptTagRequest = Schema.Struct({
 ).annotations({ identifier: "PutScriptTagRequest" }) as unknown as Schema.Schema<PutScriptTagRequest>;
 
 export interface PutScriptTagResponse {
-  result: unknown;
+  result: { id?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PutScriptTagResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Literal(null))
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1418,13 +1374,13 @@ export const DeleteScriptTagRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteScriptTagRequest" }) as unknown as Schema.Schema<DeleteScriptTagRequest>;
 
 export interface DeleteScriptTagResponse {
-  result: unknown;
+  result: { id?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteScriptTagResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Literal(null))
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1468,21 +1424,19 @@ export const ListDomainsRequest = Schema.Struct({
 ).annotations({ identifier: "ListDomainsRequest" }) as unknown as Schema.Schema<ListDomainsRequest>;
 
 export interface ListDomainsResponse {
-  result: unknown;
+  result: { environment?: string; hostname?: string; id?: string; service?: string; zone_id?: string; zone_name?: string }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListDomainsResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Array(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  hostname: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  service: Schema.optional(Schema.String),
-  zone_id: Schema.optional(Schema.String),
-  zone_name: Schema.optional(Schema.String)
-})))
-}),
+  result: Schema.Array(Schema.Struct({
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  hostname: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  service: Schema.optional(Schema.NullOr(Schema.String)),
+  zone_id: Schema.optional(Schema.NullOr(Schema.String)),
+  zone_name: Schema.optional(Schema.NullOr(Schema.String))
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -1512,7 +1466,7 @@ export interface WorkerDomainAttachToDomainRequest {
 export const WorkerDomainAttachToDomainRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  environment: Schema.optional(Schema.String),
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   service: Schema.String,
   zone_id: Schema.String
@@ -1522,20 +1476,18 @@ export const WorkerDomainAttachToDomainRequest = Schema.Struct({
 ).annotations({ identifier: "WorkerDomainAttachToDomainRequest" }) as unknown as Schema.Schema<WorkerDomainAttachToDomainRequest>;
 
 export interface WorkerDomainAttachToDomainResponse {
-  result: unknown;
+  result: { environment?: string; hostname?: string; id?: string; service?: string; zone_id?: string; zone_name?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkerDomainAttachToDomainResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  hostname: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  service: Schema.optional(Schema.String),
-  zone_id: Schema.optional(Schema.String),
-  zone_name: Schema.optional(Schema.String)
-}))
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  hostname: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  service: Schema.optional(Schema.NullOr(Schema.String)),
+  zone_id: Schema.optional(Schema.NullOr(Schema.String)),
+  zone_name: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1571,20 +1523,18 @@ export const GetADomainRequest = Schema.Struct({
 ).annotations({ identifier: "GetADomainRequest" }) as unknown as Schema.Schema<GetADomainRequest>;
 
 export interface GetADomainResponse {
-  result: unknown;
+  result: { environment?: string; hostname?: string; id?: string; service?: string; zone_id?: string; zone_name?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetADomainResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  hostname: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  service: Schema.optional(Schema.String),
-  zone_id: Schema.optional(Schema.String),
-  zone_name: Schema.optional(Schema.String)
-}))
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  hostname: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  service: Schema.optional(Schema.NullOr(Schema.String)),
+  zone_id: Schema.optional(Schema.NullOr(Schema.String)),
+  zone_name: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1620,12 +1570,12 @@ export const WorkerDomainDetachFromDomainRequest = Schema.Struct({
 ).annotations({ identifier: "WorkerDomainDetachFromDomainRequest" }) as unknown as Schema.Schema<WorkerDomainDetachFromDomainRequest>;
 
 export interface WorkerDomainDetachFromDomainResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkerDomainDetachFromDomainResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -1662,20 +1612,18 @@ export const ListNamespacesRequest = Schema.Struct({
 ).annotations({ identifier: "ListNamespacesRequest" }) as unknown as Schema.Schema<ListNamespacesRequest>;
 
 export interface ListNamespacesResponse {
-  result: unknown;
+  result: { class?: string; id?: string; name?: string; script?: string; use_sqlite?: boolean }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListNamespacesResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Array(Schema.Struct({
-  class: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  script: Schema.optional(Schema.String),
-  use_sqlite: Schema.optional(Schema.Boolean)
-})))
-}),
+  result: Schema.Array(Schema.Struct({
+  class: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  script: Schema.optional(Schema.NullOr(Schema.String)),
+  use_sqlite: Schema.optional(Schema.NullOr(Schema.Boolean))
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -1714,21 +1662,15 @@ export const ListObjectsRequest = Schema.Struct({
 ).annotations({ identifier: "ListObjectsRequest" }) as unknown as Schema.Schema<ListObjectsRequest>;
 
 export interface ListObjectsResponse {
-  result: unknown;
+  result: { hasStoredData?: boolean; id?: string }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListObjectsResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Array(Schema.Struct({
-  hasStoredData: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String)
-}))),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.optional(Schema.Number),
-  cursor: Schema.optional(Schema.String)
-}))
-}),
+  result: Schema.Array(Schema.Struct({
+  hasStoredData: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String))
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -1767,18 +1709,11 @@ export const DestinationlistRequest = Schema.Struct({
 ).annotations({ identifier: "DestinationlistRequest" }) as unknown as Schema.Schema<DestinationlistRequest>;
 
 export interface DestinationlistResponse {
-  result: { errors: { message: string }[]; messages: { message: "Successful request" }[]; result: { configuration: { destination_conf: string; headers: Record<string, unknown>; jobStatus: { error_message: string; last_complete: string; last_error: string }; logpushDataset: unknown; type: "logpush"; url: string }; enabled: boolean; name: string; scripts: string[]; slug: string }[]; success: true };
+  result: { configuration: { destination_conf: string; headers: Record<string, unknown>; jobStatus: { error_message: string; last_complete: string; last_error: string }; logpushDataset: unknown; type: "logpush"; url: string }; enabled: boolean; name: string; scripts: string[]; slug: string }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DestinationlistResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  message: Schema.Literal("Successful request")
-})),
   result: Schema.Array(Schema.Struct({
   configuration: Schema.Struct({
   destination_conf: Schema.String,
@@ -1797,8 +1732,6 @@ export const DestinationlistResponse = Schema.Struct({
   scripts: Schema.Array(Schema.String),
   slug: Schema.String
 })),
-  success: Schema.Literal(true)
-}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -1840,12 +1773,12 @@ export const DestinationcreateRequest = Schema.Struct({
 ).annotations({ identifier: "DestinationcreateRequest" }) as unknown as Schema.Schema<DestinationcreateRequest>;
 
 export interface DestinationcreateResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DestinationcreateResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -1878,19 +1811,12 @@ export const DestinationsdeleteRequest = Schema.Struct({
 ).annotations({ identifier: "DestinationsdeleteRequest" }) as unknown as Schema.Schema<DestinationsdeleteRequest>;
 
 export interface DestinationsdeleteResponse {
-  result: { errors: { message: string }[]; messages: { message: "Successful request" }[]; result?: { configuration: { destination_conf: string; logpushDataset: unknown; logpushJob: number; type: "logpush"; url: string }; enabled: boolean; name: string; scripts: string[]; slug: string }; success: true };
+  result: { configuration: { destination_conf: string; logpushDataset: unknown; logpushJob: number; type: "logpush"; url: string }; enabled: boolean; name: string; scripts: string[]; slug: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DestinationsdeleteResponse = Schema.Struct({
   result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  message: Schema.Literal("Successful request")
-})),
-  result: Schema.optional(Schema.Struct({
   configuration: Schema.Struct({
   destination_conf: Schema.String,
   logpushDataset: Schema.Union(Schema.Literal("opentelemetry-traces"), Schema.Literal("opentelemetry-logs")),
@@ -1902,8 +1828,6 @@ export const DestinationsdeleteResponse = Schema.Struct({
   name: Schema.String,
   scripts: Schema.Array(Schema.String),
   slug: Schema.String
-})),
-  success: Schema.Literal(true)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1946,18 +1870,11 @@ export const DestinationupdateRequest = Schema.Struct({
 ).annotations({ identifier: "DestinationupdateRequest" }) as unknown as Schema.Schema<DestinationupdateRequest>;
 
 export interface DestinationupdateResponse {
-  result: { errors: { message: string }[]; messages: { message: "Successful request" }[]; result: { configuration: { destination_conf: string; logpushDataset: unknown; logpushJob: number; type: "logpush"; url: string }; enabled: boolean; name: string; scripts: string[]; slug: string }; success: true };
+  result: { configuration: { destination_conf: string; logpushDataset: unknown; logpushJob: number; type: "logpush"; url: string }; enabled: boolean; name: string; scripts: string[]; slug: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DestinationupdateResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  message: Schema.Literal("Successful request")
-})),
   result: Schema.Struct({
   configuration: Schema.Struct({
   destination_conf: Schema.String,
@@ -1970,8 +1887,6 @@ export const DestinationupdateResponse = Schema.Struct({
   name: Schema.String,
   scripts: Schema.Array(Schema.String),
   slug: Schema.String
-}),
-  success: Schema.Literal(true)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2000,51 +1915,42 @@ export interface TelemetrykeyslistRequest {
 
 export const TelemetrykeyslistRequest = Schema.Struct({
   body: Schema.Struct({
-  datasets: Schema.optional(Schema.Array(Schema.String)),
-  filters: Schema.optional(Schema.Array(Schema.Struct({
+  datasets: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  filters: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   operation: Schema.Literal("includes", "not_includes", "starts_with", "regex", "exists", "is_null", "in", "not_in", "eq", "neq", "gt", "gte", "lt", "lte", "=", "!=", ">", ">=", "<", "<=", "INCLUDES", "DOES_NOT_INCLUDE", "MATCH_REGEX", "EXISTS", "DOES_NOT_EXIST", "IN", "NOT_IN", "STARTS_WITH"),
   type: Schema.Literal("string", "number", "boolean"),
-  value: Schema.optional(Schema.Union(Schema.String, Schema.Number, Schema.Boolean))
+  value: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number, Schema.Boolean)))
+})))),
+  from: Schema.optional(Schema.NullOr(Schema.Number)),
+  keyNeedle: Schema.optional(Schema.NullOr(Schema.Struct({
+  isRegex: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  matchCase: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
 }))),
-  from: Schema.optional(Schema.Number),
-  keyNeedle: Schema.optional(Schema.Struct({
-  isRegex: Schema.optional(Schema.Boolean),
-  matchCase: Schema.optional(Schema.Boolean),
+  limit: Schema.optional(Schema.NullOr(Schema.Number)),
+  needle: Schema.optional(Schema.NullOr(Schema.Struct({
+  isRegex: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  matchCase: Schema.optional(Schema.NullOr(Schema.Boolean)),
   value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
-})),
-  limit: Schema.optional(Schema.Number),
-  needle: Schema.optional(Schema.Struct({
-  isRegex: Schema.optional(Schema.Boolean),
-  matchCase: Schema.optional(Schema.Boolean),
-  value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
-})),
-  to: Schema.optional(Schema.Number)
+}))),
+  to: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/workers/observability/telemetry/keys" }),
 ).annotations({ identifier: "TelemetrykeyslistRequest" }) as unknown as Schema.Schema<TelemetrykeyslistRequest>;
 
 export interface TelemetrykeyslistResponse {
-  result: { errors: { message: string }[]; messages: { message: "Successful request" }[]; result: { key: string; lastSeenAt: number; type: "string" | "boolean" | "number" }[]; success: true };
+  result: { key: string; lastSeenAt: number; type: "string" | "boolean" | "number" }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const TelemetrykeyslistResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  message: Schema.Literal("Successful request")
-})),
   result: Schema.Array(Schema.Struct({
   key: Schema.String,
   lastSeenAt: Schema.Number,
   type: Schema.Literal("string", "boolean", "number")
 })),
-  success: Schema.Literal(true)
-}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -2072,97 +1978,90 @@ export interface TelemetryqueryRequest {
 
 export const TelemetryqueryRequest = Schema.Struct({
   body: Schema.Struct({
-  chart: Schema.optional(Schema.Boolean),
-  compare: Schema.optional(Schema.Boolean),
-  dry: Schema.optional(Schema.Boolean),
-  granularity: Schema.optional(Schema.Number),
-  ignoreSeries: Schema.optional(Schema.Boolean),
-  limit: Schema.optional(Schema.Number),
-  offset: Schema.optional(Schema.String),
-  offsetBy: Schema.optional(Schema.Number),
-  offsetDirection: Schema.optional(Schema.String),
-  parameters: Schema.optional(Schema.Struct({
-  calculations: Schema.optional(Schema.Array(Schema.Struct({
-  alias: Schema.optional(Schema.String),
-  key: Schema.optional(Schema.String),
-  keyType: Schema.optional(Schema.Literal("string", "number", "boolean")),
+  chart: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  compare: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  dry: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  granularity: Schema.optional(Schema.NullOr(Schema.Number)),
+  ignoreSeries: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  limit: Schema.optional(Schema.NullOr(Schema.Number)),
+  offset: Schema.optional(Schema.NullOr(Schema.String)),
+  offsetBy: Schema.optional(Schema.NullOr(Schema.Number)),
+  offsetDirection: Schema.optional(Schema.NullOr(Schema.String)),
+  parameters: Schema.optional(Schema.NullOr(Schema.Struct({
+  calculations: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  alias: Schema.optional(Schema.NullOr(Schema.String)),
+  key: Schema.optional(Schema.NullOr(Schema.String)),
+  keyType: Schema.optional(Schema.NullOr(Schema.Literal("string", "number", "boolean"))),
   operator: Schema.Literal("uniq", "count", "max", "min", "sum", "avg", "median", "p001", "p01", "p05", "p10", "p25", "p75", "p90", "p95", "p99", "p999", "stddev", "variance", "COUNT_DISTINCT", "COUNT", "MAX", "MIN", "SUM", "AVG", "MEDIAN", "P001", "P01", "P05", "P10", "P25", "P75", "P90", "P95", "P99", "P999", "STDDEV", "VARIANCE")
-}))),
-  datasets: Schema.optional(Schema.Array(Schema.String)),
-  filterCombination: Schema.optional(Schema.Literal("and", "or", "AND", "OR")),
-  filters: Schema.optional(Schema.Array(Schema.Struct({
+})))),
+  datasets: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  filterCombination: Schema.optional(Schema.NullOr(Schema.Literal("and", "or", "AND", "OR"))),
+  filters: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   operation: Schema.Literal("includes", "not_includes", "starts_with", "regex", "exists", "is_null", "in", "not_in", "eq", "neq", "gt", "gte", "lt", "lte", "=", "!=", ">", ">=", "<", "<=", "INCLUDES", "DOES_NOT_INCLUDE", "MATCH_REGEX", "EXISTS", "DOES_NOT_EXIST", "IN", "NOT_IN", "STARTS_WITH"),
   type: Schema.Literal("string", "number", "boolean"),
-  value: Schema.optional(Schema.Union(Schema.String, Schema.Number, Schema.Boolean))
-}))),
-  groupBys: Schema.optional(Schema.Array(Schema.Struct({
+  value: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number, Schema.Boolean)))
+})))),
+  groupBys: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   type: Schema.Literal("string", "number", "boolean"),
   value: Schema.String
-}))),
-  havings: Schema.optional(Schema.Array(Schema.Struct({
+})))),
+  havings: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   operation: Schema.Literal("eq", "neq", "gt", "gte", "lt", "lte"),
   value: Schema.Number
-}))),
-  limit: Schema.optional(Schema.Number),
-  needle: Schema.optional(Schema.Struct({
-  isRegex: Schema.optional(Schema.Boolean),
-  matchCase: Schema.optional(Schema.Boolean),
+})))),
+  limit: Schema.optional(Schema.NullOr(Schema.Number)),
+  needle: Schema.optional(Schema.NullOr(Schema.Struct({
+  isRegex: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  matchCase: Schema.optional(Schema.NullOr(Schema.Boolean)),
   value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
-})),
-  orderBy: Schema.optional(Schema.Struct({
-  order: Schema.optional(Schema.Literal("asc", "desc")),
+}))),
+  orderBy: Schema.optional(Schema.NullOr(Schema.Struct({
+  order: Schema.optional(Schema.NullOr(Schema.Literal("asc", "desc"))),
   value: Schema.String
-}))
-})),
-  patternType: Schema.optional(Schema.Literal("message", "error")),
+})))
+}))),
+  patternType: Schema.optional(Schema.NullOr(Schema.Literal("message", "error"))),
   queryId: Schema.String,
   timeframe: Schema.Struct({
   from: Schema.Number,
   to: Schema.Number
 }),
-  view: Schema.optional(Schema.Literal("traces", "events", "calculations", "invocations", "requests", "patterns"))
+  view: Schema.optional(Schema.NullOr(Schema.Literal("traces", "events", "calculations", "invocations", "requests", "patterns")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/workers/observability/telemetry/query" }),
 ).annotations({ identifier: "TelemetryqueryRequest" }) as unknown as Schema.Schema<TelemetryqueryRequest>;
 
 export interface TelemetryqueryResponse {
-  result: { errors: { message: string }[]; messages: { message: "Successful request" }[]; result: { calculations?: { aggregates: { count: number; groups?: { key: string; value: unknown }[]; interval: number; sampleInterval: number; value: number }[]; alias?: string; calculation: string; series: { data: { count: number; firstSeen: string; groups?: { key: string; value: unknown }[]; interval: number; lastSeen: string; sampleInterval: number; value: number }[]; time: string }[] }[]; compare?: { aggregates: { count: number; groups?: { key: string; value: unknown }[]; interval: number; sampleInterval: number; value: number }[]; alias?: string; calculation: string; series: { data: { count: number; firstSeen: string; groups?: { key: string; value: unknown }[]; interval: number; lastSeen: string; sampleInterval: number; value: number }[]; time: string }[] }[]; events?: { count?: number; events?: { $containers?: Record<string, unknown>; $metadata: { account?: string; cloudService?: string; coldStart?: number; cost?: number; duration?: number; endTime?: number; error?: string; errorTemplate?: string; fingerprint?: string; id: string; level?: string; message?: string; messageTemplate?: string; metricName?: string; origin?: string; parentSpanId?: string; provider?: string; region?: string; requestId?: string; service?: string; spanId?: string; spanName?: string; stackId?: string; startTime?: number; statusCode?: number; traceDuration?: number; traceId?: string; transactionName?: string; trigger?: string; type?: string; url?: string }; $workers?: unknown; dataset: string; source: unknown; timestamp: number }[]; fields?: { key: string; type: string }[]; series?: { data: { aggregates: { _count: number; _firstSeen: string; _interval: number; _lastSeen: string; bin?: Record<string, unknown> }; count: number; errors?: number; groups?: Record<string, unknown>; interval: number; sampleInterval: number }[]; time: string }[] }; invocations?: Record<string, unknown>; patterns?: { count: number; pattern: string; series: { data: { count: number; groups?: { key: string; value: unknown }[]; interval: number; sampleInterval: number; value: number }; time: string }[]; service: string }[]; run: { accountId: string; created?: string; dry: boolean; environmentId: string; granularity: number; id: string; query: { created: string; description: string; environmentId: string; generated: boolean; id: string; name: string; parameters: { calculations?: { alias?: string; key?: string; keyType?: "string" | "number" | "boolean"; operator: "uniq" | "count" | "max" | "min" | "sum" | "avg" | "median" | "p001" | "p01" | "p05" | "p10" | "p25" | "p75" | "p90" | "p95" | "p99" | "p999" | "stddev" | "variance" | "COUNT_DISTINCT" | "COUNT" | "MAX" | "MIN" | "SUM" | "AVG" | "MEDIAN" | "P001" | "P01" | "P05" | "P10" | "P25" | "P75" | "P90" | "P95" | "P99" | "P999" | "STDDEV" | "VARIANCE" }[]; datasets?: string[]; filterCombination?: "and" | "or" | "AND" | "OR"; filters?: { key: string; operation: "includes" | "not_includes" | "starts_with" | "regex" | "exists" | "is_null" | "in" | "not_in" | "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "=" | "!=" | ">" | ">=" | "<" | "<=" | "INCLUDES" | "DOES_NOT_INCLUDE" | "MATCH_REGEX" | "EXISTS" | "DOES_NOT_EXIST" | "IN" | "NOT_IN" | "STARTS_WITH"; type: "string" | "number" | "boolean"; value?: unknown }[]; groupBys?: { type: "string" | "number" | "boolean"; value: string }[]; havings?: { key: string; operation: "eq" | "neq" | "gt" | "gte" | "lt" | "lte"; value: number }[]; limit?: number; needle?: { isRegex?: boolean; matchCase?: boolean; value: unknown }; orderBy?: { order?: "asc" | "desc"; value: string } }; updated: string; userId: string; workspaceId: string }; statistics?: { abr_level?: number; bytes_read: number; elapsed: number; rows_read: number }; status: "STARTED" | "COMPLETED"; timeframe: { from: number; to: number }; updated?: string; userId: string; workspaceId: string }; statistics: { abr_level?: number; bytes_read: number; elapsed: number; rows_read: number }; traces?: { errors?: string[]; rootSpanName: string; rootTransactionName: string; service: string[]; spans: number; traceDurationMs: number; traceEndMs: number; traceId: string; traceStartMs: number }[] }; success: true };
+  result: { calculations?: { aggregates: { count: number; groups?: { key: string; value: unknown }[]; interval: number; sampleInterval: number; value: number }[]; alias?: string; calculation: string; series: { data: { count: number; firstSeen: string; groups?: { key: string; value: unknown }[]; interval: number; lastSeen: string; sampleInterval: number; value: number }[]; time: string }[] }[]; compare?: { aggregates: { count: number; groups?: { key: string; value: unknown }[]; interval: number; sampleInterval: number; value: number }[]; alias?: string; calculation: string; series: { data: { count: number; firstSeen: string; groups?: { key: string; value: unknown }[]; interval: number; lastSeen: string; sampleInterval: number; value: number }[]; time: string }[] }[]; events?: { count?: number; events?: { $containers?: Record<string, unknown>; $metadata: { account?: string; cloudService?: string; coldStart?: number; cost?: number; duration?: number; endTime?: number; error?: string; errorTemplate?: string; fingerprint?: string; id: string; level?: string; message?: string; messageTemplate?: string; metricName?: string; origin?: string; parentSpanId?: string; provider?: string; region?: string; requestId?: string; service?: string; spanId?: string; spanName?: string; stackId?: string; startTime?: number; statusCode?: number; traceDuration?: number; traceId?: string; transactionName?: string; trigger?: string; type?: string; url?: string }; $workers?: unknown; dataset: string; source: unknown; timestamp: number }[]; fields?: { key: string; type: string }[]; series?: { data: { aggregates: { _count: number; _firstSeen: string; _interval: number; _lastSeen: string; bin?: Record<string, unknown> }; count: number; errors?: number; groups?: Record<string, unknown>; interval: number; sampleInterval: number }[]; time: string }[] }; invocations?: Record<string, unknown>; patterns?: { count: number; pattern: string; series: { data: { count: number; groups?: { key: string; value: unknown }[]; interval: number; sampleInterval: number; value: number }; time: string }[]; service: string }[]; run: { accountId: string; created?: string; dry: boolean; environmentId: string; granularity: number; id: string; query: { created: string; description: string; environmentId: string; generated: boolean; id: string; name: string; parameters: { calculations?: { alias?: string; key?: string; keyType?: "string" | "number" | "boolean"; operator: "uniq" | "count" | "max" | "min" | "sum" | "avg" | "median" | "p001" | "p01" | "p05" | "p10" | "p25" | "p75" | "p90" | "p95" | "p99" | "p999" | "stddev" | "variance" | "COUNT_DISTINCT" | "COUNT" | "MAX" | "MIN" | "SUM" | "AVG" | "MEDIAN" | "P001" | "P01" | "P05" | "P10" | "P25" | "P75" | "P90" | "P95" | "P99" | "P999" | "STDDEV" | "VARIANCE" }[]; datasets?: string[]; filterCombination?: "and" | "or" | "AND" | "OR"; filters?: { key: string; operation: "includes" | "not_includes" | "starts_with" | "regex" | "exists" | "is_null" | "in" | "not_in" | "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "=" | "!=" | ">" | ">=" | "<" | "<=" | "INCLUDES" | "DOES_NOT_INCLUDE" | "MATCH_REGEX" | "EXISTS" | "DOES_NOT_EXIST" | "IN" | "NOT_IN" | "STARTS_WITH"; type: "string" | "number" | "boolean"; value?: unknown }[]; groupBys?: { type: "string" | "number" | "boolean"; value: string }[]; havings?: { key: string; operation: "eq" | "neq" | "gt" | "gte" | "lt" | "lte"; value: number }[]; limit?: number; needle?: { isRegex?: boolean; matchCase?: boolean; value: unknown }; orderBy?: { order?: "asc" | "desc"; value: string } }; updated: string; userId: string; workspaceId: string }; statistics?: { abr_level?: number; bytes_read: number; elapsed: number; rows_read: number }; status: "STARTED" | "COMPLETED"; timeframe: { from: number; to: number }; updated?: string; userId: string; workspaceId: string }; statistics: { abr_level?: number; bytes_read: number; elapsed: number; rows_read: number }; traces?: { errors?: string[]; rootSpanName: string; rootTransactionName: string; service: string[]; spans: number; traceDurationMs: number; traceEndMs: number; traceId: string; traceStartMs: number }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const TelemetryqueryResponse = Schema.Struct({
   result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  message: Schema.Literal("Successful request")
-})),
-  result: Schema.Struct({
-  calculations: Schema.optional(Schema.Array(Schema.Struct({
+  calculations: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   aggregates: Schema.Array(Schema.Struct({
   count: Schema.Number,
-  groups: Schema.optional(Schema.Array(Schema.Struct({
+  groups: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
-}))),
+})))),
   interval: Schema.Number,
   sampleInterval: Schema.Number,
   value: Schema.Number
 })),
-  alias: Schema.optional(Schema.String),
+  alias: Schema.optional(Schema.NullOr(Schema.String)),
   calculation: Schema.String,
   series: Schema.Array(Schema.Struct({
   data: Schema.Array(Schema.Struct({
   count: Schema.Number,
   firstSeen: Schema.String,
-  groups: Schema.optional(Schema.Array(Schema.Struct({
+  groups: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
-}))),
+})))),
   interval: Schema.Number,
   lastSeen: Schema.String,
   sampleInterval: Schema.Number,
@@ -2170,28 +2069,28 @@ export const TelemetryqueryResponse = Schema.Struct({
 })),
   time: Schema.String
 }))
-}))),
-  compare: Schema.optional(Schema.Array(Schema.Struct({
+})))),
+  compare: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   aggregates: Schema.Array(Schema.Struct({
   count: Schema.Number,
-  groups: Schema.optional(Schema.Array(Schema.Struct({
+  groups: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
-}))),
+})))),
   interval: Schema.Number,
   sampleInterval: Schema.Number,
   value: Schema.Number
 })),
-  alias: Schema.optional(Schema.String),
+  alias: Schema.optional(Schema.NullOr(Schema.String)),
   calculation: Schema.String,
   series: Schema.Array(Schema.Struct({
   data: Schema.Array(Schema.Struct({
   count: Schema.Number,
   firstSeen: Schema.String,
-  groups: Schema.optional(Schema.Array(Schema.Struct({
+  groups: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
-}))),
+})))),
   interval: Schema.Number,
   lastSeen: Schema.String,
   sampleInterval: Schema.Number,
@@ -2199,197 +2098,197 @@ export const TelemetryqueryResponse = Schema.Struct({
 })),
   time: Schema.String
 }))
-}))),
-  events: Schema.optional(Schema.Struct({
-  count: Schema.optional(Schema.Number),
-  events: Schema.optional(Schema.Array(Schema.Struct({
-  $containers: Schema.optional(Schema.Struct({})),
+})))),
+  events: Schema.optional(Schema.NullOr(Schema.Struct({
+  count: Schema.optional(Schema.NullOr(Schema.Number)),
+  events: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  $containers: Schema.optional(Schema.NullOr(Schema.Struct({}))),
   $metadata: Schema.Struct({
-  account: Schema.optional(Schema.String),
-  cloudService: Schema.optional(Schema.String),
-  coldStart: Schema.optional(Schema.Number),
-  cost: Schema.optional(Schema.Number),
-  duration: Schema.optional(Schema.Number),
-  endTime: Schema.optional(Schema.Number),
-  error: Schema.optional(Schema.String),
-  errorTemplate: Schema.optional(Schema.String),
-  fingerprint: Schema.optional(Schema.String),
+  account: Schema.optional(Schema.NullOr(Schema.String)),
+  cloudService: Schema.optional(Schema.NullOr(Schema.String)),
+  coldStart: Schema.optional(Schema.NullOr(Schema.Number)),
+  cost: Schema.optional(Schema.NullOr(Schema.Number)),
+  duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  endTime: Schema.optional(Schema.NullOr(Schema.Number)),
+  error: Schema.optional(Schema.NullOr(Schema.String)),
+  errorTemplate: Schema.optional(Schema.NullOr(Schema.String)),
+  fingerprint: Schema.optional(Schema.NullOr(Schema.String)),
   id: Schema.String,
-  level: Schema.optional(Schema.String),
-  message: Schema.optional(Schema.String),
-  messageTemplate: Schema.optional(Schema.String),
-  metricName: Schema.optional(Schema.String),
-  origin: Schema.optional(Schema.String),
-  parentSpanId: Schema.optional(Schema.String),
-  provider: Schema.optional(Schema.String),
-  region: Schema.optional(Schema.String),
-  requestId: Schema.optional(Schema.String),
-  service: Schema.optional(Schema.String),
-  spanId: Schema.optional(Schema.String),
-  spanName: Schema.optional(Schema.String),
-  stackId: Schema.optional(Schema.String),
-  startTime: Schema.optional(Schema.Number),
-  statusCode: Schema.optional(Schema.Number),
-  traceDuration: Schema.optional(Schema.Number),
-  traceId: Schema.optional(Schema.String),
-  transactionName: Schema.optional(Schema.String),
-  trigger: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
+  level: Schema.optional(Schema.NullOr(Schema.String)),
+  message: Schema.optional(Schema.NullOr(Schema.String)),
+  messageTemplate: Schema.optional(Schema.NullOr(Schema.String)),
+  metricName: Schema.optional(Schema.NullOr(Schema.String)),
+  origin: Schema.optional(Schema.NullOr(Schema.String)),
+  parentSpanId: Schema.optional(Schema.NullOr(Schema.String)),
+  provider: Schema.optional(Schema.NullOr(Schema.String)),
+  region: Schema.optional(Schema.NullOr(Schema.String)),
+  requestId: Schema.optional(Schema.NullOr(Schema.String)),
+  service: Schema.optional(Schema.NullOr(Schema.String)),
+  spanId: Schema.optional(Schema.NullOr(Schema.String)),
+  spanName: Schema.optional(Schema.NullOr(Schema.String)),
+  stackId: Schema.optional(Schema.NullOr(Schema.String)),
+  startTime: Schema.optional(Schema.NullOr(Schema.Number)),
+  statusCode: Schema.optional(Schema.NullOr(Schema.Number)),
+  traceDuration: Schema.optional(Schema.NullOr(Schema.Number)),
+  traceId: Schema.optional(Schema.NullOr(Schema.String)),
+  transactionName: Schema.optional(Schema.NullOr(Schema.String)),
+  trigger: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
 }),
-  $workers: Schema.optional(Schema.Union(Schema.Struct({
-  durableObjectId: Schema.optional(Schema.String),
-  entrypoint: Schema.optional(Schema.String),
-  event: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean, Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean, Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Array(Schema.Union(Schema.String, Schema.Number, Schema.Boolean)), Schema.String, Schema.Number, Schema.Boolean) })) })) })),
+  $workers: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  durableObjectId: Schema.optional(Schema.NullOr(Schema.String)),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
+  event: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean, Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean, Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Array(Schema.Union(Schema.String, Schema.Number, Schema.Boolean)), Schema.String, Schema.Number, Schema.Boolean) })) })) }))),
   eventType: Schema.Literal("fetch", "scheduled", "alarm", "cron", "queue", "email", "tail", "rpc", "websocket", "unknown"),
-  executionModel: Schema.optional(Schema.Literal("durableObject", "stateless")),
-  outcome: Schema.optional(Schema.String),
+  executionModel: Schema.optional(Schema.NullOr(Schema.Literal("durableObject", "stateless"))),
+  outcome: Schema.optional(Schema.NullOr(Schema.String)),
   requestId: Schema.String,
   scriptName: Schema.String,
-  scriptVersion: Schema.optional(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  message: Schema.optional(Schema.String),
-  tag: Schema.optional(Schema.String)
-})),
-  truncated: Schema.optional(Schema.Boolean)
+  scriptVersion: Schema.optional(Schema.NullOr(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  message: Schema.optional(Schema.NullOr(Schema.String)),
+  tag: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  truncated: Schema.optional(Schema.NullOr(Schema.Boolean))
 }), Schema.Struct({
   cpuTimeMs: Schema.Number,
-  diagnosticsChannelEvents: Schema.optional(Schema.Array(Schema.Struct({
+  diagnosticsChannelEvents: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   channel: Schema.String,
   message: Schema.String,
   timestamp: Schema.Number
-}))),
-  dispatchNamespace: Schema.optional(Schema.String),
-  durableObjectId: Schema.optional(Schema.String),
-  entrypoint: Schema.optional(Schema.String),
-  event: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean) })),
+})))),
+  dispatchNamespace: Schema.optional(Schema.NullOr(Schema.String)),
+  durableObjectId: Schema.optional(Schema.NullOr(Schema.String)),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
+  event: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean) }))),
   eventType: Schema.Literal("fetch", "scheduled", "alarm", "cron", "queue", "email", "tail", "rpc", "websocket", "unknown"),
-  executionModel: Schema.optional(Schema.Literal("durableObject", "stateless")),
+  executionModel: Schema.optional(Schema.NullOr(Schema.Literal("durableObject", "stateless"))),
   outcome: Schema.String,
   requestId: Schema.String,
   scriptName: Schema.String,
-  scriptVersion: Schema.optional(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  message: Schema.optional(Schema.String),
-  tag: Schema.optional(Schema.String)
-})),
-  truncated: Schema.optional(Schema.Boolean),
-  wallTimeMs: Schema.Number
+  scriptVersion: Schema.optional(Schema.NullOr(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  message: Schema.optional(Schema.NullOr(Schema.String)),
+  tag: Schema.optional(Schema.NullOr(Schema.String))
 }))),
+  truncated: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  wallTimeMs: Schema.Number
+})))),
   dataset: Schema.String,
   source: Schema.Union(Schema.String, Schema.Struct({})),
   timestamp: Schema.Number
-}))),
-  fields: Schema.optional(Schema.Array(Schema.Struct({
+})))),
+  fields: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   type: Schema.String
-}))),
-  series: Schema.optional(Schema.Array(Schema.Struct({
+})))),
+  series: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   data: Schema.Array(Schema.Struct({
   aggregates: Schema.Struct({
   _count: Schema.Number,
   _firstSeen: Schema.String,
   _interval: Schema.Number,
   _lastSeen: Schema.String,
-  bin: Schema.optional(Schema.Struct({}))
+  bin: Schema.optional(Schema.NullOr(Schema.Struct({})))
 }),
   count: Schema.Number,
-  errors: Schema.optional(Schema.Number),
-  groups: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean) })),
+  errors: Schema.optional(Schema.NullOr(Schema.Number)),
+  groups: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean) }))),
   interval: Schema.Number,
   sampleInterval: Schema.Number
 })),
   time: Schema.String
-})))
-})),
-  invocations: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.Struct({
-  $containers: Schema.optional(Schema.Struct({})),
+}))))
+}))),
+  invocations: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.Struct({
+  $containers: Schema.optional(Schema.NullOr(Schema.Struct({}))),
   $metadata: Schema.Struct({
-  account: Schema.optional(Schema.String),
-  cloudService: Schema.optional(Schema.String),
-  coldStart: Schema.optional(Schema.Number),
-  cost: Schema.optional(Schema.Number),
-  duration: Schema.optional(Schema.Number),
-  endTime: Schema.optional(Schema.Number),
-  error: Schema.optional(Schema.String),
-  errorTemplate: Schema.optional(Schema.String),
-  fingerprint: Schema.optional(Schema.String),
+  account: Schema.optional(Schema.NullOr(Schema.String)),
+  cloudService: Schema.optional(Schema.NullOr(Schema.String)),
+  coldStart: Schema.optional(Schema.NullOr(Schema.Number)),
+  cost: Schema.optional(Schema.NullOr(Schema.Number)),
+  duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  endTime: Schema.optional(Schema.NullOr(Schema.Number)),
+  error: Schema.optional(Schema.NullOr(Schema.String)),
+  errorTemplate: Schema.optional(Schema.NullOr(Schema.String)),
+  fingerprint: Schema.optional(Schema.NullOr(Schema.String)),
   id: Schema.String,
-  level: Schema.optional(Schema.String),
-  message: Schema.optional(Schema.String),
-  messageTemplate: Schema.optional(Schema.String),
-  metricName: Schema.optional(Schema.String),
-  origin: Schema.optional(Schema.String),
-  parentSpanId: Schema.optional(Schema.String),
-  provider: Schema.optional(Schema.String),
-  region: Schema.optional(Schema.String),
-  requestId: Schema.optional(Schema.String),
-  service: Schema.optional(Schema.String),
-  spanId: Schema.optional(Schema.String),
-  spanName: Schema.optional(Schema.String),
-  stackId: Schema.optional(Schema.String),
-  startTime: Schema.optional(Schema.Number),
-  statusCode: Schema.optional(Schema.Number),
-  traceDuration: Schema.optional(Schema.Number),
-  traceId: Schema.optional(Schema.String),
-  transactionName: Schema.optional(Schema.String),
-  trigger: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
+  level: Schema.optional(Schema.NullOr(Schema.String)),
+  message: Schema.optional(Schema.NullOr(Schema.String)),
+  messageTemplate: Schema.optional(Schema.NullOr(Schema.String)),
+  metricName: Schema.optional(Schema.NullOr(Schema.String)),
+  origin: Schema.optional(Schema.NullOr(Schema.String)),
+  parentSpanId: Schema.optional(Schema.NullOr(Schema.String)),
+  provider: Schema.optional(Schema.NullOr(Schema.String)),
+  region: Schema.optional(Schema.NullOr(Schema.String)),
+  requestId: Schema.optional(Schema.NullOr(Schema.String)),
+  service: Schema.optional(Schema.NullOr(Schema.String)),
+  spanId: Schema.optional(Schema.NullOr(Schema.String)),
+  spanName: Schema.optional(Schema.NullOr(Schema.String)),
+  stackId: Schema.optional(Schema.NullOr(Schema.String)),
+  startTime: Schema.optional(Schema.NullOr(Schema.Number)),
+  statusCode: Schema.optional(Schema.NullOr(Schema.Number)),
+  traceDuration: Schema.optional(Schema.NullOr(Schema.Number)),
+  traceId: Schema.optional(Schema.NullOr(Schema.String)),
+  transactionName: Schema.optional(Schema.NullOr(Schema.String)),
+  trigger: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
 }),
-  $workers: Schema.optional(Schema.Union(Schema.Struct({
-  durableObjectId: Schema.optional(Schema.String),
-  entrypoint: Schema.optional(Schema.String),
-  event: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean, Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean, Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Array(Schema.Union(Schema.String, Schema.Number, Schema.Boolean)), Schema.String, Schema.Number, Schema.Boolean) })) })) })),
+  $workers: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  durableObjectId: Schema.optional(Schema.NullOr(Schema.String)),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
+  event: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean, Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean, Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Array(Schema.Union(Schema.String, Schema.Number, Schema.Boolean)), Schema.String, Schema.Number, Schema.Boolean) })) })) }))),
   eventType: Schema.Literal("fetch", "scheduled", "alarm", "cron", "queue", "email", "tail", "rpc", "websocket", "unknown"),
-  executionModel: Schema.optional(Schema.Literal("durableObject", "stateless")),
-  outcome: Schema.optional(Schema.String),
+  executionModel: Schema.optional(Schema.NullOr(Schema.Literal("durableObject", "stateless"))),
+  outcome: Schema.optional(Schema.NullOr(Schema.String)),
   requestId: Schema.String,
   scriptName: Schema.String,
-  scriptVersion: Schema.optional(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  message: Schema.optional(Schema.String),
-  tag: Schema.optional(Schema.String)
-})),
-  truncated: Schema.optional(Schema.Boolean)
+  scriptVersion: Schema.optional(Schema.NullOr(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  message: Schema.optional(Schema.NullOr(Schema.String)),
+  tag: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  truncated: Schema.optional(Schema.NullOr(Schema.Boolean))
 }), Schema.Struct({
   cpuTimeMs: Schema.Number,
-  diagnosticsChannelEvents: Schema.optional(Schema.Array(Schema.Struct({
+  diagnosticsChannelEvents: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   channel: Schema.String,
   message: Schema.String,
   timestamp: Schema.Number
-}))),
-  dispatchNamespace: Schema.optional(Schema.String),
-  durableObjectId: Schema.optional(Schema.String),
-  entrypoint: Schema.optional(Schema.String),
-  event: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean) })),
+})))),
+  dispatchNamespace: Schema.optional(Schema.NullOr(Schema.String)),
+  durableObjectId: Schema.optional(Schema.NullOr(Schema.String)),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
+  event: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean) }))),
   eventType: Schema.Literal("fetch", "scheduled", "alarm", "cron", "queue", "email", "tail", "rpc", "websocket", "unknown"),
-  executionModel: Schema.optional(Schema.Literal("durableObject", "stateless")),
+  executionModel: Schema.optional(Schema.NullOr(Schema.Literal("durableObject", "stateless"))),
   outcome: Schema.String,
   requestId: Schema.String,
   scriptName: Schema.String,
-  scriptVersion: Schema.optional(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  message: Schema.optional(Schema.String),
-  tag: Schema.optional(Schema.String)
-})),
-  truncated: Schema.optional(Schema.Boolean),
-  wallTimeMs: Schema.Number
+  scriptVersion: Schema.optional(Schema.NullOr(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  message: Schema.optional(Schema.NullOr(Schema.String)),
+  tag: Schema.optional(Schema.NullOr(Schema.String))
 }))),
+  truncated: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  wallTimeMs: Schema.Number
+})))),
   dataset: Schema.String,
   source: Schema.Union(Schema.String, Schema.Struct({})),
   timestamp: Schema.Number
-})) })),
-  patterns: Schema.optional(Schema.Array(Schema.Struct({
+})) }))),
+  patterns: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   count: Schema.Number,
   pattern: Schema.String,
   series: Schema.Array(Schema.Struct({
   data: Schema.Struct({
   count: Schema.Number,
-  groups: Schema.optional(Schema.Array(Schema.Struct({
+  groups: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
-}))),
+})))),
   interval: Schema.Number,
   sampleInterval: Schema.Number,
   value: Schema.Number
@@ -2397,83 +2296,83 @@ export const TelemetryqueryResponse = Schema.Struct({
   time: Schema.String
 })),
   service: Schema.String
-}))),
+})))),
   run: Schema.Struct({
   accountId: Schema.String,
-  created: Schema.optional(Schema.String),
+  created: Schema.optional(Schema.NullOr(Schema.String)),
   dry: Schema.Boolean,
   environmentId: Schema.String,
   granularity: Schema.Number,
   id: Schema.String,
   query: Schema.Struct({
   created: Schema.String,
-  description: Schema.String,
+  description: Schema.NullOr(Schema.String),
   environmentId: Schema.String,
-  generated: Schema.Boolean,
+  generated: Schema.NullOr(Schema.Boolean),
   id: Schema.String,
-  name: Schema.String,
+  name: Schema.NullOr(Schema.String),
   parameters: Schema.Struct({
-  calculations: Schema.optional(Schema.Array(Schema.Struct({
-  alias: Schema.optional(Schema.String),
-  key: Schema.optional(Schema.String),
-  keyType: Schema.optional(Schema.Literal("string", "number", "boolean")),
+  calculations: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  alias: Schema.optional(Schema.NullOr(Schema.String)),
+  key: Schema.optional(Schema.NullOr(Schema.String)),
+  keyType: Schema.optional(Schema.NullOr(Schema.Literal("string", "number", "boolean"))),
   operator: Schema.Literal("uniq", "count", "max", "min", "sum", "avg", "median", "p001", "p01", "p05", "p10", "p25", "p75", "p90", "p95", "p99", "p999", "stddev", "variance", "COUNT_DISTINCT", "COUNT", "MAX", "MIN", "SUM", "AVG", "MEDIAN", "P001", "P01", "P05", "P10", "P25", "P75", "P90", "P95", "P99", "P999", "STDDEV", "VARIANCE")
-}))),
-  datasets: Schema.optional(Schema.Array(Schema.String)),
-  filterCombination: Schema.optional(Schema.Literal("and", "or", "AND", "OR")),
-  filters: Schema.optional(Schema.Array(Schema.Struct({
+})))),
+  datasets: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  filterCombination: Schema.optional(Schema.NullOr(Schema.Literal("and", "or", "AND", "OR"))),
+  filters: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   operation: Schema.Literal("includes", "not_includes", "starts_with", "regex", "exists", "is_null", "in", "not_in", "eq", "neq", "gt", "gte", "lt", "lte", "=", "!=", ">", ">=", "<", "<=", "INCLUDES", "DOES_NOT_INCLUDE", "MATCH_REGEX", "EXISTS", "DOES_NOT_EXIST", "IN", "NOT_IN", "STARTS_WITH"),
   type: Schema.Literal("string", "number", "boolean"),
-  value: Schema.optional(Schema.Union(Schema.String, Schema.Number, Schema.Boolean))
-}))),
-  groupBys: Schema.optional(Schema.Array(Schema.Struct({
+  value: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number, Schema.Boolean)))
+})))),
+  groupBys: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   type: Schema.Literal("string", "number", "boolean"),
   value: Schema.String
-}))),
-  havings: Schema.optional(Schema.Array(Schema.Struct({
+})))),
+  havings: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   operation: Schema.Literal("eq", "neq", "gt", "gte", "lt", "lte"),
   value: Schema.Number
-}))),
-  limit: Schema.optional(Schema.Number),
-  needle: Schema.optional(Schema.Struct({
-  isRegex: Schema.optional(Schema.Boolean),
-  matchCase: Schema.optional(Schema.Boolean),
+})))),
+  limit: Schema.optional(Schema.NullOr(Schema.Number)),
+  needle: Schema.optional(Schema.NullOr(Schema.Struct({
+  isRegex: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  matchCase: Schema.optional(Schema.NullOr(Schema.Boolean)),
   value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
-})),
-  orderBy: Schema.optional(Schema.Struct({
-  order: Schema.optional(Schema.Literal("asc", "desc")),
+}))),
+  orderBy: Schema.optional(Schema.NullOr(Schema.Struct({
+  order: Schema.optional(Schema.NullOr(Schema.Literal("asc", "desc"))),
   value: Schema.String
-}))
+})))
 }),
   updated: Schema.String,
   userId: Schema.String,
   workspaceId: Schema.String
 }),
-  statistics: Schema.optional(Schema.Struct({
-  abr_level: Schema.optional(Schema.Number),
+  statistics: Schema.optional(Schema.NullOr(Schema.Struct({
+  abr_level: Schema.optional(Schema.NullOr(Schema.Number)),
   bytes_read: Schema.Number,
   elapsed: Schema.Number,
   rows_read: Schema.Number
-})),
+}))),
   status: Schema.Literal("STARTED", "COMPLETED"),
   timeframe: Schema.Struct({
   from: Schema.Number,
   to: Schema.Number
 }),
-  updated: Schema.optional(Schema.String),
+  updated: Schema.optional(Schema.NullOr(Schema.String)),
   userId: Schema.String,
   workspaceId: Schema.String
 }),
   statistics: Schema.Struct({
-  abr_level: Schema.optional(Schema.Number),
+  abr_level: Schema.optional(Schema.NullOr(Schema.Number)),
   bytes_read: Schema.Number,
   elapsed: Schema.Number,
   rows_read: Schema.Number
 }),
-  traces: Schema.optional(Schema.Array(Schema.Struct({
-  errors: Schema.optional(Schema.Array(Schema.String)),
+  traces: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  errors: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   rootSpanName: Schema.String,
   rootTransactionName: Schema.String,
   service: Schema.Array(Schema.String),
@@ -2482,9 +2381,7 @@ export const TelemetryqueryResponse = Schema.Struct({
   traceEndMs: Schema.Number,
   traceId: Schema.String,
   traceStartMs: Schema.Number
-})))
-}),
-  success: Schema.Literal(true)
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2514,19 +2411,19 @@ export interface TelemetryvalueslistRequest {
 export const TelemetryvalueslistRequest = Schema.Struct({
   body: Schema.Struct({
   datasets: Schema.Array(Schema.String),
-  filters: Schema.optional(Schema.Array(Schema.Struct({
+  filters: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   key: Schema.String,
   operation: Schema.Literal("includes", "not_includes", "starts_with", "regex", "exists", "is_null", "in", "not_in", "eq", "neq", "gt", "gte", "lt", "lte", "=", "!=", ">", ">=", "<", "<=", "INCLUDES", "DOES_NOT_INCLUDE", "MATCH_REGEX", "EXISTS", "DOES_NOT_EXIST", "IN", "NOT_IN", "STARTS_WITH"),
   type: Schema.Literal("string", "number", "boolean"),
-  value: Schema.optional(Schema.Union(Schema.String, Schema.Number, Schema.Boolean))
-}))),
+  value: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number, Schema.Boolean)))
+})))),
   key: Schema.String,
-  limit: Schema.optional(Schema.Number),
-  needle: Schema.optional(Schema.Struct({
-  isRegex: Schema.optional(Schema.Boolean),
-  matchCase: Schema.optional(Schema.Boolean),
+  limit: Schema.optional(Schema.NullOr(Schema.Number)),
+  needle: Schema.optional(Schema.NullOr(Schema.Struct({
+  isRegex: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  matchCase: Schema.optional(Schema.NullOr(Schema.Boolean)),
   value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
-})),
+}))),
   timeframe: Schema.Struct({
   from: Schema.Number,
   to: Schema.Number
@@ -2538,26 +2435,17 @@ export const TelemetryvalueslistRequest = Schema.Struct({
 ).annotations({ identifier: "TelemetryvalueslistRequest" }) as unknown as Schema.Schema<TelemetryvalueslistRequest>;
 
 export interface TelemetryvalueslistResponse {
-  result: { errors: { message: string }[]; messages: { message: "Successful request" }[]; result: { dataset: string; key: string; type: "string" | "boolean" | "number"; value: unknown }[]; success: true };
+  result: { dataset: string; key: string; type: "string" | "boolean" | "number"; value: unknown }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const TelemetryvalueslistResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  message: Schema.Literal("Successful request")
-})),
   result: Schema.Array(Schema.Struct({
   dataset: Schema.String,
   key: Schema.String,
   type: Schema.Literal("string", "boolean", "number"),
   value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean)
 })),
-  success: Schema.Literal(true)
-}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -2590,12 +2478,11 @@ export const ListRegionsRequest = Schema.Struct({
 ).annotations({ identifier: "ListRegionsRequest" }) as unknown as Schema.Schema<ListRegionsRequest>;
 
 export interface ListRegionsResponse {
-  result: unknown;
+  result: { providers: { id: string; regions: { id: string }[] }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListRegionsResponse = Schema.Struct({
-  result: Schema.Struct({
   result: Schema.Struct({
   providers: Schema.Array(Schema.Struct({
   id: Schema.String,
@@ -2603,7 +2490,6 @@ export const ListRegionsResponse = Schema.Struct({
   id: Schema.String
 }))
 }))
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2639,20 +2525,18 @@ export const ListWorkersRequest = Schema.Struct({
 ).annotations({ identifier: "ListWorkersRequest" }) as unknown as Schema.Schema<ListWorkersRequest>;
 
 export interface ListWorkersResponse {
-  result: unknown;
+  result: unknown[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListWorkersResponse = Schema.Struct({
-  result: Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  routes: Schema.optional(Schema.Array(Schema.Struct({
+  routes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   id: Schema.String,
   pattern: Schema.String,
-  script: Schema.optional(Schema.String)
-})))
-}))
-}),
+  script: Schema.optional(Schema.NullOr(Schema.String))
+}))))
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -2678,39 +2562,39 @@ export interface WorkerScriptSearchWorkersRequest {
   account_id: string;
   name?: string;
   id?: string;
-  order_by?: "created_on" | "modified_on" | "name";
   page?: number;
   per_page?: number;
+  order_by?: string;
+  direction?: "asc" | "desc";
 }
 
 export const WorkerScriptSearchWorkersRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   name: Schema.optional(Schema.String).pipe(T.HttpQuery("name")),
   id: Schema.optional(Schema.String).pipe(T.HttpQuery("id")),
-  order_by: Schema.optional(Schema.Literal("created_on", "modified_on", "name")).pipe(T.HttpQuery("order_by")),
   page: Schema.optional(Schema.Number).pipe(T.HttpQuery("page")),
-  per_page: Schema.optional(Schema.Number).pipe(T.HttpQuery("per_page"))
+  per_page: Schema.optional(Schema.Number).pipe(T.HttpQuery("per_page")),
+  order_by: Schema.optional(Schema.String).pipe(T.HttpQuery("order_by")),
+  direction: Schema.optional(Schema.Literal("asc", "desc")).pipe(T.HttpQuery("direction"))
 }).pipe(
   T.Http({ method: "GET", path: "/accounts/{account_id}/workers/scripts-search" }),
 ).annotations({ identifier: "WorkerScriptSearchWorkersRequest" }) as unknown as Schema.Schema<WorkerScriptSearchWorkersRequest>;
 
 export interface WorkerScriptSearchWorkersResponse {
-  result: unknown;
+  result: { id: string; script_name: string; created_on: string; modified_on: string; environment_is_default?: boolean; environment_name?: string; service_name?: string }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkerScriptSearchWorkersResponse = Schema.Struct({
-  result: Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  created_on: Schema.Date,
-  environment_is_default: Schema.optional(Schema.Boolean),
-  environment_name: Schema.optional(Schema.String),
-  modified_on: Schema.Date,
+  id: Schema.String,
   script_name: Schema.String,
-  script_tag: Schema.String,
-  service_name: Schema.optional(Schema.String)
-}))
-}),
+  created_on: Schema.Date,
+  modified_on: Schema.Date,
+  environment_is_default: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  environment_name: Schema.optional(Schema.NullOr(Schema.String)),
+  service_name: Schema.optional(Schema.NullOr(Schema.String))
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -2745,12 +2629,12 @@ export const WorkerScriptDownloadWorkerRequest = Schema.Struct({
 ).annotations({ identifier: "WorkerScriptDownloadWorkerRequest" }) as unknown as Schema.Schema<WorkerScriptDownloadWorkerRequest>;
 
 export interface WorkerScriptDownloadWorkerResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkerScriptDownloadWorkerResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -2787,12 +2671,16 @@ export const WorkerScriptUploadWorkerModuleRequest = Schema.Struct({
 ).annotations({ identifier: "WorkerScriptUploadWorkerModuleRequest" }) as unknown as Schema.Schema<WorkerScriptUploadWorkerModuleRequest>;
 
 export interface WorkerScriptUploadWorkerModuleResponse {
-  result: unknown;
+  result: { id?: string; entry_point?: string; startup_time_ms?: number };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkerScriptUploadWorkerModuleResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  entry_point: Schema.optional(Schema.NullOr(Schema.String)),
+  startup_time_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -2829,13 +2717,13 @@ export const DeleteWorker1Request = Schema.Struct({
 ).annotations({ identifier: "DeleteWorker1Request" }) as unknown as Schema.Schema<DeleteWorker1Request>;
 
 export interface DeleteWorker1Response {
-  result: unknown;
+  result: { id?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteWorker1Response = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Literal(null))
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2878,16 +2766,14 @@ export const CreateAssetsUploadSession1Request = Schema.Struct({
 ).annotations({ identifier: "CreateAssetsUploadSession1Request" }) as unknown as Schema.Schema<CreateAssetsUploadSession1Request>;
 
 export interface CreateAssetsUploadSession1Response {
-  result: unknown;
+  result: { buckets?: string[][]; jwt?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateAssetsUploadSession1Response = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
-  buckets: Schema.optional(Schema.Array(Schema.Array(Schema.String))),
-  jwt: Schema.optional(Schema.String)
-}))
+  buckets: Schema.optional(Schema.NullOr(Schema.Array(Schema.Array(Schema.String)))),
+  jwt: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2934,9 +2820,7 @@ export interface PutContentResponse {
 }
 
 export const PutContentResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.Unknown
-}),
+  result: Schema.Unknown,
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -2971,12 +2855,12 @@ export const GetContentRequest = Schema.Struct({
 ).annotations({ identifier: "GetContentRequest" }) as unknown as Schema.Schema<GetContentRequest>;
 
 export interface GetContentResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetContentResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -3011,19 +2895,18 @@ export const ListDeploymentsRequest = Schema.Struct({
 ).annotations({ identifier: "ListDeploymentsRequest" }) as unknown as Schema.Schema<ListDeploymentsRequest>;
 
 export interface ListDeploymentsResponse {
-  result: unknown;
+  result: { deployments: { annotations?: { "workers/message"?: string; "workers/triggered_by"?: string }; author_email?: string; created_on: string; id: string; source: string; strategy: "percentage"; versions: { percentage: number; version_id: string }[] }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListDeploymentsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
   deployments: Schema.Array(Schema.Struct({
-  annotations: Schema.optional(Schema.Struct({
-  "workers/message": Schema.optional(Schema.String),
-  "workers/triggered_by": Schema.optional(Schema.String)
-})),
-  author_email: Schema.optional(Schema.String),
+  annotations: Schema.optional(Schema.NullOr(Schema.Struct({
+  "workers/message": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/triggered_by": Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  author_email: Schema.optional(Schema.NullOr(Schema.String)),
   created_on: Schema.Date,
   id: Schema.UUID,
   source: Schema.String,
@@ -3033,7 +2916,6 @@ export const ListDeploymentsResponse = Schema.Struct({
   version_id: Schema.UUID
 }))
 }))
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3068,11 +2950,11 @@ export const CreateDeploymentRequest = Schema.Struct({
   script_name: Schema.String.pipe(T.HttpPath("script_name")),
   force: Schema.optional(Schema.Boolean).pipe(T.HttpQuery("force")),
   body: Schema.Struct({
-  annotations: Schema.optional(Schema.Struct({
-  "workers/message": Schema.optional(Schema.String),
-  "workers/triggered_by": Schema.optional(Schema.String)
-})),
-  author_email: Schema.optional(Schema.String),
+  annotations: Schema.optional(Schema.NullOr(Schema.Struct({
+  "workers/message": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/triggered_by": Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  author_email: Schema.optional(Schema.NullOr(Schema.String)),
   created_on: Schema.Date,
   id: Schema.UUID,
   source: Schema.String,
@@ -3087,18 +2969,17 @@ export const CreateDeploymentRequest = Schema.Struct({
 ).annotations({ identifier: "CreateDeploymentRequest" }) as unknown as Schema.Schema<CreateDeploymentRequest>;
 
 export interface CreateDeploymentResponse {
-  result: unknown;
+  result: { annotations?: { "workers/message"?: string; "workers/triggered_by"?: string }; author_email?: string; created_on: string; id: string; source: string; strategy: "percentage"; versions: { percentage: number; version_id: string }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateDeploymentResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  annotations: Schema.optional(Schema.Struct({
-  "workers/message": Schema.optional(Schema.String),
-  "workers/triggered_by": Schema.optional(Schema.String)
-})),
-  author_email: Schema.optional(Schema.String),
+  annotations: Schema.optional(Schema.NullOr(Schema.Struct({
+  "workers/message": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/triggered_by": Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  author_email: Schema.optional(Schema.NullOr(Schema.String)),
   created_on: Schema.Date,
   id: Schema.UUID,
   source: Schema.String,
@@ -3107,7 +2988,6 @@ export const CreateDeploymentResponse = Schema.Struct({
   percentage: Schema.Number,
   version_id: Schema.UUID
 }))
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3145,18 +3025,17 @@ export const GetDeploymentRequest = Schema.Struct({
 ).annotations({ identifier: "GetDeploymentRequest" }) as unknown as Schema.Schema<GetDeploymentRequest>;
 
 export interface GetDeploymentResponse {
-  result: unknown;
+  result: { annotations?: { "workers/message"?: string; "workers/triggered_by"?: string }; author_email?: string; created_on: string; id: string; source: string; strategy: "percentage"; versions: { percentage: number; version_id: string }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetDeploymentResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  annotations: Schema.optional(Schema.Struct({
-  "workers/message": Schema.optional(Schema.String),
-  "workers/triggered_by": Schema.optional(Schema.String)
-})),
-  author_email: Schema.optional(Schema.String),
+  annotations: Schema.optional(Schema.NullOr(Schema.Struct({
+  "workers/message": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/triggered_by": Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  author_email: Schema.optional(Schema.NullOr(Schema.String)),
   created_on: Schema.Date,
   id: Schema.UUID,
   source: Schema.String,
@@ -3165,7 +3044,6 @@ export const GetDeploymentResponse = Schema.Struct({
   percentage: Schema.Number,
   version_id: Schema.UUID
 }))
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3203,30 +3081,12 @@ export const DeleteDeploymentRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteDeploymentRequest" }) as unknown as Schema.Schema<DeleteDeploymentRequest>;
 
 export interface DeleteDeploymentResponse {
-  result: { errors: { code: number; documentation_url?: string; message: string; source?: { pointer?: string } }[]; messages: { code: number; documentation_url?: string; message: string; source?: { pointer?: string } }[]; success: true };
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteDeploymentResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  documentation_url: Schema.optional(Schema.String),
-  message: Schema.String,
-  source: Schema.optional(Schema.Struct({
-  pointer: Schema.optional(Schema.String)
-}))
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  documentation_url: Schema.optional(Schema.String),
-  message: Schema.String,
-  source: Schema.optional(Schema.Struct({
-  pointer: Schema.optional(Schema.String)
-}))
-})),
-  success: Schema.Literal(true)
-}),
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -3261,19 +3121,17 @@ export const GetCronTriggersRequest = Schema.Struct({
 ).annotations({ identifier: "GetCronTriggersRequest" }) as unknown as Schema.Schema<GetCronTriggersRequest>;
 
 export interface GetCronTriggersResponse {
-  result: unknown;
+  result: { schedules: { created_on?: string; cron: string; modified_on?: string }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetCronTriggersResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
   schedules: Schema.Array(Schema.Struct({
-  created_on: Schema.optional(Schema.String),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
   cron: Schema.String,
-  modified_on: Schema.optional(Schema.String)
+  modified_on: Schema.optional(Schema.NullOr(Schema.String))
 }))
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3306,28 +3164,26 @@ export const UpdateCronTriggersRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   script_name: Schema.String.pipe(T.HttpPath("script_name")),
   body: Schema.Array(Schema.Struct({
-  created_on: Schema.optional(Schema.String),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
   cron: Schema.String,
-  modified_on: Schema.optional(Schema.String)
+  modified_on: Schema.optional(Schema.NullOr(Schema.String))
 })).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/workers/scripts/{script_name}/schedules" }),
 ).annotations({ identifier: "UpdateCronTriggersRequest" }) as unknown as Schema.Schema<UpdateCronTriggersRequest>;
 
 export interface UpdateCronTriggersResponse {
-  result: unknown;
+  result: { schedules: { created_on?: string; cron: string; modified_on?: string }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const UpdateCronTriggersResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
   schedules: Schema.Array(Schema.Struct({
-  created_on: Schema.optional(Schema.String),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
   cron: Schema.String,
-  modified_on: Schema.optional(Schema.String)
+  modified_on: Schema.optional(Schema.NullOr(Schema.String))
 }))
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3363,22 +3219,20 @@ export const GetSettingsRequest = Schema.Struct({
 ).annotations({ identifier: "GetSettingsRequest" }) as unknown as Schema.Schema<GetSettingsRequest>;
 
 export interface GetSettingsResponse {
-  result: unknown;
+  result: { logpush?: boolean; observability?: unknown; tags?: unknown; tail_consumers?: { environment?: string; namespace?: string; service: string }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetSettingsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  logpush: Schema.optional(Schema.Boolean),
-  observability: Schema.optional(Schema.Struct({})),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  tail_consumers: Schema.optional(Schema.Array(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  namespace: Schema.optional(Schema.String),
+  logpush: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  tags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tail_consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace: Schema.optional(Schema.NullOr(Schema.String)),
   service: Schema.String
-})))
-})
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3411,36 +3265,34 @@ export const PatchSettingsRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   script_name: Schema.String.pipe(T.HttpPath("script_name")),
   body: Schema.Struct({
-  logpush: Schema.optional(Schema.Boolean),
-  observability: Schema.optional(Schema.Struct({})),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  tail_consumers: Schema.optional(Schema.Array(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  namespace: Schema.optional(Schema.String),
+  logpush: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  tags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tail_consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace: Schema.optional(Schema.NullOr(Schema.String)),
   service: Schema.String
-})))
+}))))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/accounts/{account_id}/workers/scripts/{script_name}/script-settings" }),
 ).annotations({ identifier: "PatchSettingsRequest" }) as unknown as Schema.Schema<PatchSettingsRequest>;
 
 export interface PatchSettingsResponse {
-  result: unknown;
+  result: { logpush?: boolean; observability?: unknown; tags?: unknown; tail_consumers?: { environment?: string; namespace?: string; service: string }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PatchSettingsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  logpush: Schema.optional(Schema.Boolean),
-  observability: Schema.optional(Schema.Struct({})),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  tail_consumers: Schema.optional(Schema.Array(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  namespace: Schema.optional(Schema.String),
+  logpush: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  tags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tail_consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace: Schema.optional(Schema.NullOr(Schema.String)),
   service: Schema.String
-})))
-})
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3476,14 +3328,12 @@ export const ListScriptSecrets1Request = Schema.Struct({
 ).annotations({ identifier: "ListScriptSecrets1Request" }) as unknown as Schema.Schema<ListScriptSecrets1Request>;
 
 export interface ListScriptSecrets1Response {
-  result: unknown;
+  result: Record<string, unknown>[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListScriptSecrets1Response = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Array(Schema.Struct({})))
-}),
+  result: Schema.Array(Schema.Struct({})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -3520,14 +3370,12 @@ export const PutScriptSecretRequest = Schema.Struct({
 ).annotations({ identifier: "PutScriptSecretRequest" }) as unknown as Schema.Schema<PutScriptSecretRequest>;
 
 export interface PutScriptSecretResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PutScriptSecretResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -3566,14 +3414,12 @@ export const GetScriptSecretRequest = Schema.Struct({
 ).annotations({ identifier: "GetScriptSecretRequest" }) as unknown as Schema.Schema<GetScriptSecretRequest>;
 
 export interface GetScriptSecretResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetScriptSecretResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -3612,13 +3458,13 @@ export const DeleteScriptSecret1Request = Schema.Struct({
 ).annotations({ identifier: "DeleteScriptSecret1Request" }) as unknown as Schema.Schema<DeleteScriptSecret1Request>;
 
 export interface DeleteScriptSecret1Response {
-  result: unknown;
+  result: { id?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteScriptSecret1Response = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Literal(null))
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3654,59 +3500,57 @@ export const GetSettings1Request = Schema.Struct({
 ).annotations({ identifier: "GetSettings1Request" }) as unknown as Schema.Schema<GetSettings1Request>;
 
 export interface GetSettings1Response {
-  result: unknown;
+  result: { bindings?: unknown; compatibility_date?: unknown; compatibility_flags?: unknown; limits?: { cpu_ms?: number }; logpush?: boolean; migrations?: unknown; observability?: { enabled: boolean; head_sampling_rate?: number; logs?: { destinations?: string[]; enabled: boolean; head_sampling_rate?: number; invocation_logs: boolean; persist?: boolean } }; placement?: unknown; tags?: unknown; tail_consumers?: unknown; usage_model?: "standard" | "bundled" | "unbound" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetSettings1Response = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  bindings: Schema.optional(Schema.Array(Schema.Struct({}))),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
-  limits: Schema.optional(Schema.Struct({
-  cpu_ms: Schema.optional(Schema.Number)
-})),
-  logpush: Schema.optional(Schema.Boolean),
-  migrations: Schema.optional(Schema.Union(Schema.Struct({
-  new_tag: Schema.optional(Schema.String),
-  old_tag: Schema.optional(Schema.String)
+  bindings: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
+  cpu_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  logpush: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  migrations: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  new_tag: Schema.optional(Schema.NullOr(Schema.String)),
+  old_tag: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  steps: Schema.optional(Schema.Array(Schema.Struct({
-  deleted_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_sqlite_classes: Schema.optional(Schema.Array(Schema.String)),
-  renamed_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-}))),
-  transferred_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  from_script: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-})))
-})))
-}))),
-  observability: Schema.optional(Schema.Struct({
+  steps: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  deleted_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_sqlite_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  renamed_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  transferred_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  from_script: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+}))))
+}))))
+})))),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
   enabled: Schema.Boolean,
-  head_sampling_rate: Schema.optional(Schema.Number),
-  logs: Schema.optional(Schema.Struct({
-  destinations: Schema.optional(Schema.Array(Schema.String)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  destinations: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   enabled: Schema.Boolean,
-  head_sampling_rate: Schema.optional(Schema.Number),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
   invocation_logs: Schema.Boolean,
-  persist: Schema.optional(Schema.Boolean)
-}))
-})),
-  placement: Schema.optional(Schema.Struct({})),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  tail_consumers: Schema.optional(Schema.Array(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  namespace: Schema.optional(Schema.String),
-  service: Schema.String
+  persist: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
 }))),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound"))
-})
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  tags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tail_consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace: Schema.optional(Schema.NullOr(Schema.String)),
+  service: Schema.String
+})))),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3744,59 +3588,57 @@ export const PatchSettings1Request = Schema.Struct({
 ).annotations({ identifier: "PatchSettings1Request" }) as unknown as Schema.Schema<PatchSettings1Request>;
 
 export interface PatchSettings1Response {
-  result: unknown;
+  result: { bindings?: unknown; compatibility_date?: unknown; compatibility_flags?: unknown; limits?: { cpu_ms?: number }; logpush?: boolean; migrations?: unknown; observability?: { enabled: boolean; head_sampling_rate?: number; logs?: { destinations?: string[]; enabled: boolean; head_sampling_rate?: number; invocation_logs: boolean; persist?: boolean } }; placement?: unknown; tags?: unknown; tail_consumers?: unknown; usage_model?: "standard" | "bundled" | "unbound" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PatchSettings1Response = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  bindings: Schema.optional(Schema.Array(Schema.Struct({}))),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
-  limits: Schema.optional(Schema.Struct({
-  cpu_ms: Schema.optional(Schema.Number)
-})),
-  logpush: Schema.optional(Schema.Boolean),
-  migrations: Schema.optional(Schema.Union(Schema.Struct({
-  new_tag: Schema.optional(Schema.String),
-  old_tag: Schema.optional(Schema.String)
+  bindings: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
+  cpu_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  logpush: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  migrations: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  new_tag: Schema.optional(Schema.NullOr(Schema.String)),
+  old_tag: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  steps: Schema.optional(Schema.Array(Schema.Struct({
-  deleted_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_sqlite_classes: Schema.optional(Schema.Array(Schema.String)),
-  renamed_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-}))),
-  transferred_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  from_script: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-})))
-})))
-}))),
-  observability: Schema.optional(Schema.Struct({
+  steps: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  deleted_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_sqlite_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  renamed_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  transferred_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  from_script: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+}))))
+}))))
+})))),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
   enabled: Schema.Boolean,
-  head_sampling_rate: Schema.optional(Schema.Number),
-  logs: Schema.optional(Schema.Struct({
-  destinations: Schema.optional(Schema.Array(Schema.String)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  destinations: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   enabled: Schema.Boolean,
-  head_sampling_rate: Schema.optional(Schema.Number),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
   invocation_logs: Schema.Boolean,
-  persist: Schema.optional(Schema.Boolean)
-}))
-})),
-  placement: Schema.optional(Schema.Struct({})),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  tail_consumers: Schema.optional(Schema.Array(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  namespace: Schema.optional(Schema.String),
-  service: Schema.String
+  persist: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
 }))),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound"))
-})
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  tags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tail_consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace: Schema.optional(Schema.NullOr(Schema.String)),
+  service: Schema.String
+})))),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3832,12 +3674,15 @@ export const GetSubdomainRequest = Schema.Struct({
 ).annotations({ identifier: "GetSubdomainRequest" }) as unknown as Schema.Schema<GetSubdomainRequest>;
 
 export interface GetSubdomainResponse {
-  result: Record<string, unknown>;
+  result: { enabled: boolean; previews_enabled: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetSubdomainResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  enabled: Schema.Boolean,
+  previews_enabled: Schema.Boolean
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -3870,19 +3715,22 @@ export const PostSubdomainRequest = Schema.Struct({
   script_name: Schema.String.pipe(T.HttpPath("script_name")),
   body: Schema.Struct({
   enabled: Schema.Boolean,
-  previews_enabled: Schema.optional(Schema.Boolean)
+  previews_enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/workers/scripts/{script_name}/subdomain" }),
 ).annotations({ identifier: "PostSubdomainRequest" }) as unknown as Schema.Schema<PostSubdomainRequest>;
 
 export interface PostSubdomainResponse {
-  result: Record<string, unknown>;
+  result: { enabled: boolean; previews_enabled: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PostSubdomainResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  enabled: Schema.Boolean,
+  previews_enabled: Schema.Boolean
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -3917,12 +3765,15 @@ export const DeleteSubdomainRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteSubdomainRequest" }) as unknown as Schema.Schema<DeleteSubdomainRequest>;
 
 export interface DeleteSubdomainResponse {
-  result: Record<string, unknown>;
+  result: { enabled: boolean; previews_enabled: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteSubdomainResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  enabled: Schema.Boolean,
+  previews_enabled: Schema.Boolean
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -3957,17 +3808,15 @@ export const GetAccountsAccountIdWorkersScriptsScriptNameTailsRequest = Schema.S
 ).annotations({ identifier: "GetAccountsAccountIdWorkersScriptsScriptNameTailsRequest" }) as unknown as Schema.Schema<GetAccountsAccountIdWorkersScriptsScriptNameTailsRequest>;
 
 export interface GetAccountsAccountIdWorkersScriptsScriptNameTailsResponse {
-  result: unknown;
+  result: { expires_at: string; id: unknown; url: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetAccountsAccountIdWorkersScriptsScriptNameTailsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
   expires_at: Schema.String,
   id: Schema.String,
   url: Schema.String
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4003,17 +3852,15 @@ export const WorkerTailLogsStartTailRequest = Schema.Struct({
 ).annotations({ identifier: "WorkerTailLogsStartTailRequest" }) as unknown as Schema.Schema<WorkerTailLogsStartTailRequest>;
 
 export interface WorkerTailLogsStartTailResponse {
-  result: unknown;
+  result: { expires_at: string; id: unknown; url: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkerTailLogsStartTailResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
   expires_at: Schema.String,
   id: Schema.String,
   url: Schema.String
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4051,30 +3898,12 @@ export const DeleteTailRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteTailRequest" }) as unknown as Schema.Schema<DeleteTailRequest>;
 
 export interface DeleteTailResponse {
-  result: { errors: { code: number; documentation_url?: string; message: string; source?: { pointer?: string } }[]; messages: { code: number; documentation_url?: string; message: string; source?: { pointer?: string } }[]; success: true };
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteTailResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  documentation_url: Schema.optional(Schema.String),
-  message: Schema.String,
-  source: Schema.optional(Schema.Struct({
-  pointer: Schema.optional(Schema.String)
-}))
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  documentation_url: Schema.optional(Schema.String),
-  message: Schema.String,
-  source: Schema.optional(Schema.Struct({
-  pointer: Schema.optional(Schema.String)
-}))
-})),
-  success: Schema.Literal(true)
-}),
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -4109,18 +3938,16 @@ export const WorkerScriptFetchUsageModelRequest = Schema.Struct({
 ).annotations({ identifier: "WorkerScriptFetchUsageModelRequest" }) as unknown as Schema.Schema<WorkerScriptFetchUsageModelRequest>;
 
 export interface WorkerScriptFetchUsageModelResponse {
-  result: unknown;
+  result: { usage_model?: "standard" | "bundled" | "unbound"; user_limits?: { cpu_ms?: number } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkerScriptFetchUsageModelResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound")),
-  user_limits: Schema.optional(Schema.Struct({
-  cpu_ms: Schema.optional(Schema.Number)
-}))
-})
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound"))),
+  user_limits: Schema.optional(Schema.NullOr(Schema.Struct({
+  cpu_ms: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4153,28 +3980,26 @@ export const UpdateUsageModelRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   script_name: Schema.String.pipe(T.HttpPath("script_name")),
   body: Schema.Struct({
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound")),
-  user_limits: Schema.optional(Schema.Struct({
-  cpu_ms: Schema.optional(Schema.Number)
-}))
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound"))),
+  user_limits: Schema.optional(Schema.NullOr(Schema.Struct({
+  cpu_ms: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/workers/scripts/{script_name}/usage-model" }),
 ).annotations({ identifier: "UpdateUsageModelRequest" }) as unknown as Schema.Schema<UpdateUsageModelRequest>;
 
 export interface UpdateUsageModelResponse {
-  result: unknown;
+  result: { usage_model?: "standard" | "bundled" | "unbound"; user_limits?: { cpu_ms?: number } };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const UpdateUsageModelResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound")),
-  user_limits: Schema.optional(Schema.Struct({
-  cpu_ms: Schema.optional(Schema.Number)
-}))
-})
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound"))),
+  user_limits: Schema.optional(Schema.NullOr(Schema.Struct({
+  cpu_ms: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4216,26 +4041,24 @@ export const ListVersionsRequest = Schema.Struct({
 ).annotations({ identifier: "ListVersionsRequest" }) as unknown as Schema.Schema<ListVersionsRequest>;
 
 export interface ListVersionsResponse {
-  result: unknown;
+  result: { items?: { id?: string; metadata?: { author_email?: string; author_id?: string; created_on?: string; hasPreview?: boolean; modified_on?: string; source?: "unknown" | "api" | "wrangler" | "terraform" | "dash" | "dash_template" | "integration" | "quick_editor" | "playground" | "workersci" }; number?: number }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListVersionsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  items: Schema.optional(Schema.Array(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  metadata: Schema.optional(Schema.Struct({
-  author_email: Schema.optional(Schema.String),
-  author_id: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.String),
-  hasPreview: Schema.optional(Schema.Boolean),
-  modified_on: Schema.optional(Schema.String),
-  source: Schema.optional(Schema.Literal("unknown", "api", "wrangler", "terraform", "dash", "dash_template", "integration", "quick_editor", "playground", "workersci"))
-})),
-  number: Schema.optional(Schema.Number)
-})))
-})
+  items: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  metadata: Schema.optional(Schema.NullOr(Schema.Struct({
+  author_email: Schema.optional(Schema.NullOr(Schema.String)),
+  author_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  hasPreview: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  source: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "api", "wrangler", "terraform", "dash", "dash_template", "integration", "quick_editor", "playground", "workersci")))
+}))),
+  number: Schema.optional(Schema.NullOr(Schema.Number))
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4279,9 +4102,7 @@ export interface WorkerVersionsUploadVersionResponse {
 
 export const WorkerVersionsUploadVersionResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  startup_time_ms: Schema.optional(Schema.Number)
-})
+  startup_time_ms: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4325,28 +4146,26 @@ export interface GetVersionDetailResponse {
 
 export const GetVersionDetailResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
   resources: Schema.Struct({
-  bindings: Schema.optional(Schema.Unknown),
-  script: Schema.optional(Schema.Struct({
-  etag: Schema.optional(Schema.String),
-  handlers: Schema.optional(Schema.Array(Schema.String)),
-  last_deployed_from: Schema.optional(Schema.String),
-  named_handlers: Schema.optional(Schema.Array(Schema.Struct({
-  handlers: Schema.optional(Schema.Array(Schema.String)),
-  name: Schema.optional(Schema.String)
+  bindings: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  script: Schema.optional(Schema.NullOr(Schema.Struct({
+  etag: Schema.optional(Schema.NullOr(Schema.String)),
+  handlers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  last_deployed_from: Schema.optional(Schema.NullOr(Schema.String)),
+  named_handlers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  handlers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  name: Schema.optional(Schema.NullOr(Schema.String))
+}))))
+}))),
+  script_runtime: Schema.optional(Schema.NullOr(Schema.Struct({
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
+  cpu_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  migration_tag: Schema.optional(Schema.NullOr(Schema.String)),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("bundled", "unbound", "standard")))
 })))
-})),
-  script_runtime: Schema.optional(Schema.Struct({
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
-  limits: Schema.optional(Schema.Struct({
-  cpu_ms: Schema.optional(Schema.Number)
-})),
-  migration_tag: Schema.optional(Schema.String),
-  usage_model: Schema.optional(Schema.Literal("bundled", "unbound", "standard"))
-}))
-})
 })
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -4385,12 +4204,12 @@ export const GetScriptContent1Request = Schema.Struct({
 ).annotations({ identifier: "GetScriptContent1Request" }) as unknown as Schema.Schema<GetScriptContent1Request>;
 
 export interface GetScriptContent1Response {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetScriptContent1Response = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -4438,9 +4257,7 @@ export interface PutScriptContent1Response {
 }
 
 export const PutScriptContent1Response = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.Unknown
-}),
+  result: Schema.Unknown,
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -4477,22 +4294,20 @@ export const GetSettings2Request = Schema.Struct({
 ).annotations({ identifier: "GetSettings2Request" }) as unknown as Schema.Schema<GetSettings2Request>;
 
 export interface GetSettings2Response {
-  result: unknown;
+  result: { logpush?: boolean; observability?: unknown; tags?: unknown; tail_consumers?: { environment?: string; namespace?: string; service: string }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetSettings2Response = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  logpush: Schema.optional(Schema.Boolean),
-  observability: Schema.optional(Schema.Struct({})),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  tail_consumers: Schema.optional(Schema.Array(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  namespace: Schema.optional(Schema.String),
+  logpush: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  tags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tail_consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace: Schema.optional(Schema.NullOr(Schema.String)),
   service: Schema.String
-})))
-})
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4528,14 +4343,14 @@ export const PatchSettings2Request = Schema.Struct({
   environment_name: Schema.String.pipe(T.HttpPath("environment_name")),
   body: Schema.Struct({
   result: Schema.Struct({
-  logpush: Schema.optional(Schema.Boolean),
-  observability: Schema.optional(Schema.Struct({})),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  tail_consumers: Schema.optional(Schema.Array(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  namespace: Schema.optional(Schema.String),
+  logpush: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  tags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tail_consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace: Schema.optional(Schema.NullOr(Schema.String)),
   service: Schema.String
-})))
+}))))
 })
 }).pipe(T.HttpBody())
 }).pipe(
@@ -4543,22 +4358,20 @@ export const PatchSettings2Request = Schema.Struct({
 ).annotations({ identifier: "PatchSettings2Request" }) as unknown as Schema.Schema<PatchSettings2Request>;
 
 export interface PatchSettings2Response {
-  result: unknown;
+  result: { logpush?: boolean; observability?: unknown; tags?: unknown; tail_consumers?: { environment?: string; namespace?: string; service: string }[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PatchSettings2Response = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  logpush: Schema.optional(Schema.Boolean),
-  observability: Schema.optional(Schema.Struct({})),
-  tags: Schema.optional(Schema.Array(Schema.String)),
-  tail_consumers: Schema.optional(Schema.Array(Schema.Struct({
-  environment: Schema.optional(Schema.String),
-  namespace: Schema.optional(Schema.String),
+  logpush: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  tags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tail_consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
+  namespace: Schema.optional(Schema.NullOr(Schema.String)),
   service: Schema.String
-})))
-})
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4592,15 +4405,13 @@ export const GetSubdomain1Request = Schema.Struct({
 ).annotations({ identifier: "GetSubdomain1Request" }) as unknown as Schema.Schema<GetSubdomain1Request>;
 
 export interface GetSubdomain1Response {
-  result: unknown;
+  result: { subdomain: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetSubdomain1Response = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
   subdomain: Schema.String
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4638,15 +4449,13 @@ export const CreateSubdomainRequest = Schema.Struct({
 ).annotations({ identifier: "CreateSubdomainRequest" }) as unknown as Schema.Schema<CreateSubdomainRequest>;
 
 export interface CreateSubdomainResponse {
-  result: unknown;
+  result: { subdomain: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateSubdomainResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
   subdomain: Schema.String
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4680,12 +4489,12 @@ export const DeleteSubdomain1Request = Schema.Struct({
 ).annotations({ identifier: "DeleteSubdomain1Request" }) as unknown as Schema.Schema<DeleteSubdomain1Request>;
 
 export interface DeleteSubdomain1Response {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteSubdomain1Response = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -4722,25 +4531,24 @@ export const ListworkersRequest = Schema.Struct({
 ).annotations({ identifier: "ListworkersRequest" }) as unknown as Schema.Schema<ListworkersRequest>;
 
 export interface ListworkersResponse {
-  result: unknown;
+  result: { created_on: string; id: string; logpush: boolean; name: string; observability: { enabled?: boolean; head_sampling_rate?: number; logs?: { enabled?: boolean; head_sampling_rate?: number; invocation_logs?: boolean } }; references: { dispatch_namespace_outbounds: { namespace_id: string; namespace_name: string; worker_id: string; worker_name: string }[]; domains: { certificate_id: string; hostname: string; id: string; zone_id: string; zone_name: string }[]; durable_objects: { namespace_id: string; namespace_name: string; worker_id: string; worker_name: string }[]; queues: { queue_consumer_id: string; queue_id: string; queue_name: string }[]; workers: { id: string; name: string }[] }; subdomain: { enabled?: boolean; previews_enabled?: boolean }; tags: string[]; tail_consumers: { name: string }[]; updated_on: string }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListworkersResponse = Schema.Struct({
-  result: Schema.Struct({
   result: Schema.Array(Schema.Struct({
   created_on: Schema.Date,
   id: Schema.String,
   logpush: Schema.Boolean,
   name: Schema.String,
   observability: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  head_sampling_rate: Schema.optional(Schema.Number),
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  head_sampling_rate: Schema.optional(Schema.Number),
-  invocation_logs: Schema.optional(Schema.Boolean)
-}))
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  invocation_logs: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
 }),
   references: Schema.Struct({
   dispatch_namespace_outbounds: Schema.Array(Schema.Struct({
@@ -4773,16 +4581,15 @@ export const ListworkersResponse = Schema.Struct({
 }))
 }),
   subdomain: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  previews_enabled: Schema.optional(Schema.Boolean)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  previews_enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   tags: Schema.Array(Schema.String),
   tail_consumers: Schema.Array(Schema.Struct({
   name: Schema.String
 })),
   updated_on: Schema.Date
-}))
-}),
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -4817,25 +4624,24 @@ export const CreateworkerRequest = Schema.Struct({
 ).annotations({ identifier: "CreateworkerRequest" }) as unknown as Schema.Schema<CreateworkerRequest>;
 
 export interface CreateworkerResponse {
-  result: unknown;
+  result: { created_on: string; id: string; logpush: boolean; name: string; observability: { enabled?: boolean; head_sampling_rate?: number; logs?: { enabled?: boolean; head_sampling_rate?: number; invocation_logs?: boolean } }; references: { dispatch_namespace_outbounds: { namespace_id: string; namespace_name: string; worker_id: string; worker_name: string }[]; domains: { certificate_id: string; hostname: string; id: string; zone_id: string; zone_name: string }[]; durable_objects: { namespace_id: string; namespace_name: string; worker_id: string; worker_name: string }[]; queues: { queue_consumer_id: string; queue_id: string; queue_name: string }[]; workers: { id: string; name: string }[] }; subdomain: { enabled?: boolean; previews_enabled?: boolean }; tags: string[]; tail_consumers: { name: string }[]; updated_on: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateworkerResponse = Schema.Struct({
-  result: Schema.Struct({
   result: Schema.Struct({
   created_on: Schema.Date,
   id: Schema.String,
   logpush: Schema.Boolean,
   name: Schema.String,
   observability: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  head_sampling_rate: Schema.optional(Schema.Number),
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  head_sampling_rate: Schema.optional(Schema.Number),
-  invocation_logs: Schema.optional(Schema.Boolean)
-}))
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  invocation_logs: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
 }),
   references: Schema.Struct({
   dispatch_namespace_outbounds: Schema.Array(Schema.Struct({
@@ -4868,15 +4674,14 @@ export const CreateworkerResponse = Schema.Struct({
 }))
 }),
   subdomain: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  previews_enabled: Schema.optional(Schema.Boolean)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  previews_enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   tags: Schema.Array(Schema.String),
   tail_consumers: Schema.Array(Schema.Struct({
   name: Schema.String
 })),
   updated_on: Schema.Date
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4912,25 +4717,24 @@ export const GetworkerRequest = Schema.Struct({
 ).annotations({ identifier: "GetworkerRequest" }) as unknown as Schema.Schema<GetworkerRequest>;
 
 export interface GetworkerResponse {
-  result: unknown;
+  result: { created_on: string; id: string; logpush: boolean; name: string; observability: { enabled?: boolean; head_sampling_rate?: number; logs?: { enabled?: boolean; head_sampling_rate?: number; invocation_logs?: boolean } }; references: { dispatch_namespace_outbounds: { namespace_id: string; namespace_name: string; worker_id: string; worker_name: string }[]; domains: { certificate_id: string; hostname: string; id: string; zone_id: string; zone_name: string }[]; durable_objects: { namespace_id: string; namespace_name: string; worker_id: string; worker_name: string }[]; queues: { queue_consumer_id: string; queue_id: string; queue_name: string }[]; workers: { id: string; name: string }[] }; subdomain: { enabled?: boolean; previews_enabled?: boolean }; tags: string[]; tail_consumers: { name: string }[]; updated_on: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetworkerResponse = Schema.Struct({
-  result: Schema.Struct({
   result: Schema.Struct({
   created_on: Schema.Date,
   id: Schema.String,
   logpush: Schema.Boolean,
   name: Schema.String,
   observability: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  head_sampling_rate: Schema.optional(Schema.Number),
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  head_sampling_rate: Schema.optional(Schema.Number),
-  invocation_logs: Schema.optional(Schema.Boolean)
-}))
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  invocation_logs: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
 }),
   references: Schema.Struct({
   dispatch_namespace_outbounds: Schema.Array(Schema.Struct({
@@ -4963,15 +4767,14 @@ export const GetworkerResponse = Schema.Struct({
 }))
 }),
   subdomain: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  previews_enabled: Schema.optional(Schema.Boolean)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  previews_enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   tags: Schema.Array(Schema.String),
   tail_consumers: Schema.Array(Schema.Struct({
   name: Schema.String
 })),
   updated_on: Schema.Date
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5009,25 +4812,24 @@ export const UpdateworkerRequest = Schema.Struct({
 ).annotations({ identifier: "UpdateworkerRequest" }) as unknown as Schema.Schema<UpdateworkerRequest>;
 
 export interface UpdateworkerResponse {
-  result: unknown;
+  result: { created_on: string; id: string; logpush: boolean; name: string; observability: { enabled?: boolean; head_sampling_rate?: number; logs?: { enabled?: boolean; head_sampling_rate?: number; invocation_logs?: boolean } }; references: { dispatch_namespace_outbounds: { namespace_id: string; namespace_name: string; worker_id: string; worker_name: string }[]; domains: { certificate_id: string; hostname: string; id: string; zone_id: string; zone_name: string }[]; durable_objects: { namespace_id: string; namespace_name: string; worker_id: string; worker_name: string }[]; queues: { queue_consumer_id: string; queue_id: string; queue_name: string }[]; workers: { id: string; name: string }[] }; subdomain: { enabled?: boolean; previews_enabled?: boolean }; tags: string[]; tail_consumers: { name: string }[]; updated_on: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const UpdateworkerResponse = Schema.Struct({
-  result: Schema.Struct({
   result: Schema.Struct({
   created_on: Schema.Date,
   id: Schema.String,
   logpush: Schema.Boolean,
   name: Schema.String,
   observability: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  head_sampling_rate: Schema.optional(Schema.Number),
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  head_sampling_rate: Schema.optional(Schema.Number),
-  invocation_logs: Schema.optional(Schema.Boolean)
-}))
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  invocation_logs: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
 }),
   references: Schema.Struct({
   dispatch_namespace_outbounds: Schema.Array(Schema.Struct({
@@ -5060,15 +4862,14 @@ export const UpdateworkerResponse = Schema.Struct({
 }))
 }),
   subdomain: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  previews_enabled: Schema.optional(Schema.Boolean)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  previews_enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   tags: Schema.Array(Schema.String),
   tail_consumers: Schema.Array(Schema.Struct({
   name: Schema.String
 })),
   updated_on: Schema.Date
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5104,30 +4905,12 @@ export const DeleteworkerRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteworkerRequest" }) as unknown as Schema.Schema<DeleteworkerRequest>;
 
 export interface DeleteworkerResponse {
-  result: { errors: { code: number; documentation_url?: string; message: string; source?: { pointer?: string } }[]; messages: { code: number; documentation_url?: string; message: string; source?: { pointer?: string } }[]; success: true };
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteworkerResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  documentation_url: Schema.optional(Schema.String),
-  message: Schema.String,
-  source: Schema.optional(Schema.Struct({
-  pointer: Schema.optional(Schema.String)
-}))
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  documentation_url: Schema.optional(Schema.String),
-  message: Schema.String,
-  source: Schema.optional(Schema.Struct({
-  pointer: Schema.optional(Schema.String)
-}))
-})),
-  success: Schema.Literal(true)
-}),
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -5162,25 +4945,24 @@ export const EditworkerRequest = Schema.Struct({
 ).annotations({ identifier: "EditworkerRequest" }) as unknown as Schema.Schema<EditworkerRequest>;
 
 export interface EditworkerResponse {
-  result: unknown;
+  result: { created_on: string; id: string; logpush: boolean; name: string; observability: { enabled?: boolean; head_sampling_rate?: number; logs?: { enabled?: boolean; head_sampling_rate?: number; invocation_logs?: boolean } }; references: { dispatch_namespace_outbounds: { namespace_id: string; namespace_name: string; worker_id: string; worker_name: string }[]; domains: { certificate_id: string; hostname: string; id: string; zone_id: string; zone_name: string }[]; durable_objects: { namespace_id: string; namespace_name: string; worker_id: string; worker_name: string }[]; queues: { queue_consumer_id: string; queue_id: string; queue_name: string }[]; workers: { id: string; name: string }[] }; subdomain: { enabled?: boolean; previews_enabled?: boolean }; tags: string[]; tail_consumers: { name: string }[]; updated_on: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const EditworkerResponse = Schema.Struct({
-  result: Schema.Struct({
   result: Schema.Struct({
   created_on: Schema.Date,
   id: Schema.String,
   logpush: Schema.Boolean,
   name: Schema.String,
   observability: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  head_sampling_rate: Schema.optional(Schema.Number),
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  head_sampling_rate: Schema.optional(Schema.Number),
-  invocation_logs: Schema.optional(Schema.Boolean)
-}))
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  head_sampling_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  invocation_logs: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
 }),
   references: Schema.Struct({
   dispatch_namespace_outbounds: Schema.Array(Schema.Struct({
@@ -5213,15 +4995,14 @@ export const EditworkerResponse = Schema.Struct({
 }))
 }),
   subdomain: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  previews_enabled: Schema.optional(Schema.Boolean)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  previews_enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   tags: Schema.Array(Schema.String),
   tail_consumers: Schema.Array(Schema.Struct({
   name: Schema.String
 })),
   updated_on: Schema.Date
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5261,68 +5042,66 @@ export const ListworkerversionsRequest = Schema.Struct({
 ).annotations({ identifier: "ListworkerversionsRequest" }) as unknown as Schema.Schema<ListworkerversionsRequest>;
 
 export interface ListworkerversionsResponse {
-  result: unknown;
+  result: { annotations?: { "workers/message"?: string; "workers/tag"?: string; "workers/triggered_by"?: string }; assets?: { config?: { html_handling?: "auto-trailing-slash" | "force-trailing-slash" | "drop-trailing-slash" | "none"; not_found_handling?: "none" | "404-page" | "single-page-application"; run_worker_first?: unknown }; jwt?: string }; bindings?: Record<string, unknown>[]; compatibility_date?: string; compatibility_flags?: string[]; created_on: string; id: string; limits?: { cpu_ms: number }; main_module?: string; migrations?: unknown; modules?: { content_base64: string; content_type: string; name: string }[]; number: number; placement?: { mode?: "smart" }; source?: string; startup_time_ms?: number; usage_model?: "standard" | "bundled" | "unbound" }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListworkerversionsResponse = Schema.Struct({
-  result: Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  annotations: Schema.optional(Schema.Struct({
-  "workers/message": Schema.optional(Schema.String),
-  "workers/tag": Schema.optional(Schema.String),
-  "workers/triggered_by": Schema.optional(Schema.String)
-})),
-  assets: Schema.optional(Schema.Struct({
-  config: Schema.optional(Schema.Struct({
-  html_handling: Schema.optional(Schema.Literal("auto-trailing-slash", "force-trailing-slash", "drop-trailing-slash", "none")),
-  not_found_handling: Schema.optional(Schema.Literal("none", "404-page", "single-page-application")),
-  run_worker_first: Schema.optional(Schema.Union(Schema.Array(Schema.String), Schema.Boolean))
-})),
-  jwt: Schema.optional(Schema.String)
-})),
-  bindings: Schema.optional(Schema.Array(Schema.Struct({}))),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
+  annotations: Schema.optional(Schema.NullOr(Schema.Struct({
+  "workers/message": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/tag": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/triggered_by": Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  assets: Schema.optional(Schema.NullOr(Schema.Struct({
+  config: Schema.optional(Schema.NullOr(Schema.Struct({
+  html_handling: Schema.optional(Schema.NullOr(Schema.Literal("auto-trailing-slash", "force-trailing-slash", "drop-trailing-slash", "none"))),
+  not_found_handling: Schema.optional(Schema.NullOr(Schema.Literal("none", "404-page", "single-page-application"))),
+  run_worker_first: Schema.optional(Schema.NullOr(Schema.Union(Schema.Array(Schema.String), Schema.Boolean)))
+}))),
+  jwt: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  bindings: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   created_on: Schema.Date,
   id: Schema.UUID,
-  limits: Schema.optional(Schema.Struct({
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  main_module: Schema.optional(Schema.String),
-  migrations: Schema.optional(Schema.Union(Schema.Struct({
-  new_tag: Schema.optional(Schema.String),
-  old_tag: Schema.optional(Schema.String)
+}))),
+  main_module: Schema.optional(Schema.NullOr(Schema.String)),
+  migrations: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  new_tag: Schema.optional(Schema.NullOr(Schema.String)),
+  old_tag: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  steps: Schema.optional(Schema.Array(Schema.Struct({
-  deleted_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_sqlite_classes: Schema.optional(Schema.Array(Schema.String)),
-  renamed_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-}))),
-  transferred_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  from_script: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-})))
-})))
-}))),
-  modules: Schema.optional(Schema.Array(Schema.Struct({
+  steps: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  deleted_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_sqlite_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  renamed_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  transferred_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  from_script: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+}))))
+}))))
+})))),
+  modules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   content_base64: Schema.String,
   content_type: Schema.String,
   name: Schema.String
-}))),
+})))),
   number: Schema.Number,
-  placement: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("smart"))
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("smart")))
+}))),
+  source: Schema.optional(Schema.NullOr(Schema.String)),
+  startup_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound")))
 })),
-  source: Schema.optional(Schema.String),
-  startup_time_ms: Schema.optional(Schema.Number),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound"))
-}))
-}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -5356,126 +5135,124 @@ export const CreateworkerversionRequest = Schema.Struct({
   worker_id: Schema.String.pipe(T.HttpPath("worker_id")),
   deploy: Schema.optional(Schema.Boolean).pipe(T.HttpQuery("deploy")),
   body: Schema.Struct({
-  annotations: Schema.optional(Schema.Struct({
-  "workers/message": Schema.optional(Schema.String),
-  "workers/tag": Schema.optional(Schema.String),
-  "workers/triggered_by": Schema.optional(Schema.String)
-})),
-  assets: Schema.optional(Schema.Struct({
-  config: Schema.optional(Schema.Struct({
-  html_handling: Schema.optional(Schema.Literal("auto-trailing-slash", "force-trailing-slash", "drop-trailing-slash", "none")),
-  not_found_handling: Schema.optional(Schema.Literal("none", "404-page", "single-page-application")),
-  run_worker_first: Schema.optional(Schema.Union(Schema.Array(Schema.String), Schema.Boolean))
-})),
-  jwt: Schema.optional(Schema.String)
-})),
-  bindings: Schema.optional(Schema.Array(Schema.Struct({}))),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
+  annotations: Schema.optional(Schema.NullOr(Schema.Struct({
+  "workers/message": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/tag": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/triggered_by": Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  assets: Schema.optional(Schema.NullOr(Schema.Struct({
+  config: Schema.optional(Schema.NullOr(Schema.Struct({
+  html_handling: Schema.optional(Schema.NullOr(Schema.Literal("auto-trailing-slash", "force-trailing-slash", "drop-trailing-slash", "none"))),
+  not_found_handling: Schema.optional(Schema.NullOr(Schema.Literal("none", "404-page", "single-page-application"))),
+  run_worker_first: Schema.optional(Schema.NullOr(Schema.Union(Schema.Array(Schema.String), Schema.Boolean)))
+}))),
+  jwt: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  bindings: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   created_on: Schema.Date,
   id: Schema.UUID,
-  limits: Schema.optional(Schema.Struct({
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  main_module: Schema.optional(Schema.String),
-  migrations: Schema.optional(Schema.Union(Schema.Struct({
-  new_tag: Schema.optional(Schema.String),
-  old_tag: Schema.optional(Schema.String)
+}))),
+  main_module: Schema.optional(Schema.NullOr(Schema.String)),
+  migrations: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  new_tag: Schema.optional(Schema.NullOr(Schema.String)),
+  old_tag: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  steps: Schema.optional(Schema.Array(Schema.Struct({
-  deleted_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_sqlite_classes: Schema.optional(Schema.Array(Schema.String)),
-  renamed_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-}))),
-  transferred_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  from_script: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-})))
-})))
-}))),
-  modules: Schema.optional(Schema.Array(Schema.Struct({
+  steps: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  deleted_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_sqlite_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  renamed_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  transferred_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  from_script: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+}))))
+}))))
+})))),
+  modules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   content_base64: Schema.String,
   content_type: Schema.String,
   name: Schema.String
-}))),
+})))),
   number: Schema.Number,
-  placement: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("smart"))
-})),
-  source: Schema.optional(Schema.String),
-  startup_time_ms: Schema.optional(Schema.Number),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound"))
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("smart")))
+}))),
+  source: Schema.optional(Schema.NullOr(Schema.String)),
+  startup_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/workers/workers/{worker_id}/versions" }),
 ).annotations({ identifier: "CreateworkerversionRequest" }) as unknown as Schema.Schema<CreateworkerversionRequest>;
 
 export interface CreateworkerversionResponse {
-  result: unknown;
+  result: { annotations?: { "workers/message"?: string; "workers/tag"?: string; "workers/triggered_by"?: string }; assets?: { config?: { html_handling?: "auto-trailing-slash" | "force-trailing-slash" | "drop-trailing-slash" | "none"; not_found_handling?: "none" | "404-page" | "single-page-application"; run_worker_first?: unknown }; jwt?: string }; bindings?: Record<string, unknown>[]; compatibility_date?: string; compatibility_flags?: string[]; created_on: string; id: string; limits?: { cpu_ms: number }; main_module?: string; migrations?: unknown; modules?: { content_base64: string; content_type: string; name: string }[]; number: number; placement?: { mode?: "smart" }; source?: string; startup_time_ms?: number; usage_model?: "standard" | "bundled" | "unbound" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateworkerversionResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  annotations: Schema.optional(Schema.Struct({
-  "workers/message": Schema.optional(Schema.String),
-  "workers/tag": Schema.optional(Schema.String),
-  "workers/triggered_by": Schema.optional(Schema.String)
-})),
-  assets: Schema.optional(Schema.Struct({
-  config: Schema.optional(Schema.Struct({
-  html_handling: Schema.optional(Schema.Literal("auto-trailing-slash", "force-trailing-slash", "drop-trailing-slash", "none")),
-  not_found_handling: Schema.optional(Schema.Literal("none", "404-page", "single-page-application")),
-  run_worker_first: Schema.optional(Schema.Union(Schema.Array(Schema.String), Schema.Boolean))
-})),
-  jwt: Schema.optional(Schema.String)
-})),
-  bindings: Schema.optional(Schema.Array(Schema.Struct({}))),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
+  annotations: Schema.optional(Schema.NullOr(Schema.Struct({
+  "workers/message": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/tag": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/triggered_by": Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  assets: Schema.optional(Schema.NullOr(Schema.Struct({
+  config: Schema.optional(Schema.NullOr(Schema.Struct({
+  html_handling: Schema.optional(Schema.NullOr(Schema.Literal("auto-trailing-slash", "force-trailing-slash", "drop-trailing-slash", "none"))),
+  not_found_handling: Schema.optional(Schema.NullOr(Schema.Literal("none", "404-page", "single-page-application"))),
+  run_worker_first: Schema.optional(Schema.NullOr(Schema.Union(Schema.Array(Schema.String), Schema.Boolean)))
+}))),
+  jwt: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  bindings: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   created_on: Schema.Date,
   id: Schema.UUID,
-  limits: Schema.optional(Schema.Struct({
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  main_module: Schema.optional(Schema.String),
-  migrations: Schema.optional(Schema.Union(Schema.Struct({
-  new_tag: Schema.optional(Schema.String),
-  old_tag: Schema.optional(Schema.String)
+}))),
+  main_module: Schema.optional(Schema.NullOr(Schema.String)),
+  migrations: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  new_tag: Schema.optional(Schema.NullOr(Schema.String)),
+  old_tag: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  steps: Schema.optional(Schema.Array(Schema.Struct({
-  deleted_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_sqlite_classes: Schema.optional(Schema.Array(Schema.String)),
-  renamed_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-}))),
-  transferred_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  from_script: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-})))
-})))
-}))),
-  modules: Schema.optional(Schema.Array(Schema.Struct({
+  steps: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  deleted_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_sqlite_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  renamed_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  transferred_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  from_script: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+}))))
+}))))
+})))),
+  modules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   content_base64: Schema.String,
   content_type: Schema.String,
   name: Schema.String
-}))),
+})))),
   number: Schema.Number,
-  placement: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("smart"))
-})),
-  source: Schema.optional(Schema.String),
-  startup_time_ms: Schema.optional(Schema.Number),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound"))
-})
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("smart")))
+}))),
+  source: Schema.optional(Schema.NullOr(Schema.String)),
+  startup_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5515,67 +5292,65 @@ export const GetworkerversionRequest = Schema.Struct({
 ).annotations({ identifier: "GetworkerversionRequest" }) as unknown as Schema.Schema<GetworkerversionRequest>;
 
 export interface GetworkerversionResponse {
-  result: unknown;
+  result: { annotations?: { "workers/message"?: string; "workers/tag"?: string; "workers/triggered_by"?: string }; assets?: { config?: { html_handling?: "auto-trailing-slash" | "force-trailing-slash" | "drop-trailing-slash" | "none"; not_found_handling?: "none" | "404-page" | "single-page-application"; run_worker_first?: unknown }; jwt?: string }; bindings?: Record<string, unknown>[]; compatibility_date?: string; compatibility_flags?: string[]; created_on: string; id: string; limits?: { cpu_ms: number }; main_module?: string; migrations?: unknown; modules?: { content_base64: string; content_type: string; name: string }[]; number: number; placement?: { mode?: "smart" }; source?: string; startup_time_ms?: number; usage_model?: "standard" | "bundled" | "unbound" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetworkerversionResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
-  annotations: Schema.optional(Schema.Struct({
-  "workers/message": Schema.optional(Schema.String),
-  "workers/tag": Schema.optional(Schema.String),
-  "workers/triggered_by": Schema.optional(Schema.String)
-})),
-  assets: Schema.optional(Schema.Struct({
-  config: Schema.optional(Schema.Struct({
-  html_handling: Schema.optional(Schema.Literal("auto-trailing-slash", "force-trailing-slash", "drop-trailing-slash", "none")),
-  not_found_handling: Schema.optional(Schema.Literal("none", "404-page", "single-page-application")),
-  run_worker_first: Schema.optional(Schema.Union(Schema.Array(Schema.String), Schema.Boolean))
-})),
-  jwt: Schema.optional(Schema.String)
-})),
-  bindings: Schema.optional(Schema.Array(Schema.Struct({}))),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
+  annotations: Schema.optional(Schema.NullOr(Schema.Struct({
+  "workers/message": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/tag": Schema.optional(Schema.NullOr(Schema.String)),
+  "workers/triggered_by": Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  assets: Schema.optional(Schema.NullOr(Schema.Struct({
+  config: Schema.optional(Schema.NullOr(Schema.Struct({
+  html_handling: Schema.optional(Schema.NullOr(Schema.Literal("auto-trailing-slash", "force-trailing-slash", "drop-trailing-slash", "none"))),
+  not_found_handling: Schema.optional(Schema.NullOr(Schema.Literal("none", "404-page", "single-page-application"))),
+  run_worker_first: Schema.optional(Schema.NullOr(Schema.Union(Schema.Array(Schema.String), Schema.Boolean)))
+}))),
+  jwt: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  bindings: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   created_on: Schema.Date,
   id: Schema.UUID,
-  limits: Schema.optional(Schema.Struct({
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  main_module: Schema.optional(Schema.String),
-  migrations: Schema.optional(Schema.Union(Schema.Struct({
-  new_tag: Schema.optional(Schema.String),
-  old_tag: Schema.optional(Schema.String)
+}))),
+  main_module: Schema.optional(Schema.NullOr(Schema.String)),
+  migrations: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  new_tag: Schema.optional(Schema.NullOr(Schema.String)),
+  old_tag: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  steps: Schema.optional(Schema.Array(Schema.Struct({
-  deleted_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_classes: Schema.optional(Schema.Array(Schema.String)),
-  new_sqlite_classes: Schema.optional(Schema.Array(Schema.String)),
-  renamed_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-}))),
-  transferred_classes: Schema.optional(Schema.Array(Schema.Struct({
-  from: Schema.optional(Schema.String),
-  from_script: Schema.optional(Schema.String),
-  to: Schema.optional(Schema.String)
-})))
-})))
-}))),
-  modules: Schema.optional(Schema.Array(Schema.Struct({
+  steps: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  deleted_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  new_sqlite_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  renamed_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  transferred_classes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  from: Schema.optional(Schema.NullOr(Schema.String)),
+  from_script: Schema.optional(Schema.NullOr(Schema.String)),
+  to: Schema.optional(Schema.NullOr(Schema.String))
+}))))
+}))))
+})))),
+  modules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   content_base64: Schema.String,
   content_type: Schema.String,
   name: Schema.String
-}))),
+})))),
   number: Schema.Number,
-  placement: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("smart"))
-})),
-  source: Schema.optional(Schema.String),
-  startup_time_ms: Schema.optional(Schema.Number),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound"))
-})
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("smart")))
+}))),
+  source: Schema.optional(Schema.NullOr(Schema.String)),
+  startup_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5613,30 +5388,12 @@ export const DeleteworkerversionRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteworkerversionRequest" }) as unknown as Schema.Schema<DeleteworkerversionRequest>;
 
 export interface DeleteworkerversionResponse {
-  result: { errors: { code: number; documentation_url?: string; message: string; source?: { pointer?: string } }[]; messages: { code: number; documentation_url?: string; message: string; source?: { pointer?: string } }[]; success: true };
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteworkerversionResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  documentation_url: Schema.optional(Schema.String),
-  message: Schema.String,
-  source: Schema.optional(Schema.Struct({
-  pointer: Schema.optional(Schema.String)
-}))
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  documentation_url: Schema.optional(Schema.String),
-  message: Schema.String,
-  source: Schema.optional(Schema.Struct({
-  pointer: Schema.optional(Schema.String)
-}))
-})),
-  success: Schema.Literal(true)
-}),
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),

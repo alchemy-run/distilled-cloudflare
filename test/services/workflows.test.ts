@@ -118,11 +118,7 @@ const withWorkflow = <A, E, R>(
     // Run the test
     return yield* fn(workflowName, scriptName);
   }).pipe(
-    Effect.ensuring(
-      cleanupWorkflow(workflowName).pipe(
-        Effect.andThen(cleanupWorker(scriptName)),
-      ),
-    ),
+    Effect.ensuring(cleanupWorkflow(workflowName).pipe(Effect.andThen(cleanupWorker(scriptName)))),
   );
 };
 

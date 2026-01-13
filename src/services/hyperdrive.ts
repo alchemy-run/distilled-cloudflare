@@ -17,6 +17,15 @@ import {
   CloudflareNetworkError,
   CloudflareHttpError,
 } from "../errors.ts";
+import {
+  AuthenticationError,
+  InvalidToken,
+  MissingToken,
+  RateLimited,
+  TokenExpired,
+  TooManyRequests,
+  Unauthorized,
+} from "../errors/generated.ts";
 
 export interface ListHyperdriveRequest {
   account_id: string;
@@ -29,14 +38,12 @@ export const ListHyperdriveRequest = Schema.Struct({
 ).annotations({ identifier: "ListHyperdriveRequest" }) as unknown as Schema.Schema<ListHyperdriveRequest>;
 
 export interface ListHyperdriveResponse {
-  result: unknown;
+  result: Record<string, unknown>[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListHyperdriveResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Array(Schema.Struct({})))
-}),
+  result: Schema.Array(Schema.Struct({})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -50,12 +57,12 @@ export const listHyperdrive: (
   input: ListHyperdriveRequest
 ) => Effect.Effect<
   ListHyperdriveResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: ListHyperdriveRequest,
   output: ListHyperdriveResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface CreateHyperdriveRequest {
@@ -84,14 +91,12 @@ export const CreateHyperdriveRequest = Schema.Struct({
 ).annotations({ identifier: "CreateHyperdriveRequest" }) as unknown as Schema.Schema<CreateHyperdriveRequest>;
 
 export interface CreateHyperdriveResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateHyperdriveResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -105,12 +110,12 @@ export const createHyperdrive: (
   input: CreateHyperdriveRequest
 ) => Effect.Effect<
   CreateHyperdriveResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: CreateHyperdriveRequest,
   output: CreateHyperdriveResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface GetHyperdriveRequest {
@@ -126,14 +131,12 @@ export const GetHyperdriveRequest = Schema.Struct({
 ).annotations({ identifier: "GetHyperdriveRequest" }) as unknown as Schema.Schema<GetHyperdriveRequest>;
 
 export interface GetHyperdriveResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetHyperdriveResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -147,12 +150,12 @@ export const getHyperdrive: (
   input: GetHyperdriveRequest
 ) => Effect.Effect<
   GetHyperdriveResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetHyperdriveRequest,
   output: GetHyperdriveResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface UpdateHyperdriveRequest {
@@ -183,14 +186,12 @@ export const UpdateHyperdriveRequest = Schema.Struct({
 ).annotations({ identifier: "UpdateHyperdriveRequest" }) as unknown as Schema.Schema<UpdateHyperdriveRequest>;
 
 export interface UpdateHyperdriveResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const UpdateHyperdriveResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -204,12 +205,12 @@ export const updateHyperdrive: (
   input: UpdateHyperdriveRequest
 ) => Effect.Effect<
   UpdateHyperdriveResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: UpdateHyperdriveRequest,
   output: UpdateHyperdriveResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface DeleteHyperdriveRequest {
@@ -225,14 +226,12 @@ export const DeleteHyperdriveRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteHyperdriveRequest" }) as unknown as Schema.Schema<DeleteHyperdriveRequest>;
 
 export interface DeleteHyperdriveResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteHyperdriveResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -246,12 +245,12 @@ export const deleteHyperdrive: (
   input: DeleteHyperdriveRequest
 ) => Effect.Effect<
   DeleteHyperdriveResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DeleteHyperdriveRequest,
   output: DeleteHyperdriveResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));
 
 export interface PatchHyperdriveRequest {
@@ -279,14 +278,12 @@ export const PatchHyperdriveRequest = Schema.Struct({
 ).annotations({ identifier: "PatchHyperdriveRequest" }) as unknown as Schema.Schema<PatchHyperdriveRequest>;
 
 export interface PatchHyperdriveResponse {
-  result: unknown;
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const PatchHyperdriveResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -300,10 +297,10 @@ export const patchHyperdrive: (
   input: PatchHyperdriveRequest
 ) => Effect.Effect<
   PatchHyperdriveResponse,
-  CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: PatchHyperdriveRequest,
   output: PatchHyperdriveResponse,
-  errors: [],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
 }));

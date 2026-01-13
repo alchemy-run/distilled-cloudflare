@@ -7,11 +7,7 @@
 
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import {
-  CloudflareError,
-  CloudflareHttpError,
-  UnknownCloudflareError,
-} from "../errors.ts";
+import { CloudflareError, CloudflareHttpError, UnknownCloudflareError } from "../errors.ts";
 
 /**
  * Cloudflare API response envelope.
@@ -106,9 +102,7 @@ export const parseResponse = <O>(
       const errors = json.errors ?? [];
       const error = errors[0];
       if (!error) {
-        return yield* Effect.fail(
-          new CloudflareError({ code: 0, message: "Unknown error" }),
-        );
+        return yield* Effect.fail(new CloudflareError({ code: 0, message: "Unknown error" }));
       }
 
       // Handle case where error code is missing
@@ -123,14 +117,19 @@ export const parseResponse = <O>(
           // Instantiate the specific error class directly
           // Error classes are TaggedError subclasses with (props) constructor
           try {
-            const errorInstance = new (ErrorClass as unknown as new (props: { code: number; message: string }) => CloudflareError)({
+            const errorInstance = new (ErrorClass as unknown as new (props: {
+              code: number;
+              message: string;
+            }) => CloudflareError)({
               code: errorCode,
               message: errorMessage,
             });
             return yield* Effect.fail(errorInstance);
           } catch {
             // If instantiation fails, fall back to base error
-            return yield* Effect.fail(new CloudflareError({ code: errorCode, message: errorMessage }));
+            return yield* Effect.fail(
+              new CloudflareError({ code: errorCode, message: errorMessage }),
+            );
           }
         }
 
@@ -160,7 +159,10 @@ export const parseResponse = <O>(
     }
 
     // Decode the result using the output schema
-    const result = yield* Schema.decodeUnknown(outputSchema)(responseObject).pipe(
+    // Use onExcessProperty: "ignore" to allow unknown fields from the API
+    const result = yield* Schema.decodeUnknown(outputSchema, {
+      onExcessProperty: "ignore",
+    })(responseObject).pipe(
       Effect.mapError(
         () =>
           new CloudflareHttpError({

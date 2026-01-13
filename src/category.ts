@@ -75,8 +75,7 @@ export const isAuthError = (error: { readonly _tag?: string }): boolean =>
  * Check if an error is a not found error.
  */
 export const isNotFoundError = (error: { readonly _tag?: string }): boolean =>
-  error._tag?.includes("NotFound") === true ||
-  error._tag?.includes("NoSuch") === true;
+  error._tag?.includes("NotFound") === true || error._tag?.includes("NoSuch") === true;
 
 /**
  * Check if an error is a conflict error.
@@ -90,5 +89,4 @@ export const isConflictError = (error: { readonly _tag?: string }): boolean =>
  * Check if an error is a server error.
  */
 export const isServerError = (error: { readonly _tag?: string }): boolean =>
-  error._tag?.includes("Internal") === true ||
-  error._tag?.includes("Server") === true;
+  error._tag?.includes("Internal") === true || error._tag?.includes("Server") === true;

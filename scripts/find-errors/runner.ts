@@ -73,20 +73,25 @@ export const callEndpoint = (
       headers["X-Auth-Email"] = auth.email;
     }
 
-    let request = HttpClientRequest.make(method as "GET" | "POST" | "PUT" | "DELETE" | "PATCH")(url);
+    let request = HttpClientRequest.make(method as "GET" | "POST" | "PUT" | "DELETE" | "PATCH")(
+      url,
+    );
     request = HttpClientRequest.setHeaders(headers)(request);
 
     if (body !== undefined && method !== "GET" && method !== "HEAD") {
-      request = HttpClientRequest.setBody(
-        HttpBody.text(JSON.stringify(body), "application/json"),
-      )(request);
+      request = HttpClientRequest.setBody(HttpBody.text(JSON.stringify(body), "application/json"))(
+        request,
+      );
     }
 
     const response = yield* client.execute(request).pipe(
-      Effect.mapError((error) => ({
-        success: false,
-        errorMessage: String(error),
-      } as CallResult)),
+      Effect.mapError(
+        (error) =>
+          ({
+            success: false,
+            errorMessage: String(error),
+          }) as CallResult,
+      ),
     );
 
     const json = yield* response.json.pipe(
@@ -111,11 +116,11 @@ export const callEndpoint = (
       tracker.allErrors.push({ code: errorCode, message: errorMessage });
 
       // Add to catalog if new
-      const { catalog: updatedCatalog, isNew, suggestedName } = addDiscoveredError(
-        tracker.catalog,
-        errorCode,
-        errorMessage,
-      );
+      const {
+        catalog: updatedCatalog,
+        isNew,
+        suggestedName,
+      } = addDiscoveredError(tracker.catalog, errorCode, errorMessage);
 
       if (isNew) {
         tracker.catalog = updatedCatalog;

@@ -108,12 +108,12 @@ export const ListDnsRecordsRequest = Schema.Struct({
 ).annotations({ identifier: "ListDnsRecordsRequest" }) as unknown as Schema.Schema<ListDnsRecordsRequest>;
 
 export interface ListDnsRecordsResponse {
-  result: Record<string, unknown>;
+  result: Record<string, unknown>[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListDnsRecordsResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Array(Schema.Struct({})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -197,12 +197,17 @@ export const DnsRecordsForAZoneBatchDnsRecordsRequest = Schema.Struct({
 ).annotations({ identifier: "DnsRecordsForAZoneBatchDnsRecordsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneBatchDnsRecordsRequest>;
 
 export interface DnsRecordsForAZoneBatchDnsRecordsResponse {
-  result: Record<string, unknown>;
+  result: { deletes?: Record<string, unknown>[]; patches?: Record<string, unknown>[]; posts?: Record<string, unknown>[]; puts?: Record<string, unknown>[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DnsRecordsForAZoneBatchDnsRecordsResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  deletes: Schema.optional(Schema.Array(Schema.Struct({}))),
+  patches: Schema.optional(Schema.Array(Schema.Struct({}))),
+  posts: Schema.optional(Schema.Array(Schema.Struct({}))),
+  puts: Schema.optional(Schema.Array(Schema.Struct({})))
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -235,12 +240,12 @@ export const DnsRecordsForAZoneExportDnsRecordsRequest = Schema.Struct({
 ).annotations({ identifier: "DnsRecordsForAZoneExportDnsRecordsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneExportDnsRecordsRequest>;
 
 export interface DnsRecordsForAZoneExportDnsRecordsResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DnsRecordsForAZoneExportDnsRecordsResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -275,12 +280,15 @@ export const DnsRecordsForAZoneImportDnsRecordsRequest = Schema.Struct({
 ).annotations({ identifier: "DnsRecordsForAZoneImportDnsRecordsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneImportDnsRecordsRequest>;
 
 export interface DnsRecordsForAZoneImportDnsRecordsResponse {
-  result: Record<string, unknown>;
+  result: { recs_added?: number; total_records_parsed?: number };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DnsRecordsForAZoneImportDnsRecordsResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  recs_added: Schema.optional(Schema.Number),
+  total_records_parsed: Schema.optional(Schema.Number)
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -313,12 +321,15 @@ export const DnsRecordsForAZoneScanDnsRecordsRequest = Schema.Struct({
 ).annotations({ identifier: "DnsRecordsForAZoneScanDnsRecordsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneScanDnsRecordsRequest>;
 
 export interface DnsRecordsForAZoneScanDnsRecordsResponse {
-  result: Record<string, unknown>;
+  result: { recs_added?: number; total_records_parsed?: number };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DnsRecordsForAZoneScanDnsRecordsResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  recs_added: Schema.optional(Schema.Number),
+  total_records_parsed: Schema.optional(Schema.Number)
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -351,12 +362,12 @@ export const DnsRecordsForAZoneReviewDnsScanRequest = Schema.Struct({
 ).annotations({ identifier: "DnsRecordsForAZoneReviewDnsScanRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneReviewDnsScanRequest>;
 
 export interface DnsRecordsForAZoneReviewDnsScanResponse {
-  result: Record<string, unknown>;
+  result: Record<string, unknown>[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DnsRecordsForAZoneReviewDnsScanResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Array(Schema.Struct({})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -394,12 +405,15 @@ export const DnsRecordsForAZoneApplyDnsScanResultsRequest = Schema.Struct({
 ).annotations({ identifier: "DnsRecordsForAZoneApplyDnsScanResultsRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneApplyDnsScanResultsRequest>;
 
 export interface DnsRecordsForAZoneApplyDnsScanResultsResponse {
-  result: Record<string, unknown>;
+  result: { accepts?: Record<string, unknown>[]; rejects?: string[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DnsRecordsForAZoneApplyDnsScanResultsResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  accepts: Schema.optional(Schema.Array(Schema.Struct({}))),
+  rejects: Schema.optional(Schema.Array(Schema.String))
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -432,12 +446,12 @@ export const DnsRecordsForAZoneTriggerDnsScanRequest = Schema.Struct({
 ).annotations({ identifier: "DnsRecordsForAZoneTriggerDnsScanRequest" }) as unknown as Schema.Schema<DnsRecordsForAZoneTriggerDnsScanRequest>;
 
 export interface DnsRecordsForAZoneTriggerDnsScanResponse {
-  result: Record<string, unknown>;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DnsRecordsForAZoneTriggerDnsScanResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -470,12 +484,15 @@ export const GetUsageRequest = Schema.Struct({
 ).annotations({ identifier: "GetUsageRequest" }) as unknown as Schema.Schema<GetUsageRequest>;
 
 export interface GetUsageResponse {
-  result: Record<string, unknown>;
+  result: { record_quota?: number; record_usage?: number };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetUsageResponse = Schema.Struct({
-  result: Schema.Struct({}),
+  result: Schema.Struct({
+  record_quota: Schema.optional(Schema.Number),
+  record_usage: Schema.optional(Schema.Number)
+}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -592,15 +609,13 @@ export const DeleteDnsRecordRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteDnsRecordRequest" }) as unknown as Schema.Schema<DeleteDnsRecordRequest>;
 
 export interface DeleteDnsRecordResponse {
-  result: { result?: { id?: string } };
+  result: { id?: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteDnsRecordResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   id: Schema.optional(Schema.String)
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

@@ -10,11 +10,7 @@ import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";
 import { test, getAccountId } from "../test.ts";
 import * as Queues from "../../src/services/queues.ts";
-import {
-  QueueNotFound,
-  QueueAlreadyExists,
-  InvalidQueueName,
-} from "../../src/errors/generated.ts";
+import { QueueNotFound, QueueAlreadyExists, InvalidQueueName } from "../../src/errors/generated.ts";
 
 const accountId = () => getAccountId();
 
@@ -46,10 +42,7 @@ const cleanupByName = (name: string) =>
   }).pipe(Effect.ignore);
 
 // Helper to create a queue and run a test, then cleanup
-const withQueue = <A, E, R>(
-  name: string,
-  fn: (queueId: string) => Effect.Effect<A, E, R>,
-) =>
+const withQueue = <A, E, R>(name: string, fn: (queueId: string) => Effect.Effect<A, E, R>) =>
   Effect.gen(function* () {
     yield* cleanupByName(name);
 

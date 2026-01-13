@@ -49,9 +49,7 @@ export interface ApiToken {
   readonly auth: CloudflareAuth;
 }
 
-export const ApiToken = Context.GenericTag<ApiToken>(
-  "@distilled-cloudflare/ApiToken",
-);
+export const ApiToken = Context.GenericTag<ApiToken>("@distilled-cloudflare/ApiToken");
 
 /**
  * Cloudflare Account ID - required for account-scoped operations.
@@ -60,9 +58,7 @@ export interface AccountId {
   readonly accountId: string;
 }
 
-export const AccountId = Context.GenericTag<AccountId>(
-  "@distilled-cloudflare/AccountId",
-);
+export const AccountId = Context.GenericTag<AccountId>("@distilled-cloudflare/AccountId");
 
 /**
  * Cloudflare Zone ID - required for zone-scoped operations.
@@ -71,9 +67,7 @@ export interface ZoneId {
   readonly zoneId: string;
 }
 
-export const ZoneId = Context.GenericTag<ZoneId>(
-  "@distilled-cloudflare/ZoneId",
-);
+export const ZoneId = Context.GenericTag<ZoneId>("@distilled-cloudflare/ZoneId");
 
 /**
  * Create an ApiToken layer from environment variables.
@@ -118,10 +112,7 @@ export const fromToken = (token: string): Layer.Layer<ApiToken> =>
 /**
  * Create an ApiToken layer from API Key + Email.
  */
-export const fromApiKey = (
-  apiKey: string,
-  email: string,
-): Layer.Layer<ApiToken> =>
+export const fromApiKey = (apiKey: string, email: string): Layer.Layer<ApiToken> =>
   Layer.succeed(ApiToken, {
     auth: { type: "key" as const, apiKey: Redacted.make(apiKey), email },
   });
@@ -136,9 +127,7 @@ export const accountIdFromEnv = (): Layer.Layer<AccountId> =>
     Effect.sync(() => {
       const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
       if (!accountId) {
-        throw new Error(
-          "CLOUDFLARE_ACCOUNT_ID environment variable is not set",
-        );
+        throw new Error("CLOUDFLARE_ACCOUNT_ID environment variable is not set");
       }
       return { accountId };
     }),

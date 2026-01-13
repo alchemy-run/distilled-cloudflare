@@ -93,7 +93,9 @@ const generate = Effect.gen(function* () {
       lines.push(`/**`);
       lines.push(` * Cloudflare error code ${code}: ${name}`);
       lines.push(` */`);
-      lines.push(`export class ${safeName} extends Schema.TaggedError<${safeName}>()("${safeName}", {`);
+      lines.push(
+        `export class ${safeName} extends Schema.TaggedError<${safeName}>()("${safeName}", {`,
+      );
       lines.push(`  code: Schema.Literal(${code}),`);
       lines.push(`  message: Schema.String,`);
       lines.push(`}) {`);
@@ -141,7 +143,9 @@ const generate = Effect.gen(function* () {
   lines.push(` * Error catalog for response parser.`);
   lines.push(` * Maps error codes to their names (matching the class identifiers).`);
   lines.push(` */`);
-  lines.push(`export const ERROR_CATALOG: Map<number, { name: string; category: string }> = new Map([`);
+  lines.push(
+    `export const ERROR_CATALOG: Map<number, { name: string; category: string }> = new Map([`,
+  );
   for (const [code, entry] of Object.entries(catalog.codes)) {
     const className = codeToClassName.get(Number(code));
     if (className) {
@@ -155,7 +159,9 @@ const generate = Effect.gen(function* () {
   const content = lines.join("\n");
   yield* fs.writeFileString("src/errors/generated.ts", content);
 
-  console.log(`✅ Generated src/errors/generated.ts with ${Object.keys(catalog.codes).length} error classes\n`);
+  console.log(
+    `✅ Generated src/errors/generated.ts with ${Object.keys(catalog.codes).length} error classes\n`,
+  );
 
   // Print summary
   console.log(`📋 Summary by category:`);

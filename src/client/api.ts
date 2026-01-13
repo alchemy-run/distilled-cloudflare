@@ -20,10 +20,7 @@ import {
 } from "../errors.ts";
 import * as T from "../traits.ts";
 import { buildRequest } from "./request-builder.ts";
-import {
-  parseResponse,
-  type ErrorCatalog,
-} from "./response-parser.ts";
+import { parseResponse, type ErrorCatalog } from "./response-parser.ts";
 
 const CLOUDFLARE_API_BASE = "https://api.cloudflare.com/client/v4";
 
@@ -43,10 +40,7 @@ export interface Operation<
 /**
  * Create an Effect-returning API function from an operation definition.
  */
-export const make = <
-  I extends Schema.Schema.AnyNoContext,
-  O extends Schema.Schema.AnyNoContext,
->(
+export const make = <I extends Schema.Schema.AnyNoContext, O extends Schema.Schema.AnyNoContext>(
   initOperation: () => {
     input: I;
     output: O;
@@ -62,14 +56,14 @@ export const make = <
   // Build error schema map and catalog from the errors array
   const errorSchemas = new Map<string, Schema.Schema.AnyNoContext>();
   const catalog: ErrorCatalog = new Map();
-  
+
   for (const errorSchema of op.errors) {
     const ErrorClass = errorSchema as unknown as { name: string; code?: number };
     const identifier = ErrorClass.name;
-    
+
     // Add to schema map (name -> schema)
     errorSchemas.set(identifier, errorSchema);
-    
+
     // Add to catalog (code -> name) if the error has a static code property
     if (typeof ErrorClass.code === "number") {
       catalog.set(ErrorClass.code, { name: identifier, category: "error" });
@@ -95,10 +89,7 @@ export const make = <
         .filter(([_, v]) => v !== undefined)
         .flatMap(([k, v]) => {
           if (Array.isArray(v)) {
-            return v.map(
-              (item) =>
-                `${encodeURIComponent(k)}=${encodeURIComponent(item)}`,
-            );
+            return v.map((item) => `${encodeURIComponent(k)}=${encodeURIComponent(item)}`);
           }
           return `${encodeURIComponent(k)}=${encodeURIComponent(v!)}`;
         })
@@ -141,22 +132,23 @@ export const make = <
       if (request.body !== undefined) {
         if (isFormData) {
           // FormData body - use formData body type
-          httpRequest = HttpClientRequest.setBody(
-            HttpBody.formData(request.body as FormData),
-          )(httpRequest);
+          httpRequest = HttpClientRequest.setBody(HttpBody.formData(request.body as FormData))(
+            httpRequest,
+          );
         } else {
           // Serialize body based on content type
-          const bodyText = contentType === "application/json"
-            ? JSON.stringify(request.body)
-            : String(request.body);
+          const bodyText =
+            contentType === "application/json"
+              ? JSON.stringify(request.body)
+              : String(request.body);
 
-          httpRequest = HttpClientRequest.setBody(
-            HttpBody.text(bodyText, contentType),
-          )(httpRequest);
+          httpRequest = HttpClientRequest.setBody(HttpBody.text(bodyText, contentType))(
+            httpRequest,
+          );
         }
       }
 
-      yield* Effect.logDebug(httpRequest)
+      yield* Effect.logDebug(httpRequest);
 
       // Execute request
       const client = yield* HttpClient.HttpClient;
@@ -174,7 +166,7 @@ export const make = <
         status: rawResponse.status,
         headers: rawResponse.headers,
         // can't log body because it's a stream
-      })
+      });
 
       // Convert response headers to Record
       const responseHeaders = rawResponse.headers as Record<string, string>;
@@ -183,9 +175,7 @@ export const make = <
       // Convert Effect Stream to ReadableStream for the response parser
       const contentLength = responseHeaders["content-length"];
       const isEmptyBody =
-        request.method === "HEAD" ||
-        contentLength === "0" ||
-        rawResponse.status === 204;
+        request.method === "HEAD" || contentLength === "0" || rawResponse.status === 204;
 
       const responseBody = isEmptyBody
         ? new ReadableStream<Uint8Array>({ start: (c) => c.close() })

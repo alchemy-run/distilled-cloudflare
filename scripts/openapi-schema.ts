@@ -16,9 +16,7 @@ export const JsonReference = Schema.Struct({
 });
 export type JsonReference = typeof JsonReference.Type;
 
-export const isJsonReference = (
-  value: unknown,
-): value is JsonReference =>
+export const isJsonReference = (value: unknown): value is JsonReference =>
   typeof value === "object" &&
   value !== null &&
   "$ref" in value &&
@@ -217,11 +215,14 @@ export interface ComponentsObject {
 export interface ServerObject {
   url: string;
   description?: string;
-  variables?: Record<string, {
-    default: string;
-    enum?: string[];
-    description?: string;
-  }>;
+  variables?: Record<
+    string,
+    {
+      default: string;
+      enum?: string[];
+      description?: string;
+    }
+  >;
 }
 
 // =============================================================================
@@ -278,9 +279,7 @@ export const operationIdToFunctionName = (operationId: string): string => {
 
   // Find the last meaningful verb or use all parts
   const verbIndex = parts.findLastIndex((p) =>
-    ["list", "get", "create", "update", "delete", "patch", "post", "put"].includes(
-      p.toLowerCase(),
-    ),
+    ["list", "get", "create", "update", "delete", "patch", "post", "put"].includes(p.toLowerCase()),
   );
 
   const relevantParts = verbIndex >= 0 ? parts.slice(verbIndex) : parts;
@@ -288,9 +287,7 @@ export const operationIdToFunctionName = (operationId: string): string => {
   // camelCase the result
   return relevantParts
     .map((part, i) =>
-      i === 0
-        ? part.toLowerCase()
-        : part.charAt(0).toUpperCase() + part.slice(1).toLowerCase(),
+      i === 0 ? part.toLowerCase() : part.charAt(0).toUpperCase() + part.slice(1).toLowerCase(),
     )
     .join("");
 };

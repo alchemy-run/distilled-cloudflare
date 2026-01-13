@@ -59,11 +59,7 @@ export const loadServiceSpec = (serviceName: string) =>
     const data = yield* Schema.decodeUnknown(Schema.parseJson(ServiceSpec))(content);
 
     return data;
-  }).pipe(
-    Effect.catchAll(() =>
-      Effect.succeed<ServiceSpec>({ operations: {} }),
-    ),
-  );
+  }).pipe(Effect.catchAll(() => Effect.succeed<ServiceSpec>({ operations: {} })));
 
 /**
  * Save spec patches for a service to spec/{service}.json
@@ -83,11 +79,7 @@ export const saveServiceSpec = (serviceName: string, spec: ServiceSpec) =>
 /**
  * Record an error for an operation.
  */
-export const recordError = (
-  serviceName: string,
-  operationName: string,
-  errorName: string,
-) =>
+export const recordError = (serviceName: string, operationName: string, errorName: string) =>
   Effect.gen(function* () {
     const spec = yield* loadServiceSpec(serviceName);
     const opPatch = spec.operations[operationName] ?? {};

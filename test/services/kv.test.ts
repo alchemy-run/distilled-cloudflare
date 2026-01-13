@@ -9,6 +9,7 @@ import { describe, expect } from "vitest";
 import * as Effect from "effect/Effect";
 import { test, getAccountId } from "../test.ts";
 import * as KV from "../../src/services/kv.ts";
+import { NamespaceNameRequired, IncompleteBody, ParseError } from "../../src/errors/generated.ts";
 
 const accountId = () => getAccountId();
 
@@ -25,8 +26,8 @@ const findNamespaceByTitle = (title: string) =>
     const response = yield* KV.listNamespaces({
       account_id: accountId(),
     });
-    const namespaces = (response.result as { result?: Array<{ id: string; title: string }> }).result ?? [];
-    return namespaces.find((ns) => ns.title === title);
+    // response.result is already the array of namespaces
+    return response.result.find((ns) => ns.title === title);
   });
 
 // Cleanup by title - finds and deletes namespace by name
@@ -51,14 +52,10 @@ const withNamespace = <A, E, R>(
       body: { title },
     });
 
-    const namespaceId = (created.result as { result?: { id: string } }).result?.id;
-    if (!namespaceId) {
-      return yield* Effect.die(new Error("Failed to create namespace"));
-    }
+    // created.result is already the namespace object with id
+    const namespaceId = created.result.id;
 
-    return yield* fn(namespaceId).pipe(
-      Effect.ensuring(cleanupNamespace(namespaceId)),
-    );
+    return yield* fn(namespaceId).pipe(Effect.ensuring(cleanupNamespace(namespaceId)));
   });
 
 describe("KV", () => {
@@ -83,7 +80,8 @@ describe("KV", () => {
         });
         expect(created.result).toBeDefined();
 
-        const namespaceId = (created.result as { result?: { id: string } }).result?.id;
+        // created.result is already the namespace object
+        const namespaceId = created.result.id;
         expect(namespaceId).toBeDefined();
 
         // Get namespace
@@ -117,8 +115,8 @@ describe("KV", () => {
             namespace_id: namespaceId,
           });
 
-          const result = (fetched.result as { result?: { title: string } }).result;
-          expect(result?.title).toBe(newTitle);
+          // fetched.result is already the namespace object
+          expect(fetched.result.title).toBe(newTitle);
         }),
       ));
   });
@@ -212,9 +210,9 @@ describe("KV", () => {
     test("list keys with limit", () =>
       withNamespace("itty-cf-kv-limit", (namespaceId) =>
         Effect.gen(function* () {
-          // Write multiple keys
-          const keys = Array.from({ length: 5 }, (_, i) => ({
-            key: `key-${i}`,
+          // Write multiple keys (need at least 10+ to test limit since API requires limit >= 10)
+          const keys = Array.from({ length: 15 }, (_, i) => ({
+            key: `key-${String(i).padStart(2, "0")}`,
             value: `value-${i}`,
           }));
 
@@ -224,13 +222,53 @@ describe("KV", () => {
             body: keys,
           });
 
-          // List with limit
+          // List with limit (minimum is 10)
           const response = yield* KV.listANamespaceSKeys({
             account_id: accountId(),
             namespace_id: namespaceId,
-            limit: 2,
+            limit: 10,
           });
           expect(response.result).toBeDefined();
+          // Should return at most 10 keys
+          expect(response.result.length).toBeLessThanOrEqual(10);
+        }),
+      ));
+
+    test("write and read single key-value pair with FormData", () =>
+      withNamespace("itty-cf-kv-single-rw", (namespaceId) =>
+        Effect.gen(function* () {
+          const keyName = "single-key";
+          const value = "Hello, KV!";
+          const metadata = { author: "test", version: 1 };
+
+          // Create FormData for the write request
+          const formData = new FormData();
+          formData.append("value", value);
+          formData.append("metadata", JSON.stringify(metadata));
+
+          // Write single key with FormData
+          yield* KV.workersKvNamespaceWriteKeyValuePairWithMetadata({
+            account_id: accountId(),
+            namespace_id: namespaceId,
+            key_name: keyName,
+            body: formData,
+          });
+
+          // Read the metadata
+          const metadataResponse = yield* KV.workersKvNamespaceReadTheMetadataForAKey({
+            account_id: accountId(),
+            namespace_id: namespaceId,
+            key_name: keyName,
+          });
+          expect(metadataResponse.result).toBeDefined();
+
+          // Verify key exists in list
+          const keysResponse = yield* KV.listANamespaceSKeys({
+            account_id: accountId(),
+            namespace_id: namespaceId,
+          });
+          const found = keysResponse.result.find((k) => k.name === keyName);
+          expect(found).toBeDefined();
         }),
       ));
   });
@@ -289,8 +327,8 @@ describe("KV", () => {
             namespace_id: namespaceId,
           });
 
-          const keys = (remaining.result as { result?: Array<{ name: string }> }).result ?? [];
-          const found = keys.find((k) => k.name === "to-delete");
+          // remaining.result is already the array of keys
+          const found = remaining.result.find((k) => k.name === "to-delete");
           expect(found).toBeUndefined();
         }),
       ));
@@ -308,6 +346,69 @@ describe("KV", () => {
         });
         expect(response.result).toBeDefined();
         expect(response.result_info).toBeDefined();
+      }));
+  });
+
+  describe("Error Handling", () => {
+    test("NamespaceNameRequired error when creating with invalid body", () =>
+      Effect.gen(function* () {
+        // Pass a body with wrong field (not title) to trigger 10019
+        const result = yield* KV.createANamespace({
+          account_id: accountId(),
+          // @ts-expect-error - intentionally using wrong field to trigger error
+          body: { wrongField: "test" },
+        }).pipe(Effect.exit);
+
+        expect(result._tag).toBe("Failure");
+        if (result._tag === "Failure") {
+          const error = result.cause;
+          expect(error._tag).toBe("Fail");
+          if (error._tag === "Fail") {
+            expect(error.error).toBeInstanceOf(NamespaceNameRequired);
+            expect((error.error as NamespaceNameRequired).code).toBe(10019);
+          }
+        }
+      }));
+
+    test("IncompleteBody error when accessing non-existent namespace", () =>
+      Effect.gen(function* () {
+        // Use a fake namespace ID that doesn't exist
+        // Cloudflare returns 10013 (IncompleteBody) for this case
+        const fakeNamespaceId = "00000000000000000000000000000000";
+
+        const result = yield* KV.getANamespace({
+          account_id: accountId(),
+          namespace_id: fakeNamespaceId,
+        }).pipe(Effect.exit);
+
+        expect(result._tag).toBe("Failure");
+        if (result._tag === "Failure") {
+          const error = result.cause;
+          expect(error._tag).toBe("Fail");
+          if (error._tag === "Fail") {
+            expect(error.error).toBeInstanceOf(IncompleteBody);
+            expect((error.error as IncompleteBody).code).toBe(10013);
+          }
+        }
+      }));
+
+    test("IncompleteBody error when listing keys for non-existent namespace", () =>
+      Effect.gen(function* () {
+        const fakeNamespaceId = "00000000000000000000000000000000";
+
+        const result = yield* KV.listANamespaceSKeys({
+          account_id: accountId(),
+          namespace_id: fakeNamespaceId,
+        }).pipe(Effect.exit);
+
+        expect(result._tag).toBe("Failure");
+        if (result._tag === "Failure") {
+          const error = result.cause;
+          expect(error._tag).toBe("Fail");
+          if (error._tag === "Fail") {
+            expect(error.error).toBeInstanceOf(IncompleteBody);
+          }
+        }
       }));
   });
 });

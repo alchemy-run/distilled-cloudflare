@@ -22,7 +22,9 @@ import { loadCatalog } from "./catalog.ts";
 import { createErrorTracker, callEndpoint, printSummary, type Auth } from "./runner.ts";
 
 // Load .env file from repo root
-const dotenv = await Bun.file("../.env").text().catch(() => "");
+const dotenv = await Bun.file("../.env")
+  .text()
+  .catch(() => "");
 for (const line of dotenv.split("\n")) {
   const match = line.match(/^([^=]+)=(.*)$/);
   if (match) {
@@ -30,7 +32,10 @@ for (const line of dotenv.split("\n")) {
     if (key && !process.env[key]) {
       // Strip quotes from value
       let value = (match[2] ?? "").trim();
-      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
         value = value.slice(1, -1);
       }
       process.env[key] = value;
@@ -43,10 +48,7 @@ const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID ?? "00000000000000000000000
 const ZONE_ID = process.env.CLOUDFLARE_ZONE_ID ?? "00000000000000000000000000000000";
 
 // Sample endpoints to probe for each service
-const SERVICE_ENDPOINTS: Record<
-  string,
-  Array<{ method: string; path: string; body?: unknown }>
-> = {
+const SERVICE_ENDPOINTS: Record<string, Array<{ method: string; path: string; body?: unknown }>> = {
   dns: [
     { method: "GET", path: "/zones/invalid-zone-id/dns_records" },
     { method: "GET", path: "/zones/00000000000000000000000000000000/dns_records" },
@@ -57,49 +59,80 @@ const SERVICE_ENDPOINTS: Record<
     { method: "GET", path: `/zones/${ZONE_ID}/dns_records/nonexistent` },
     { method: "DELETE", path: `/zones/${ZONE_ID}/dns_records/nonexistent` },
     { method: "POST", path: `/zones/${ZONE_ID}/dns_records`, body: {} },
-    { method: "POST", path: `/zones/${ZONE_ID}/dns_records`, body: { type: "A", name: "", content: "" } },
+    {
+      method: "POST",
+      path: `/zones/${ZONE_ID}/dns_records`,
+      body: { type: "A", name: "", content: "" },
+    },
   ],
   workers: [
     { method: "GET", path: "/accounts/invalid-account/workers/scripts" },
     { method: "GET", path: "/accounts/00000000000000000000000000000000/workers/scripts" },
-    { method: "DELETE", path: "/accounts/00000000000000000000000000000000/workers/scripts/nonexistent" },
+    {
+      method: "DELETE",
+      path: "/accounts/00000000000000000000000000000000/workers/scripts/nonexistent",
+    },
     // With real account ID
     { method: "DELETE", path: `/accounts/${ACCOUNT_ID}/workers/scripts/nonexistent-script-12345` },
     { method: "GET", path: `/accounts/${ACCOUNT_ID}/workers/scripts/nonexistent-script-12345` },
-    { method: "GET", path: `/accounts/${ACCOUNT_ID}/workers/scripts/nonexistent-script-12345/settings` },
+    {
+      method: "GET",
+      path: `/accounts/${ACCOUNT_ID}/workers/scripts/nonexistent-script-12345/settings`,
+    },
   ],
   kv: [
     { method: "GET", path: "/accounts/invalid-account/storage/kv/namespaces" },
     { method: "GET", path: "/accounts/00000000000000000000000000000000/storage/kv/namespaces" },
-    { method: "DELETE", path: "/accounts/00000000000000000000000000000000/storage/kv/namespaces/invalid" },
+    {
+      method: "DELETE",
+      path: "/accounts/00000000000000000000000000000000/storage/kv/namespaces/invalid",
+    },
     // With real account ID
     { method: "GET", path: `/accounts/${ACCOUNT_ID}/storage/kv/namespaces/nonexistent-namespace` },
-    { method: "DELETE", path: `/accounts/${ACCOUNT_ID}/storage/kv/namespaces/nonexistent-namespace` },
+    {
+      method: "DELETE",
+      path: `/accounts/${ACCOUNT_ID}/storage/kv/namespaces/nonexistent-namespace`,
+    },
     { method: "POST", path: `/accounts/${ACCOUNT_ID}/storage/kv/namespaces`, body: {} },
     { method: "POST", path: `/accounts/${ACCOUNT_ID}/storage/kv/namespaces`, body: { title: "" } },
   ],
   r2: [
     { method: "GET", path: "/accounts/invalid-account/r2/buckets" },
     { method: "GET", path: "/accounts/00000000000000000000000000000000/r2/buckets" },
-    { method: "DELETE", path: "/accounts/00000000000000000000000000000000/r2/buckets/nonexistent-bucket" },
+    {
+      method: "DELETE",
+      path: "/accounts/00000000000000000000000000000000/r2/buckets/nonexistent-bucket",
+    },
     // With real account ID
     { method: "GET", path: `/accounts/${ACCOUNT_ID}/r2/buckets/nonexistent-bucket-12345` },
     { method: "DELETE", path: `/accounts/${ACCOUNT_ID}/r2/buckets/nonexistent-bucket-12345` },
     { method: "POST", path: `/accounts/${ACCOUNT_ID}/r2/buckets`, body: {} },
     { method: "POST", path: `/accounts/${ACCOUNT_ID}/r2/buckets`, body: { name: "" } },
-    { method: "POST", path: `/accounts/${ACCOUNT_ID}/r2/buckets`, body: { name: "invalid name with spaces" } },
+    {
+      method: "POST",
+      path: `/accounts/${ACCOUNT_ID}/r2/buckets`,
+      body: { name: "invalid name with spaces" },
+    },
   ],
   queues: [
     { method: "GET", path: "/accounts/invalid-account/queues" },
     { method: "GET", path: "/accounts/00000000000000000000000000000000/queues" },
     { method: "DELETE", path: "/accounts/00000000000000000000000000000000/queues/invalid-queue" },
-    { method: "POST", path: "/accounts/00000000000000000000000000000000/queues", body: { queue_name: "" } },
+    {
+      method: "POST",
+      path: "/accounts/00000000000000000000000000000000/queues",
+      body: { queue_name: "" },
+    },
     // With real account ID
     { method: "GET", path: `/accounts/${ACCOUNT_ID}/queues/00000000000000000000000000000000` },
     { method: "DELETE", path: `/accounts/${ACCOUNT_ID}/queues/00000000000000000000000000000000` },
     { method: "POST", path: `/accounts/${ACCOUNT_ID}/queues`, body: {} },
     { method: "POST", path: `/accounts/${ACCOUNT_ID}/queues`, body: { queue_name: "" } },
-    { method: "POST", path: `/accounts/${ACCOUNT_ID}/queues`, body: { queue_name: "invalid name with spaces" } },
+    {
+      method: "POST",
+      path: `/accounts/${ACCOUNT_ID}/queues`,
+      body: { queue_name: "invalid name with spaces" },
+    },
   ],
   zones: [
     { method: "GET", path: "/zones/invalid-zone-id" },
@@ -167,7 +200,9 @@ const findCommand = Command.make(
       const auth = getAuth();
       if (!auth && !dryRun) {
         yield* Console.log("❌ Cloudflare credentials required");
-        yield* Console.log("   Set CLOUDFLARE_API_TOKEN or (CLOUDFLARE_API_KEY + CLOUDFLARE_EMAIL)");
+        yield* Console.log(
+          "   Set CLOUDFLARE_API_TOKEN or (CLOUDFLARE_API_KEY + CLOUDFLARE_EMAIL)",
+        );
         yield* Console.log("   Run 'bun run download:env' from repo root to fetch from Doppler");
         return;
       }
@@ -242,8 +277,6 @@ const cli = Command.run(findCommand, {
 // Run
 cli(process.argv).pipe(
   Effect.provide(NodeContext.layer),
-  Logger.withMinimumLogLevel(
-    process.env.DEBUG ? LogLevel.Debug : LogLevel.Info,
-  ),
+  Logger.withMinimumLogLevel(process.env.DEBUG ? LogLevel.Debug : LogLevel.Info),
   NodeRuntime.runMain,
 );

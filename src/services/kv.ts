@@ -19,12 +19,16 @@ import {
 } from "../errors.ts";
 import {
   AuthenticationError,
+  IncompleteBody,
   InvalidToken,
   MissingToken,
+  NamespaceNameRequired,
+  ParseError,
   RateLimited,
   TokenExpired,
   TooManyRequests,
   Unauthorized,
+  ValidationError,
 } from "../errors/generated.ts";
 
 export interface ListNamespacesRequest {
@@ -46,18 +50,16 @@ export const ListNamespacesRequest = Schema.Struct({
 ).annotations({ identifier: "ListNamespacesRequest" }) as unknown as Schema.Schema<ListNamespacesRequest>;
 
 export interface ListNamespacesResponse {
-  result: unknown;
+  result: { id: string; supports_url_encoding?: boolean; title: string }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListNamespacesResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Array(Schema.Struct({
+  result: Schema.Array(Schema.Struct({
   id: Schema.String,
   supports_url_encoding: Schema.optional(Schema.Boolean),
   title: Schema.String
-})))
-}),
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -94,17 +96,15 @@ export const CreateANamespaceRequest = Schema.Struct({
 ).annotations({ identifier: "CreateANamespaceRequest" }) as unknown as Schema.Schema<CreateANamespaceRequest>;
 
 export interface CreateANamespaceResponse {
-  result: unknown;
+  result: { id: string; supports_url_encoding?: boolean; title: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateANamespaceResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   id: Schema.String,
   supports_url_encoding: Schema.optional(Schema.Boolean),
   title: Schema.String
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -119,12 +119,12 @@ export const createANamespace: (
   input: CreateANamespaceRequest
 ) => Effect.Effect<
   CreateANamespaceResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | NamespaceNameRequired | ParseError | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: CreateANamespaceRequest,
   output: CreateANamespaceResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, NamespaceNameRequired, ParseError, ValidationError],
 }));
 
 export interface GetANamespaceRequest {
@@ -140,17 +140,15 @@ export const GetANamespaceRequest = Schema.Struct({
 ).annotations({ identifier: "GetANamespaceRequest" }) as unknown as Schema.Schema<GetANamespaceRequest>;
 
 export interface GetANamespaceResponse {
-  result: unknown;
+  result: { id: string; supports_url_encoding?: boolean; title: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetANamespaceResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   id: Schema.String,
   supports_url_encoding: Schema.optional(Schema.Boolean),
   title: Schema.String
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -165,12 +163,12 @@ export const getANamespace: (
   input: GetANamespaceRequest
 ) => Effect.Effect<
   GetANamespaceResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetANamespaceRequest,
   output: GetANamespaceResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody],
 }));
 
 export interface WorkersKvNamespaceRenameANamespaceRequest {
@@ -190,17 +188,15 @@ export const WorkersKvNamespaceRenameANamespaceRequest = Schema.Struct({
 ).annotations({ identifier: "WorkersKvNamespaceRenameANamespaceRequest" }) as unknown as Schema.Schema<WorkersKvNamespaceRenameANamespaceRequest>;
 
 export interface WorkersKvNamespaceRenameANamespaceResponse {
-  result: unknown;
+  result: { id: string; supports_url_encoding?: boolean; title: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkersKvNamespaceRenameANamespaceResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.Struct({
   id: Schema.String,
   supports_url_encoding: Schema.optional(Schema.Boolean),
   title: Schema.String
-})
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -215,12 +211,12 @@ export const workersKvNamespaceRenameANamespace: (
   input: WorkersKvNamespaceRenameANamespaceRequest
 ) => Effect.Effect<
   WorkersKvNamespaceRenameANamespaceResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | NamespaceNameRequired | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: WorkersKvNamespaceRenameANamespaceRequest,
   output: WorkersKvNamespaceRenameANamespaceResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody, NamespaceNameRequired],
 }));
 
 export interface WorkersKvNamespaceRemoveANamespaceRequest {
@@ -241,9 +237,7 @@ export interface WorkersKvNamespaceRemoveANamespaceResponse {
 }
 
 export const WorkersKvNamespaceRemoveANamespaceResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Union(Schema.Struct({}), Schema.Null),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -257,12 +251,12 @@ export const workersKvNamespaceRemoveANamespace: (
   input: WorkersKvNamespaceRemoveANamespaceRequest
 ) => Effect.Effect<
   WorkersKvNamespaceRemoveANamespaceResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: WorkersKvNamespaceRemoveANamespaceRequest,
   output: WorkersKvNamespaceRemoveANamespaceResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody],
 }));
 
 export interface WorkersKvNamespaceWriteMultipleKeyValuePairsRequest {
@@ -287,16 +281,14 @@ export const WorkersKvNamespaceWriteMultipleKeyValuePairsRequest = Schema.Struct
 ).annotations({ identifier: "WorkersKvNamespaceWriteMultipleKeyValuePairsRequest" }) as unknown as Schema.Schema<WorkersKvNamespaceWriteMultipleKeyValuePairsRequest>;
 
 export interface WorkersKvNamespaceWriteMultipleKeyValuePairsResponse {
-  result: unknown;
+  result: { successful_key_count?: number; unsuccessful_keys?: string[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkersKvNamespaceWriteMultipleKeyValuePairsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   successful_key_count: Schema.optional(Schema.Number),
   unsuccessful_keys: Schema.optional(Schema.Array(Schema.String))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -311,12 +303,12 @@ export const workersKvNamespaceWriteMultipleKeyValuePairs: (
   input: WorkersKvNamespaceWriteMultipleKeyValuePairsRequest
 ) => Effect.Effect<
   WorkersKvNamespaceWriteMultipleKeyValuePairsResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: WorkersKvNamespaceWriteMultipleKeyValuePairsRequest,
   output: WorkersKvNamespaceWriteMultipleKeyValuePairsResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody, ValidationError],
 }));
 
 export interface DeleteMultipleKeyValuePairsDeprecatedRequest {
@@ -334,16 +326,14 @@ export const DeleteMultipleKeyValuePairsDeprecatedRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteMultipleKeyValuePairsDeprecatedRequest" }) as unknown as Schema.Schema<DeleteMultipleKeyValuePairsDeprecatedRequest>;
 
 export interface DeleteMultipleKeyValuePairsDeprecatedResponse {
-  result: unknown;
+  result: { successful_key_count?: number; unsuccessful_keys?: string[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteMultipleKeyValuePairsDeprecatedResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   successful_key_count: Schema.optional(Schema.Number),
   unsuccessful_keys: Schema.optional(Schema.Array(Schema.String))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -358,12 +348,12 @@ export const deleteMultipleKeyValuePairsDeprecated: (
   input: DeleteMultipleKeyValuePairsDeprecatedRequest
 ) => Effect.Effect<
   DeleteMultipleKeyValuePairsDeprecatedResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DeleteMultipleKeyValuePairsDeprecatedRequest,
   output: DeleteMultipleKeyValuePairsDeprecatedResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody],
 }));
 
 export interface DeleteMultipleKeyValuePairsRequest {
@@ -381,16 +371,14 @@ export const DeleteMultipleKeyValuePairsRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteMultipleKeyValuePairsRequest" }) as unknown as Schema.Schema<DeleteMultipleKeyValuePairsRequest>;
 
 export interface DeleteMultipleKeyValuePairsResponse {
-  result: unknown;
+  result: { successful_key_count?: number; unsuccessful_keys?: string[] };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteMultipleKeyValuePairsResponse = Schema.Struct({
   result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
   successful_key_count: Schema.optional(Schema.Number),
   unsuccessful_keys: Schema.optional(Schema.Array(Schema.String))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -405,12 +393,12 @@ export const deleteMultipleKeyValuePairs: (
   input: DeleteMultipleKeyValuePairsRequest
 ) => Effect.Effect<
   DeleteMultipleKeyValuePairsResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DeleteMultipleKeyValuePairsRequest,
   output: DeleteMultipleKeyValuePairsResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody],
 }));
 
 export interface GetMultipleKeyValuePairsRequest {
@@ -437,8 +425,7 @@ export interface GetMultipleKeyValuePairsResponse {
 }
 
 export const GetMultipleKeyValuePairsResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Union(Schema.Struct({
+  result: Schema.Union(Schema.Struct({
   values: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean, Schema.Record({ key: Schema.String, value: Schema.Unknown })) }))
 }), Schema.Struct({
   values: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
@@ -446,8 +433,7 @@ export const GetMultipleKeyValuePairsResponse = Schema.Struct({
   metadata: Schema.Unknown,
   value: Schema.Unknown
 }) }))
-})))
-}),
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -461,12 +447,12 @@ export const getMultipleKeyValuePairs: (
   input: GetMultipleKeyValuePairsRequest
 ) => Effect.Effect<
   GetMultipleKeyValuePairsResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetMultipleKeyValuePairsRequest,
   output: GetMultipleKeyValuePairsResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody],
 }));
 
 export interface ListANamespaceSKeysRequest {
@@ -488,22 +474,16 @@ export const ListANamespaceSKeysRequest = Schema.Struct({
 ).annotations({ identifier: "ListANamespaceSKeysRequest" }) as unknown as Schema.Schema<ListANamespaceSKeysRequest>;
 
 export interface ListANamespaceSKeysResponse {
-  result: unknown;
+  result: { expiration?: number; metadata?: unknown; name: string }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListANamespaceSKeysResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Array(Schema.Struct({
+  result: Schema.Array(Schema.Struct({
   expiration: Schema.optional(Schema.Number),
   metadata: Schema.optional(Schema.Unknown),
   name: Schema.String
-}))),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.optional(Schema.Number),
-  cursor: Schema.optional(Schema.String)
-}))
-}),
+})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -517,12 +497,12 @@ export const listANamespaceSKeys: (
   input: ListANamespaceSKeysRequest
 ) => Effect.Effect<
   ListANamespaceSKeysResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: ListANamespaceSKeysRequest,
   output: ListANamespaceSKeysResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody],
 }));
 
 export interface WorkersKvNamespaceReadTheMetadataForAKeyRequest {
@@ -545,9 +525,7 @@ export interface WorkersKvNamespaceReadTheMetadataForAKeyResponse {
 }
 
 export const WorkersKvNamespaceReadTheMetadataForAKeyResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Unknown)
-}),
+  result: Schema.Unknown,
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -561,12 +539,12 @@ export const workersKvNamespaceReadTheMetadataForAKey: (
   input: WorkersKvNamespaceReadTheMetadataForAKeyRequest
 ) => Effect.Effect<
   WorkersKvNamespaceReadTheMetadataForAKeyResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: WorkersKvNamespaceReadTheMetadataForAKeyRequest,
   output: WorkersKvNamespaceReadTheMetadataForAKeyResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody],
 }));
 
 export interface WorkersKvNamespaceReadKeyValuePairRequest {
@@ -584,12 +562,12 @@ export const WorkersKvNamespaceReadKeyValuePairRequest = Schema.Struct({
 ).annotations({ identifier: "WorkersKvNamespaceReadKeyValuePairRequest" }) as unknown as Schema.Schema<WorkersKvNamespaceReadKeyValuePairRequest>;
 
 export interface WorkersKvNamespaceReadKeyValuePairResponse {
-  result: unknown;
+  result: unknown | null;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkersKvNamespaceReadKeyValuePairResponse = Schema.Struct({
-  result: Schema.Unknown,
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -603,12 +581,12 @@ export const workersKvNamespaceReadKeyValuePair: (
   input: WorkersKvNamespaceReadKeyValuePairRequest
 ) => Effect.Effect<
   WorkersKvNamespaceReadKeyValuePairResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: WorkersKvNamespaceReadKeyValuePairRequest,
   output: WorkersKvNamespaceReadKeyValuePairResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody],
 }));
 
 export interface WorkersKvNamespaceWriteKeyValuePairWithMetadataRequest {
@@ -637,9 +615,7 @@ export interface WorkersKvNamespaceWriteKeyValuePairWithMetadataResponse {
 }
 
 export const WorkersKvNamespaceWriteKeyValuePairWithMetadataResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Union(Schema.Struct({}), Schema.Null),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -653,12 +629,12 @@ export const workersKvNamespaceWriteKeyValuePairWithMetadata: (
   input: WorkersKvNamespaceWriteKeyValuePairWithMetadataRequest
 ) => Effect.Effect<
   WorkersKvNamespaceWriteKeyValuePairWithMetadataResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: WorkersKvNamespaceWriteKeyValuePairWithMetadataRequest,
   output: WorkersKvNamespaceWriteKeyValuePairWithMetadataResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody, ValidationError],
 }));
 
 export interface DeleteKeyValuePairRequest {
@@ -681,9 +657,7 @@ export interface DeleteKeyValuePairResponse {
 }
 
 export const DeleteKeyValuePairResponse = Schema.Struct({
-  result: Schema.Struct({
-  result: Schema.optional(Schema.Struct({}))
-}),
+  result: Schema.Union(Schema.Struct({}), Schema.Null),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -697,10 +671,10 @@ export const deleteKeyValuePair: (
   input: DeleteKeyValuePairRequest
 ) => Effect.Effect<
   DeleteKeyValuePairResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | IncompleteBody | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DeleteKeyValuePairRequest,
   output: DeleteKeyValuePairResponse,
-  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized],
+  errors: [RateLimited, TooManyRequests, AuthenticationError, InvalidToken, MissingToken, TokenExpired, Unauthorized, IncompleteBody],
 }));

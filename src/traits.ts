@@ -26,8 +26,7 @@ export interface Annotation {
 }
 
 function makeAnnotation<T>(sym: symbol, value: T): Annotation {
-  const fn = <A extends Annotatable>(schema: A): A =>
-    schema.annotations({ [sym]: value }) as A;
+  const fn = <A extends Annotatable>(schema: A): A => schema.annotations({ [sym]: value }) as A;
 
   Object.defineProperty(fn, annotationMetaSymbol, {
     value: [{ symbol: sym, value }],
@@ -57,8 +56,7 @@ export function all(...annotations: Annotation[]): Annotation {
     }
   }
 
-  const fn = <A extends Annotatable>(schema: A): A =>
-    schema.annotations(raw) as A;
+  const fn = <A extends Annotatable>(schema: A): A => schema.annotations(raw) as A;
 
   Object.defineProperty(fn, annotationMetaSymbol, {
     value: entries,
@@ -99,7 +97,8 @@ export const HttpBody = () => makeAnnotation(httpBodySymbol, true);
 
 /** Content type for the request body */
 export const httpContentTypeSymbol = Symbol.for("distilled-cloudflare/http-content-type");
-export const HttpContentType = (contentType: string) => makeAnnotation(httpContentTypeSymbol, contentType);
+export const HttpContentType = (contentType: string) =>
+  makeAnnotation(httpContentTypeSymbol, contentType);
 
 /** Text body binding (plain text, JavaScript, etc.) */
 export const HttpTextBody = (contentType: string = "text/plain") =>
@@ -128,8 +127,7 @@ export interface HttpOperationTrait {
   path: string;
 }
 
-export const Http = (trait: HttpOperationTrait) =>
-  makeAnnotation(httpOperationSymbol, trait);
+export const Http = (trait: HttpOperationTrait) => makeAnnotation(httpOperationSymbol, trait);
 
 // =============================================================================
 // Service-Level Traits
@@ -142,8 +140,7 @@ export interface ServiceTrait {
   version?: string;
 }
 
-export const Service = (trait: ServiceTrait) =>
-  makeAnnotation(serviceSymbol, trait);
+export const Service = (trait: ServiceTrait) => makeAnnotation(serviceSymbol, trait);
 
 // =============================================================================
 // Pagination Trait
@@ -158,17 +155,13 @@ export interface PaginationTrait {
   pageSize?: string;
 }
 
-export const Pagination = (trait: PaginationTrait) =>
-  makeAnnotation(paginationSymbol, trait);
+export const Pagination = (trait: PaginationTrait) => makeAnnotation(paginationSymbol, trait);
 
 // =============================================================================
 // Annotation Retrieval Helpers
 // =============================================================================
 
-export const getAnnotation = <T>(
-  ast: AST.AST,
-  symbol: symbol,
-): T | undefined => {
+export const getAnnotation = <T>(ast: AST.AST, symbol: symbol): T | undefined => {
   return ast.annotations?.[symbol] as T | undefined;
 };
 
@@ -181,10 +174,7 @@ export const getPropAnnotation = <T>(
   return getAnnotationUnwrap(prop.type, symbol);
 };
 
-export const hasPropAnnotation = (
-  prop: AST.PropertySignature,
-  symbol: symbol,
-): boolean => {
+export const hasPropAnnotation = (prop: AST.PropertySignature, symbol: symbol): boolean => {
   if (prop.annotations?.[symbol] !== undefined) return true;
   return hasAnnotation(prop.type, symbol);
 };
@@ -199,8 +189,7 @@ export const hasAnnotation = (ast: AST.AST, symbol: symbol): boolean => {
   if (ast._tag === "Union") {
     const nonNullishTypes = ast.types.filter(
       (t: AST.AST) =>
-        t._tag !== "UndefinedKeyword" &&
-        !(t._tag === "Literal" && t.literal === null),
+        t._tag !== "UndefinedKeyword" && !(t._tag === "Literal" && t.literal === null),
     );
     return nonNullishTypes.some((t: AST.AST) => hasAnnotation(t, symbol));
   }
@@ -214,10 +203,7 @@ export const hasAnnotation = (ast: AST.AST, symbol: symbol): boolean => {
   return false;
 };
 
-export const getAnnotationUnwrap = <T>(
-  ast: AST.AST,
-  symbol: symbol,
-): T | undefined => {
+export const getAnnotationUnwrap = <T>(ast: AST.AST, symbol: symbol): T | undefined => {
   const direct = ast.annotations?.[symbol] as T | undefined;
   if (direct !== undefined) return direct;
 
@@ -234,9 +220,7 @@ export const getAnnotationUnwrap = <T>(
 
   if (ast._tag === "Union") {
     const nonNullishTypes = ast.types.filter(
-      (t) =>
-        t._tag !== "UndefinedKeyword" &&
-        !(t._tag === "Literal" && t.literal === null),
+      (t) => t._tag !== "UndefinedKeyword" && !(t._tag === "Literal" && t.literal === null),
     );
     if (nonNullishTypes.length === 1) {
       return getAnnotationUnwrap(nonNullishTypes[0]!, symbol);

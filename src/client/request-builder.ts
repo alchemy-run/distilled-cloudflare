@@ -101,12 +101,18 @@ export const buildRequest = <I>(
     }
   }
 
+  // Determine if the body should be included
+  // FormData doesn't have enumerable keys, so we need to check for it specifically
+  const hasBody =
+    body instanceof FormData ||
+    (body !== undefined && body !== null && Object.keys(body as object).length > 0);
+
   return {
     method: httpOp.method,
     path,
     query,
     headers,
-    body: body && Object.keys(body as object).length > 0 ? body : undefined,
+    body: hasBody ? body : undefined,
     contentType,
   };
 };

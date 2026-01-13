@@ -4,15 +4,13 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "check:write": "biome check --write",
-    "check": "biome check",
     "download:env": "doppler secrets download --no-file --format env > .env",
     "find": "bun scripts/find-errors/index.ts",
-    "generate:service": "bun scripts/generate-clients.ts --service",
-    "generate": "bun scripts/generate-clients.ts",
+    "generate": "bun scripts/generate-clients.ts && bun format",
     "test:watch": "vitest watch",
     "test": "vitest run",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "format": "oxfmt './src' './test' './scripts'"
   },
   "dependencies": {
     "effect": "latest",
@@ -23,6 +21,7 @@
     "@effect/platform-node": "latest",
     "@effect/vitest": "latest",
     "@types/bun": "latest",
+    "oxfmt": "^0.24.0",
     "vitest": "latest"
   },
   "exports": {

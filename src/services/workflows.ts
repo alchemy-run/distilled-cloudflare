@@ -44,20 +44,11 @@ export const ListWorkflowsRequest = Schema.Struct({
 ).annotations({ identifier: "ListWorkflowsRequest" }) as unknown as Schema.Schema<ListWorkflowsRequest>;
 
 export interface ListWorkflowsResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { class_name: string; created_on: string; id: string; instances: { complete?: number; errored?: number; paused?: number; queued?: number; running?: number; terminated?: number; waiting?: number; waitingForPause?: number }; modified_on: string; name: string; script_name: string; triggered_on: string }[]; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { class_name: string; created_on: string; id: string; instances: { complete?: number; errored?: number; paused?: number; queued?: number; running?: number; terminated?: number; waiting?: number; waitingForPause?: number }; modified_on: string; name: string; script_name: string; triggered_on: string }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListWorkflowsResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
   result: Schema.Array(Schema.Struct({
   class_name: Schema.String,
   created_on: Schema.Date,
@@ -77,15 +68,6 @@ export const ListWorkflowsResponse = Schema.Struct({
   script_name: Schema.String,
   triggered_on: Schema.Date
 })),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
-}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -120,20 +102,11 @@ export const GetWorkflowDetailsRequest = Schema.Struct({
 ).annotations({ identifier: "GetWorkflowDetailsRequest" }) as unknown as Schema.Schema<GetWorkflowDetailsRequest>;
 
 export interface GetWorkflowDetailsResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { class_name: string; created_on: string; id: string; instances: { complete?: number; errored?: number; paused?: number; queued?: number; running?: number; terminated?: number; waiting?: number; waitingForPause?: number }; modified_on: string; name: string; script_name: string; triggered_on: string }; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { class_name: string; created_on: string; id: string; instances: { complete?: number; errored?: number; paused?: number; queued?: number; running?: number; terminated?: number; waiting?: number; waitingForPause?: number }; modified_on: string; name: string; script_name: string; triggered_on: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetWorkflowDetailsResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
   result: Schema.Struct({
   class_name: Schema.String,
   created_on: Schema.Date,
@@ -152,15 +125,6 @@ export const GetWorkflowDetailsResponse = Schema.Struct({
   name: Schema.String,
   script_name: Schema.String,
   triggered_on: Schema.Date
-}),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -201,20 +165,11 @@ export const CreateOrModifyWorkflowRequest = Schema.Struct({
 ).annotations({ identifier: "CreateOrModifyWorkflowRequest" }) as unknown as Schema.Schema<CreateOrModifyWorkflowRequest>;
 
 export interface CreateOrModifyWorkflowResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { class_name: string; created_on: string; id: string; is_deleted: number; modified_on: string; name: string; script_name: string; terminator_running: number; triggered_on: string; version_id: string }; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { class_name: string; created_on: string; id: string; is_deleted: number; modified_on: string; name: string; script_name: string; terminator_running: number; triggered_on: string; version_id: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateOrModifyWorkflowResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
   result: Schema.Struct({
   class_name: Schema.String,
   created_on: Schema.Date,
@@ -226,15 +181,6 @@ export const CreateOrModifyWorkflowResponse = Schema.Struct({
   terminator_running: Schema.Number,
   triggered_on: Schema.Date,
   version_id: Schema.UUID
-}),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -270,32 +216,14 @@ export const DeleteWorkflowRequest = Schema.Struct({
 ).annotations({ identifier: "DeleteWorkflowRequest" }) as unknown as Schema.Schema<DeleteWorkflowRequest>;
 
 export interface DeleteWorkflowResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { status: "ok"; success: boolean }; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { status: "ok"; success: boolean };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteWorkflowResponse = Schema.Struct({
   result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  result: Schema.Struct({
   status: Schema.Literal("ok"),
   success: Schema.Boolean
-}),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -345,20 +273,11 @@ export const ListWorkflowInstancesRequest = Schema.Struct({
 ).annotations({ identifier: "ListWorkflowInstancesRequest" }) as unknown as Schema.Schema<ListWorkflowInstancesRequest>;
 
 export interface ListWorkflowInstancesResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { created_on: string; ended_on: string; id: string; modified_on: string; started_on: string; status: "queued" | "running" | "paused" | "errored" | "terminated" | "complete" | "waitingForPause" | "waiting"; version_id: string; workflow_id: string }[]; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { created_on: string; ended_on: string; id: string; modified_on: string; started_on: string; status: "queued" | "running" | "paused" | "errored" | "terminated" | "complete" | "waitingForPause" | "waiting"; version_id: string; workflow_id: string }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListWorkflowInstancesResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
   result: Schema.Array(Schema.Struct({
   created_on: Schema.Date,
   ended_on: Schema.Date,
@@ -369,15 +288,6 @@ export const ListWorkflowInstancesResponse = Schema.Struct({
   version_id: Schema.UUID,
   workflow_id: Schema.UUID
 })),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
-}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -421,34 +331,16 @@ export const CreateNewWorkflowInstanceRequest = Schema.Struct({
 ).annotations({ identifier: "CreateNewWorkflowInstanceRequest" }) as unknown as Schema.Schema<CreateNewWorkflowInstanceRequest>;
 
 export interface CreateNewWorkflowInstanceResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { id: string; status: "queued" | "running" | "paused" | "errored" | "terminated" | "complete" | "waitingForPause" | "waiting"; version_id: string; workflow_id: string }; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { id: string; status: "queued" | "running" | "paused" | "errored" | "terminated" | "complete" | "waitingForPause" | "waiting"; version_id: string; workflow_id: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateNewWorkflowInstanceResponse = Schema.Struct({
   result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  result: Schema.Struct({
   id: Schema.String,
   status: Schema.Literal("queued", "running", "paused", "errored", "terminated", "complete", "waitingForPause", "waiting"),
   version_id: Schema.UUID,
   workflow_id: Schema.UUID
-}),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -493,35 +385,17 @@ export const CreateWorkflowInstanceRequest = Schema.Struct({
 ).annotations({ identifier: "CreateWorkflowInstanceRequest" }) as unknown as Schema.Schema<CreateWorkflowInstanceRequest>;
 
 export interface CreateWorkflowInstanceResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { id: string; status: "queued" | "running" | "paused" | "errored" | "terminated" | "complete" | "waitingForPause" | "waiting"; version_id: string; workflow_id: string }[]; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { id: string; status: "queued" | "running" | "paused" | "errored" | "terminated" | "complete" | "waitingForPause" | "waiting"; version_id: string; workflow_id: string }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateWorkflowInstanceResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
   result: Schema.Array(Schema.Struct({
   id: Schema.String,
   status: Schema.Literal("queued", "running", "paused", "errored", "terminated", "complete", "waitingForPause", "waiting"),
   version_id: Schema.UUID,
   workflow_id: Schema.UUID
 })),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
-}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -558,32 +432,14 @@ export const WorBatchTerminateWorkflowInstancesRequest = Schema.Struct({
 ).annotations({ identifier: "WorBatchTerminateWorkflowInstancesRequest" }) as unknown as Schema.Schema<WorBatchTerminateWorkflowInstancesRequest>;
 
 export interface WorBatchTerminateWorkflowInstancesResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { instancesTerminated: number; status: "ok" | "already_running" }; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { instancesTerminated: number; status: "ok" | "already_running" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorBatchTerminateWorkflowInstancesResponse = Schema.Struct({
   result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  result: Schema.Struct({
   instancesTerminated: Schema.Number,
   status: Schema.Literal("ok", "already_running")
-}),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -619,31 +475,13 @@ export const WorStatusTerminateWorkflowInstancesRequest = Schema.Struct({
 ).annotations({ identifier: "WorStatusTerminateWorkflowInstancesRequest" }) as unknown as Schema.Schema<WorStatusTerminateWorkflowInstancesRequest>;
 
 export interface WorStatusTerminateWorkflowInstancesResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { status: "running" | "not_running" }; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { status: "running" | "not_running" };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorStatusTerminateWorkflowInstancesResponse = Schema.Struct({
   result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  result: Schema.Struct({
   status: Schema.Literal("running", "not_running")
-}),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -681,20 +519,11 @@ export const WorDescribeWorkflowInstanceRequest = Schema.Struct({
 ).annotations({ identifier: "WorDescribeWorkflowInstanceRequest" }) as unknown as Schema.Schema<WorDescribeWorkflowInstanceRequest>;
 
 export interface WorDescribeWorkflowInstanceResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { end: string; error: { message: string; name: string }; output: unknown; params: Record<string, unknown>; queued: string; start: string; status: "queued" | "running" | "paused" | "errored" | "terminated" | "complete" | "waitingForPause" | "waiting"; steps: unknown[]; success: boolean; trigger: { source: "unknown" | "api" | "binding" | "event" | "cron" }; versionId: string }; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { end: string; error: { message: string; name: string }; output: unknown; params: Record<string, unknown>; queued: string; start: string; status: "queued" | "running" | "paused" | "errored" | "terminated" | "complete" | "waitingForPause" | "waiting"; steps: unknown[]; success: boolean; trigger: { source: "unknown" | "api" | "binding" | "event" | "cron" }; versionId: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorDescribeWorkflowInstanceResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
   result: Schema.Struct({
   end: Schema.Date,
   error: Schema.Struct({
@@ -764,15 +593,6 @@ export const WorDescribeWorkflowInstanceResponse = Schema.Struct({
   versionId: Schema.UUID
 }),
   result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
-}),
-  result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
     count: Schema.optional(Schema.Number),
@@ -812,30 +632,12 @@ export const WorSendEventWorkflowInstanceRequest = Schema.Struct({
 ).annotations({ identifier: "WorSendEventWorkflowInstanceRequest" }) as unknown as Schema.Schema<WorSendEventWorkflowInstanceRequest>;
 
 export interface WorSendEventWorkflowInstanceResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result?: Record<string, unknown>; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: Record<string, unknown>;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorSendEventWorkflowInstanceResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  result: Schema.optional(Schema.Struct({})),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
-}),
+  result: Schema.Struct({}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -876,32 +678,14 @@ export const WorChangeStatusWorkflowInstanceRequest = Schema.Struct({
 ).annotations({ identifier: "WorChangeStatusWorkflowInstanceRequest" }) as unknown as Schema.Schema<WorChangeStatusWorkflowInstanceRequest>;
 
 export interface WorChangeStatusWorkflowInstanceResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { status: "queued" | "running" | "paused" | "errored" | "terminated" | "complete" | "waitingForPause" | "waiting"; timestamp: string }; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { status: "queued" | "running" | "paused" | "errored" | "terminated" | "complete" | "waitingForPause" | "waiting"; timestamp: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorChangeStatusWorkflowInstanceResponse = Schema.Struct({
   result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  result: Schema.Struct({
   status: Schema.Literal("queued", "running", "paused", "errored", "terminated", "complete", "waitingForPause", "waiting"),
   timestamp: Schema.Date
-}),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -941,20 +725,11 @@ export const ListWorkflowVersionsRequest = Schema.Struct({
 ).annotations({ identifier: "ListWorkflowVersionsRequest" }) as unknown as Schema.Schema<ListWorkflowVersionsRequest>;
 
 export interface ListWorkflowVersionsResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { class_name: string; created_on: string; id: string; modified_on: string; workflow_id: string }[]; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { class_name: string; created_on: string; id: string; modified_on: string; workflow_id: string }[];
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListWorkflowVersionsResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
   result: Schema.Array(Schema.Struct({
   class_name: Schema.String,
   created_on: Schema.Date,
@@ -962,15 +737,6 @@ export const ListWorkflowVersionsResponse = Schema.Struct({
   modified_on: Schema.Date,
   workflow_id: Schema.UUID
 })),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
-}),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -1007,35 +773,17 @@ export const WorDescribeWorkflowVersionsRequest = Schema.Struct({
 ).annotations({ identifier: "WorDescribeWorkflowVersionsRequest" }) as unknown as Schema.Schema<WorDescribeWorkflowVersionsRequest>;
 
 export interface WorDescribeWorkflowVersionsResponse {
-  result: { errors: { code: number; message: string }[]; messages: { code: number; message: string }[]; result: { class_name: string; created_on: string; id: string; modified_on: string; workflow_id: string }; result_info?: { count: number; cursor?: string; page?: number; per_page: number; total_count: number }; success: true };
+  result: { class_name: string; created_on: string; id: string; modified_on: string; workflow_id: string };
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorDescribeWorkflowVersionsResponse = Schema.Struct({
-  result: Schema.Struct({
-  errors: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
-  messages: Schema.Array(Schema.Struct({
-  code: Schema.Number,
-  message: Schema.String
-})),
   result: Schema.Struct({
   class_name: Schema.String,
   created_on: Schema.Date,
   id: Schema.UUID,
   modified_on: Schema.Date,
   workflow_id: Schema.UUID
-}),
-  result_info: Schema.optional(Schema.Struct({
-  count: Schema.Number,
-  cursor: Schema.optional(Schema.String),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.Number,
-  total_count: Schema.Number
-})),
-  success: Schema.Literal(true)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

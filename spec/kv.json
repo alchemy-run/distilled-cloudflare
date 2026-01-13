@@ -1,15 +1,18 @@
 {
   "operations": {
     "listNamespaces": { "errors": [] },
-    "createNamespace": { "errors": ["NamespaceNameRequired", "ValidationError"] },
-    "getNamespace": { "errors": ["BindingNotFound"] },
-    "deleteNamespace": { "errors": ["BindingNotFound"] },
-    "renameNamespace": { "errors": ["BindingNotFound", "NamespaceNameRequired"] },
-    "listKeys": { "errors": ["BindingNotFound"] },
-    "getValue": { "errors": ["BindingNotFound", "NoSuchKey"] },
-    "putValue": { "errors": ["BindingNotFound", "ValidationError"] },
-    "deleteValue": { "errors": ["BindingNotFound"] },
-    "bulkWrite": { "errors": ["BindingNotFound", "ValidationError"] },
-    "bulkDelete": { "errors": ["BindingNotFound"] }
+    "createANamespace": { "errors": ["NamespaceNameRequired", "ParseError", "ValidationError"] },
+    "getANamespace": { "errors": ["IncompleteBody"] },
+    "workersKvNamespaceRemoveANamespace": { "errors": ["IncompleteBody"] },
+    "workersKvNamespaceRenameANamespace": { "errors": ["IncompleteBody", "NamespaceNameRequired"] },
+    "listANamespaceSKeys": { "errors": ["IncompleteBody"] },
+    "workersKvNamespaceReadKeyValuePair": { "errors": ["IncompleteBody"] },
+    "workersKvNamespaceWriteKeyValuePairWithMetadata": { "errors": ["IncompleteBody", "ValidationError"] },
+    "deleteKeyValuePair": { "errors": ["IncompleteBody"] },
+    "workersKvNamespaceWriteMultipleKeyValuePairs": { "errors": ["IncompleteBody", "ValidationError"] },
+    "deleteMultipleKeyValuePairs": { "errors": ["IncompleteBody"] },
+    "deleteMultipleKeyValuePairsDeprecated": { "errors": ["IncompleteBody"] },
+    "getMultipleKeyValuePairs": { "errors": ["IncompleteBody"] },
+    "workersKvNamespaceReadTheMetadataForAKey": { "errors": ["IncompleteBody"] }
   }
 }

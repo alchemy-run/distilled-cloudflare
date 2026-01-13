@@ -63,7 +63,10 @@ const OPENAPI_PATCH = "spec/openapi.patch.json";
  * Deep merge two objects, with source taking precedence.
  * Arrays are concatenated, objects are recursively merged.
  */
-function deepMerge<T extends Record<string, unknown>>(target: T, source: Record<string, unknown>): T {
+function deepMerge<T extends Record<string, unknown>>(
+  target: T,
+  source: Record<string, unknown>,
+): T {
   const result = { ...target } as Record<string, unknown>;
 
   for (const key of Object.keys(source)) {
@@ -141,11 +144,51 @@ async function loadAndApplyPatches(spec: {
 
 // Reserved words that cannot be used as function names
 const RESERVED_WORDS = new Set([
-  "delete", "export", "import", "default", "class", "function", "const", "let", "var",
-  "if", "else", "for", "while", "do", "switch", "case", "break", "continue", "return",
-  "try", "catch", "finally", "throw", "new", "this", "super", "extends", "implements",
-  "interface", "type", "enum", "namespace", "module", "declare", "abstract", "async",
-  "await", "yield", "static", "public", "private", "protected", "readonly", "get", "set",
+  "delete",
+  "export",
+  "import",
+  "default",
+  "class",
+  "function",
+  "const",
+  "let",
+  "var",
+  "if",
+  "else",
+  "for",
+  "while",
+  "do",
+  "switch",
+  "case",
+  "break",
+  "continue",
+  "return",
+  "try",
+  "catch",
+  "finally",
+  "throw",
+  "new",
+  "this",
+  "super",
+  "extends",
+  "implements",
+  "interface",
+  "type",
+  "enum",
+  "namespace",
+  "module",
+  "declare",
+  "abstract",
+  "async",
+  "await",
+  "yield",
+  "static",
+  "public",
+  "private",
+  "protected",
+  "readonly",
+  "get",
+  "set",
 ]);
 
 /**
@@ -194,7 +237,19 @@ function resolveSchema(
 function schemaToTsType(
   schema: OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference,
   allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
+  visited: Set<string> = new Set(),
 ): string {
+  // Check for circular references
+  if (OpenAPI.isJsonReference(schema)) {
+    const refName = OpenAPI.getSchemaName(schema);
+    if (visited.has(refName)) {
+      // Cycle detected - return unknown to break the recursion
+      return "unknown";
+    }
+    visited = new Set(visited);
+    visited.add(refName);
+  }
+
   // Resolve references first
   const s = resolveSchema(schema, allSchemas);
 
@@ -216,14 +271,14 @@ function schemaToTsType(
       return "boolean";
     case "array":
       if (s.items) {
-        return `${schemaToTsType(s.items, allSchemas)}[]`;
+        return `${schemaToTsType(s.items, allSchemas, visited)}[]`;
       }
       return "unknown[]";
     case "object":
       if (s.properties) {
         const props = Object.entries(s.properties)
           .map(([propName, propSchema]) => {
-            const propType = schemaToTsType(propSchema, allSchemas);
+            const propType = schemaToTsType(propSchema, allSchemas, visited);
             const isRequired = s.required?.includes(propName);
             const safeName = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(propName)
               ? propName
@@ -251,27 +306,27 @@ function mergeAllOfSchemas(
   allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
 ): OpenAPI.OpenApiSchemaObject {
   const resolved = resolveSchema(schema, allSchemas);
-  
+
   // If no allOf, just return the resolved schema
   if (!resolved.allOf || resolved.allOf.length === 0) {
     return resolved;
   }
-  
+
   // Merge all allOf members recursively
   const mergedProperties: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference> = {};
   const mergedRequired: string[] = [];
-  
+
   for (const member of resolved.allOf) {
     // Recursively merge each member (handles nested allOf and refs)
     const memberSchema = mergeAllOfSchemas(member, allSchemas);
-    
+
     // Merge properties
     if (memberSchema.properties) {
       for (const [propName, propSchema] of Object.entries(memberSchema.properties)) {
         mergedProperties[propName] = propSchema;
       }
     }
-    
+
     // Merge required
     if (memberSchema.required) {
       for (const req of memberSchema.required) {
@@ -281,7 +336,7 @@ function mergeAllOfSchemas(
       }
     }
   }
-  
+
   // Also include direct properties from the schema itself
   if (resolved.properties) {
     for (const [propName, propSchema] of Object.entries(resolved.properties)) {
@@ -295,9 +350,9 @@ function mergeAllOfSchemas(
       }
     }
   }
-  
+
   return {
-    type: 'object',
+    type: "object",
     properties: mergedProperties,
     required: mergedRequired.length > 0 ? mergedRequired : undefined,
   } as OpenAPI.OpenApiSchemaObject;
@@ -305,10 +360,10 @@ function mergeAllOfSchemas(
 
 /**
  * Extract the 'result' property schema from a Cloudflare API response.
- * 
+ *
  * Cloudflare responses follow this pattern:
  * { success: boolean, errors: [], messages: [], result: T | null, result_info?: {} }
- * 
+ *
  * This function recursively merges allOf schemas and extracts the 'result' property.
  * Returns null if no result property is found (meaning result is always null for this operation).
  */
@@ -318,29 +373,234 @@ function extractResultSchema(
 ): OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference | null {
   // Merge all allOf schemas to get the full combined schema
   const merged = mergeAllOfSchemas(schema, allSchemas);
-  
+
   // Check if the merged schema has a 'result' property
-  if (merged.properties && 'result' in merged.properties) {
+  if (merged.properties && "result" in merged.properties) {
     return merged.properties.result as OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference;
   }
-  
+
   // No result property found - this operation returns result: null
   return null;
+}
+
+/**
+ * Collect all schema references from a schema (recursively).
+ */
+function collectSchemaRefs(
+  schema: OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference,
+  allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
+  refs: Set<string> = new Set(),
+  visited: Set<string> = new Set(),
+): Set<string> {
+  if (OpenAPI.isJsonReference(schema)) {
+    const refName = OpenAPI.getSchemaName(schema);
+    refs.add(refName);
+    if (visited.has(refName)) {
+      return refs;
+    }
+    visited = new Set(visited);
+    visited.add(refName);
+    const resolved = allSchemas[refName];
+    if (resolved) {
+      collectSchemaRefs(resolved, allSchemas, refs, visited);
+    }
+    return refs;
+  }
+
+  const s = schema as OpenAPI.OpenApiSchemaObject;
+
+  if (s.items) {
+    collectSchemaRefs(s.items, allSchemas, refs, visited);
+  }
+  if (s.properties) {
+    for (const propSchema of Object.values(s.properties)) {
+      collectSchemaRefs(propSchema, allSchemas, refs, visited);
+    }
+  }
+  if (s.additionalProperties && typeof s.additionalProperties !== "boolean") {
+    collectSchemaRefs(s.additionalProperties, allSchemas, refs, visited);
+  }
+  if (s.allOf) {
+    for (const member of s.allOf) {
+      collectSchemaRefs(member, allSchemas, refs, visited);
+    }
+  }
+  if (s.oneOf) {
+    for (const member of s.oneOf) {
+      collectSchemaRefs(member, allSchemas, refs, visited);
+    }
+  }
+  if (s.anyOf) {
+    for (const member of s.anyOf) {
+      collectSchemaRefs(member, allSchemas, refs, visited);
+    }
+  }
+
+  return refs;
+}
+
+/**
+ * Build dependency graph for schemas and detect cycles.
+ * Returns a map of schema name -> direct dependencies.
+ */
+function buildSchemaDependencyGraph(
+  schemaNames: Set<string>,
+  allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
+): Map<string, Set<string>> {
+  const graph = new Map<string, Set<string>>();
+
+  for (const name of schemaNames) {
+    const schema = allSchemas[name];
+    if (schema) {
+      const deps = collectSchemaRefs(schema, allSchemas, new Set(), new Set([name]));
+      deps.delete(name); // Remove self-reference from deps (handled separately)
+      graph.set(name, deps);
+    }
+  }
+
+  return graph;
+}
+
+/**
+ * Detect which schemas are part of cycles.
+ */
+function findCyclicSchemas(graph: Map<string, Set<string>>): Set<string> {
+  const cyclic = new Set<string>();
+  const visited = new Set<string>();
+  const recStack = new Set<string>();
+
+  function dfs(node: string, path: string[]): boolean {
+    if (recStack.has(node)) {
+      // Found a cycle - mark all nodes in the cycle
+      const cycleStart = path.indexOf(node);
+      for (let i = cycleStart; i < path.length; i++) {
+        cyclic.add(path[i]!);
+      }
+      cyclic.add(node);
+      return true;
+    }
+    if (visited.has(node)) {
+      return false;
+    }
+
+    visited.add(node);
+    recStack.add(node);
+
+    const deps = graph.get(node) ?? new Set();
+    for (const dep of deps) {
+      if (graph.has(dep)) {
+        dfs(dep, [...path, node]);
+      }
+    }
+
+    recStack.delete(node);
+    return false;
+  }
+
+  for (const node of graph.keys()) {
+    if (!visited.has(node)) {
+      dfs(node, []);
+    }
+  }
+
+  return cyclic;
+}
+
+/**
+ * Topological sort of schemas (for non-cyclic dependencies).
+ * Cyclic schemas are placed first so they can reference each other via suspend.
+ */
+function topologicalSortSchemas(
+  schemaNames: Set<string>,
+  graph: Map<string, Set<string>>,
+  cyclicSchemas: Set<string>,
+): string[] {
+  const sorted: string[] = [];
+  const visited = new Set<string>();
+
+  // First, add all cyclic schemas (order doesn't matter for these)
+  for (const name of cyclicSchemas) {
+    if (schemaNames.has(name)) {
+      sorted.push(name);
+      visited.add(name);
+    }
+  }
+
+  // Then topologically sort the rest
+  function visit(name: string) {
+    if (visited.has(name)) return;
+    visited.add(name);
+
+    const deps = graph.get(name) ?? new Set();
+    for (const dep of deps) {
+      if (schemaNames.has(dep) && !cyclicSchemas.has(dep)) {
+        visit(dep);
+      }
+    }
+
+    sorted.push(name);
+  }
+
+  for (const name of schemaNames) {
+    if (!cyclicSchemas.has(name)) {
+      visit(name);
+    }
+  }
+
+  return sorted;
+}
+
+/**
+ * Convert schema ref name to a valid TypeScript identifier.
+ */
+function schemaNameToIdentifier(refName: string): string {
+  // Remove common prefixes and clean up the name
+  return refName
+    .replace(/^(schemas|components)_/, "")
+    .replace(/[^a-zA-Z0-9_]/g, "_")
+    .replace(/^(\d)/, "_$1"); // Prefix with _ if starts with number
 }
 
 function generateSchemaCode(
   name: string,
   schema: OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference,
   allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
+  generatedSchemaNames: Set<string> = new Set(),
+  cyclicSchemas: Set<string> = new Set(),
+  visited: Set<string> = new Set(),
 ): string {
+  // Check for references to named schemas
+  if (OpenAPI.isJsonReference(schema)) {
+    const refName = OpenAPI.getSchemaName(schema);
+
+    // If this schema has been generated as a named schema, reference it
+    if (generatedSchemaNames.has(refName)) {
+      const identifier = schemaNameToIdentifier(refName);
+      // Use suspend for cyclic schemas to break the cycle
+      if (cyclicSchemas.has(refName) && visited.has(refName)) {
+        return `Schema.suspend(() => ${identifier})`;
+      }
+      return identifier;
+    }
+
+    // Cycle detection for inline schemas
+    if (visited.has(refName)) {
+      return "Schema.Unknown";
+    }
+    visited = new Set(visited);
+    visited.add(refName);
+  }
+
   // Resolve references - inline the actual schema
   const s = resolveSchema(schema, allSchemas);
 
   // Handle enum
   if (s.enum) {
-    const literals = s.enum
-      .map((v) => (typeof v === "string" ? `"${v}"` : String(v)))
-      .join(", ");
+    // Special case: enum: [null] - Cloudflare often returns objects when spec says null
+    if (s.enum.length === 1 && s.enum[0] === null) {
+      return "Schema.NullOr(Schema.Unknown)";
+    }
+    const literals = s.enum.map((v) => (typeof v === "string" ? `"${v}"` : String(v))).join(", ");
     return `Schema.Literal(${literals})`;
   }
 
@@ -363,7 +623,14 @@ function generateSchemaCode(
 
     case "array":
       if (s.items) {
-        const itemType = generateSchemaCode("item", s.items, allSchemas);
+        const itemType = generateSchemaCode(
+          "item",
+          s.items,
+          allSchemas,
+          generatedSchemaNames,
+          cyclicSchemas,
+          visited,
+        );
         return `Schema.Array(${itemType})`;
       }
       return "Schema.Array(Schema.Unknown)";
@@ -372,16 +639,33 @@ function generateSchemaCode(
       if (s.properties) {
         const props = Object.entries(s.properties)
           .map(([propName, propSchema]) => {
-            const propType = generateSchemaCode(propName, propSchema, allSchemas);
+            const propType = generateSchemaCode(
+              propName,
+              propSchema,
+              allSchemas,
+              generatedSchemaNames,
+              cyclicSchemas,
+              visited,
+            );
             const isRequired = s.required?.includes(propName);
             const safeName = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(propName)
               ? propName
               : `"${propName}"`;
 
+            // Check if property is nullable (OpenAPI 3.0 style)
+            const resolved = resolveSchema(propSchema, allSchemas);
+            const isNullable = resolved.nullable === true;
+
             if (isRequired) {
+              // Required but nullable: use NullOr
+              if (isNullable) {
+                return `  ${safeName}: Schema.NullOr(${propType})`;
+              }
               return `  ${safeName}: ${propType}`;
             }
-            return `  ${safeName}: Schema.optional(${propType})`;
+            // Optional: use Schema.optional to allow missing keys, and Schema.NullOr to allow null values
+            // This handles Cloudflare's API which often returns null for optional fields or omits them entirely
+            return `  ${safeName}: Schema.optional(Schema.NullOr(${propType}))`;
           })
           .join(",\n");
         return `Schema.Struct({\n${props}\n})`;
@@ -390,36 +674,76 @@ function generateSchemaCode(
         if (typeof s.additionalProperties === "boolean") {
           return "Schema.Record({ key: Schema.String, value: Schema.Unknown })";
         }
-        const valueType = generateSchemaCode("value", s.additionalProperties, allSchemas);
+        const valueType = generateSchemaCode(
+          "value",
+          s.additionalProperties,
+          allSchemas,
+          generatedSchemaNames,
+          cyclicSchemas,
+          visited,
+        );
         return `Schema.Record({ key: Schema.String, value: ${valueType} })`;
       }
       return "Schema.Struct({})";
 
     case "null":
-      return "Schema.Null";
+      // Cloudflare's spec often says null but API returns objects, so be lenient
+      return "Schema.NullOr(Schema.Unknown)";
 
     default:
       // Handle allOf
       if (s.allOf && s.allOf.length > 0) {
         for (const member of s.allOf) {
           if (!OpenAPI.isJsonReference(member)) {
-            return generateSchemaCode(name, member, allSchemas);
+            return generateSchemaCode(
+              name,
+              member,
+              allSchemas,
+              generatedSchemaNames,
+              cyclicSchemas,
+              visited,
+            );
           }
         }
-        return generateSchemaCode(name, s.allOf[0]!, allSchemas);
+        return generateSchemaCode(
+          name,
+          s.allOf[0]!,
+          allSchemas,
+          generatedSchemaNames,
+          cyclicSchemas,
+          visited,
+        );
       }
 
       // Handle oneOf/anyOf as Union
       if (s.oneOf && s.oneOf.length > 0) {
         const members = s.oneOf
-          .map((m) => generateSchemaCode("member", m, allSchemas))
+          .map((m) =>
+            generateSchemaCode(
+              "member",
+              m,
+              allSchemas,
+              generatedSchemaNames,
+              cyclicSchemas,
+              visited,
+            ),
+          )
           .join(", ");
         return `Schema.Union(${members})`;
       }
 
       if (s.anyOf && s.anyOf.length > 0) {
         const members = s.anyOf
-          .map((m) => generateSchemaCode("member", m, allSchemas))
+          .map((m) =>
+            generateSchemaCode(
+              "member",
+              m,
+              allSchemas,
+              generatedSchemaNames,
+              cyclicSchemas,
+              visited,
+            ),
+          )
           .join(", ");
         return `Schema.Union(${members})`;
       }
@@ -445,6 +769,60 @@ async function loadServiceSpec(serviceName: string): Promise<ServiceSpec> {
 }
 
 /**
+ * Collect all schema references used by an operation.
+ */
+function collectOperationSchemaRefs(
+  operation: OpenAPI.OperationObject,
+  allSchemas: Record<string, OpenAPI.OpenApiSchemaObject | OpenAPI.JsonReference>,
+  allRequestBodies: Record<string, OpenAPI.RequestBodyObject | OpenAPI.JsonReference>,
+): Set<string> {
+  const refs = new Set<string>();
+
+  // Collect from parameters
+  for (const param of operation.parameters ?? []) {
+    if (!OpenAPI.isJsonReference(param)) {
+      const p = param as OpenAPI.ParameterObject;
+      if (p.schema) {
+        collectSchemaRefs(p.schema, allSchemas, refs);
+      }
+    }
+  }
+
+  // Collect from request body
+  if (operation.requestBody) {
+    let rb: OpenAPI.RequestBodyObject | undefined;
+    if (OpenAPI.isJsonReference(operation.requestBody)) {
+      const refName = OpenAPI.getSchemaName(operation.requestBody);
+      const resolved = allRequestBodies[refName];
+      if (resolved && !OpenAPI.isJsonReference(resolved)) {
+        rb = resolved;
+      }
+    } else {
+      rb = operation.requestBody as OpenAPI.RequestBodyObject;
+    }
+
+    if (rb) {
+      const jsonContent = rb.content["application/json"];
+      if (jsonContent?.schema) {
+        collectSchemaRefs(jsonContent.schema, allSchemas, refs);
+      }
+    }
+  }
+
+  // Collect from response
+  const response200 = operation.responses["200"];
+  if (response200 && !OpenAPI.isJsonReference(response200)) {
+    const r = response200 as OpenAPI.ResponseObject;
+    const jsonContent = r.content?.["application/json"];
+    if (jsonContent?.schema) {
+      collectSchemaRefs(jsonContent.schema, allSchemas, refs);
+    }
+  }
+
+  return refs;
+}
+
+/**
  * Generate a service file following the distilled-aws pattern.
  */
 function generateServiceFile(
@@ -459,6 +837,23 @@ function generateServiceFile(
   allRequestBodies: Record<string, OpenAPI.RequestBodyObject | OpenAPI.JsonReference>,
   serviceSpec: ServiceSpec,
 ): string {
+  // First pass: collect all schema references used by this service
+  const allReferencedSchemas = new Set<string>();
+  for (const { operation } of operations) {
+    const refs = collectOperationSchemaRefs(operation, allSchemas, allRequestBodies);
+    for (const ref of refs) {
+      allReferencedSchemas.add(ref);
+    }
+  }
+
+  // Build dependency graph and detect cycles
+  const dependencyGraph = buildSchemaDependencyGraph(allReferencedSchemas, allSchemas);
+  const cyclicSchemas = findCyclicSchemas(dependencyGraph);
+
+  // Generate named schemas for cyclic types (sorted topologically)
+  const sortedCyclicSchemas = topologicalSortSchemas(cyclicSchemas, dependencyGraph, cyclicSchemas);
+  const generatedSchemaNames = new Set<string>(cyclicSchemas);
+
   // Collect all errors used by this service
   const allErrorNames = new Set<string>();
   for (const op of operations) {
@@ -484,11 +879,11 @@ function generateServiceFile(
     'import * as API from "../client/api.ts";',
     'import * as T from "../traits.ts";',
     'import type { ApiToken } from "../auth.ts";',
-    'import {',
-    '  CloudflareError,',
-    '  UnknownCloudflareError,',
-    '  CloudflareNetworkError,',
-    '  CloudflareHttpError,',
+    "import {",
+    "  CloudflareError,",
+    "  UnknownCloudflareError,",
+    "  CloudflareNetworkError,",
+    "  CloudflareHttpError,",
     '} from "../errors.ts";',
   ];
 
@@ -513,6 +908,37 @@ function generateServiceFile(
   lines.push(`} from "../errors/generated.ts";`);
 
   lines.push("");
+
+  // Generate named schemas for cyclic types
+  if (sortedCyclicSchemas.length > 0) {
+    lines.push("// ============================================================");
+    lines.push("// Named schemas (required for circular references)");
+    lines.push("// ============================================================");
+    lines.push("");
+
+    for (const schemaName of sortedCyclicSchemas) {
+      const schema = allSchemas[schemaName];
+      if (!schema) continue;
+
+      const identifier = schemaNameToIdentifier(schemaName);
+      // Generate the schema code, marking this schema as "being generated" so recursive refs use suspend
+      const schemaCode = generateSchemaCode(
+        schemaName,
+        schema,
+        allSchemas,
+        generatedSchemaNames,
+        cyclicSchemas,
+        new Set([schemaName]), // Mark current schema as visited to trigger suspend on self-refs
+      );
+      lines.push(`export const ${identifier} = ${schemaCode};`);
+      lines.push("");
+    }
+
+    lines.push("// ============================================================");
+    lines.push("// Operations");
+    lines.push("// ============================================================");
+    lines.push("");
+  }
 
   // Track generated schemas and function names to avoid duplicates
   const generatedSchemas = new Set<string>();
@@ -547,7 +973,7 @@ function generateServiceFile(
       const p = param as OpenAPI.ParameterObject;
       const tsType = p.schema ? schemaToTsType(p.schema, allSchemas) : "string";
       const schemaType = p.schema
-        ? generateSchemaCode(p.name, p.schema, allSchemas)
+        ? generateSchemaCode(p.name, p.schema, allSchemas, generatedSchemaNames, cyclicSchemas)
         : "Schema.String";
 
       const traitAnnotation =
@@ -559,9 +985,7 @@ function generateServiceFile(
               ? `.pipe(T.HttpHeader("${p.name}"))`
               : "";
 
-      const safeName = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(p.name)
-        ? p.name
-        : `"${p.name}"`;
+      const safeName = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(p.name) ? p.name : `"${p.name}"`;
 
       if (p.required) {
         interfaceFields.push(`${safeName}: ${tsType}`);
@@ -593,7 +1017,13 @@ function generateServiceFile(
 
         if (jsonContent?.schema) {
           const tsType = schemaToTsType(jsonContent.schema, allSchemas);
-          const schemaType = generateSchemaCode("body", jsonContent.schema, allSchemas);
+          const schemaType = generateSchemaCode(
+            "body",
+            jsonContent.schema,
+            allSchemas,
+            generatedSchemaNames,
+            cyclicSchemas,
+          );
           interfaceFields.push(`body: ${tsType}`);
           schemaFields.push(`  body: ${schemaType}.pipe(T.HttpBody())`);
         } else if (formDataContent?.schema) {
@@ -604,8 +1034,16 @@ function generateServiceFile(
         } else if (jsContent?.schema) {
           // Handle JavaScript/text content types (e.g., simple service worker uploads)
           const tsType = schemaToTsType(jsContent.schema, allSchemas);
-          const schemaType = generateSchemaCode("body", jsContent.schema, allSchemas);
-          const contentType = rb.content["application/javascript"] ? "application/javascript" : "text/javascript";
+          const schemaType = generateSchemaCode(
+            "body",
+            jsContent.schema,
+            allSchemas,
+            generatedSchemaNames,
+            cyclicSchemas,
+          );
+          const contentType = rb.content["application/javascript"]
+            ? "application/javascript"
+            : "text/javascript";
           interfaceFields.push(`body: ${tsType}`);
           schemaFields.push(`  body: ${schemaType}.pipe(T.HttpTextBody("${contentType}"))`);
         }
@@ -629,7 +1067,9 @@ function generateServiceFile(
       lines.push(schemaFields.join(",\n"));
       lines.push(`}).pipe(`);
       lines.push(`  T.Http({ method: "${method}", path: "${path}" }),`);
-      lines.push(`).annotations({ identifier: "${requestClassName}" }) as unknown as Schema.Schema<${requestClassName}>;`);
+      lines.push(
+        `).annotations({ identifier: "${requestClassName}" }) as unknown as Schema.Schema<${requestClassName}>;`,
+      );
       lines.push("");
     }
 
@@ -648,10 +1088,16 @@ function generateServiceFile(
           // Extract the 'result' property from the Cloudflare response envelope
           // This recursively merges allOf schemas and finds the result property
           const extractedResult = extractResultSchema(jsonContent.schema, allSchemas);
-          
+
           if (extractedResult) {
             // Found a 'result' property - use its schema
-            resultSchema = generateSchemaCode("result", extractedResult, allSchemas);
+            resultSchema = generateSchemaCode(
+              "result",
+              extractedResult,
+              allSchemas,
+              generatedSchemaNames,
+              cyclicSchemas,
+            );
             resultTsType = schemaToTsType(extractedResult, allSchemas);
           }
           // If no result property found, the operation returns result: null
@@ -662,7 +1108,9 @@ function generateServiceFile(
       // Response interface
       lines.push(`export interface ${responseClassName} {`);
       lines.push(`  result: ${resultTsType};`);
-      lines.push(`  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };`);
+      lines.push(
+        `  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };`,
+      );
       lines.push(`}`);
       lines.push("");
 
@@ -676,7 +1124,9 @@ function generateServiceFile(
       lines.push(`    total_count: Schema.optional(Schema.Number),`);
       lines.push(`    cursor: Schema.optional(Schema.String),`);
       lines.push(`  })),`);
-      lines.push(`}).annotations({ identifier: "${responseClassName}" }) as unknown as Schema.Schema<${responseClassName}>;`);
+      lines.push(
+        `}).annotations({ identifier: "${responseClassName}" }) as unknown as Schema.Schema<${responseClassName}>;`,
+      );
       lines.push("");
     }
 
@@ -686,7 +1136,7 @@ function generateServiceFile(
     // Build error union type
     // Combine common errors with operation-specific errors
     const allOperationErrors = [...new Set([...COMMON_ERRORS, ...operationErrors])];
-    
+
     const errorTypes = [
       ...allOperationErrors,
       "CloudflareError",
@@ -726,9 +1176,7 @@ const generateCommand = Command.make(
       yield* Console.log("\n🔧 Generating Cloudflare SDK\n");
 
       // Ensure cache directory exists
-      yield* Effect.tryPromise(() =>
-        Bun.write(".cache/.gitkeep", ""),
-      );
+      yield* Effect.tryPromise(() => Bun.write(".cache/.gitkeep", ""));
 
       // Fetch or load OpenAPI spec
       let specContent: string;
@@ -760,7 +1208,9 @@ const generateCommand = Command.make(
       spec = yield* Effect.tryPromise(() => loadAndApplyPatches(spec));
       const patchedPathCount = Object.keys(spec.paths).length;
       if (patchedPathCount > originalPathCount) {
-        yield* Console.log(`   Applied patches: ${patchedPathCount - originalPathCount} new paths added`);
+        yield* Console.log(
+          `   Applied patches: ${patchedPathCount - originalPathCount} new paths added`,
+        );
       }
 
       const allSchemas = (spec.components?.schemas ?? {}) as Record<
@@ -816,9 +1266,7 @@ const generateCommand = Command.make(
       yield* Console.log(`   Grouped into ${serviceOps.size} services`);
 
       // Ensure services directory exists
-      yield* Effect.tryPromise(() =>
-        Bun.write("src/services/.gitkeep", ""),
-      );
+      yield* Effect.tryPromise(() => Bun.write("src/services/.gitkeep", ""));
 
       // Generate service files
       for (const [serviceName, ops] of serviceOps) {
@@ -827,10 +1275,14 @@ const generateCommand = Command.make(
         // Load service spec for errors
         const serviceSpec = yield* Effect.tryPromise(() => loadServiceSpec(serviceName));
 
-        const content = generateServiceFile(serviceName, ops, allSchemas, allRequestBodies, serviceSpec);
-        yield* Effect.tryPromise(() =>
-          Bun.write(`src/services/${serviceName}.ts`, content),
+        const content = generateServiceFile(
+          serviceName,
+          ops,
+          allSchemas,
+          allRequestBodies,
+          serviceSpec,
         );
+        yield* Effect.tryPromise(() => Bun.write(`src/services/${serviceName}.ts`, content));
       }
 
       yield* Console.log("\n✅ Generation complete!\n");
@@ -846,8 +1298,6 @@ const cli = Command.run(generateCommand, {
 // Run
 cli(process.argv).pipe(
   Effect.provide(NodeContext.layer),
-  Logger.withMinimumLogLevel(
-    process.env.DEBUG ? LogLevel.Debug : LogLevel.Info,
-  ),
+  Logger.withMinimumLogLevel(process.env.DEBUG ? LogLevel.Debug : LogLevel.Info),
   NodeRuntime.runMain,
 );

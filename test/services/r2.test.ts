@@ -25,10 +25,7 @@ const cleanup = (name: string) =>
   }).pipe(Effect.ignore);
 
 // Helper to create a bucket with cleanup
-const withBucket = <A, E, R>(
-  name: string,
-  fn: (bucketName: string) => Effect.Effect<A, E, R>,
-) =>
+const withBucket = <A, E, R>(name: string, fn: (bucketName: string) => Effect.Effect<A, E, R>) =>
   cleanup(name).pipe(
     Effect.andThen(
       R2.createBucket({
@@ -79,9 +76,7 @@ describe("R2", () => {
         yield* R2.getBucket({
           account_id: accountId(),
           bucket_name: name,
-        }).pipe(
-          Effect.catchTag("NoSuchBucket", () => Effect.void),
-        );
+        }).pipe(Effect.catchTag("NoSuchBucket", () => Effect.void));
       }));
 
     test("create bucket with location hint", () =>
