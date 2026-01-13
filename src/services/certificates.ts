@@ -52,11 +52,11 @@ export interface ListCertificatesResponse {
 
 export const ListCertificatesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  certificate: Schema.optional(Schema.String),
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
   csr: Schema.String,
-  expires_on: Schema.optional(Schema.String),
+  expires_on: Schema.optional(Schema.NullOr(Schema.String)),
   hostnames: Schema.Array(Schema.String),
-  id: Schema.optional(Schema.String),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
   request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
   requested_validity: Schema.Literal(7, 30, 90, 365, 730, 1095, 5475)
 })),
@@ -90,7 +90,7 @@ export const CreateCertificateRequest = Schema.Struct({
   csr: Schema.String,
   hostnames: Schema.Array(Schema.String),
   request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
-  requested_validity: Schema.optional(Schema.Literal(7, 30, 90, 365, 730, 1095, 5475))
+  requested_validity: Schema.optional(Schema.NullOr(Schema.Literal(7, 30, 90, 365, 730, 1095, 5475)))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/certificates" }),
@@ -103,11 +103,11 @@ export interface CreateCertificateResponse {
 
 export const CreateCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-  certificate: Schema.optional(Schema.String),
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
   csr: Schema.String,
-  expires_on: Schema.optional(Schema.String),
+  expires_on: Schema.optional(Schema.NullOr(Schema.String)),
   hostnames: Schema.Array(Schema.String),
-  id: Schema.optional(Schema.String),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
   request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
   requested_validity: Schema.Literal(7, 30, 90, 365, 730, 1095, 5475)
 }),
@@ -149,11 +149,11 @@ export interface GetCertificateResponse {
 
 export const GetCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-  certificate: Schema.optional(Schema.String),
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
   csr: Schema.String,
-  expires_on: Schema.optional(Schema.String),
+  expires_on: Schema.optional(Schema.NullOr(Schema.String)),
   hostnames: Schema.Array(Schema.String),
-  id: Schema.optional(Schema.String),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
   request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
   requested_validity: Schema.Literal(7, 30, 90, 365, 730, 1095, 5475)
 }),

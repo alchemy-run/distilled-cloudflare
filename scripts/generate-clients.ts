@@ -18,6 +18,8 @@
 import { Command, Options } from "@effect/cli";
 import { NodeContext, NodeRuntime } from "@effect/platform-node";
 import { Console, Effect, Logger, LogLevel } from "effect";
+import * as jsonc from "jsonc-parser";
+import * as jsonpatch from "fast-json-patch";
 import * as OpenAPI from "./openapi-schema.ts";
 
 const OPENAPI_URL = "https://raw.githubusercontent.com/cloudflare/api-schemas/main/openapi.json";
@@ -57,83 +59,30 @@ const SERVICE_PATTERNS: Record<string, RegExp> = {
   workflows: /^\/accounts\/\{account_id\}\/workflows/,
 };
 
-const OPENAPI_PATCH = "spec/openapi.patch.json";
+const OPENAPI_PATCH = "spec/openapi.patch.jsonc";
 
 /**
- * Deep merge two objects, with source taking precedence.
- * Arrays are concatenated, objects are recursively merged.
- */
-function deepMerge<T extends Record<string, unknown>>(
-  target: T,
-  source: Record<string, unknown>,
-): T {
-  const result = { ...target } as Record<string, unknown>;
-
-  for (const key of Object.keys(source)) {
-    const sourceValue = source[key];
-    const targetValue = result[key];
-
-    if (
-      sourceValue !== null &&
-      typeof sourceValue === "object" &&
-      !Array.isArray(sourceValue) &&
-      targetValue !== null &&
-      typeof targetValue === "object" &&
-      !Array.isArray(targetValue)
-    ) {
-      // Recursively merge objects
-      result[key] = deepMerge(
-        targetValue as Record<string, unknown>,
-        sourceValue as Record<string, unknown>,
-      );
-    } else {
-      // Override with source value (or add new key)
-      result[key] = sourceValue;
-    }
-  }
-
-  return result as T;
-}
-
-/**
- * Load and apply OpenAPI patches from spec/openapi.patch.json
+ * Load and apply OpenAPI patches from spec/openapi.patch.jsonc
+ *
+ * Uses RFC 6902 JSON Patch format stored as JSONC (JSON with comments).
+ * Each patch operation must have a comment explaining what it fixes and why.
  */
 async function loadAndApplyPatches(spec: {
   paths: Record<string, Record<string, unknown>>;
   components?: { schemas?: Record<string, unknown> };
 }): Promise<typeof spec> {
   try {
-    const patchExists = await Bun.file(OPENAPI_PATCH).exists();
+    const patchFile = Bun.file(OPENAPI_PATCH);
+    const patchExists = await patchFile.exists();
     if (!patchExists) {
       return spec;
     }
 
-    const patchContent = await Bun.file(OPENAPI_PATCH).text();
-    const patch = JSON.parse(patchContent) as {
-      paths?: Record<string, Record<string, unknown>>;
-      components?: { schemas?: Record<string, unknown> };
-    };
+    const patchContent = await patchFile.text();
+    const patches = jsonc.parse(patchContent) as jsonpatch.Operation[];
 
-    // Merge paths
-    if (patch.paths) {
-      spec.paths = deepMerge(spec.paths, patch.paths);
-    }
-
-    // Merge component schemas
-    // For component schemas, use direct replacement (not deep merge)
-    // This allows patches to fully override schemas instead of merging properties
-    if (patch.components?.schemas) {
-      if (!spec.components) {
-        spec.components = { schemas: {} };
-      }
-      if (!spec.components.schemas) {
-        spec.components.schemas = {};
-      }
-      for (const [schemaName, schemaValue] of Object.entries(patch.components.schemas)) {
-        // Fully replace the schema instead of merging
-        (spec.components.schemas as Record<string, unknown>)[schemaName] = schemaValue;
-      }
-    }
+    // Apply JSON Patch operations
+    jsonpatch.applyPatch(spec, patches, true, true);
 
     return spec;
   } catch (error) {

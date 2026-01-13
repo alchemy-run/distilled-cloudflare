@@ -50,13 +50,13 @@ export interface ListPortalsResponse {
 
 export const ListPortalsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  created_by: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   id: Schema.String,
-  modified_at: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
+  modified_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
 })),
   result_info: Schema.optional(Schema.Struct({
@@ -88,25 +88,25 @@ export interface CreatePortalsRequest {
 export const CreatePortalsRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  description: Schema.optional(Schema.String),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   id: Schema.String,
   name: Schema.String,
-  servers: Schema.optional(Schema.Array(Schema.Struct({
-  default_disabled: Schema.optional(Schema.Boolean),
-  on_behalf: Schema.optional(Schema.Boolean),
+  servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  default_disabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  on_behalf: Schema.optional(Schema.NullOr(Schema.Boolean)),
   server_id: Schema.String,
-  updated_prompts: Schema.optional(Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
+  updated_prompts: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
   name: Schema.String
-}))),
-  updated_tools: Schema.optional(Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
+})))),
+  updated_tools: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
   name: Schema.String
-})))
-})))
+}))))
+}))))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/access/ai-controls/mcp/portals" }),
@@ -159,30 +159,30 @@ export interface McpPortalsApiFetchGatewaysResponse {
 
 export const McpPortalsApiFetchGatewaysResponse = Schema.Struct({
   result: Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  created_by: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   id: Schema.String,
-  modified_at: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
+  modified_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String,
   servers: Schema.Array(Schema.Struct({
   auth_type: Schema.Literal("oauth", "bearer", "unauthenticated"),
-  created_at: Schema.optional(Schema.Date),
-  created_by: Schema.optional(Schema.String),
-  default_disabled: Schema.optional(Schema.Boolean),
-  description: Schema.optional(Schema.String),
-  error: Schema.optional(Schema.String),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  default_disabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  error: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   id: Schema.String,
-  last_synced: Schema.optional(Schema.Date),
-  modified_at: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
+  last_synced: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String,
-  on_behalf: Schema.optional(Schema.Boolean),
+  on_behalf: Schema.optional(Schema.NullOr(Schema.Boolean)),
   prompts: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  status: Schema.optional(Schema.String),
+  status: Schema.optional(Schema.NullOr(Schema.String)),
   tools: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
   updated_prompts: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Number, Schema.String) })),
   updated_tools: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Number, Schema.String) }))
@@ -219,24 +219,24 @@ export const UpdatePortalsRequest = Schema.Struct({
   id: Schema.String.pipe(T.HttpPath("id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  hostname: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  servers: Schema.optional(Schema.Array(Schema.Struct({
-  default_disabled: Schema.optional(Schema.Boolean),
-  on_behalf: Schema.optional(Schema.Boolean),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  hostname: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  default_disabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  on_behalf: Schema.optional(Schema.NullOr(Schema.Boolean)),
   server_id: Schema.String,
-  updated_prompts: Schema.optional(Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
+  updated_prompts: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
   name: Schema.String
-}))),
-  updated_tools: Schema.optional(Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
+})))),
+  updated_tools: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
   name: Schema.String
-})))
-})))
+}))))
+}))))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/access/ai-controls/mcp/portals/{id}" }),
@@ -249,13 +249,13 @@ export interface UpdatePortalsResponse {
 
 export const UpdatePortalsResponse = Schema.Struct({
   result: Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  created_by: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   id: Schema.String,
-  modified_at: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
+  modified_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -298,13 +298,13 @@ export interface DeletePortalsResponse {
 
 export const DeletePortalsResponse = Schema.Struct({
   result: Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  created_by: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   id: Schema.String,
-  modified_at: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
+  modified_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -352,18 +352,18 @@ export interface ListServersResponse {
 export const ListServersResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
   auth_type: Schema.Literal("oauth", "bearer", "unauthenticated"),
-  created_at: Schema.optional(Schema.Date),
-  created_by: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  error: Schema.optional(Schema.String),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  error: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   id: Schema.String,
-  last_synced: Schema.optional(Schema.Date),
-  modified_at: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
+  last_synced: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String,
   prompts: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  status: Schema.optional(Schema.String),
+  status: Schema.optional(Schema.NullOr(Schema.String)),
   tools: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Unknown }))
 })),
   result_info: Schema.optional(Schema.Struct({
@@ -395,9 +395,9 @@ export interface CreateServersRequest {
 export const CreateServersRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  auth_credentials: Schema.optional(Schema.String),
+  auth_credentials: Schema.optional(Schema.NullOr(Schema.String)),
   auth_type: Schema.Literal("oauth", "bearer", "unauthenticated"),
-  description: Schema.optional(Schema.String),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   id: Schema.String,
   name: Schema.String
@@ -454,18 +454,18 @@ export interface McpPortalsApiFetchServersResponse {
 export const McpPortalsApiFetchServersResponse = Schema.Struct({
   result: Schema.Struct({
   auth_type: Schema.Literal("oauth", "bearer", "unauthenticated"),
-  created_at: Schema.optional(Schema.Date),
-  created_by: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  error: Schema.optional(Schema.String),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  error: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   id: Schema.String,
-  last_synced: Schema.optional(Schema.Date),
-  modified_at: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
+  last_synced: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String,
   prompts: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  status: Schema.optional(Schema.String),
+  status: Schema.optional(Schema.NullOr(Schema.String)),
   tools: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Unknown }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -499,9 +499,9 @@ export const UpdateServersRequest = Schema.Struct({
   id: Schema.String.pipe(T.HttpPath("id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  auth_credentials: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String)
+  auth_credentials: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/access/ai-controls/mcp/servers/{id}" }),
@@ -515,18 +515,18 @@ export interface UpdateServersResponse {
 export const UpdateServersResponse = Schema.Struct({
   result: Schema.Struct({
   auth_type: Schema.Literal("oauth", "bearer", "unauthenticated"),
-  created_at: Schema.optional(Schema.Date),
-  created_by: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  error: Schema.optional(Schema.String),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  error: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   id: Schema.String,
-  last_synced: Schema.optional(Schema.Date),
-  modified_at: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
+  last_synced: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String,
   prompts: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  status: Schema.optional(Schema.String),
+  status: Schema.optional(Schema.NullOr(Schema.String)),
   tools: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Unknown }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -570,18 +570,18 @@ export interface DeleteServersResponse {
 export const DeleteServersResponse = Schema.Struct({
   result: Schema.Struct({
   auth_type: Schema.Literal("oauth", "bearer", "unauthenticated"),
-  created_at: Schema.optional(Schema.Date),
-  created_by: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  error: Schema.optional(Schema.String),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  created_by: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  error: Schema.optional(Schema.NullOr(Schema.String)),
   hostname: Schema.String,
   id: Schema.String,
-  last_synced: Schema.optional(Schema.Date),
-  modified_at: Schema.optional(Schema.Date),
-  modified_by: Schema.optional(Schema.String),
+  last_synced: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  modified_by: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String,
   prompts: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  status: Schema.optional(Schema.String),
+  status: Schema.optional(Schema.NullOr(Schema.String)),
   tools: Schema.Array(Schema.Record({ key: Schema.String, value: Schema.Unknown }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -754,9 +754,9 @@ export interface ListShortLivedCertificateCAsResponse {
 
 export const ListShortLivedCertificateCAsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  aud: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  public_key: Schema.optional(Schema.String)
+  aud: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  public_key: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -920,9 +920,9 @@ export interface GetAShortLivedCertificateCaResponse {
 
 export const GetAShortLivedCertificateCaResponse = Schema.Struct({
   result: Schema.Struct({
-  aud: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  public_key: Schema.optional(Schema.String)
+  aud: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  public_key: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -964,9 +964,9 @@ export interface CreateAShortLivedCertificateCaResponse {
 
 export const CreateAShortLivedCertificateCaResponse = Schema.Struct({
   result: Schema.Struct({
-  aud: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  public_key: Schema.optional(Schema.String)
+  aud: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  public_key: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1333,8 +1333,8 @@ export const UpdateAccessApplicationSettingsRequest = Schema.Struct({
   app_id: Schema.Union(Schema.String, Schema.String).pipe(T.HttpPath("app_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  allow_iframe: Schema.optional(Schema.Boolean),
-  skip_interstitial: Schema.optional(Schema.Boolean)
+  allow_iframe: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  skip_interstitial: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/access/apps/{app_id}/settings" }),
@@ -1378,8 +1378,8 @@ export const UpdateAccessApplicationSettings1Request = Schema.Struct({
   app_id: Schema.Union(Schema.String, Schema.String).pipe(T.HttpPath("app_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  allow_iframe: Schema.optional(Schema.Boolean),
-  skip_interstitial: Schema.optional(Schema.Boolean)
+  allow_iframe: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  skip_interstitial: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/accounts/{account_id}/access/apps/{app_id}/settings" }),
@@ -1432,29 +1432,29 @@ export interface AccessApplicationsTestAccessPoliciesResponse {
 
 export const AccessApplicationsTestAccessPoliciesResponse = Schema.Struct({
   result: Schema.Struct({
-  app_state: Schema.optional(Schema.Struct({
-  app_uid: Schema.optional(Schema.String),
-  aud: Schema.optional(Schema.String),
-  hostname: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  policies: Schema.optional(Schema.Array(Schema.Struct({}))),
-  status: Schema.optional(Schema.String)
-})),
-  user_identity: Schema.optional(Schema.Struct({
-  account_id: Schema.optional(Schema.String),
-  device_sessions: Schema.optional(Schema.Struct({})),
-  email: Schema.optional(Schema.String),
-  geo: Schema.optional(Schema.Struct({
-  country: Schema.optional(Schema.String)
-})),
-  iat: Schema.optional(Schema.Number),
-  id: Schema.optional(Schema.String),
-  is_gateway: Schema.optional(Schema.Boolean),
-  is_warp: Schema.optional(Schema.Boolean),
-  name: Schema.optional(Schema.String),
-  user_uuid: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.Number)
-}))
+  app_state: Schema.optional(Schema.NullOr(Schema.Struct({
+  app_uid: Schema.optional(Schema.NullOr(Schema.String)),
+  aud: Schema.optional(Schema.NullOr(Schema.String)),
+  hostname: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  policies: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  status: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  user_identity: Schema.optional(Schema.NullOr(Schema.Struct({
+  account_id: Schema.optional(Schema.NullOr(Schema.String)),
+  device_sessions: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  email: Schema.optional(Schema.NullOr(Schema.String)),
+  geo: Schema.optional(Schema.NullOr(Schema.Struct({
+  country: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  iat: Schema.optional(Schema.NullOr(Schema.Number)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  is_gateway: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  is_warp: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  user_uuid: Schema.optional(Schema.NullOr(Schema.String)),
+  version: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1494,13 +1494,13 @@ export interface ListBookmarkApplicationsResponse {
 
 export const ListBookmarkApplicationsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  app_launcher_visible: Schema.optional(Schema.Boolean),
-  created_at: Schema.optional(Schema.Unknown),
-  domain: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  logo_url: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  app_launcher_visible: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  domain: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  logo_url: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1542,13 +1542,13 @@ export interface GetABookmarkApplicationResponse {
 
 export const GetABookmarkApplicationResponse = Schema.Struct({
   result: Schema.Struct({
-  app_launcher_visible: Schema.optional(Schema.Boolean),
-  created_at: Schema.optional(Schema.Unknown),
-  domain: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  logo_url: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  app_launcher_visible: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  domain: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  logo_url: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1590,13 +1590,13 @@ export interface CreateABookmarkApplicationResponse {
 
 export const CreateABookmarkApplicationResponse = Schema.Struct({
   result: Schema.Struct({
-  app_launcher_visible: Schema.optional(Schema.Boolean),
-  created_at: Schema.optional(Schema.Unknown),
-  domain: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  logo_url: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  app_launcher_visible: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  domain: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  logo_url: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1638,13 +1638,13 @@ export interface UpdateABookmarkApplicationResponse {
 
 export const UpdateABookmarkApplicationResponse = Schema.Struct({
   result: Schema.Struct({
-  app_launcher_visible: Schema.optional(Schema.Boolean),
-  created_at: Schema.optional(Schema.Unknown),
-  domain: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  logo_url: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  app_launcher_visible: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  domain: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  logo_url: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1686,7 +1686,7 @@ export interface DeleteABookmarkApplicationResponse {
 
 export const DeleteABookmarkApplicationResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1728,13 +1728,13 @@ export interface ListMtlsCertificatesResponse {
 
 export const ListMtlsCertificatesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  associated_hostnames: Schema.optional(Schema.Array(Schema.String)),
-  created_at: Schema.optional(Schema.Unknown),
-  expires_on: Schema.optional(Schema.Date),
-  fingerprint: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  associated_hostnames: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  expires_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  fingerprint: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1904,13 +1904,13 @@ export interface GetAnMtlsCertificateResponse {
 
 export const GetAnMtlsCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-  associated_hostnames: Schema.optional(Schema.Array(Schema.String)),
-  created_at: Schema.optional(Schema.Unknown),
-  expires_on: Schema.optional(Schema.Date),
-  fingerprint: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  associated_hostnames: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  expires_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  fingerprint: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1954,13 +1954,13 @@ export interface UpdateAnMtlsCertificateResponse {
 
 export const UpdateAnMtlsCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-  associated_hostnames: Schema.optional(Schema.Array(Schema.String)),
-  created_at: Schema.optional(Schema.Unknown),
-  expires_on: Schema.optional(Schema.Date),
-  fingerprint: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  associated_hostnames: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  expires_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  fingerprint: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2002,7 +2002,7 @@ export interface DeleteAnMtlsCertificateResponse {
 
 export const DeleteAnMtlsCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2044,12 +2044,12 @@ export interface ListCustomPagesResponse {
 
 export const ListCustomPagesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  app_count: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.Unknown),
+  app_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
   name: Schema.String,
   type: Schema.Literal("identity_denied", "forbidden"),
-  uid: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2080,13 +2080,13 @@ export interface CreateACustomPageRequest {
 export const CreateACustomPageRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  app_count: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.Unknown),
+  app_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
   custom_html: Schema.String,
   name: Schema.String,
   type: Schema.Literal("identity_denied", "forbidden"),
-  uid: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/access/custom_pages" }),
@@ -2139,13 +2139,13 @@ export interface GetACustomPageResponse {
 
 export const GetACustomPageResponse = Schema.Struct({
   result: Schema.Struct({
-  app_count: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.Unknown),
+  app_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
   custom_html: Schema.String,
   name: Schema.String,
   type: Schema.Literal("identity_denied", "forbidden"),
-  uid: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2178,13 +2178,13 @@ export const UpdateACustomPageRequest = Schema.Struct({
   custom_page_id: Schema.String.pipe(T.HttpPath("custom_page_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  app_count: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.Unknown),
+  app_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
   custom_html: Schema.String,
   name: Schema.String,
   type: Schema.Literal("identity_denied", "forbidden"),
-  uid: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/access/custom_pages/{custom_page_id}" }),
@@ -2197,12 +2197,12 @@ export interface UpdateACustomPageResponse {
 
 export const UpdateACustomPageResponse = Schema.Struct({
   result: Schema.Struct({
-  app_count: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.Unknown),
+  app_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
   name: Schema.String,
   type: Schema.Literal("identity_denied", "forbidden"),
-  uid: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2282,8 +2282,8 @@ export interface ListSshCaResponse {
 
 export const ListSshCaResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  public_key: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  public_key: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2363,7 +2363,7 @@ export interface DeleteAnSshCaResponse {
 
 export const DeleteAnSshCaResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2407,14 +2407,14 @@ export interface ListAccessGroupsResponse {
 
 export const ListAccessGroupsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  created_at: Schema.optional(Schema.Unknown),
-  exclude: Schema.optional(Schema.Array(Schema.Struct({}))),
-  id: Schema.optional(Schema.String),
-  include: Schema.optional(Schema.Array(Schema.Struct({}))),
-  is_default: Schema.optional(Schema.Array(Schema.Struct({}))),
-  name: Schema.optional(Schema.String),
-  require: Schema.optional(Schema.Array(Schema.Struct({}))),
-  updated_at: Schema.optional(Schema.Unknown)
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  is_default: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2496,14 +2496,14 @@ export interface GetAnAccessGroupResponse {
 
 export const GetAnAccessGroupResponse = Schema.Struct({
   result: Schema.Struct({
-  created_at: Schema.optional(Schema.Unknown),
-  exclude: Schema.optional(Schema.Array(Schema.Struct({}))),
-  id: Schema.optional(Schema.String),
-  include: Schema.optional(Schema.Array(Schema.Struct({}))),
-  is_default: Schema.optional(Schema.Array(Schema.Struct({}))),
-  name: Schema.optional(Schema.String),
-  require: Schema.optional(Schema.Array(Schema.Struct({}))),
-  updated_at: Schema.optional(Schema.Unknown)
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  is_default: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2547,14 +2547,14 @@ export interface UpdateAnAccessGroupResponse {
 
 export const UpdateAnAccessGroupResponse = Schema.Struct({
   result: Schema.Struct({
-  created_at: Schema.optional(Schema.Unknown),
-  exclude: Schema.optional(Schema.Array(Schema.Struct({}))),
-  id: Schema.optional(Schema.String),
-  include: Schema.optional(Schema.Array(Schema.Struct({}))),
-  is_default: Schema.optional(Schema.Array(Schema.Struct({}))),
-  name: Schema.optional(Schema.String),
-  require: Schema.optional(Schema.Array(Schema.Struct({}))),
-  updated_at: Schema.optional(Schema.Unknown)
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  is_default: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2848,14 +2848,14 @@ export interface ListScimGroupResourcesResponse {
 
 export const ListScimGroupResourcesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  displayName: Schema.optional(Schema.String),
-  externalId: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  meta: Schema.optional(Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  lastModified: Schema.optional(Schema.Date)
-})),
-  schemas: Schema.optional(Schema.Array(Schema.String))
+  displayName: Schema.optional(Schema.NullOr(Schema.String)),
+  externalId: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  lastModified: Schema.optional(Schema.NullOr(Schema.Date))
+}))),
+  schemas: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2909,20 +2909,20 @@ export interface ListScimUserResourcesResponse {
 
 export const ListScimUserResourcesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  active: Schema.optional(Schema.Boolean),
-  displayName: Schema.optional(Schema.String),
-  emails: Schema.optional(Schema.Array(Schema.Struct({
-  primary: Schema.optional(Schema.Boolean),
-  type: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
+  active: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  displayName: Schema.optional(Schema.NullOr(Schema.String)),
+  emails: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  primary: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  type: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  externalId: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  lastModified: Schema.optional(Schema.NullOr(Schema.Date))
 }))),
-  externalId: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  meta: Schema.optional(Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  lastModified: Schema.optional(Schema.Date)
-})),
-  schemas: Schema.optional(Schema.Array(Schema.String))
+  schemas: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2962,9 +2962,9 @@ export interface GetTheAccessKeyConfigurationResponse {
 
 export const GetTheAccessKeyConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  days_until_next_rotation: Schema.optional(Schema.Number),
-  key_rotation_interval_days: Schema.optional(Schema.Number),
-  last_key_rotation_at: Schema.optional(Schema.Date)
+  days_until_next_rotation: Schema.optional(Schema.NullOr(Schema.Number)),
+  key_rotation_interval_days: Schema.optional(Schema.NullOr(Schema.Number)),
+  last_key_rotation_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3006,9 +3006,9 @@ export interface UpdateTheAccessKeyConfigurationResponse {
 
 export const UpdateTheAccessKeyConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  days_until_next_rotation: Schema.optional(Schema.Number),
-  key_rotation_interval_days: Schema.optional(Schema.Number),
-  last_key_rotation_at: Schema.optional(Schema.Date)
+  days_until_next_rotation: Schema.optional(Schema.NullOr(Schema.Number)),
+  key_rotation_interval_days: Schema.optional(Schema.NullOr(Schema.Number)),
+  last_key_rotation_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3048,9 +3048,9 @@ export interface AccessKeyConfigurationRotateAccessKeysResponse {
 
 export const AccessKeyConfigurationRotateAccessKeysResponse = Schema.Struct({
   result: Schema.Struct({
-  days_until_next_rotation: Schema.optional(Schema.Number),
-  key_rotation_interval_days: Schema.optional(Schema.Number),
-  last_key_rotation_at: Schema.optional(Schema.Date)
+  days_until_next_rotation: Schema.optional(Schema.NullOr(Schema.Number)),
+  key_rotation_interval_days: Schema.optional(Schema.NullOr(Schema.Number)),
+  last_key_rotation_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3106,15 +3106,15 @@ export interface GetAccessAuthenticationLogsResponse {
 
 export const GetAccessAuthenticationLogsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  action: Schema.optional(Schema.String),
-  allowed: Schema.optional(Schema.Boolean),
-  app_domain: Schema.optional(Schema.String),
-  app_uid: Schema.optional(Schema.String),
-  connection: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Date),
-  ip_address: Schema.optional(Schema.String),
-  ray_id: Schema.optional(Schema.String),
-  user_email: Schema.optional(Schema.String)
+  action: Schema.optional(Schema.NullOr(Schema.String)),
+  allowed: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  app_domain: Schema.optional(Schema.NullOr(Schema.String)),
+  app_uid: Schema.optional(Schema.NullOr(Schema.String)),
+  connection: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  ip_address: Schema.optional(Schema.NullOr(Schema.String)),
+  ray_id: Schema.optional(Schema.NullOr(Schema.String)),
+  user_email: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3180,17 +3180,17 @@ export interface UpdateLogsResponse {
 
 export const UpdateLogsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  cf_resource_id: Schema.optional(Schema.String),
-  error_description: Schema.optional(Schema.String),
-  idp_id: Schema.optional(Schema.String),
-  idp_resource_id: Schema.optional(Schema.String),
-  logged_at: Schema.optional(Schema.Date),
-  request_body: Schema.optional(Schema.String),
-  request_method: Schema.optional(Schema.String),
-  resource_group_name: Schema.optional(Schema.String),
-  resource_type: Schema.optional(Schema.String),
-  resource_user_email: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.String)
+  cf_resource_id: Schema.optional(Schema.NullOr(Schema.String)),
+  error_description: Schema.optional(Schema.NullOr(Schema.String)),
+  idp_id: Schema.optional(Schema.NullOr(Schema.String)),
+  idp_resource_id: Schema.optional(Schema.NullOr(Schema.String)),
+  logged_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  request_body: Schema.optional(Schema.NullOr(Schema.String)),
+  request_method: Schema.optional(Schema.NullOr(Schema.String)),
+  resource_group_name: Schema.optional(Schema.NullOr(Schema.String)),
+  resource_type: Schema.optional(Schema.NullOr(Schema.String)),
+  resource_user_email: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3230,28 +3230,28 @@ export interface GetYourZeroTrustOrganizationResponse {
 
 export const GetYourZeroTrustOrganizationResponse = Schema.Struct({
   result: Schema.Struct({
-  allow_authenticate_via_warp: Schema.optional(Schema.Boolean),
-  auth_domain: Schema.optional(Schema.String),
-  auto_redirect_to_identity: Schema.optional(Schema.Boolean),
-  created_at: Schema.optional(Schema.Unknown),
-  custom_pages: Schema.optional(Schema.Struct({
-  forbidden: Schema.optional(Schema.String),
-  identity_denied: Schema.optional(Schema.String)
-})),
-  is_ui_read_only: Schema.optional(Schema.Boolean),
-  login_design: Schema.optional(Schema.Struct({
-  background_color: Schema.optional(Schema.String),
-  footer_text: Schema.optional(Schema.String),
-  header_text: Schema.optional(Schema.String),
-  logo_path: Schema.optional(Schema.String),
-  text_color: Schema.optional(Schema.String)
-})),
-  name: Schema.optional(Schema.String),
-  session_duration: Schema.optional(Schema.String),
-  ui_read_only_toggle_reason: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown),
-  user_seat_expiration_inactive_time: Schema.optional(Schema.String),
-  warp_auth_session_duration: Schema.optional(Schema.String)
+  allow_authenticate_via_warp: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  auth_domain: Schema.optional(Schema.NullOr(Schema.String)),
+  auto_redirect_to_identity: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  custom_pages: Schema.optional(Schema.NullOr(Schema.Struct({
+  forbidden: Schema.optional(Schema.NullOr(Schema.String)),
+  identity_denied: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  is_ui_read_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  login_design: Schema.optional(Schema.NullOr(Schema.Struct({
+  background_color: Schema.optional(Schema.NullOr(Schema.String)),
+  footer_text: Schema.optional(Schema.NullOr(Schema.String)),
+  header_text: Schema.optional(Schema.NullOr(Schema.String)),
+  logo_path: Schema.optional(Schema.NullOr(Schema.String)),
+  text_color: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.String)),
+  ui_read_only_toggle_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  user_seat_expiration_inactive_time: Schema.optional(Schema.NullOr(Schema.String)),
+  warp_auth_session_duration: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3333,28 +3333,28 @@ export interface UpdateYourZeroTrustOrganizationResponse {
 
 export const UpdateYourZeroTrustOrganizationResponse = Schema.Struct({
   result: Schema.Struct({
-  allow_authenticate_via_warp: Schema.optional(Schema.Boolean),
-  auth_domain: Schema.optional(Schema.String),
-  auto_redirect_to_identity: Schema.optional(Schema.Boolean),
-  created_at: Schema.optional(Schema.Unknown),
-  custom_pages: Schema.optional(Schema.Struct({
-  forbidden: Schema.optional(Schema.String),
-  identity_denied: Schema.optional(Schema.String)
-})),
-  is_ui_read_only: Schema.optional(Schema.Boolean),
-  login_design: Schema.optional(Schema.Struct({
-  background_color: Schema.optional(Schema.String),
-  footer_text: Schema.optional(Schema.String),
-  header_text: Schema.optional(Schema.String),
-  logo_path: Schema.optional(Schema.String),
-  text_color: Schema.optional(Schema.String)
-})),
-  name: Schema.optional(Schema.String),
-  session_duration: Schema.optional(Schema.String),
-  ui_read_only_toggle_reason: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown),
-  user_seat_expiration_inactive_time: Schema.optional(Schema.String),
-  warp_auth_session_duration: Schema.optional(Schema.String)
+  allow_authenticate_via_warp: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  auth_domain: Schema.optional(Schema.NullOr(Schema.String)),
+  auto_redirect_to_identity: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  custom_pages: Schema.optional(Schema.NullOr(Schema.Struct({
+  forbidden: Schema.optional(Schema.NullOr(Schema.String)),
+  identity_denied: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  is_ui_read_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  login_design: Schema.optional(Schema.NullOr(Schema.Struct({
+  background_color: Schema.optional(Schema.NullOr(Schema.String)),
+  footer_text: Schema.optional(Schema.NullOr(Schema.String)),
+  header_text: Schema.optional(Schema.NullOr(Schema.String)),
+  logo_path: Schema.optional(Schema.NullOr(Schema.String)),
+  text_color: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.String)),
+  ui_read_only_toggle_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  user_seat_expiration_inactive_time: Schema.optional(Schema.NullOr(Schema.String)),
+  warp_auth_session_duration: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3394,7 +3394,7 @@ export interface GetYourZeroTrustOrganizationDohSettingsResponse {
 
 export const GetYourZeroTrustOrganizationDohSettingsResponse = Schema.Struct({
   result: Schema.Struct({
-  doh_jwt_duration: Schema.optional(Schema.String)
+  doh_jwt_duration: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3547,16 +3547,16 @@ export interface CreateAnAccessReusablePolicyRequest {
 export const CreateAnAccessReusablePolicyRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  approval_groups: Schema.optional(Schema.Array(Schema.Struct({
+  approval_groups: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   approvals_needed: Schema.Number,
-  email_addresses: Schema.optional(Schema.Array(Schema.String)),
-  email_list_uuid: Schema.optional(Schema.String)
-}))),
-  approval_required: Schema.optional(Schema.Boolean),
-  isolation_required: Schema.optional(Schema.Boolean),
-  purpose_justification_prompt: Schema.optional(Schema.String),
-  purpose_justification_required: Schema.optional(Schema.Boolean),
-  session_duration: Schema.optional(Schema.String)
+  email_addresses: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  email_list_uuid: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  approval_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  isolation_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  purpose_justification_prompt: Schema.optional(Schema.NullOr(Schema.String)),
+  purpose_justification_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/access/policies" }),
@@ -3640,16 +3640,16 @@ export const UpdateAnAccessReusablePolicyRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   policy_id: Schema.String.pipe(T.HttpPath("policy_id")),
   body: Schema.Struct({
-  approval_groups: Schema.optional(Schema.Array(Schema.Struct({
+  approval_groups: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   approvals_needed: Schema.Number,
-  email_addresses: Schema.optional(Schema.Array(Schema.String)),
-  email_list_uuid: Schema.optional(Schema.String)
-}))),
-  approval_required: Schema.optional(Schema.Boolean),
-  isolation_required: Schema.optional(Schema.Boolean),
-  purpose_justification_prompt: Schema.optional(Schema.String),
-  purpose_justification_required: Schema.optional(Schema.Boolean),
-  session_duration: Schema.optional(Schema.String)
+  email_addresses: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  email_list_uuid: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  approval_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  isolation_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  purpose_justification_prompt: Schema.optional(Schema.NullOr(Schema.String)),
+  purpose_justification_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/access/policies/{policy_id}" }),
@@ -3731,18 +3731,18 @@ export interface AccessPolicyTestsRequest {
 export const AccessPolicyTestsRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  policies: Schema.optional(Schema.Array(Schema.Union(Schema.Struct({
-  approval_groups: Schema.optional(Schema.Array(Schema.Struct({
+  policies: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  approval_groups: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   approvals_needed: Schema.Number,
-  email_addresses: Schema.optional(Schema.Array(Schema.String)),
-  email_list_uuid: Schema.optional(Schema.String)
-}))),
-  approval_required: Schema.optional(Schema.Boolean),
-  isolation_required: Schema.optional(Schema.Boolean),
-  purpose_justification_prompt: Schema.optional(Schema.String),
-  purpose_justification_required: Schema.optional(Schema.Boolean),
-  session_duration: Schema.optional(Schema.String)
-}), Schema.String)))
+  email_addresses: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  email_list_uuid: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  approval_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  isolation_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  purpose_justification_prompt: Schema.optional(Schema.NullOr(Schema.String)),
+  purpose_justification_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.String))
+}), Schema.String))))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/access/policy-tests" }),
@@ -3755,8 +3755,8 @@ export interface AccessPolicyTestsResponse {
 
 export const AccessPolicyTestsResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("success"))
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("success")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3798,16 +3798,16 @@ export interface UpdateResponse {
 
 export const UpdateResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  percent_approved: Schema.optional(Schema.Number),
-  percent_blocked: Schema.optional(Schema.Number),
-  percent_errored: Schema.optional(Schema.Number),
-  percent_users_processed: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("blocked", "processing", "exceeded time", "complete")),
-  total_users: Schema.optional(Schema.Number),
-  users_approved: Schema.optional(Schema.Number),
-  users_blocked: Schema.optional(Schema.Number),
-  users_errored: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  percent_approved: Schema.optional(Schema.NullOr(Schema.Number)),
+  percent_blocked: Schema.optional(Schema.NullOr(Schema.Number)),
+  percent_errored: Schema.optional(Schema.NullOr(Schema.Number)),
+  percent_users_processed: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("blocked", "processing", "exceeded time", "complete"))),
+  total_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  users_approved: Schema.optional(Schema.NullOr(Schema.Number)),
+  users_blocked: Schema.optional(Schema.NullOr(Schema.Number)),
+  users_errored: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3853,10 +3853,10 @@ export interface GetAUserPageResponse {
 
 export const GetAUserPageResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  email: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("approved", "blocked", "error"))
+  email: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("approved", "blocked", "error")))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3902,11 +3902,11 @@ export interface UpdateAUserSeatResponse {
 
 export const UpdateAUserSeatResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  access_seat: Schema.optional(Schema.Boolean),
-  created_at: Schema.optional(Schema.Date),
-  gateway_seat: Schema.optional(Schema.Boolean),
-  seat_uid: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Date)
+  access_seat: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  gateway_seat: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  seat_uid: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3950,14 +3950,14 @@ export interface ListServiceTokensResponse {
 
 export const ListServiceTokensResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  client_id: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Unknown),
-  duration: Schema.optional(Schema.String),
-  expires_at: Schema.optional(Schema.Date),
-  id: Schema.optional(Schema.Unknown),
-  last_seen_at: Schema.optional(Schema.Unknown),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  client_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  duration: Schema.optional(Schema.NullOr(Schema.String)),
+  expires_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  last_seen_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4039,14 +4039,14 @@ export interface GetAServiceTokenResponse {
 
 export const GetAServiceTokenResponse = Schema.Struct({
   result: Schema.Struct({
-  client_id: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Unknown),
-  duration: Schema.optional(Schema.String),
-  expires_at: Schema.optional(Schema.Date),
-  id: Schema.optional(Schema.Unknown),
-  last_seen_at: Schema.optional(Schema.Unknown),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  client_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  duration: Schema.optional(Schema.NullOr(Schema.String)),
+  expires_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  last_seen_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4090,14 +4090,14 @@ export interface UpdateAServiceTokenResponse {
 
 export const UpdateAServiceTokenResponse = Schema.Struct({
   result: Schema.Struct({
-  client_id: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Unknown),
-  duration: Schema.optional(Schema.String),
-  expires_at: Schema.optional(Schema.Date),
-  id: Schema.optional(Schema.Unknown),
-  last_seen_at: Schema.optional(Schema.Unknown),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  client_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  duration: Schema.optional(Schema.NullOr(Schema.String)),
+  expires_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  last_seen_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4139,14 +4139,14 @@ export interface DeleteAServiceTokenResponse {
 
 export const DeleteAServiceTokenResponse = Schema.Struct({
   result: Schema.Struct({
-  client_id: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Unknown),
-  duration: Schema.optional(Schema.String),
-  expires_at: Schema.optional(Schema.Date),
-  id: Schema.optional(Schema.Unknown),
-  last_seen_at: Schema.optional(Schema.Unknown),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  client_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  duration: Schema.optional(Schema.NullOr(Schema.String)),
+  expires_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  last_seen_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4188,14 +4188,14 @@ export interface AccessServiceTokensRefreshAServiceTokenResponse {
 
 export const AccessServiceTokensRefreshAServiceTokenResponse = Schema.Struct({
   result: Schema.Struct({
-  client_id: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Unknown),
-  duration: Schema.optional(Schema.String),
-  expires_at: Schema.optional(Schema.Date),
-  id: Schema.optional(Schema.Unknown),
-  last_seen_at: Schema.optional(Schema.Unknown),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  client_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  duration: Schema.optional(Schema.NullOr(Schema.String)),
+  expires_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  last_seen_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4239,13 +4239,13 @@ export interface AccessServiceTokensRotateAServiceTokenResponse {
 
 export const AccessServiceTokensRotateAServiceTokenResponse = Schema.Struct({
   result: Schema.Struct({
-  client_id: Schema.optional(Schema.String),
-  client_secret: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Unknown),
-  duration: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Unknown)
+  client_id: Schema.optional(Schema.NullOr(Schema.String)),
+  client_secret: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  duration: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4287,10 +4287,10 @@ export interface ListTagsResponse {
 
 export const ListTagsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  app_count: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.Unknown),
+  app_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
   name: Schema.String,
-  updated_at: Schema.optional(Schema.Unknown)
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4372,10 +4372,10 @@ export interface GetATagResponse {
 
 export const GetATagResponse = Schema.Struct({
   result: Schema.Struct({
-  app_count: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.Unknown),
+  app_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
   name: Schema.String,
-  updated_at: Schema.optional(Schema.Unknown)
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4408,9 +4408,9 @@ export const UpdateATagRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   tag_name: Schema.String.pipe(T.HttpPath("tag_name")),
   body: Schema.Struct({
-  created_at: Schema.optional(Schema.Unknown),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
   name: Schema.String,
-  updated_at: Schema.optional(Schema.Unknown)
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/access/tags/{tag_name}" }),
@@ -4423,10 +4423,10 @@ export interface UpdateATagResponse {
 
 export const UpdateATagResponse = Schema.Struct({
   result: Schema.Struct({
-  app_count: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.Unknown),
+  app_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Unknown)),
   name: Schema.String,
-  updated_at: Schema.optional(Schema.Unknown)
+  updated_at: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4512,17 +4512,17 @@ export interface GetUsersResponse {
 
 export const GetUsersResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  access_seat: Schema.optional(Schema.Boolean),
-  active_device_count: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.Date),
-  email: Schema.optional(Schema.String),
-  gateway_seat: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  last_successful_login: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  seat_uid: Schema.optional(Schema.String),
-  uid: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Date)
+  access_seat: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  active_device_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  email: Schema.optional(Schema.NullOr(Schema.String)),
+  gateway_seat: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  last_successful_login: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  seat_uid: Schema.optional(Schema.NullOr(Schema.String)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4564,20 +4564,20 @@ export interface GetActiveSessionsResponse {
 
 export const GetActiveSessionsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  expiration: Schema.optional(Schema.Number),
-  metadata: Schema.optional(Schema.Struct({
-  apps: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  hostname: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.String),
-  uid: Schema.optional(Schema.String)
-}) })),
-  expires: Schema.optional(Schema.Number),
-  iat: Schema.optional(Schema.Number),
-  nonce: Schema.optional(Schema.String),
-  ttl: Schema.optional(Schema.Number)
-})),
-  name: Schema.optional(Schema.String)
+  expiration: Schema.optional(Schema.NullOr(Schema.Number)),
+  metadata: Schema.optional(Schema.NullOr(Schema.Struct({
+  apps: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  hostname: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.String)),
+  uid: Schema.optional(Schema.NullOr(Schema.String))
+}) }))),
+  expires: Schema.optional(Schema.NullOr(Schema.Number)),
+  iat: Schema.optional(Schema.NullOr(Schema.Number)),
+  nonce: Schema.optional(Schema.NullOr(Schema.String)),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4661,8 +4661,8 @@ export interface GetFailedLoginsResponse {
 
 export const GetFailedLoginsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  expiration: Schema.optional(Schema.Number),
-  metadata: Schema.optional(Schema.Struct({}))
+  expiration: Schema.optional(Schema.NullOr(Schema.Number)),
+  metadata: Schema.optional(Schema.NullOr(Schema.Struct({})))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

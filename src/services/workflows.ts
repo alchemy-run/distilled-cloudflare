@@ -54,19 +54,19 @@ export const ListWorkflowsResponse = Schema.Struct({
   created_on: Schema.Date,
   id: Schema.UUID,
   instances: Schema.Struct({
-  complete: Schema.optional(Schema.Number),
-  errored: Schema.optional(Schema.Number),
-  paused: Schema.optional(Schema.Number),
-  queued: Schema.optional(Schema.Number),
-  running: Schema.optional(Schema.Number),
-  terminated: Schema.optional(Schema.Number),
-  waiting: Schema.optional(Schema.Number),
-  waitingForPause: Schema.optional(Schema.Number)
+  complete: Schema.optional(Schema.NullOr(Schema.Number)),
+  errored: Schema.optional(Schema.NullOr(Schema.Number)),
+  paused: Schema.optional(Schema.NullOr(Schema.Number)),
+  queued: Schema.optional(Schema.NullOr(Schema.Number)),
+  running: Schema.optional(Schema.NullOr(Schema.Number)),
+  terminated: Schema.optional(Schema.NullOr(Schema.Number)),
+  waiting: Schema.optional(Schema.NullOr(Schema.Number)),
+  waitingForPause: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   modified_on: Schema.Date,
   name: Schema.String,
   script_name: Schema.String,
-  triggered_on: Schema.Date
+  triggered_on: Schema.NullOr(Schema.Date)
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -112,19 +112,19 @@ export const GetWorkflowDetailsResponse = Schema.Struct({
   created_on: Schema.Date,
   id: Schema.UUID,
   instances: Schema.Struct({
-  complete: Schema.optional(Schema.Number),
-  errored: Schema.optional(Schema.Number),
-  paused: Schema.optional(Schema.Number),
-  queued: Schema.optional(Schema.Number),
-  running: Schema.optional(Schema.Number),
-  terminated: Schema.optional(Schema.Number),
-  waiting: Schema.optional(Schema.Number),
-  waitingForPause: Schema.optional(Schema.Number)
+  complete: Schema.optional(Schema.NullOr(Schema.Number)),
+  errored: Schema.optional(Schema.NullOr(Schema.Number)),
+  paused: Schema.optional(Schema.NullOr(Schema.Number)),
+  queued: Schema.optional(Schema.NullOr(Schema.Number)),
+  running: Schema.optional(Schema.NullOr(Schema.Number)),
+  terminated: Schema.optional(Schema.NullOr(Schema.Number)),
+  waiting: Schema.optional(Schema.NullOr(Schema.Number)),
+  waitingForPause: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   modified_on: Schema.Date,
   name: Schema.String,
   script_name: Schema.String,
-  triggered_on: Schema.Date
+  triggered_on: Schema.NullOr(Schema.Date)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -179,7 +179,7 @@ export const CreateOrModifyWorkflowResponse = Schema.Struct({
   name: Schema.String,
   script_name: Schema.String,
   terminator_running: Schema.Number,
-  triggered_on: Schema.Date,
+  triggered_on: Schema.NullOr(Schema.Date),
   version_id: Schema.UUID
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -223,7 +223,7 @@ export interface DeleteWorkflowResponse {
 export const DeleteWorkflowResponse = Schema.Struct({
   result: Schema.Struct({
   status: Schema.Literal("ok"),
-  success: Schema.Boolean
+  success: Schema.NullOr(Schema.Boolean)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -280,10 +280,10 @@ export interface ListWorkflowInstancesResponse {
 export const ListWorkflowInstancesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
   created_on: Schema.Date,
-  ended_on: Schema.Date,
+  ended_on: Schema.NullOr(Schema.Date),
   id: Schema.String,
   modified_on: Schema.Date,
-  started_on: Schema.Date,
+  started_on: Schema.NullOr(Schema.Date),
   status: Schema.Literal("queued", "running", "paused", "errored", "terminated", "complete", "waitingForPause", "waiting"),
   version_id: Schema.UUID,
   workflow_id: Schema.UUID
@@ -319,12 +319,12 @@ export const CreateNewWorkflowInstanceRequest = Schema.Struct({
   workflow_name: Schema.String.pipe(T.HttpPath("workflow_name")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  instance_id: Schema.optional(Schema.String),
-  instance_retention: Schema.optional(Schema.Struct({
-  error_retention: Schema.optional(Schema.Union(Schema.Number, Schema.String)),
-  success_retention: Schema.optional(Schema.Union(Schema.Number, Schema.String))
-})),
-  params: Schema.optional(Schema.Struct({}))
+  instance_id: Schema.optional(Schema.NullOr(Schema.String)),
+  instance_retention: Schema.optional(Schema.NullOr(Schema.Struct({
+  error_retention: Schema.optional(Schema.NullOr(Schema.Union(Schema.Number, Schema.String))),
+  success_retention: Schema.optional(Schema.NullOr(Schema.Union(Schema.Number, Schema.String)))
+}))),
+  params: Schema.optional(Schema.NullOr(Schema.Struct({})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/workflows/{workflow_name}/instances" }),
@@ -373,12 +373,12 @@ export const CreateWorkflowInstanceRequest = Schema.Struct({
   workflow_name: Schema.String.pipe(T.HttpPath("workflow_name")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Array(Schema.Struct({
-  instance_id: Schema.optional(Schema.String),
-  instance_retention: Schema.optional(Schema.Struct({
-  error_retention: Schema.optional(Schema.Union(Schema.Number, Schema.String)),
-  success_retention: Schema.optional(Schema.Union(Schema.Number, Schema.String))
-})),
-  params: Schema.optional(Schema.Struct({}))
+  instance_id: Schema.optional(Schema.NullOr(Schema.String)),
+  instance_retention: Schema.optional(Schema.NullOr(Schema.Struct({
+  error_retention: Schema.optional(Schema.NullOr(Schema.Union(Schema.Number, Schema.String))),
+  success_retention: Schema.optional(Schema.NullOr(Schema.Union(Schema.Number, Schema.String)))
+}))),
+  params: Schema.optional(Schema.NullOr(Schema.Struct({})))
 })).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/workflows/{workflow_name}/instances/batch" }),
@@ -525,46 +525,46 @@ export interface WorDescribeWorkflowInstanceResponse {
 
 export const WorDescribeWorkflowInstanceResponse = Schema.Struct({
   result: Schema.Struct({
-  end: Schema.Date,
-  error: Schema.Struct({
+  end: Schema.NullOr(Schema.Date),
+  error: Schema.NullOr(Schema.Struct({
   message: Schema.String,
   name: Schema.String
-}),
+})),
   output: Schema.Union(Schema.String, Schema.Number),
   params: Schema.Struct({}),
   queued: Schema.Date,
-  start: Schema.Date,
+  start: Schema.NullOr(Schema.Date),
   status: Schema.Literal("queued", "running", "paused", "errored", "terminated", "complete", "waitingForPause", "waiting"),
   steps: Schema.Array(Schema.Union(Schema.Struct({
   attempts: Schema.Array(Schema.Struct({
-  end: Schema.Date,
-  error: Schema.Struct({
+  end: Schema.NullOr(Schema.Date),
+  error: Schema.NullOr(Schema.Struct({
   message: Schema.String,
   name: Schema.String
-}),
+})),
   start: Schema.Date,
-  success: Schema.Boolean
+  success: Schema.NullOr(Schema.Boolean)
 })),
   config: Schema.Struct({
   retries: Schema.Struct({
-  backoff: Schema.optional(Schema.Literal("constant", "linear", "exponential")),
+  backoff: Schema.optional(Schema.NullOr(Schema.Literal("constant", "linear", "exponential"))),
   delay: Schema.Union(Schema.Unknown, Schema.Number),
   limit: Schema.Number
 }),
   timeout: Schema.Union(Schema.Unknown, Schema.Number)
 }),
-  end: Schema.Date,
+  end: Schema.NullOr(Schema.Date),
   name: Schema.String,
   output: Schema.Struct({}),
   start: Schema.Date,
-  success: Schema.Boolean,
+  success: Schema.NullOr(Schema.Boolean),
   type: Schema.Literal("step")
 }), Schema.Struct({
   end: Schema.Date,
-  error: Schema.Struct({
+  error: Schema.NullOr(Schema.Struct({
   message: Schema.String,
   name: Schema.String
-}),
+})),
   finished: Schema.Boolean,
   name: Schema.String,
   start: Schema.Date,
@@ -576,17 +576,17 @@ export const WorDescribeWorkflowInstanceResponse = Schema.Struct({
   type: Schema.Literal("termination")
 }), Schema.Struct({
   end: Schema.Date,
-  error: Schema.Struct({
+  error: Schema.NullOr(Schema.Struct({
   message: Schema.String,
   name: Schema.String
-}),
+})),
   finished: Schema.Boolean,
   name: Schema.String,
   output: Schema.Union(Schema.Struct({}), Schema.String, Schema.Number, Schema.Boolean),
   start: Schema.Date,
   type: Schema.Literal("waitForEvent")
 }))),
-  success: Schema.Boolean,
+  success: Schema.NullOr(Schema.Boolean),
   trigger: Schema.Struct({
   source: Schema.Literal("unknown", "api", "binding", "event", "cron")
 }),

@@ -54,20 +54,26 @@ export class TokenExpired extends Schema.TaggedError<TokenExpired>()("TokenExpir
 /**
  * Cloudflare error code 10000: AuthenticationError
  */
-export class AuthenticationError extends Schema.TaggedError<AuthenticationError>()("AuthenticationError", {
-  code: Schema.Literal(10000),
-  message: Schema.String,
-}) {
+export class AuthenticationError extends Schema.TaggedError<AuthenticationError>()(
+  "AuthenticationError",
+  {
+    code: Schema.Literal(10000),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10000;
 }
 
 /**
  * Cloudflare error code 10002: Unauthorized
  */
-export class Unauthorized_10002 extends Schema.TaggedError<Unauthorized_10002>()("Unauthorized_10002", {
-  code: Schema.Literal(10002),
-  message: Schema.String,
-}) {
+export class Unauthorized_10002 extends Schema.TaggedError<Unauthorized_10002>()(
+  "Unauthorized_10002",
+  {
+    code: Schema.Literal(10002),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10002;
 }
 
@@ -104,10 +110,13 @@ export class ExpiredRequest extends Schema.TaggedError<ExpiredRequest>()("Expire
 /**
  * Cloudflare error code 10042: NotEntitled
  */
-export class NotEntitled_10042 extends Schema.TaggedError<NotEntitled_10042>()("NotEntitled_10042", {
-  code: Schema.Literal(10042),
-  message: Schema.String,
-}) {
+export class NotEntitled_10042 extends Schema.TaggedError<NotEntitled_10042>()(
+  "NotEntitled_10042",
+  {
+    code: Schema.Literal(10042),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10042;
 }
 
@@ -158,10 +167,13 @@ export class InvalidMethod extends Schema.TaggedError<InvalidMethod>()("InvalidM
 /**
  * Cloudflare error code 10005: InvalidBucketName
  */
-export class InvalidBucketName extends Schema.TaggedError<InvalidBucketName>()("InvalidBucketName", {
-  code: Schema.Literal(10005),
-  message: Schema.String,
-}) {
+export class InvalidBucketName extends Schema.TaggedError<InvalidBucketName>()(
+  "InvalidBucketName",
+  {
+    code: Schema.Literal(10005),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10005;
 }
 
@@ -218,30 +230,39 @@ export class InvalidDigest extends Schema.TaggedError<InvalidDigest>()("InvalidD
 /**
  * Cloudflare error code 10016: InvalidWorkerName
  */
-export class InvalidWorkerName extends Schema.TaggedError<InvalidWorkerName>()("InvalidWorkerName", {
-  code: Schema.Literal(10016),
-  message: Schema.String,
-}) {
+export class InvalidWorkerName extends Schema.TaggedError<InvalidWorkerName>()(
+  "InvalidWorkerName",
+  {
+    code: Schema.Literal(10016),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10016;
 }
 
 /**
  * Cloudflare error code 10019: NamespaceNameRequired
  */
-export class NamespaceNameRequired extends Schema.TaggedError<NamespaceNameRequired>()("NamespaceNameRequired", {
-  code: Schema.Literal(10019),
-  message: Schema.String,
-}) {
+export class NamespaceNameRequired extends Schema.TaggedError<NamespaceNameRequired>()(
+  "NamespaceNameRequired",
+  {
+    code: Schema.Literal(10019),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10019;
 }
 
 /**
  * Cloudflare error code 10020: InvalidObjectName
  */
-export class InvalidObjectName extends Schema.TaggedError<InvalidObjectName>()("InvalidObjectName", {
-  code: Schema.Literal(10020),
-  message: Schema.String,
-}) {
+export class InvalidObjectName extends Schema.TaggedError<InvalidObjectName>()(
+  "InvalidObjectName",
+  {
+    code: Schema.Literal(10020),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10020;
 }
 
@@ -268,30 +289,39 @@ export class InvalidPart extends Schema.TaggedError<InvalidPart>()("InvalidPart"
 /**
  * Cloudflare error code 10026: InvalidRequestBody
  */
-export class InvalidRequestBody extends Schema.TaggedError<InvalidRequestBody>()("InvalidRequestBody", {
-  code: Schema.Literal(10026),
-  message: Schema.String,
-}) {
+export class InvalidRequestBody extends Schema.TaggedError<InvalidRequestBody>()(
+  "InvalidRequestBody",
+  {
+    code: Schema.Literal(10026),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10026;
 }
 
 /**
  * Cloudflare error code 10027: WorkerSizeLimitExceeded
  */
-export class WorkerSizeLimitExceeded extends Schema.TaggedError<WorkerSizeLimitExceeded>()("WorkerSizeLimitExceeded", {
-  code: Schema.Literal(10027),
-  message: Schema.String,
-}) {
+export class WorkerSizeLimitExceeded extends Schema.TaggedError<WorkerSizeLimitExceeded>()(
+  "WorkerSizeLimitExceeded",
+  {
+    code: Schema.Literal(10027),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10027;
 }
 
 /**
  * Cloudflare error code 10033: MissingContentLength
  */
-export class MissingContentLength extends Schema.TaggedError<MissingContentLength>()("MissingContentLength", {
-  code: Schema.Literal(10033),
-  message: Schema.String,
-}) {
+export class MissingContentLength extends Schema.TaggedError<MissingContentLength>()(
+  "MissingContentLength",
+  {
+    code: Schema.Literal(10033),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10033;
 }
 
@@ -318,10 +348,13 @@ export class InvalidRange extends Schema.TaggedError<InvalidRange>()("InvalidRan
 /**
  * Cloudflare error code 10040: BucketNameRequired
  */
-export class BucketNameRequired extends Schema.TaggedError<BucketNameRequired>()("BucketNameRequired", {
-  code: Schema.Literal(10040),
-  message: Schema.String,
-}) {
+export class BucketNameRequired extends Schema.TaggedError<BucketNameRequired>()(
+  "BucketNameRequired",
+  {
+    code: Schema.Literal(10040),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10040;
 }
 
@@ -338,30 +371,39 @@ export class InvalidPartSize extends Schema.TaggedError<InvalidPartSize>()("Inva
 /**
  * Cloudflare error code 10052: BindingNameRequired
  */
-export class BindingNameRequired extends Schema.TaggedError<BindingNameRequired>()("BindingNameRequired", {
-  code: Schema.Literal(10052),
-  message: Schema.String,
-}) {
+export class BindingNameRequired extends Schema.TaggedError<BindingNameRequired>()(
+  "BindingNameRequired",
+  {
+    code: Schema.Literal(10052),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10052;
 }
 
 /**
  * Cloudflare error code 10054: EnvVarSizeExceeded
  */
-export class EnvVarSizeExceeded extends Schema.TaggedError<EnvVarSizeExceeded>()("EnvVarSizeExceeded", {
-  code: Schema.Literal(10054),
-  message: Schema.String,
-}) {
+export class EnvVarSizeExceeded extends Schema.TaggedError<EnvVarSizeExceeded>()(
+  "EnvVarSizeExceeded",
+  {
+    code: Schema.Literal(10054),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10054;
 }
 
 /**
  * Cloudflare error code 10055: EnvVarCountExceeded
  */
-export class EnvVarCountExceeded extends Schema.TaggedError<EnvVarCountExceeded>()("EnvVarCountExceeded", {
-  code: Schema.Literal(10055),
-  message: Schema.String,
-}) {
+export class EnvVarCountExceeded extends Schema.TaggedError<EnvVarCountExceeded>()(
+  "EnvVarCountExceeded",
+  {
+    code: Schema.Literal(10055),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10055;
 }
 
@@ -378,10 +420,13 @@ export class NoEventHandlers extends Schema.TaggedError<NoEventHandlers>()("NoEv
 /**
  * Cloudflare error code 10069: UnsupportedEventHandlers
  */
-export class UnsupportedEventHandlers extends Schema.TaggedError<UnsupportedEventHandlers>()("UnsupportedEventHandlers", {
-  code: Schema.Literal(10069),
-  message: Schema.String,
-}) {
+export class UnsupportedEventHandlers extends Schema.TaggedError<UnsupportedEventHandlers>()(
+  "UnsupportedEventHandlers",
+  {
+    code: Schema.Literal(10069),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10069;
 }
 
@@ -492,10 +537,13 @@ export class BindingNotFound extends Schema.TaggedError<BindingNotFound>()("Bind
 /**
  * Cloudflare error code 10059: NoCorsConfiguration
  */
-export class NoCorsConfiguration extends Schema.TaggedError<NoCorsConfiguration>()("NoCorsConfiguration", {
-  code: Schema.Literal(10059),
-  message: Schema.String,
-}) {
+export class NoCorsConfiguration extends Schema.TaggedError<NoCorsConfiguration>()(
+  "NoCorsConfiguration",
+  {
+    code: Schema.Literal(10059),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10059;
 }
 
@@ -526,20 +574,26 @@ export class BucketNotEmpty extends Schema.TaggedError<BucketNotEmpty>()("Bucket
 /**
  * Cloudflare error code 10031: PreconditionFailed
  */
-export class PreconditionFailed extends Schema.TaggedError<PreconditionFailed>()("PreconditionFailed", {
-  code: Schema.Literal(10031),
-  message: Schema.String,
-}) {
+export class PreconditionFailed extends Schema.TaggedError<PreconditionFailed>()(
+  "PreconditionFailed",
+  {
+    code: Schema.Literal(10031),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10031;
 }
 
 /**
  * Cloudflare error code 10035: ConcurrentModification
  */
-export class ConcurrentModification extends Schema.TaggedError<ConcurrentModification>()("ConcurrentModification", {
-  code: Schema.Literal(10035),
-  message: Schema.String,
-}) {
+export class ConcurrentModification extends Schema.TaggedError<ConcurrentModification>()(
+  "ConcurrentModification",
+  {
+    code: Schema.Literal(10035),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10035;
 }
 
@@ -556,10 +610,13 @@ export class BucketConflict extends Schema.TaggedError<BucketConflict>()("Bucket
 /**
  * Cloudflare error code 11009: QueueAlreadyExists
  */
-export class QueueAlreadyExists extends Schema.TaggedError<QueueAlreadyExists>()("QueueAlreadyExists", {
-  code: Schema.Literal(11009),
-  message: Schema.String,
-}) {
+export class QueueAlreadyExists extends Schema.TaggedError<QueueAlreadyExists>()(
+  "QueueAlreadyExists",
+  {
+    code: Schema.Literal(11009),
+    message: Schema.String,
+  },
+) {
   static readonly code = 11009;
 }
 
@@ -600,10 +657,13 @@ export class TooManyBuckets extends Schema.TaggedError<TooManyBuckets>()("TooMan
 /**
  * Cloudflare error code 10058: TooManyRequests
  */
-export class TooManyRequests_10058 extends Schema.TaggedError<TooManyRequests_10058>()("TooManyRequests_10058", {
-  code: Schema.Literal(10058),
-  message: Schema.String,
-}) {
+export class TooManyRequests_10058 extends Schema.TaggedError<TooManyRequests_10058>()(
+  "TooManyRequests_10058",
+  {
+    code: Schema.Literal(10058),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10058;
 }
 
@@ -624,10 +684,13 @@ export class InternalError extends Schema.TaggedError<InternalError>()("Internal
 /**
  * Cloudflare error code 10043: ServiceUnavailable
  */
-export class ServiceUnavailable extends Schema.TaggedError<ServiceUnavailable>()("ServiceUnavailable", {
-  code: Schema.Literal(10043),
-  message: Schema.String,
-}) {
+export class ServiceUnavailable extends Schema.TaggedError<ServiceUnavailable>()(
+  "ServiceUnavailable",
+  {
+    code: Schema.Literal(10043),
+    message: Schema.String,
+  },
+) {
   static readonly code = 10043;
 }
 
@@ -635,14 +698,132 @@ export class ServiceUnavailable extends Schema.TaggedError<ServiceUnavailable>()
 // Union Types
 // =============================================================================
 
-export type AuthErrors = Unauthorized | InvalidToken | MissingToken | TokenExpired | AuthenticationError | Unauthorized_10002 | AccessDenied | NotEntitled | ExpiredRequest | NotEntitled_10042;
-export type BadRequestErrors = InvalidRequest | InvalidFormat | InvalidType | InvalidMethod | InvalidBucketName | ParseError | EntityTooSmall | MetadataTooLarge | IncompleteBody | InvalidDigest | InvalidWorkerName | NamespaceNameRequired | InvalidObjectName | ValidationError | InvalidPart | InvalidRequestBody | WorkerSizeLimitExceeded | MissingContentLength | BadDigest | InvalidRange | BucketNameRequired | InvalidPartSize | BindingNameRequired | EnvVarSizeExceeded | EnvVarCountExceeded | NoEventHandlers | UnsupportedEventHandlers | InvalidQueueName | EntityTooLarge;
-export type NotFoundErrors = InvalidZone | RecordNotFound | NoRouteForURI | NoRoute | NoSuchBucket | NoSuchKey | NoSuchUpload | BindingNotFound | NoCorsConfiguration | QueueNotFound;
-export type ConflictErrors = BucketNotEmpty | PreconditionFailed | ConcurrentModification | BucketConflict | QueueAlreadyExists;
-export type ThrottlingErrors = RateLimited | TooManyRequests | TooManyBuckets | TooManyRequests_10058;
+export type AuthErrors =
+  | Unauthorized
+  | InvalidToken
+  | MissingToken
+  | TokenExpired
+  | AuthenticationError
+  | Unauthorized_10002
+  | AccessDenied
+  | NotEntitled
+  | ExpiredRequest
+  | NotEntitled_10042;
+export type BadRequestErrors =
+  | InvalidRequest
+  | InvalidFormat
+  | InvalidType
+  | InvalidMethod
+  | InvalidBucketName
+  | ParseError
+  | EntityTooSmall
+  | MetadataTooLarge
+  | IncompleteBody
+  | InvalidDigest
+  | InvalidWorkerName
+  | NamespaceNameRequired
+  | InvalidObjectName
+  | ValidationError
+  | InvalidPart
+  | InvalidRequestBody
+  | WorkerSizeLimitExceeded
+  | MissingContentLength
+  | BadDigest
+  | InvalidRange
+  | BucketNameRequired
+  | InvalidPartSize
+  | BindingNameRequired
+  | EnvVarSizeExceeded
+  | EnvVarCountExceeded
+  | NoEventHandlers
+  | UnsupportedEventHandlers
+  | InvalidQueueName
+  | EntityTooLarge;
+export type NotFoundErrors =
+  | InvalidZone
+  | RecordNotFound
+  | NoRouteForURI
+  | NoRoute
+  | NoSuchBucket
+  | NoSuchKey
+  | NoSuchUpload
+  | BindingNotFound
+  | NoCorsConfiguration
+  | QueueNotFound;
+export type ConflictErrors =
+  | BucketNotEmpty
+  | PreconditionFailed
+  | ConcurrentModification
+  | BucketConflict
+  | QueueAlreadyExists;
+export type ThrottlingErrors =
+  | RateLimited
+  | TooManyRequests
+  | TooManyBuckets
+  | TooManyRequests_10058;
 export type ServerErrors = InternalError | ServiceUnavailable;
 
-export type CloudflareKnownError = Unauthorized | InvalidToken | MissingToken | TokenExpired | AuthenticationError | Unauthorized_10002 | AccessDenied | NotEntitled | ExpiredRequest | NotEntitled_10042 | InvalidRequest | InvalidFormat | InvalidType | InvalidMethod | InvalidBucketName | ParseError | EntityTooSmall | MetadataTooLarge | IncompleteBody | InvalidDigest | InvalidWorkerName | NamespaceNameRequired | InvalidObjectName | ValidationError | InvalidPart | InvalidRequestBody | WorkerSizeLimitExceeded | MissingContentLength | BadDigest | InvalidRange | BucketNameRequired | InvalidPartSize | BindingNameRequired | EnvVarSizeExceeded | EnvVarCountExceeded | NoEventHandlers | UnsupportedEventHandlers | InvalidQueueName | EntityTooLarge | InvalidZone | RecordNotFound | NoRouteForURI | NoRoute | NoSuchBucket | NoSuchKey | NoSuchUpload | BindingNotFound | NoCorsConfiguration | QueueNotFound | BucketNotEmpty | PreconditionFailed | ConcurrentModification | BucketConflict | QueueAlreadyExists | RateLimited | TooManyRequests | TooManyBuckets | TooManyRequests_10058 | InternalError | ServiceUnavailable;
+export type CloudflareKnownError =
+  | Unauthorized
+  | InvalidToken
+  | MissingToken
+  | TokenExpired
+  | AuthenticationError
+  | Unauthorized_10002
+  | AccessDenied
+  | NotEntitled
+  | ExpiredRequest
+  | NotEntitled_10042
+  | InvalidRequest
+  | InvalidFormat
+  | InvalidType
+  | InvalidMethod
+  | InvalidBucketName
+  | ParseError
+  | EntityTooSmall
+  | MetadataTooLarge
+  | IncompleteBody
+  | InvalidDigest
+  | InvalidWorkerName
+  | NamespaceNameRequired
+  | InvalidObjectName
+  | ValidationError
+  | InvalidPart
+  | InvalidRequestBody
+  | WorkerSizeLimitExceeded
+  | MissingContentLength
+  | BadDigest
+  | InvalidRange
+  | BucketNameRequired
+  | InvalidPartSize
+  | BindingNameRequired
+  | EnvVarSizeExceeded
+  | EnvVarCountExceeded
+  | NoEventHandlers
+  | UnsupportedEventHandlers
+  | InvalidQueueName
+  | EntityTooLarge
+  | InvalidZone
+  | RecordNotFound
+  | NoRouteForURI
+  | NoRoute
+  | NoSuchBucket
+  | NoSuchKey
+  | NoSuchUpload
+  | BindingNotFound
+  | NoCorsConfiguration
+  | QueueNotFound
+  | BucketNotEmpty
+  | PreconditionFailed
+  | ConcurrentModification
+  | BucketConflict
+  | QueueAlreadyExists
+  | RateLimited
+  | TooManyRequests
+  | TooManyBuckets
+  | TooManyRequests_10058
+  | InternalError
+  | ServiceUnavailable;
 
 /**
  * Map of error codes to their error class constructors.

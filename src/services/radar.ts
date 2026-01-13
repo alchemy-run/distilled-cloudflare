@@ -983,18 +983,18 @@ export const GetAnnotationsResponse = Schema.Struct({
   asns: Schema.Array(Schema.Number),
   asnsDetails: Schema.Array(Schema.Struct({
   asn: Schema.String,
-  locations: Schema.optional(Schema.Struct({
+  locations: Schema.optional(Schema.NullOr(Schema.Struct({
   code: Schema.String,
   name: Schema.String
-})),
+}))),
   name: Schema.String
 })),
   dataSource: Schema.String,
-  description: Schema.optional(Schema.String),
-  endDate: Schema.optional(Schema.String),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  endDate: Schema.optional(Schema.NullOr(Schema.String)),
   eventType: Schema.String,
   id: Schema.String,
-  linkedUrl: Schema.optional(Schema.String),
+  linkedUrl: Schema.optional(Schema.NullOr(Schema.String)),
   locations: Schema.Array(Schema.String),
   locationsDetails: Schema.Array(Schema.Struct({
   code: Schema.String,
@@ -1009,7 +1009,7 @@ export const GetAnnotationsResponse = Schema.Struct({
   outageCause: Schema.String,
   outageType: Schema.String
 }),
-  scope: Schema.optional(Schema.String),
+  scope: Schema.optional(Schema.NullOr(Schema.String)),
   startDate: Schema.String
 }))
 }),
@@ -1071,18 +1071,18 @@ export const GetAnnotationsOutagesResponse = Schema.Struct({
   asns: Schema.Array(Schema.Number),
   asnsDetails: Schema.Array(Schema.Struct({
   asn: Schema.String,
-  locations: Schema.optional(Schema.Struct({
+  locations: Schema.optional(Schema.NullOr(Schema.Struct({
   code: Schema.String,
   name: Schema.String
-})),
+}))),
   name: Schema.String
 })),
   dataSource: Schema.String,
-  description: Schema.optional(Schema.String),
-  endDate: Schema.optional(Schema.Date),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  endDate: Schema.optional(Schema.NullOr(Schema.Date)),
   eventType: Schema.String,
   id: Schema.String,
-  linkedUrl: Schema.optional(Schema.String),
+  linkedUrl: Schema.optional(Schema.NullOr(Schema.String)),
   locations: Schema.Array(Schema.String),
   locationsDetails: Schema.Array(Schema.Struct({
   code: Schema.String,
@@ -1097,7 +1097,7 @@ export const GetAnnotationsOutagesResponse = Schema.Struct({
   outageCause: Schema.String,
   outageType: Schema.String
 }),
-  scope: Schema.optional(Schema.String),
+  scope: Schema.optional(Schema.NullOr(Schema.String)),
   startDate: Schema.Date
 }))
 }),
@@ -2497,7 +2497,7 @@ export interface GetDnsAs112TopLocationsResponse {
 export const GetDnsAs112TopLocationsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -2508,7 +2508,7 @@ export const GetDnsAs112TopLocationsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -2581,7 +2581,7 @@ export interface GetDnsAs112TopLocationsByDnssecResponse {
 export const GetDnsAs112TopLocationsByDnssecResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -2592,7 +2592,7 @@ export const GetDnsAs112TopLocationsByDnssecResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -2665,7 +2665,7 @@ export interface GetDnsAs112TopLocationsByEdnsResponse {
 export const GetDnsAs112TopLocationsByEdnsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -2676,7 +2676,7 @@ export const GetDnsAs112TopLocationsByEdnsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -2749,7 +2749,7 @@ export interface GetDnsAs112TopLocationsByIpVersionResponse {
 export const GetDnsAs112TopLocationsByIpVersionResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -2760,7 +2760,7 @@ export const GetDnsAs112TopLocationsByIpVersionResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -4351,7 +4351,7 @@ export interface GetAttacksLayer3TopAttacksResponse {
 export const GetAttacksLayer3TopAttacksResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -4362,7 +4362,7 @@ export const GetAttacksLayer3TopAttacksResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -4437,7 +4437,7 @@ export interface GetAttacksLayer3TopIndustriesResponse {
 export const GetAttacksLayer3TopIndustriesResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -4448,7 +4448,7 @@ export const GetAttacksLayer3TopIndustriesResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -4522,7 +4522,7 @@ export interface GetAttacksLayer3TopOriginLocationsResponse {
 export const GetAttacksLayer3TopOriginLocationsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -4533,7 +4533,7 @@ export const GetAttacksLayer3TopOriginLocationsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -4609,7 +4609,7 @@ export interface GetAttacksLayer3TopTargetLocationsResponse {
 export const GetAttacksLayer3TopTargetLocationsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -4620,7 +4620,7 @@ export const GetAttacksLayer3TopTargetLocationsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -4696,7 +4696,7 @@ export interface GetAttacksLayer3TopVerticalsResponse {
 export const GetAttacksLayer3TopVerticalsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -4707,7 +4707,7 @@ export const GetAttacksLayer3TopVerticalsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -6335,7 +6335,7 @@ export interface GetAttacksLayer7TopOriginAsResponse {
 export const GetAttacksLayer7TopOriginAsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -6346,7 +6346,7 @@ export const GetAttacksLayer7TopOriginAsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -6428,7 +6428,7 @@ export interface GetAttacksLayer7TopAttacksResponse {
 export const GetAttacksLayer7TopAttacksResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -6439,7 +6439,7 @@ export const GetAttacksLayer7TopAttacksResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -6522,7 +6522,7 @@ export interface GetAttacksLayer7TopIndustriesResponse {
 export const GetAttacksLayer7TopIndustriesResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -6533,7 +6533,7 @@ export const GetAttacksLayer7TopIndustriesResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -6611,7 +6611,7 @@ export interface GetAttacksLayer7TopOriginLocationResponse {
 export const GetAttacksLayer7TopOriginLocationResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -6622,7 +6622,7 @@ export const GetAttacksLayer7TopOriginLocationResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -6694,7 +6694,7 @@ export interface GetAttacksLayer7TopTargetLocationResponse {
 export const GetAttacksLayer7TopTargetLocationResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -6705,7 +6705,7 @@ export const GetAttacksLayer7TopTargetLocationResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -6787,7 +6787,7 @@ export interface GetAttacksLayer7TopVerticalsResponse {
 export const GetAttacksLayer7TopVerticalsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -6798,7 +6798,7 @@ export const GetAttacksLayer7TopVerticalsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -6985,7 +6985,7 @@ export const GetBgpIpsTimeseriesResponse = Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
 })),
-  delay: Schema.optional(Schema.Struct({
+  delay: Schema.optional(Schema.NullOr(Schema.Struct({
   asn_data: Schema.Struct({
   delaySecs: Schema.Number,
   delayStr: Schema.String,
@@ -7007,7 +7007,7 @@ export const GetBgpIpsTimeseriesResponse = Schema.Struct({
 }),
   healthy: Schema.Boolean,
   nowTs: Schema.Number
-})),
+}))),
   lastUpdated: Schema.Date,
   normalization: Schema.Literal("PERCENTAGE", "MIN0_MAX", "MIN_MAX", "RAW_VALUES", "PERCENTAGE_CHANGE", "ROLLING_AVERAGE", "OVERLAPPED_PERCENTAGE", "RATIO"),
   units: Schema.Array(Schema.Struct({
@@ -8473,7 +8473,7 @@ export const GetCertificateLogDetailsResponse = Schema.Struct({
   endExclusive: Schema.Date,
   lastUpdate: Schema.Date,
   operator: Schema.String,
-  performance: Schema.Struct({
+  performance: Schema.NullOr(Schema.Struct({
   endpoints: Schema.Array(Schema.Struct({
   endpoint: Schema.Literal("add-chain (new)", "add-chain (old)", "add-pre-chain (new)", "add-pre-chain (old)", "get-entries", "get-roots", "get-sth"),
   responseTime: Schema.Number,
@@ -8481,7 +8481,7 @@ export const GetCertificateLogDetailsResponse = Schema.Struct({
 })),
   responseTime: Schema.Number,
   uptime: Schema.Number
-}),
+})),
   related: Schema.Array(Schema.Struct({
   description: Schema.String,
   endExclusive: Schema.Date,
@@ -8493,8 +8493,8 @@ export const GetCertificateLogDetailsResponse = Schema.Struct({
   startInclusive: Schema.Date,
   state: Schema.Literal("USABLE", "PENDING", "QUALIFIED", "READ_ONLY", "RETIRED", "REJECTED"),
   stateTimestamp: Schema.Date,
-  submittableCertCount: Schema.String,
-  submittedCertCount: Schema.String,
+  submittableCertCount: Schema.NullOr(Schema.String),
+  submittedCertCount: Schema.NullOr(Schema.String),
   url: Schema.String
 })
 }),
@@ -11276,7 +11276,7 @@ export interface GetDnsTopAsesResponse {
 export const GetDnsTopAsesResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -11287,7 +11287,7 @@ export const GetDnsTopAsesResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -11386,7 +11386,7 @@ export interface GetDnsTopLocationsResponse {
 export const GetDnsTopLocationsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -11397,7 +11397,7 @@ export const GetDnsTopLocationsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -14433,7 +14433,7 @@ export interface GetEmailSecurityTopTldsByMessagesResponse {
 export const GetEmailSecurityTopTldsByMessagesResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -14444,7 +14444,7 @@ export const GetEmailSecurityTopTldsByMessagesResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -14524,7 +14524,7 @@ export interface GetEmailSecurityTopTldsByMaliciousResponse {
 export const GetEmailSecurityTopTldsByMaliciousResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -14535,7 +14535,7 @@ export const GetEmailSecurityTopTldsByMaliciousResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -14615,7 +14615,7 @@ export interface GetEmailSecurityTopTldsBySpamResponse {
 export const GetEmailSecurityTopTldsBySpamResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -14626,7 +14626,7 @@ export const GetEmailSecurityTopTldsBySpamResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -14706,7 +14706,7 @@ export interface GetEmailSecurityTopTldsBySpoofResponse {
 export const GetEmailSecurityTopTldsBySpoofResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -14717,7 +14717,7 @@ export const GetEmailSecurityTopTldsBySpoofResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -14783,13 +14783,13 @@ export interface ListResponse {
 export const ListResponse = Schema.Struct({
   result: Schema.Struct({
   asns: Schema.Array(Schema.Struct({
-  aka: Schema.optional(Schema.String),
+  aka: Schema.optional(Schema.NullOr(Schema.String)),
   asn: Schema.Number,
   country: Schema.String,
   countryName: Schema.String,
   name: Schema.String,
-  orgName: Schema.optional(Schema.String),
-  website: Schema.optional(Schema.String)
+  orgName: Schema.optional(Schema.NullOr(Schema.String)),
+  website: Schema.optional(Schema.NullOr(Schema.String))
 }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -14833,14 +14833,14 @@ export interface GetEntitiesAsnByIpResponse {
 export const GetEntitiesAsnByIpResponse = Schema.Struct({
   result: Schema.Struct({
   asn: Schema.Struct({
-  aka: Schema.optional(Schema.String),
+  aka: Schema.optional(Schema.NullOr(Schema.String)),
   asn: Schema.Number,
   country: Schema.String,
   countryName: Schema.String,
   estimatedUsers: Schema.Struct({
-  estimatedUsers: Schema.optional(Schema.Number),
+  estimatedUsers: Schema.optional(Schema.NullOr(Schema.Number)),
   locations: Schema.Array(Schema.Struct({
-  estimatedUsers: Schema.optional(Schema.Number),
+  estimatedUsers: Schema.optional(Schema.NullOr(Schema.Number)),
   locationAlpha2: Schema.String,
   locationName: Schema.String
 }))
@@ -14848,9 +14848,9 @@ export const GetEntitiesAsnByIpResponse = Schema.Struct({
   name: Schema.String,
   orgName: Schema.String,
   related: Schema.Array(Schema.Struct({
-  aka: Schema.optional(Schema.String),
+  aka: Schema.optional(Schema.NullOr(Schema.String)),
   asn: Schema.Number,
-  estimatedUsers: Schema.optional(Schema.Number),
+  estimatedUsers: Schema.optional(Schema.NullOr(Schema.Number)),
   name: Schema.String
 })),
   source: Schema.String,
@@ -14898,15 +14898,15 @@ export interface GetEntitiesAsnByIdResponse {
 export const GetEntitiesAsnByIdResponse = Schema.Struct({
   result: Schema.Struct({
   asn: Schema.Struct({
-  aka: Schema.optional(Schema.String),
+  aka: Schema.optional(Schema.NullOr(Schema.String)),
   asn: Schema.Number,
   confidenceLevel: Schema.Number,
   country: Schema.String,
   countryName: Schema.String,
   estimatedUsers: Schema.Struct({
-  estimatedUsers: Schema.optional(Schema.Number),
+  estimatedUsers: Schema.optional(Schema.NullOr(Schema.Number)),
   locations: Schema.Array(Schema.Struct({
-  estimatedUsers: Schema.optional(Schema.Number),
+  estimatedUsers: Schema.optional(Schema.NullOr(Schema.Number)),
   locationAlpha2: Schema.String,
   locationName: Schema.String
 }))
@@ -14914,9 +14914,9 @@ export const GetEntitiesAsnByIdResponse = Schema.Struct({
   name: Schema.String,
   orgName: Schema.String,
   related: Schema.Array(Schema.Struct({
-  aka: Schema.optional(Schema.String),
+  aka: Schema.optional(Schema.NullOr(Schema.String)),
   asn: Schema.Number,
-  estimatedUsers: Schema.optional(Schema.Number),
+  estimatedUsers: Schema.optional(Schema.NullOr(Schema.Number)),
   name: Schema.String
 })),
   source: Schema.String,
@@ -14968,11 +14968,11 @@ export const GetAsnsAsSetResponse = Schema.Struct({
   as_set_members_count: Schema.Number,
   as_set_upstreams_count: Schema.Number,
   asn_cone_size: Schema.Number,
-  hierarchical_asn: Schema.optional(Schema.Number),
-  inferred_asn: Schema.optional(Schema.Number),
+  hierarchical_asn: Schema.optional(Schema.NullOr(Schema.Number)),
+  inferred_asn: Schema.optional(Schema.NullOr(Schema.Number)),
   irr_sources: Schema.Array(Schema.String),
   name: Schema.String,
-  peeringdb_asn: Schema.optional(Schema.Number)
+  peeringdb_asn: Schema.optional(Schema.NullOr(Schema.Number))
 })),
   paths: Schema.Array(Schema.Array(Schema.String))
 }),
@@ -17491,7 +17491,7 @@ export interface GetHttpTopAsesByHttpRequestsResponse {
 export const GetHttpTopAsesByHttpRequestsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -17502,7 +17502,7 @@ export const GetHttpTopAsesByHttpRequestsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -17593,7 +17593,7 @@ export interface GetHttpTopAsesByBotClassResponse {
 export const GetHttpTopAsesByBotClassResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -17604,7 +17604,7 @@ export const GetHttpTopAsesByBotClassResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -17695,7 +17695,7 @@ export interface GetHttpTopAsesByBrowserFamilyResponse {
 export const GetHttpTopAsesByBrowserFamilyResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -17706,7 +17706,7 @@ export const GetHttpTopAsesByBrowserFamilyResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -17797,7 +17797,7 @@ export interface GetHttpTopAsesByDeviceTypeResponse {
 export const GetHttpTopAsesByDeviceTypeResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -17808,7 +17808,7 @@ export const GetHttpTopAsesByDeviceTypeResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -17899,7 +17899,7 @@ export interface GetHttpTopAsesByHttpProtocolResponse {
 export const GetHttpTopAsesByHttpProtocolResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -17910,7 +17910,7 @@ export const GetHttpTopAsesByHttpProtocolResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -18001,7 +18001,7 @@ export interface GetHttpTopAsesByHttpVersionResponse {
 export const GetHttpTopAsesByHttpVersionResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -18012,7 +18012,7 @@ export const GetHttpTopAsesByHttpVersionResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -18103,7 +18103,7 @@ export interface GetHttpTopAsesByIpVersionResponse {
 export const GetHttpTopAsesByIpVersionResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -18114,7 +18114,7 @@ export const GetHttpTopAsesByIpVersionResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -18205,7 +18205,7 @@ export interface GetHttpTopAsesByOperatingSystemResponse {
 export const GetHttpTopAsesByOperatingSystemResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -18216,7 +18216,7 @@ export const GetHttpTopAsesByOperatingSystemResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -18307,7 +18307,7 @@ export interface GetHttpTopAsesByTlsVersionResponse {
 export const GetHttpTopAsesByTlsVersionResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -18318,7 +18318,7 @@ export const GetHttpTopAsesByTlsVersionResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -18409,7 +18409,7 @@ export interface GetHttpTopBrowsersResponse {
 export const GetHttpTopBrowsersResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -18420,7 +18420,7 @@ export const GetHttpTopBrowsersResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -18508,7 +18508,7 @@ export interface GetHttpTopBrowserFamiliesResponse {
 export const GetHttpTopBrowserFamiliesResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -18519,7 +18519,7 @@ export const GetHttpTopBrowserFamiliesResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -18609,7 +18609,7 @@ export interface GetHttpTopLocationsByHttpRequestsResponse {
 export const GetHttpTopLocationsByHttpRequestsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -18620,7 +18620,7 @@ export const GetHttpTopLocationsByHttpRequestsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -18711,7 +18711,7 @@ export interface GetHttpTopLocationsByBotClassResponse {
 export const GetHttpTopLocationsByBotClassResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -18722,7 +18722,7 @@ export const GetHttpTopLocationsByBotClassResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -18813,7 +18813,7 @@ export interface GetHttpTopLocationsByBrowserFamilyResponse {
 export const GetHttpTopLocationsByBrowserFamilyResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -18824,7 +18824,7 @@ export const GetHttpTopLocationsByBrowserFamilyResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -18915,7 +18915,7 @@ export interface GetHttpTopLocationsByDeviceTypeResponse {
 export const GetHttpTopLocationsByDeviceTypeResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -18926,7 +18926,7 @@ export const GetHttpTopLocationsByDeviceTypeResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -19017,7 +19017,7 @@ export interface GetHttpTopLocationsByHttpProtocolResponse {
 export const GetHttpTopLocationsByHttpProtocolResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -19028,7 +19028,7 @@ export const GetHttpTopLocationsByHttpProtocolResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -19119,7 +19119,7 @@ export interface GetHttpTopLocationsByHttpVersionResponse {
 export const GetHttpTopLocationsByHttpVersionResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -19130,7 +19130,7 @@ export const GetHttpTopLocationsByHttpVersionResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -19221,7 +19221,7 @@ export interface GetHttpTopLocationsByIpVersionResponse {
 export const GetHttpTopLocationsByIpVersionResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -19232,7 +19232,7 @@ export const GetHttpTopLocationsByIpVersionResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -19323,7 +19323,7 @@ export interface GetHttpTopLocationsByOperatingSystemResponse {
 export const GetHttpTopLocationsByOperatingSystemResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -19334,7 +19334,7 @@ export const GetHttpTopLocationsByOperatingSystemResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -19425,7 +19425,7 @@ export interface GetHttpTopLocationsByTlsVersionResponse {
 export const GetHttpTopLocationsByTlsVersionResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -19436,7 +19436,7 @@ export const GetHttpTopLocationsByTlsVersionResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -20360,7 +20360,7 @@ export interface GetNetflowsTopAsesResponse {
 export const GetNetflowsTopAsesResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -20371,7 +20371,7 @@ export const GetNetflowsTopAsesResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -20446,7 +20446,7 @@ export interface GetNetflowsTopLocationsResponse {
 export const GetNetflowsTopLocationsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -20457,7 +20457,7 @@ export const GetNetflowsTopLocationsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -21217,7 +21217,7 @@ export interface GetQualitySpeedTopAsesResponse {
 export const GetQualitySpeedTopAsesResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -21228,7 +21228,7 @@ export const GetQualitySpeedTopAsesResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -21308,7 +21308,7 @@ export interface GetQualitySpeedTopLocationsResponse {
 export const GetQualitySpeedTopLocationsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -21319,7 +21319,7 @@ export const GetQualitySpeedTopLocationsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -21395,18 +21395,18 @@ export interface GetRankingDomainDetailsResponse {
 export const GetRankingDomainDetailsResponse = Schema.Struct({
   result: Schema.Struct({
   details_0: Schema.Struct({
-  bucket: Schema.optional(Schema.String),
+  bucket: Schema.optional(Schema.NullOr(Schema.String)),
   categories: Schema.Array(Schema.Struct({
   id: Schema.Number,
   name: Schema.String,
   superCategoryId: Schema.Number
 })),
-  rank: Schema.optional(Schema.Number),
-  top_locations: Schema.optional(Schema.Array(Schema.Struct({
+  rank: Schema.optional(Schema.NullOr(Schema.Number)),
+  top_locations: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   locationCode: Schema.String,
   locationName: Schema.String,
   rank: Schema.Number
-})))
+}))))
 }),
   meta: Schema.Struct({
   dateRange: Schema.Array(Schema.Struct({
@@ -21589,7 +21589,7 @@ export interface GetRankingTopInternetServicesResponse {
 export const GetRankingTopInternetServicesResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -21600,7 +21600,7 @@ export const GetRankingTopInternetServicesResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -21753,7 +21753,7 @@ export interface GetRankingTopDomainsResponse {
 export const GetRankingTopDomainsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -21764,7 +21764,7 @@ export const GetRankingTopDomainsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -21783,7 +21783,7 @@ export const GetRankingTopDomainsResponse = Schema.Struct({
   superCategoryId: Schema.Number
 })),
   domain: Schema.String,
-  pctRankChange: Schema.optional(Schema.Number),
+  pctRankChange: Schema.optional(Schema.NullOr(Schema.Number)),
   rank: Schema.Number
 }))
 }),
@@ -21834,7 +21834,7 @@ export interface GetRobotsTxtTopDomainCategoriesByFilesParsedResponse {
 export const GetRobotsTxtTopDomainCategoriesByFilesParsedResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -21845,7 +21845,7 @@ export const GetRobotsTxtTopDomainCategoriesByFilesParsedResponse = Schema.Struc
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -21913,7 +21913,7 @@ export interface GetRobotsTxtTopUserAgentsByDirectiveResponse {
 export const GetRobotsTxtTopUserAgentsByDirectiveResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -21924,7 +21924,7 @@ export const GetRobotsTxtTopUserAgentsByDirectiveResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -21937,9 +21937,9 @@ export const GetRobotsTxtTopUserAgentsByDirectiveResponse = Schema.Struct({
 }))
 }),
   top_0: Schema.Array(Schema.Struct({
-  fully: Schema.optional(Schema.Number),
+  fully: Schema.optional(Schema.NullOr(Schema.Number)),
   name: Schema.String,
-  partially: Schema.optional(Schema.Number),
+  partially: Schema.optional(Schema.NullOr(Schema.Number)),
   value: Schema.Number
 }))
 }),
@@ -22328,28 +22328,28 @@ export interface GetTrafficAnomaliesResponse {
 export const GetTrafficAnomaliesResponse = Schema.Struct({
   result: Schema.Struct({
   trafficAnomalies: Schema.Array(Schema.Struct({
-  asnDetails: Schema.optional(Schema.Struct({
+  asnDetails: Schema.optional(Schema.NullOr(Schema.Struct({
   asn: Schema.String,
-  locations: Schema.optional(Schema.Struct({
+  locations: Schema.optional(Schema.NullOr(Schema.Struct({
   code: Schema.String,
   name: Schema.String
-})),
+}))),
   name: Schema.String
-})),
-  endDate: Schema.optional(Schema.Date),
-  locationDetails: Schema.optional(Schema.Struct({
+}))),
+  endDate: Schema.optional(Schema.NullOr(Schema.Date)),
+  locationDetails: Schema.optional(Schema.NullOr(Schema.Struct({
   code: Schema.String,
   name: Schema.String
-})),
-  originDetails: Schema.optional(Schema.Struct({
+}))),
+  originDetails: Schema.optional(Schema.NullOr(Schema.Struct({
   name: Schema.String,
   origin: Schema.String
-})),
+}))),
   startDate: Schema.String,
   status: Schema.String,
   type: Schema.String,
   uuid: Schema.String,
-  visibleInDataSources: Schema.optional(Schema.Array(Schema.String))
+  visibleInDataSources: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -22461,7 +22461,7 @@ export interface GetVerifiedBotsTopByHttpRequestsResponse {
 export const GetVerifiedBotsTopByHttpRequestsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -22472,7 +22472,7 @@ export const GetVerifiedBotsTopByHttpRequestsResponse = Schema.Struct({
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date
@@ -22546,7 +22546,7 @@ export interface GetVerifiedBotsTopCategoriesByHttpRequestsResponse {
 export const GetVerifiedBotsTopCategoriesByHttpRequestsResponse = Schema.Struct({
   result: Schema.Struct({
   meta: Schema.Struct({
-  confidenceInfo: Schema.Struct({
+  confidenceInfo: Schema.NullOr(Schema.Struct({
   annotations: Schema.Array(Schema.Struct({
   dataSource: Schema.Literal("ALL", "AI_BOTS", "AI_GATEWAY", "BGP", "BOTS", "CONNECTION_ANOMALY", "CT", "DNS", "DNS_MAGNITUDE", "DNS_AS112", "DOS", "EMAIL_ROUTING", "EMAIL_SECURITY", "FW", "FW_PG", "HTTP", "HTTP_CONTROL", "HTTP_CRAWLER_REFERER", "HTTP_ORIGINS", "IQI", "LEAKED_CREDENTIALS", "NET", "ROBOTS_TXT", "SPEED", "WORKERS_AI"),
   description: Schema.String,
@@ -22557,7 +22557,7 @@ export const GetVerifiedBotsTopCategoriesByHttpRequestsResponse = Schema.Struct(
   startDate: Schema.Date
 })),
   level: Schema.Number
-}),
+})),
   dateRange: Schema.Array(Schema.Struct({
   endTime: Schema.Date,
   startTime: Schema.Date

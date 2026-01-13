@@ -46,27 +46,27 @@ export const UserListusertenantsResponse = Schema.Struct({
   create_time: Schema.Date,
   id: Schema.String,
   meta: Schema.Struct({
-  flags: Schema.optional(Schema.Struct({
+  flags: Schema.optional(Schema.NullOr(Schema.Struct({
   account_creation: Schema.String,
   account_deletion: Schema.String,
   account_migration: Schema.String,
   account_mobility: Schema.String,
   sub_org_creation: Schema.String
-})),
-  managed_by: Schema.optional(Schema.String)
+}))),
+  managed_by: Schema.optional(Schema.NullOr(Schema.String))
 }),
   name: Schema.String,
-  parent: Schema.optional(Schema.Struct({
+  parent: Schema.optional(Schema.NullOr(Schema.Struct({
   id: Schema.String,
   name: Schema.String
-})),
-  profile: Schema.optional(Schema.Struct({
+}))),
+  profile: Schema.optional(Schema.NullOr(Schema.Struct({
   business_address: Schema.String,
   business_email: Schema.String,
   business_name: Schema.String,
   business_phone: Schema.String,
   external_metadata: Schema.String
-}))
+})))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

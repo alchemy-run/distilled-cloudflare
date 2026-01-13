@@ -1,0 +1,1173 @@
+[
+  // Workers: Replace scripts-search result items schema.
+  // 
+  // Problem: The result items schema uses $ref to workers_created_on,
+  // workers_modified_on, workers_script_name, workers_identifier which
+  // the generator cannot properly resolve through nested allOf.
+  // 
+  // Fix: Replace just the result items with inline property definitions.
+  {
+    "op": "replace",
+    "path": "/paths/~1accounts~1{account_id}~1workers~1scripts-search/get/responses/200/content/application~1json/schema/allOf/1/properties/result/items",
+    "value": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Script tag identifier"
+        },
+        "script_name": {
+          "type": "string"
+        },
+        "created_on": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modified_on": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "environment_is_default": {
+          "type": "boolean"
+        },
+        "environment_name": {
+          "type": "string"
+        },
+        "service_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "script_name",
+        "created_on",
+        "modified_on"
+      ]
+    }
+  },
+
+  // Containers API: List and create applications (undocumented).
+  // 
+  // The Containers API is not included in the official OpenAPI spec.
+  // Schema reverse-engineered from API responses.
+  {
+    "op": "add",
+    "path": "/paths/~1accounts~1{account_id}~1containers~1applications",
+    "value": {
+      "get": {
+        "operationId": "listContainerApplications",
+        "summary": "List all container applications",
+        "tags": [
+          "Containers"
+        ],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ContainerApplication"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createContainerApplication",
+        "summary": "Create a new container application",
+        "tags": [
+          "Containers"
+        ],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContainerApplicationBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/ContainerApplication"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  // Containers API: Get, update, delete application by ID (undocumented).
+  // 
+  // The Containers API is not included in the official OpenAPI spec.
+  // Schema reverse-engineered from API responses.
+  {
+    "op": "add",
+    "path": "/paths/~1accounts~1{account_id}~1containers~1applications~1{application_id}",
+    "value": {
+      "get": {
+        "operationId": "getContainerApplication",
+        "summary": "Get a container application by ID",
+        "tags": [
+          "Containers"
+        ],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/ContainerApplication"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateContainerApplication",
+        "summary": "Update a container application",
+        "tags": [
+          "Containers"
+        ],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContainerApplicationBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/ContainerApplication"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteContainerApplication",
+        "summary": "Delete a container application",
+        "tags": [
+          "Containers"
+        ],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  // Containers API: Create rollout endpoint (undocumented).
+  // 
+  // The Containers API is not included in the official OpenAPI spec.
+  // Schema reverse-engineered from API responses.
+  {
+    "op": "add",
+    "path": "/paths/~1accounts~1{account_id}~1containers~1applications~1{application_id}~1rollouts",
+    "value": {
+      "post": {
+        "operationId": "createContainerApplicationRollout",
+        "summary": "Create a rollout for a container application",
+        "tags": [
+          "Containers"
+        ],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRolloutBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/RolloutResponse"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  // Containers API: Get account identity and limits (undocumented).
+  // 
+  // Returns container limits, available locations, and defaults.
+  {
+    "op": "add",
+    "path": "/paths/~1accounts~1{account_id}~1containers~1me",
+    "value": {
+      "get": {
+        "operationId": "getContainerIdentity",
+        "summary": "Get container identity and limits for the account",
+        "tags": [
+          "Containers"
+        ],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/ContainerIdentity"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  // Containers API: ContainerApplication schema (undocumented).
+  // 
+  // Reverse-engineered from API responses.
+  {
+    "op": "add",
+    "path": "/components/schemas/ContainerApplication",
+    "value": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "account_id": {
+          "type": "string"
+        },
+        "scheduling_policy": {
+          "type": "string"
+        },
+        "instances": {
+          "type": "integer"
+        },
+        "max_instances": {
+          "type": "integer"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "durable_object_namespace_id": {
+          "type": "string"
+        },
+        "constraints": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "type": "integer"
+            }
+          }
+        },
+        "configuration": {
+          "$ref": "#/components/schemas/DeploymentConfiguration"
+        },
+        "durable_objects": {
+          "type": "object",
+          "properties": {
+            "namespace_id": {
+              "type": "string"
+            }
+          }
+        },
+        "health": {
+          "type": "object",
+          "properties": {
+            "instances": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  // Containers API: CreateContainerApplicationBody schema (undocumented).
+  // 
+  // Reverse-engineered from API responses.
+  {
+    "op": "add",
+    "path": "/components/schemas/CreateContainerApplicationBody",
+    "value": {
+      "type": "object",
+      "required": [
+        "name",
+        "max_instances",
+        "configuration"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "max_instances": {
+          "type": "integer"
+        },
+        "instances": {
+          "type": "integer"
+        },
+        "scheduling_policy": {
+          "type": "string"
+        },
+        "configuration": {
+          "$ref": "#/components/schemas/DeploymentConfiguration"
+        },
+        "durable_objects": {
+          "type": "object",
+          "properties": {
+            "namespace_id": {
+              "type": "string"
+            }
+          }
+        },
+        "constraints": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "type": "integer"
+            }
+          }
+        },
+        "affinities": {
+          "type": "object",
+          "properties": {
+            "colocation": {
+              "type": "string",
+              "enum": [
+                "datacenter"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+
+  // Containers API: UpdateContainerApplicationBody schema (undocumented).
+  // 
+  // Reverse-engineered from API responses.
+  {
+    "op": "add",
+    "path": "/components/schemas/UpdateContainerApplicationBody",
+    "value": {
+      "type": "object",
+      "properties": {
+        "instances": {
+          "type": "integer"
+        },
+        "max_instances": {
+          "type": "integer"
+        },
+        "scheduling_policy": {
+          "type": "string"
+        },
+        "configuration": {
+          "$ref": "#/components/schemas/DeploymentConfiguration"
+        },
+        "constraints": {
+          "type": "object",
+          "properties": {
+            "tier": {
+              "type": "integer"
+            },
+            "region": {
+              "type": "string"
+            },
+            "regions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "cities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "affinities": {
+          "type": "object",
+          "properties": {
+            "colocation": {
+              "type": "string",
+              "enum": [
+                "datacenter"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+
+  // Containers API: DeploymentConfiguration schema (undocumented).
+  // 
+  // Reverse-engineered from API responses.
+  {
+    "op": "add",
+    "path": "/components/schemas/DeploymentConfiguration",
+    "value": {
+      "type": "object",
+      "required": [
+        "image"
+      ],
+      "properties": {
+        "image": {
+          "type": "string"
+        },
+        "instance_type": {
+          "type": "string"
+        },
+        "vcpu": {
+          "type": "number"
+        },
+        "memory": {
+          "type": "string"
+        },
+        "observability": {
+          "type": "object",
+          "properties": {
+            "logs": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "ssh_public_key_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "secrets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "env"
+                ]
+              },
+              "secret": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "disk": {
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "string"
+            }
+          }
+        },
+        "environment_variables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "network": {
+          "type": "object",
+          "properties": {
+            "assign_ipv4": {
+              "type": "string",
+              "enum": [
+                "none",
+                "predefined",
+                "account"
+              ]
+            },
+            "assign_ipv6": {
+              "type": "string",
+              "enum": [
+                "none",
+                "predefined",
+                "account"
+              ]
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "public",
+                "private"
+              ]
+            }
+          }
+        },
+        "command": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "entrypoint": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dns": {
+          "type": "object",
+          "properties": {
+            "servers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "searches": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "port": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "http",
+                  "tcp"
+                ]
+              },
+              "tls": {
+                "type": "boolean"
+              },
+              "port": {
+                "type": "string"
+              },
+              "http": {
+                "type": "object",
+                "properties": {
+                  "method": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "headers": {
+                    "type": "object"
+                  }
+                }
+              },
+              "interval": {
+                "type": "string"
+              },
+              "timeout": {
+                "type": "string"
+              },
+              "retries": {
+                "type": "integer"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "health",
+                  "ready"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  // Containers API: CreateRolloutBody schema (undocumented).
+  // 
+  // Reverse-engineered from API responses.
+  {
+    "op": "add",
+    "path": "/components/schemas/CreateRolloutBody",
+    "value": {
+      "type": "object",
+      "required": [
+        "description",
+        "strategy",
+        "step_percentage",
+        "target_configuration"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "strategy": {
+          "type": "string",
+          "enum": [
+            "rolling"
+          ]
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "full_auto"
+          ]
+        },
+        "step_percentage": {
+          "type": "integer"
+        },
+        "target_configuration": {
+          "$ref": "#/components/schemas/DeploymentConfiguration"
+        }
+      }
+    }
+  },
+
+  // Containers API: RolloutResponse schema (undocumented).
+  // 
+  // Reverse-engineered from API responses.
+  {
+    "op": "add",
+    "path": "/components/schemas/RolloutResponse",
+    "value": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "last_updated_at": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "strategy": {
+          "type": "string"
+        },
+        "current_version": {
+          "type": "integer"
+        },
+        "target_version": {
+          "type": "integer"
+        },
+        "health": {
+          "type": "object",
+          "properties": {
+            "instances": {
+              "type": "object",
+              "properties": {
+                "healthy": {
+                  "type": "integer"
+                },
+                "failed": {
+                  "type": "integer"
+                },
+                "starting": {
+                  "type": "integer"
+                },
+                "scheduling": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "current_configuration": {
+          "type": "object",
+          "properties": {
+            "image": {
+              "type": "string"
+            },
+            "observability": {
+              "type": "object"
+            }
+          }
+        },
+        "target_configuration": {
+          "$ref": "#/components/schemas/DeploymentConfiguration"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "string"
+              },
+              "step_size": {
+                "type": "object",
+                "properties": {
+                  "percentage": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "description": {
+                "type": "string"
+              },
+              "started_at": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "progress": {
+          "type": "object",
+          "properties": {
+            "total_steps": {
+              "type": "integer"
+            },
+            "current_step": {
+              "type": "integer"
+            },
+            "updated_instances": {
+              "type": "integer"
+            },
+            "total_instances": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  // Containers API: ContainerIdentity schema (undocumented).
+  // 
+  // Reverse-engineered from API responses.
+  {
+    "op": "add",
+    "path": "/components/schemas/ContainerIdentity",
+    "value": {
+      "type": "object",
+      "properties": {
+        "account_id": {
+          "type": "string"
+        },
+        "external_account_id": {
+          "type": "string"
+        },
+        "legacy_identity": {
+          "type": "string"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limits": {
+          "type": "object",
+          "properties": {
+            "account_id": {
+              "type": "string"
+            },
+            "vcpu_per_deployment": {
+              "type": "integer"
+            },
+            "memory_mib_per_deployment": {
+              "type": "integer"
+            },
+            "memory_per_deployment": {
+              "type": "string"
+            },
+            "disk_per_deployment": {
+              "type": "string"
+            },
+            "disk_mb_per_deployment": {
+              "type": "integer"
+            },
+            "total_vcpu": {
+              "type": "integer"
+            },
+            "total_memory_mib": {
+              "type": "integer"
+            },
+            "node_group": {
+              "type": "string"
+            },
+            "ipv4s": {
+              "type": "integer"
+            },
+            "network_modes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "total_disk_mb": {
+              "type": "integer"
+            },
+            "total_memory": {
+              "type": "string"
+            }
+          }
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "defaults": {
+          "type": "object",
+          "properties": {
+            "vcpus": {
+              "type": "integer"
+            },
+            "memory_mib": {
+              "type": "integer"
+            },
+            "memory": {
+              "type": "string"
+            },
+            "disk_mb": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  // Workers: Make startup_time_ms optional in upload response.
+  // 
+  // Problem: The spec marks 'startup_time_ms' as required in the upload
+  // response, but the API doesn't always return this field.
+  // 
+  // Fix: Remove the required array from the allOf member.
+  {
+    "op": "remove",
+    "path": "/components/schemas/workers_script-response-upload/allOf/1/required"
+  },
+
+  // Workers: Fix delete response result type.
+  // 
+  // Problem: The spec claims result is always null for delete operations,
+  // but the API actually returns { id: string } with the deleted resource ID.
+  // 
+  // Fix: Replace the result property definition.
+  {
+    "op": "replace",
+    "path": "/components/schemas/workers_api-response-null-result/allOf/1/properties/result",
+    "value": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    }
+  },
+
+  // R2: Add uppercase location enum values.
+  // 
+  // Problem: The API returns uppercase values (WNAM, EEUR, etc.) but the
+  // OpenAPI spec only defines lowercase values (wnam, eeur, etc.).
+  // This causes schema validation failures when decoding responses.
+  // 
+  // Fix: Add all uppercase variants to the enum.
+  {
+    "op": "replace",
+    "path": "/components/schemas/r2_bucket_location/enum",
+    "value": [
+      "apac",
+      "eeur",
+      "enam",
+      "weur",
+      "wnam",
+      "oc",
+      "APAC",
+      "EEUR",
+      "ENAM",
+      "WEUR",
+      "WNAM",
+      "OC"
+    ]
+  },
+
+  // R2: Make conditions optional in lifecycle rules.
+  // 
+  // Problem: The spec marks 'conditions' as required, but the API returns
+  // lifecycle rules with empty/missing conditions objects.
+  // This causes schema validation failures.
+  // 
+  // Fix: Remove 'conditions' from the required array.
+  {
+    "op": "replace",
+    "path": "/components/schemas/r2_lifecycle-rule/required",
+    "value": [
+      "id",
+      "enabled"
+    ]
+  },
+
+  // R2: Remove 'prefix' from conditions required array.
+  // 
+  // Problem: The spec has conditions.required: ["prefix"] but the API
+  // returns conditions: {} with no prefix for default lifecycle rules.
+  // This causes schema validation failures when decoding responses.
+  // 
+  // Fix: Remove the required array from conditions entirely.
+  {
+    "op": "remove",
+    "path": "/components/schemas/r2_lifecycle-rule/properties/conditions/required"
+  },
+
+  // KV: Fix workers-kv_api-response-common-no-result result to allow null.
+  // 
+  // Problem: The spec has result: { nullable: true, type: object } but
+  // the generator doesn't handle nullable correctly and produces
+  // Schema.Struct({}) which rejects null values.
+  // 
+  // Fix: Replace with oneOf null | object to make null explicit.
+  {
+    "op": "replace",
+    "path": "/components/schemas/workers-kv_api-response-common-no-result/allOf/1/properties/result",
+    "value": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "object" }
+      ]
+    }
+  }
+
+]

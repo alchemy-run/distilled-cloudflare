@@ -2562,20 +2562,18 @@ export interface WorkerScriptSearchWorkersRequest {
   account_id: string;
   name?: string;
   id?: string;
+  order_by?: "created_on" | "modified_on" | "name";
   page?: number;
   per_page?: number;
-  order_by?: string;
-  direction?: "asc" | "desc";
 }
 
 export const WorkerScriptSearchWorkersRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   name: Schema.optional(Schema.String).pipe(T.HttpQuery("name")),
   id: Schema.optional(Schema.String).pipe(T.HttpQuery("id")),
+  order_by: Schema.optional(Schema.Literal("created_on", "modified_on", "name")).pipe(T.HttpQuery("order_by")),
   page: Schema.optional(Schema.Number).pipe(T.HttpQuery("page")),
-  per_page: Schema.optional(Schema.Number).pipe(T.HttpQuery("per_page")),
-  order_by: Schema.optional(Schema.String).pipe(T.HttpQuery("order_by")),
-  direction: Schema.optional(Schema.Literal("asc", "desc")).pipe(T.HttpQuery("direction"))
+  per_page: Schema.optional(Schema.Number).pipe(T.HttpQuery("per_page"))
 }).pipe(
   T.Http({ method: "GET", path: "/accounts/{account_id}/workers/scripts-search" }),
 ).annotations({ identifier: "WorkerScriptSearchWorkersRequest" }) as unknown as Schema.Schema<WorkerScriptSearchWorkersRequest>;
@@ -2671,13 +2669,12 @@ export const WorkerScriptUploadWorkerModuleRequest = Schema.Struct({
 ).annotations({ identifier: "WorkerScriptUploadWorkerModuleRequest" }) as unknown as Schema.Schema<WorkerScriptUploadWorkerModuleRequest>;
 
 export interface WorkerScriptUploadWorkerModuleResponse {
-  result: { id?: string; entry_point?: string; startup_time_ms?: number };
+  result: unknown;
   result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const WorkerScriptUploadWorkerModuleResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.NullOr(Schema.String)),
   entry_point: Schema.optional(Schema.NullOr(Schema.String)),
   startup_time_ms: Schema.optional(Schema.NullOr(Schema.Number))
 }),

@@ -44,14 +44,14 @@ export interface CloudflareIpsCloudflareIpDetailsResponse {
 
 export const CloudflareIpsCloudflareIpDetailsResponse = Schema.Struct({
   result: Schema.Union(Schema.Struct({
-  etag: Schema.optional(Schema.String),
-  ipv4_cidrs: Schema.optional(Schema.Array(Schema.String)),
-  ipv6_cidrs: Schema.optional(Schema.Array(Schema.String))
+  etag: Schema.optional(Schema.NullOr(Schema.String)),
+  ipv4_cidrs: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  ipv6_cidrs: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }), Schema.Struct({
-  etag: Schema.optional(Schema.String),
-  ipv4_cidrs: Schema.optional(Schema.Array(Schema.String)),
-  ipv6_cidrs: Schema.optional(Schema.Array(Schema.String)),
-  jdcloud_cidrs: Schema.optional(Schema.Array(Schema.String))
+  etag: Schema.optional(Schema.NullOr(Schema.String)),
+  ipv4_cidrs: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  ipv6_cidrs: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  jdcloud_cidrs: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

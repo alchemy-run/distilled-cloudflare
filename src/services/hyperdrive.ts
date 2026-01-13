@@ -73,18 +73,18 @@ export interface CreateHyperdriveRequest {
 export const CreateHyperdriveRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  caching: Schema.optional(Schema.Struct({})),
-  created_on: Schema.optional(Schema.Date),
+  caching: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
   id: Schema.String,
-  modified_on: Schema.optional(Schema.Date),
-  mtls: Schema.optional(Schema.Struct({
-  ca_certificate_id: Schema.optional(Schema.String),
-  mtls_certificate_id: Schema.optional(Schema.String),
-  sslmode: Schema.optional(Schema.String)
-})),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  mtls: Schema.optional(Schema.NullOr(Schema.Struct({
+  ca_certificate_id: Schema.optional(Schema.NullOr(Schema.String)),
+  mtls_certificate_id: Schema.optional(Schema.NullOr(Schema.String)),
+  sslmode: Schema.optional(Schema.NullOr(Schema.String))
+}))),
   name: Schema.String,
   origin: Schema.Struct({}),
-  origin_connection_limit: Schema.optional(Schema.Number)
+  origin_connection_limit: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/hyperdrive/configs" }),
@@ -168,18 +168,18 @@ export const UpdateHyperdriveRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   hyperdrive_id: Schema.String.pipe(T.HttpPath("hyperdrive_id")),
   body: Schema.Struct({
-  caching: Schema.optional(Schema.Struct({})),
-  created_on: Schema.optional(Schema.Date),
+  caching: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
   id: Schema.String,
-  modified_on: Schema.optional(Schema.Date),
-  mtls: Schema.optional(Schema.Struct({
-  ca_certificate_id: Schema.optional(Schema.String),
-  mtls_certificate_id: Schema.optional(Schema.String),
-  sslmode: Schema.optional(Schema.String)
-})),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  mtls: Schema.optional(Schema.NullOr(Schema.Struct({
+  ca_certificate_id: Schema.optional(Schema.NullOr(Schema.String)),
+  mtls_certificate_id: Schema.optional(Schema.NullOr(Schema.String)),
+  sslmode: Schema.optional(Schema.NullOr(Schema.String))
+}))),
   name: Schema.String,
   origin: Schema.Struct({}),
-  origin_connection_limit: Schema.optional(Schema.Number)
+  origin_connection_limit: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}" }),
@@ -263,15 +263,15 @@ export const PatchHyperdriveRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   hyperdrive_id: Schema.String.pipe(T.HttpPath("hyperdrive_id")),
   body: Schema.Struct({
-  caching: Schema.optional(Schema.Struct({})),
-  mtls: Schema.optional(Schema.Struct({
-  ca_certificate_id: Schema.optional(Schema.String),
-  mtls_certificate_id: Schema.optional(Schema.String),
-  sslmode: Schema.optional(Schema.String)
-})),
-  name: Schema.optional(Schema.String),
-  origin: Schema.optional(Schema.Struct({})),
-  origin_connection_limit: Schema.optional(Schema.Number)
+  caching: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  mtls: Schema.optional(Schema.NullOr(Schema.Struct({
+  ca_certificate_id: Schema.optional(Schema.NullOr(Schema.String)),
+  mtls_certificate_id: Schema.optional(Schema.NullOr(Schema.String)),
+  sslmode: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  origin: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  origin_connection_limit: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}" }),

@@ -57,7 +57,7 @@ export interface ListNamespacesResponse {
 export const ListNamespacesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
   id: Schema.String,
-  supports_url_encoding: Schema.optional(Schema.Boolean),
+  supports_url_encoding: Schema.optional(Schema.NullOr(Schema.Boolean)),
   title: Schema.String
 })),
   result_info: Schema.optional(Schema.Struct({
@@ -103,7 +103,7 @@ export interface CreateANamespaceResponse {
 export const CreateANamespaceResponse = Schema.Struct({
   result: Schema.Struct({
   id: Schema.String,
-  supports_url_encoding: Schema.optional(Schema.Boolean),
+  supports_url_encoding: Schema.optional(Schema.NullOr(Schema.Boolean)),
   title: Schema.String
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -147,7 +147,7 @@ export interface GetANamespaceResponse {
 export const GetANamespaceResponse = Schema.Struct({
   result: Schema.Struct({
   id: Schema.String,
-  supports_url_encoding: Schema.optional(Schema.Boolean),
+  supports_url_encoding: Schema.optional(Schema.NullOr(Schema.Boolean)),
   title: Schema.String
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -195,7 +195,7 @@ export interface WorkersKvNamespaceRenameANamespaceResponse {
 export const WorkersKvNamespaceRenameANamespaceResponse = Schema.Struct({
   result: Schema.Struct({
   id: Schema.String,
-  supports_url_encoding: Schema.optional(Schema.Boolean),
+  supports_url_encoding: Schema.optional(Schema.NullOr(Schema.Boolean)),
   title: Schema.String
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -237,7 +237,7 @@ export interface WorkersKvNamespaceRemoveANamespaceResponse {
 }
 
 export const WorkersKvNamespaceRemoveANamespaceResponse = Schema.Struct({
-  result: Schema.Union(Schema.Struct({}), Schema.Null),
+  result: Schema.Union(Schema.NullOr(Schema.Unknown), Schema.Struct({})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -269,11 +269,11 @@ export const WorkersKvNamespaceWriteMultipleKeyValuePairsRequest = Schema.Struct
   namespace_id: Schema.String.pipe(T.HttpPath("namespace_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Array(Schema.Struct({
-  base64: Schema.optional(Schema.Boolean),
-  expiration: Schema.optional(Schema.Number),
-  expiration_ttl: Schema.optional(Schema.Number),
+  base64: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expiration: Schema.optional(Schema.NullOr(Schema.Number)),
+  expiration_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
   key: Schema.String,
-  metadata: Schema.optional(Schema.Unknown),
+  metadata: Schema.optional(Schema.NullOr(Schema.Unknown)),
   value: Schema.String
 })).pipe(T.HttpBody())
 }).pipe(
@@ -287,8 +287,8 @@ export interface WorkersKvNamespaceWriteMultipleKeyValuePairsResponse {
 
 export const WorkersKvNamespaceWriteMultipleKeyValuePairsResponse = Schema.Struct({
   result: Schema.Struct({
-  successful_key_count: Schema.optional(Schema.Number),
-  unsuccessful_keys: Schema.optional(Schema.Array(Schema.String))
+  successful_key_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  unsuccessful_keys: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -332,8 +332,8 @@ export interface DeleteMultipleKeyValuePairsDeprecatedResponse {
 
 export const DeleteMultipleKeyValuePairsDeprecatedResponse = Schema.Struct({
   result: Schema.Struct({
-  successful_key_count: Schema.optional(Schema.Number),
-  unsuccessful_keys: Schema.optional(Schema.Array(Schema.String))
+  successful_key_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  unsuccessful_keys: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -377,8 +377,8 @@ export interface DeleteMultipleKeyValuePairsResponse {
 
 export const DeleteMultipleKeyValuePairsResponse = Schema.Struct({
   result: Schema.Struct({
-  successful_key_count: Schema.optional(Schema.Number),
-  unsuccessful_keys: Schema.optional(Schema.Array(Schema.String))
+  successful_key_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  unsuccessful_keys: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -412,8 +412,8 @@ export const GetMultipleKeyValuePairsRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
   keys: Schema.Array(Schema.String),
-  type: Schema.optional(Schema.Literal("text", "json")),
-  withMetadata: Schema.optional(Schema.Boolean)
+  type: Schema.optional(Schema.NullOr(Schema.Literal("text", "json"))),
+  withMetadata: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/storage/kv/namespaces/{namespace_id}/bulk/get" }),
@@ -426,13 +426,13 @@ export interface GetMultipleKeyValuePairsResponse {
 
 export const GetMultipleKeyValuePairsResponse = Schema.Struct({
   result: Schema.Union(Schema.Struct({
-  values: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean, Schema.Record({ key: Schema.String, value: Schema.Unknown })) }))
+  values: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.String, Schema.Number, Schema.Boolean, Schema.Record({ key: Schema.String, value: Schema.Unknown })) })))
 }), Schema.Struct({
-  values: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  expiration: Schema.optional(Schema.Number),
+  values: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  expiration: Schema.optional(Schema.NullOr(Schema.Number)),
   metadata: Schema.Unknown,
   value: Schema.Unknown
-}) }))
+}) })))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -480,8 +480,8 @@ export interface ListANamespaceSKeysResponse {
 
 export const ListANamespaceSKeysResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  expiration: Schema.optional(Schema.Number),
-  metadata: Schema.optional(Schema.Unknown),
+  expiration: Schema.optional(Schema.NullOr(Schema.Number)),
+  metadata: Schema.optional(Schema.NullOr(Schema.Unknown)),
   name: Schema.String
 })),
   result_info: Schema.optional(Schema.Struct({
@@ -615,7 +615,7 @@ export interface WorkersKvNamespaceWriteKeyValuePairWithMetadataResponse {
 }
 
 export const WorkersKvNamespaceWriteKeyValuePairWithMetadataResponse = Schema.Struct({
-  result: Schema.Union(Schema.Struct({}), Schema.Null),
+  result: Schema.Union(Schema.NullOr(Schema.Unknown), Schema.Struct({})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -657,7 +657,7 @@ export interface DeleteKeyValuePairResponse {
 }
 
 export const DeleteKeyValuePairResponse = Schema.Struct({
-  result: Schema.Union(Schema.Struct({}), Schema.Null),
+  result: Schema.Union(Schema.NullOr(Schema.Unknown), Schema.Struct({})),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),

@@ -45,20 +45,20 @@ export interface TenantsRetrievetenantResponse {
 export const TenantsRetrievetenantResponse = Schema.Struct({
   result: Schema.Struct({
   cdate: Schema.Date,
-  customer_id: Schema.optional(Schema.String),
+  customer_id: Schema.optional(Schema.NullOr(Schema.String)),
   edate: Schema.Date,
   tenant_contacts: Schema.Struct({
-  email: Schema.optional(Schema.String),
-  website: Schema.optional(Schema.String)
+  email: Schema.optional(Schema.NullOr(Schema.String)),
+  website: Schema.optional(Schema.NullOr(Schema.String))
 }),
   tenant_labels: Schema.Array(Schema.String),
   tenant_metadata: Schema.Struct({
-  dns: Schema.optional(Schema.Struct({
+  dns: Schema.optional(Schema.NullOr(Schema.Struct({
   ns_pool: Schema.Struct({
-  primary: Schema.optional(Schema.String),
-  secondary: Schema.optional(Schema.String)
+  primary: Schema.optional(Schema.NullOr(Schema.String)),
+  secondary: Schema.optional(Schema.NullOr(Schema.String))
 })
-}))
+})))
 }),
   tenant_name: Schema.String,
   tenant_network: Schema.Struct({}),
@@ -151,14 +151,14 @@ export const TenantsListaccountsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
   created_on: Schema.Date,
   id: Schema.String,
-  name: Schema.String,
+  name: Schema.NullOr(Schema.String),
   settings: Schema.Struct({
-  abuse_contact_email: Schema.String,
-  access_approval_expiry: Schema.Date,
-  api_access_enabled: Schema.Boolean,
-  default_nameservers: Schema.String,
-  enforce_twofactor: Schema.Boolean,
-  use_account_custom_ns_by_default: Schema.Boolean
+  abuse_contact_email: Schema.NullOr(Schema.String),
+  access_approval_expiry: Schema.NullOr(Schema.Date),
+  api_access_enabled: Schema.NullOr(Schema.Boolean),
+  default_nameservers: Schema.NullOr(Schema.String),
+  enforce_twofactor: Schema.NullOr(Schema.Boolean),
+  use_account_custom_ns_by_default: Schema.NullOr(Schema.Boolean)
 }),
   type: Schema.Literal("standard", "enterprise")
 })),
@@ -212,7 +212,7 @@ export const TenantsListentitlementsResponse = Schema.Struct({
   type: Schema.Literal("bool"),
   value: Schema.Boolean
 }),
-  custom_entitlements: Schema.Array(Schema.Struct({
+  custom_entitlements: Schema.NullOr(Schema.Array(Schema.Struct({
   allocation: Schema.Union(Schema.Struct({
   type: Schema.Literal("max_count"),
   value: Schema.Number
@@ -221,12 +221,12 @@ export const TenantsListentitlementsResponse = Schema.Struct({
   value: Schema.Boolean
 }), Schema.Struct({
   type: Schema.Literal(""),
-  value: Schema.optional(Schema.Struct({}))
+  value: Schema.optional(Schema.NullOr(Schema.Struct({})))
 })),
   feature: Schema.Struct({
   key: Schema.String
 })
-})),
+}))),
   mhs_certificate_count: Schema.Struct({
   type: Schema.Literal("max_count"),
   value: Schema.Number

@@ -50,10 +50,10 @@ export interface ListDatabasesResponse {
 
 export const ListDatabasesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  uuid: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.String)
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  uuid: Schema.optional(Schema.NullOr(Schema.String)),
+  version: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -84,9 +84,9 @@ export interface CreateDatabaseRequest {
 export const CreateDatabaseRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.Literal("eu", "fedramp")),
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.Literal("eu", "fedramp"))),
   name: Schema.String,
-  primary_location_hint: Schema.optional(Schema.Literal("wnam", "enam", "weur", "eeur", "apac", "oc"))
+  primary_location_hint: Schema.optional(Schema.NullOr(Schema.Literal("wnam", "enam", "weur", "eeur", "apac", "oc")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/d1/database" }),
@@ -99,15 +99,15 @@ export interface CreateDatabaseResponse {
 
 export const CreateDatabaseResponse = Schema.Struct({
   result: Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  file_size: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  num_tables: Schema.optional(Schema.Number),
-  read_replication: Schema.optional(Schema.Struct({
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  file_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  num_tables: Schema.optional(Schema.NullOr(Schema.Number)),
+  read_replication: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.Literal("auto", "disabled")
-})),
-  uuid: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.String)
+}))),
+  uuid: Schema.optional(Schema.NullOr(Schema.String)),
+  version: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -149,15 +149,15 @@ export interface GetDatabaseResponse {
 
 export const GetDatabaseResponse = Schema.Struct({
   result: Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  file_size: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  num_tables: Schema.optional(Schema.Number),
-  read_replication: Schema.optional(Schema.Struct({
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  file_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  num_tables: Schema.optional(Schema.NullOr(Schema.Number)),
+  read_replication: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.Literal("auto", "disabled")
-})),
-  uuid: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.String)
+}))),
+  uuid: Schema.optional(Schema.NullOr(Schema.String)),
+  version: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -205,15 +205,15 @@ export interface UpdateDatabaseResponse {
 
 export const UpdateDatabaseResponse = Schema.Struct({
   result: Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  file_size: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  num_tables: Schema.optional(Schema.Number),
-  read_replication: Schema.optional(Schema.Struct({
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  file_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  num_tables: Schema.optional(Schema.NullOr(Schema.Number)),
+  read_replication: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.Literal("auto", "disabled")
-})),
-  uuid: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.String)
+}))),
+  uuid: Schema.optional(Schema.NullOr(Schema.String)),
+  version: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -254,7 +254,7 @@ export interface DeleteDatabaseResponse {
 }
 
 export const DeleteDatabaseResponse = Schema.Struct({
-  result: Schema.Literal(null),
+  result: Schema.NullOr(Schema.Unknown),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
     per_page: Schema.optional(Schema.Number),
@@ -286,9 +286,9 @@ export const UpdatePartialDatabaseRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   database_id: Schema.String.pipe(T.HttpPath("database_id")),
   body: Schema.Struct({
-  read_replication: Schema.optional(Schema.Struct({
+  read_replication: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.Literal("auto", "disabled")
-}))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/accounts/{account_id}/d1/database/{database_id}" }),
@@ -301,15 +301,15 @@ export interface UpdatePartialDatabaseResponse {
 
 export const UpdatePartialDatabaseResponse = Schema.Struct({
   result: Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  file_size: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  num_tables: Schema.optional(Schema.Number),
-  read_replication: Schema.optional(Schema.Struct({
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  file_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  num_tables: Schema.optional(Schema.NullOr(Schema.Number)),
+  read_replication: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.Literal("auto", "disabled")
-})),
-  uuid: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.String)
+}))),
+  uuid: Schema.optional(Schema.NullOr(Schema.String)),
+  version: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -342,12 +342,12 @@ export const CloudflareD1ExportDatabaseRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   database_id: Schema.String.pipe(T.HttpPath("database_id")),
   body: Schema.Struct({
-  current_bookmark: Schema.optional(Schema.String),
-  dump_options: Schema.optional(Schema.Struct({
-  no_data: Schema.optional(Schema.Boolean),
-  no_schema: Schema.optional(Schema.Boolean),
-  tables: Schema.optional(Schema.Array(Schema.String))
-})),
+  current_bookmark: Schema.optional(Schema.NullOr(Schema.String)),
+  dump_options: Schema.optional(Schema.NullOr(Schema.Struct({
+  no_data: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  no_schema: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tables: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
   output_format: Schema.Literal("polling")
 }).pipe(T.HttpBody())
 }).pipe(
@@ -361,16 +361,16 @@ export interface CloudflareD1ExportDatabaseResponse {
 
 export const CloudflareD1ExportDatabaseResponse = Schema.Struct({
   result: Schema.Struct({
-  at_bookmark: Schema.optional(Schema.String),
-  error: Schema.optional(Schema.String),
-  messages: Schema.optional(Schema.Array(Schema.String)),
-  result: Schema.optional(Schema.Struct({
-  filename: Schema.optional(Schema.String),
-  signed_url: Schema.optional(Schema.String)
-})),
-  status: Schema.optional(Schema.Literal("complete", "error")),
-  success: Schema.optional(Schema.Boolean),
-  type: Schema.optional(Schema.Literal("export"))
+  at_bookmark: Schema.optional(Schema.NullOr(Schema.String)),
+  error: Schema.optional(Schema.NullOr(Schema.String)),
+  messages: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  result: Schema.optional(Schema.NullOr(Schema.Struct({
+  filename: Schema.optional(Schema.NullOr(Schema.String)),
+  signed_url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("complete", "error"))),
+  success: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("export")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -424,33 +424,33 @@ export interface CloudflareD1ImportDatabaseResponse {
 
 export const CloudflareD1ImportDatabaseResponse = Schema.Struct({
   result: Schema.Struct({
-  at_bookmark: Schema.optional(Schema.String),
-  error: Schema.optional(Schema.String),
-  filename: Schema.optional(Schema.String),
-  messages: Schema.optional(Schema.Array(Schema.String)),
-  result: Schema.optional(Schema.Struct({
-  final_bookmark: Schema.optional(Schema.String),
-  meta: Schema.optional(Schema.Struct({
-  changed_db: Schema.optional(Schema.Boolean),
-  changes: Schema.optional(Schema.Number),
-  duration: Schema.optional(Schema.Number),
-  last_row_id: Schema.optional(Schema.Number),
-  rows_read: Schema.optional(Schema.Number),
-  rows_written: Schema.optional(Schema.Number),
-  served_by_colo: Schema.optional(Schema.String),
-  served_by_primary: Schema.optional(Schema.Boolean),
-  served_by_region: Schema.optional(Schema.Literal("WNAM", "ENAM", "WEUR", "EEUR", "APAC", "OC")),
-  size_after: Schema.optional(Schema.Number),
-  timings: Schema.optional(Schema.Struct({
-  sql_duration_ms: Schema.optional(Schema.Number)
-}))
-})),
-  num_queries: Schema.optional(Schema.Number)
-})),
-  status: Schema.optional(Schema.Literal("complete", "error")),
-  success: Schema.optional(Schema.Boolean),
-  type: Schema.optional(Schema.Literal("import")),
-  upload_url: Schema.optional(Schema.String)
+  at_bookmark: Schema.optional(Schema.NullOr(Schema.String)),
+  error: Schema.optional(Schema.NullOr(Schema.String)),
+  filename: Schema.optional(Schema.NullOr(Schema.String)),
+  messages: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  result: Schema.optional(Schema.NullOr(Schema.Struct({
+  final_bookmark: Schema.optional(Schema.NullOr(Schema.String)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({
+  changed_db: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  changes: Schema.optional(Schema.NullOr(Schema.Number)),
+  duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  last_row_id: Schema.optional(Schema.NullOr(Schema.Number)),
+  rows_read: Schema.optional(Schema.NullOr(Schema.Number)),
+  rows_written: Schema.optional(Schema.NullOr(Schema.Number)),
+  served_by_colo: Schema.optional(Schema.NullOr(Schema.String)),
+  served_by_primary: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  served_by_region: Schema.optional(Schema.NullOr(Schema.Literal("WNAM", "ENAM", "WEUR", "EEUR", "APAC", "OC"))),
+  size_after: Schema.optional(Schema.NullOr(Schema.Number)),
+  timings: Schema.optional(Schema.NullOr(Schema.Struct({
+  sql_duration_ms: Schema.optional(Schema.NullOr(Schema.Number))
+})))
+}))),
+  num_queries: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("complete", "error"))),
+  success: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("import"))),
+  upload_url: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -483,13 +483,13 @@ export const CloudflareD1QueryDatabaseRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   database_id: Schema.String.pipe(T.HttpPath("database_id")),
   body: Schema.Union(Schema.Struct({
-  params: Schema.optional(Schema.Array(Schema.String)),
+  params: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   sql: Schema.String
 }), Schema.Struct({
-  batch: Schema.optional(Schema.Array(Schema.Struct({
-  params: Schema.optional(Schema.Array(Schema.String)),
+  batch: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  params: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   sql: Schema.String
-})))
+}))))
 })).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/d1/database/{database_id}/query" }),
@@ -502,23 +502,23 @@ export interface CloudflareD1QueryDatabaseResponse {
 
 export const CloudflareD1QueryDatabaseResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  meta: Schema.optional(Schema.Struct({
-  changed_db: Schema.optional(Schema.Boolean),
-  changes: Schema.optional(Schema.Number),
-  duration: Schema.optional(Schema.Number),
-  last_row_id: Schema.optional(Schema.Number),
-  rows_read: Schema.optional(Schema.Number),
-  rows_written: Schema.optional(Schema.Number),
-  served_by_colo: Schema.optional(Schema.String),
-  served_by_primary: Schema.optional(Schema.Boolean),
-  served_by_region: Schema.optional(Schema.Literal("WNAM", "ENAM", "WEUR", "EEUR", "APAC", "OC")),
-  size_after: Schema.optional(Schema.Number),
-  timings: Schema.optional(Schema.Struct({
-  sql_duration_ms: Schema.optional(Schema.Number)
-}))
-})),
-  results: Schema.optional(Schema.Array(Schema.Struct({}))),
-  success: Schema.optional(Schema.Boolean)
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({
+  changed_db: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  changes: Schema.optional(Schema.NullOr(Schema.Number)),
+  duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  last_row_id: Schema.optional(Schema.NullOr(Schema.Number)),
+  rows_read: Schema.optional(Schema.NullOr(Schema.Number)),
+  rows_written: Schema.optional(Schema.NullOr(Schema.Number)),
+  served_by_colo: Schema.optional(Schema.NullOr(Schema.String)),
+  served_by_primary: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  served_by_region: Schema.optional(Schema.NullOr(Schema.Literal("WNAM", "ENAM", "WEUR", "EEUR", "APAC", "OC"))),
+  size_after: Schema.optional(Schema.NullOr(Schema.Number)),
+  timings: Schema.optional(Schema.NullOr(Schema.Struct({
+  sql_duration_ms: Schema.optional(Schema.NullOr(Schema.Number))
+})))
+}))),
+  results: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  success: Schema.optional(Schema.NullOr(Schema.Boolean))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -551,13 +551,13 @@ export const CloudflareD1RawDatabaseQueryRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   database_id: Schema.String.pipe(T.HttpPath("database_id")),
   body: Schema.Union(Schema.Struct({
-  params: Schema.optional(Schema.Array(Schema.String)),
+  params: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   sql: Schema.String
 }), Schema.Struct({
-  batch: Schema.optional(Schema.Array(Schema.Struct({
-  params: Schema.optional(Schema.Array(Schema.String)),
+  batch: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  params: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   sql: Schema.String
-})))
+}))))
 })).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/d1/database/{database_id}/raw" }),
@@ -570,26 +570,26 @@ export interface CloudflareD1RawDatabaseQueryResponse {
 
 export const CloudflareD1RawDatabaseQueryResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  meta: Schema.optional(Schema.Struct({
-  changed_db: Schema.optional(Schema.Boolean),
-  changes: Schema.optional(Schema.Number),
-  duration: Schema.optional(Schema.Number),
-  last_row_id: Schema.optional(Schema.Number),
-  rows_read: Schema.optional(Schema.Number),
-  rows_written: Schema.optional(Schema.Number),
-  served_by_colo: Schema.optional(Schema.String),
-  served_by_primary: Schema.optional(Schema.Boolean),
-  served_by_region: Schema.optional(Schema.Literal("WNAM", "ENAM", "WEUR", "EEUR", "APAC", "OC")),
-  size_after: Schema.optional(Schema.Number),
-  timings: Schema.optional(Schema.Struct({
-  sql_duration_ms: Schema.optional(Schema.Number)
-}))
-})),
-  results: Schema.optional(Schema.Struct({
-  columns: Schema.optional(Schema.Array(Schema.String)),
-  rows: Schema.optional(Schema.Array(Schema.Array(Schema.Union(Schema.Number, Schema.String, Schema.Struct({})))))
-})),
-  success: Schema.optional(Schema.Boolean)
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({
+  changed_db: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  changes: Schema.optional(Schema.NullOr(Schema.Number)),
+  duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  last_row_id: Schema.optional(Schema.NullOr(Schema.Number)),
+  rows_read: Schema.optional(Schema.NullOr(Schema.Number)),
+  rows_written: Schema.optional(Schema.NullOr(Schema.Number)),
+  served_by_colo: Schema.optional(Schema.NullOr(Schema.String)),
+  served_by_primary: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  served_by_region: Schema.optional(Schema.NullOr(Schema.Literal("WNAM", "ENAM", "WEUR", "EEUR", "APAC", "OC"))),
+  size_after: Schema.optional(Schema.NullOr(Schema.Number)),
+  timings: Schema.optional(Schema.NullOr(Schema.Struct({
+  sql_duration_ms: Schema.optional(Schema.NullOr(Schema.Number))
+})))
+}))),
+  results: Schema.optional(Schema.NullOr(Schema.Struct({
+  columns: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  rows: Schema.optional(Schema.NullOr(Schema.Array(Schema.Array(Schema.Union(Schema.Number, Schema.String, Schema.Struct({}))))))
+}))),
+  success: Schema.optional(Schema.NullOr(Schema.Boolean))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -633,7 +633,7 @@ export interface GetBookmarkResponse {
 
 export const GetBookmarkResponse = Schema.Struct({
   result: Schema.Struct({
-  bookmark: Schema.optional(Schema.String)
+  bookmark: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -679,9 +679,9 @@ export interface CloudflareD1TimeTravelRestoreResponse {
 
 export const CloudflareD1TimeTravelRestoreResponse = Schema.Struct({
   result: Schema.Struct({
-  bookmark: Schema.optional(Schema.Unknown),
-  message: Schema.optional(Schema.String),
-  previous_bookmark: Schema.optional(Schema.Unknown)
+  bookmark: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  message: Schema.optional(Schema.NullOr(Schema.String)),
+  previous_bookmark: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

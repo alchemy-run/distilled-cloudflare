@@ -61,43 +61,43 @@ export interface Get_Response {
 export const Get_Response = Schema.Struct({
   result: Schema.Array(Schema.Struct({
   account: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String))
 }),
-  activated_on: Schema.Date,
-  cname_suffix: Schema.optional(Schema.String),
+  activated_on: Schema.NullOr(Schema.Date),
+  cname_suffix: Schema.optional(Schema.NullOr(Schema.String)),
   created_on: Schema.Date,
   development_mode: Schema.Number,
   id: Schema.String,
   meta: Schema.Struct({
-  cdn_only: Schema.optional(Schema.Boolean),
-  custom_certificate_quota: Schema.optional(Schema.Number),
-  dns_only: Schema.optional(Schema.Boolean),
-  foundation_dns: Schema.optional(Schema.Boolean),
-  page_rule_quota: Schema.optional(Schema.Number),
-  phishing_detected: Schema.optional(Schema.Boolean),
-  step: Schema.optional(Schema.Number)
+  cdn_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  custom_certificate_quota: Schema.optional(Schema.NullOr(Schema.Number)),
+  dns_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  foundation_dns: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  page_rule_quota: Schema.optional(Schema.NullOr(Schema.Number)),
+  phishing_detected: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  step: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   modified_on: Schema.Date,
   name: Schema.String,
   name_servers: Schema.Array(Schema.String),
-  original_dnshost: Schema.String,
-  original_name_servers: Schema.Array(Schema.String),
-  original_registrar: Schema.String,
+  original_dnshost: Schema.NullOr(Schema.String),
+  original_name_servers: Schema.NullOr(Schema.Array(Schema.String)),
+  original_registrar: Schema.NullOr(Schema.String),
   owner: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
-  paused: Schema.optional(Schema.Boolean),
-  permissions: Schema.optional(Schema.Array(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  permissions: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   plan: Schema.Unknown,
-  status: Schema.optional(Schema.Literal("initializing", "pending", "active", "moved")),
-  tenant: Schema.optional(Schema.Unknown),
-  tenant_unit: Schema.optional(Schema.Unknown),
-  type: Schema.optional(Schema.Literal("full", "partial", "secondary", "internal")),
-  vanity_name_servers: Schema.optional(Schema.Array(Schema.String)),
-  verification_key: Schema.optional(Schema.String)
+  status: Schema.optional(Schema.NullOr(Schema.Literal("initializing", "pending", "active", "moved"))),
+  tenant: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  tenant_unit: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("full", "partial", "secondary", "internal"))),
+  vanity_name_servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  verification_key: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -127,10 +127,10 @@ export interface PostRequest {
 export const PostRequest = Schema.Struct({
   body: Schema.Struct({
   account: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   name: Schema.String,
-  type: Schema.optional(Schema.Literal("full", "partial", "secondary", "internal"))
+  type: Schema.optional(Schema.NullOr(Schema.Literal("full", "partial", "secondary", "internal")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones" }),
@@ -144,43 +144,43 @@ export interface PostResponse {
 export const PostResponse = Schema.Struct({
   result: Schema.Struct({
   account: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String))
 }),
-  activated_on: Schema.Date,
-  cname_suffix: Schema.optional(Schema.String),
+  activated_on: Schema.NullOr(Schema.Date),
+  cname_suffix: Schema.optional(Schema.NullOr(Schema.String)),
   created_on: Schema.Date,
   development_mode: Schema.Number,
   id: Schema.String,
   meta: Schema.Struct({
-  cdn_only: Schema.optional(Schema.Boolean),
-  custom_certificate_quota: Schema.optional(Schema.Number),
-  dns_only: Schema.optional(Schema.Boolean),
-  foundation_dns: Schema.optional(Schema.Boolean),
-  page_rule_quota: Schema.optional(Schema.Number),
-  phishing_detected: Schema.optional(Schema.Boolean),
-  step: Schema.optional(Schema.Number)
+  cdn_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  custom_certificate_quota: Schema.optional(Schema.NullOr(Schema.Number)),
+  dns_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  foundation_dns: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  page_rule_quota: Schema.optional(Schema.NullOr(Schema.Number)),
+  phishing_detected: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  step: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   modified_on: Schema.Date,
   name: Schema.String,
   name_servers: Schema.Array(Schema.String),
-  original_dnshost: Schema.String,
-  original_name_servers: Schema.Array(Schema.String),
-  original_registrar: Schema.String,
+  original_dnshost: Schema.NullOr(Schema.String),
+  original_name_servers: Schema.NullOr(Schema.Array(Schema.String)),
+  original_registrar: Schema.NullOr(Schema.String),
   owner: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
-  paused: Schema.optional(Schema.Boolean),
-  permissions: Schema.optional(Schema.Array(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  permissions: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   plan: Schema.Unknown,
-  status: Schema.optional(Schema.Literal("initializing", "pending", "active", "moved")),
-  tenant: Schema.optional(Schema.Unknown),
-  tenant_unit: Schema.optional(Schema.Unknown),
-  type: Schema.optional(Schema.Literal("full", "partial", "secondary", "internal")),
-  vanity_name_servers: Schema.optional(Schema.Array(Schema.String)),
-  verification_key: Schema.optional(Schema.String)
+  status: Schema.optional(Schema.NullOr(Schema.Literal("initializing", "pending", "active", "moved"))),
+  tenant: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  tenant_unit: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("full", "partial", "secondary", "internal"))),
+  vanity_name_servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  verification_key: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -226,49 +226,49 @@ export interface GetAnalyticsByCoLocationsResponse {
 
 export const GetAnalyticsByCoLocationsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  colo_id: Schema.optional(Schema.String),
-  timeseries: Schema.optional(Schema.Array(Schema.Struct({
-  bandwidth: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  cached: Schema.optional(Schema.Number),
-  uncached: Schema.optional(Schema.Number)
-})),
-  requests: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  cached: Schema.optional(Schema.Number),
-  country: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  http_status: Schema.optional(Schema.Struct({})),
-  uncached: Schema.optional(Schema.Number)
-})),
-  since: Schema.optional(Schema.Union(Schema.String, Schema.Number)),
-  threats: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  country: Schema.optional(Schema.Struct({})),
-  type: Schema.optional(Schema.Struct({}))
-})),
-  until: Schema.optional(Schema.Union(Schema.String, Schema.Number))
+  colo_id: Schema.optional(Schema.NullOr(Schema.String)),
+  timeseries: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  bandwidth: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  cached: Schema.optional(Schema.NullOr(Schema.Number)),
+  uncached: Schema.optional(Schema.NullOr(Schema.Number))
 }))),
-  totals: Schema.optional(Schema.Struct({
-  bandwidth: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  cached: Schema.optional(Schema.Number),
-  uncached: Schema.optional(Schema.Number)
-})),
-  requests: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  cached: Schema.optional(Schema.Number),
-  country: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  http_status: Schema.optional(Schema.Struct({})),
-  uncached: Schema.optional(Schema.Number)
-})),
-  since: Schema.optional(Schema.Union(Schema.String, Schema.Number)),
-  threats: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  country: Schema.optional(Schema.Struct({})),
-  type: Schema.optional(Schema.Struct({}))
-})),
-  until: Schema.optional(Schema.Union(Schema.String, Schema.Number))
-}))
+  requests: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  cached: Schema.optional(Schema.NullOr(Schema.Number)),
+  country: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Unknown }))),
+  http_status: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  uncached: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  since: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number))),
+  threats: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  country: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  type: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  until: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number)))
+})))),
+  totals: Schema.optional(Schema.NullOr(Schema.Struct({
+  bandwidth: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  cached: Schema.optional(Schema.NullOr(Schema.Number)),
+  uncached: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  requests: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  cached: Schema.optional(Schema.NullOr(Schema.Number)),
+  country: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Unknown }))),
+  http_status: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  uncached: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  since: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number))),
+  threats: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  country: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  type: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  until: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number)))
+})))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -314,112 +314,112 @@ export interface GetDashboardResponse {
 
 export const GetDashboardResponse = Schema.Struct({
   result: Schema.Struct({
-  timeseries: Schema.optional(Schema.Array(Schema.Struct({
-  bandwidth: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  cached: Schema.optional(Schema.Number),
-  content_type: Schema.optional(Schema.Struct({})),
-  country: Schema.optional(Schema.Struct({})),
-  ssl: Schema.optional(Schema.Struct({
-  encrypted: Schema.optional(Schema.Number),
-  unencrypted: Schema.optional(Schema.Number)
-})),
-  ssl_protocols: Schema.optional(Schema.Struct({
-  TLSv1: Schema.optional(Schema.Number),
-  "TLSv1.1": Schema.optional(Schema.Number),
-  "TLSv1.2": Schema.optional(Schema.Number),
-  "TLSv1.3": Schema.optional(Schema.Number),
-  none: Schema.optional(Schema.Number)
-})),
-  uncached: Schema.optional(Schema.Number)
-})),
-  pageviews: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  search_engine: Schema.optional(Schema.Struct({}))
-})),
-  requests: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  cached: Schema.optional(Schema.Number),
-  content_type: Schema.optional(Schema.Struct({})),
-  country: Schema.optional(Schema.Struct({})),
-  http_status: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  ssl: Schema.optional(Schema.Struct({
-  encrypted: Schema.optional(Schema.Number),
-  unencrypted: Schema.optional(Schema.Number)
-})),
-  ssl_protocols: Schema.optional(Schema.Struct({
-  TLSv1: Schema.optional(Schema.Number),
-  "TLSv1.1": Schema.optional(Schema.Number),
-  "TLSv1.2": Schema.optional(Schema.Number),
-  "TLSv1.3": Schema.optional(Schema.Number),
-  none: Schema.optional(Schema.Number)
-})),
-  uncached: Schema.optional(Schema.Number)
-})),
-  since: Schema.optional(Schema.Union(Schema.String, Schema.Number)),
-  threats: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  country: Schema.optional(Schema.Struct({})),
-  type: Schema.optional(Schema.Struct({}))
-})),
-  uniques: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number)
-})),
-  until: Schema.optional(Schema.Union(Schema.String, Schema.Number))
+  timeseries: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  bandwidth: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  cached: Schema.optional(Schema.NullOr(Schema.Number)),
+  content_type: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  country: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  ssl: Schema.optional(Schema.NullOr(Schema.Struct({
+  encrypted: Schema.optional(Schema.NullOr(Schema.Number)),
+  unencrypted: Schema.optional(Schema.NullOr(Schema.Number))
 }))),
-  totals: Schema.optional(Schema.Struct({
-  bandwidth: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  cached: Schema.optional(Schema.Number),
-  content_type: Schema.optional(Schema.Struct({})),
-  country: Schema.optional(Schema.Struct({})),
-  ssl: Schema.optional(Schema.Struct({
-  encrypted: Schema.optional(Schema.Number),
-  unencrypted: Schema.optional(Schema.Number)
-})),
-  ssl_protocols: Schema.optional(Schema.Struct({
-  TLSv1: Schema.optional(Schema.Number),
-  "TLSv1.1": Schema.optional(Schema.Number),
-  "TLSv1.2": Schema.optional(Schema.Number),
-  "TLSv1.3": Schema.optional(Schema.Number),
-  none: Schema.optional(Schema.Number)
-})),
-  uncached: Schema.optional(Schema.Number)
-})),
-  pageviews: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  search_engine: Schema.optional(Schema.Struct({}))
-})),
-  requests: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  cached: Schema.optional(Schema.Number),
-  content_type: Schema.optional(Schema.Struct({})),
-  country: Schema.optional(Schema.Struct({})),
-  http_status: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  ssl: Schema.optional(Schema.Struct({
-  encrypted: Schema.optional(Schema.Number),
-  unencrypted: Schema.optional(Schema.Number)
-})),
-  ssl_protocols: Schema.optional(Schema.Struct({
-  TLSv1: Schema.optional(Schema.Number),
-  "TLSv1.1": Schema.optional(Schema.Number),
-  "TLSv1.2": Schema.optional(Schema.Number),
-  "TLSv1.3": Schema.optional(Schema.Number),
-  none: Schema.optional(Schema.Number)
-})),
-  uncached: Schema.optional(Schema.Number)
-})),
-  since: Schema.optional(Schema.Union(Schema.String, Schema.Number)),
-  threats: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number),
-  country: Schema.optional(Schema.Struct({})),
-  type: Schema.optional(Schema.Struct({}))
-})),
-  uniques: Schema.optional(Schema.Struct({
-  all: Schema.optional(Schema.Number)
-})),
-  until: Schema.optional(Schema.Union(Schema.String, Schema.Number))
-}))
+  ssl_protocols: Schema.optional(Schema.NullOr(Schema.Struct({
+  TLSv1: Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.1": Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.2": Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.3": Schema.optional(Schema.NullOr(Schema.Number)),
+  none: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  uncached: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  pageviews: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  search_engine: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  requests: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  cached: Schema.optional(Schema.NullOr(Schema.Number)),
+  content_type: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  country: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  http_status: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Unknown }))),
+  ssl: Schema.optional(Schema.NullOr(Schema.Struct({
+  encrypted: Schema.optional(Schema.NullOr(Schema.Number)),
+  unencrypted: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  ssl_protocols: Schema.optional(Schema.NullOr(Schema.Struct({
+  TLSv1: Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.1": Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.2": Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.3": Schema.optional(Schema.NullOr(Schema.Number)),
+  none: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  uncached: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  since: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number))),
+  threats: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  country: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  type: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  uniques: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  until: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number)))
+})))),
+  totals: Schema.optional(Schema.NullOr(Schema.Struct({
+  bandwidth: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  cached: Schema.optional(Schema.NullOr(Schema.Number)),
+  content_type: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  country: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  ssl: Schema.optional(Schema.NullOr(Schema.Struct({
+  encrypted: Schema.optional(Schema.NullOr(Schema.Number)),
+  unencrypted: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  ssl_protocols: Schema.optional(Schema.NullOr(Schema.Struct({
+  TLSv1: Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.1": Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.2": Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.3": Schema.optional(Schema.NullOr(Schema.Number)),
+  none: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  uncached: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  pageviews: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  search_engine: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  requests: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  cached: Schema.optional(Schema.NullOr(Schema.Number)),
+  content_type: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  country: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  http_status: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Unknown }))),
+  ssl: Schema.optional(Schema.NullOr(Schema.Struct({
+  encrypted: Schema.optional(Schema.NullOr(Schema.Number)),
+  unencrypted: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  ssl_protocols: Schema.optional(Schema.NullOr(Schema.Struct({
+  TLSv1: Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.1": Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.2": Schema.optional(Schema.NullOr(Schema.Number)),
+  "TLSv1.3": Schema.optional(Schema.NullOr(Schema.Number)),
+  none: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  uncached: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  since: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number))),
+  threats: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number)),
+  country: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  type: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  uniques: Schema.optional(Schema.NullOr(Schema.Struct({
+  all: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  until: Schema.optional(Schema.NullOr(Schema.Union(Schema.String, Schema.Number)))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -459,14 +459,14 @@ export interface ListCustomPagesResponse {
 
 export const ListCustomPagesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  preview_target: Schema.optional(Schema.String),
-  required_tokens: Schema.optional(Schema.Array(Schema.String)),
-  state: Schema.optional(Schema.Literal("default", "customized")),
-  url: Schema.optional(Schema.String)
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  preview_target: Schema.optional(Schema.NullOr(Schema.String)),
+  required_tokens: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("default", "customized"))),
+  url: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -550,14 +550,14 @@ export interface UpdateACustomPageResponse {
 
 export const UpdateACustomPageResponse = Schema.Struct({
   result: Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  preview_target: Schema.optional(Schema.String),
-  required_tokens: Schema.optional(Schema.Array(Schema.String)),
-  state: Schema.optional(Schema.Literal("default", "customized")),
-  url: Schema.optional(Schema.String)
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  preview_target: Schema.optional(Schema.NullOr(Schema.String)),
+  required_tokens: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("default", "customized"))),
+  url: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -598,43 +598,43 @@ export interface Get_1Response {
 export const Get_1Response = Schema.Struct({
   result: Schema.Struct({
   account: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String))
 }),
-  activated_on: Schema.Date,
-  cname_suffix: Schema.optional(Schema.String),
+  activated_on: Schema.NullOr(Schema.Date),
+  cname_suffix: Schema.optional(Schema.NullOr(Schema.String)),
   created_on: Schema.Date,
   development_mode: Schema.Number,
   id: Schema.String,
   meta: Schema.Struct({
-  cdn_only: Schema.optional(Schema.Boolean),
-  custom_certificate_quota: Schema.optional(Schema.Number),
-  dns_only: Schema.optional(Schema.Boolean),
-  foundation_dns: Schema.optional(Schema.Boolean),
-  page_rule_quota: Schema.optional(Schema.Number),
-  phishing_detected: Schema.optional(Schema.Boolean),
-  step: Schema.optional(Schema.Number)
+  cdn_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  custom_certificate_quota: Schema.optional(Schema.NullOr(Schema.Number)),
+  dns_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  foundation_dns: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  page_rule_quota: Schema.optional(Schema.NullOr(Schema.Number)),
+  phishing_detected: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  step: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   modified_on: Schema.Date,
   name: Schema.String,
   name_servers: Schema.Array(Schema.String),
-  original_dnshost: Schema.String,
-  original_name_servers: Schema.Array(Schema.String),
-  original_registrar: Schema.String,
+  original_dnshost: Schema.NullOr(Schema.String),
+  original_name_servers: Schema.NullOr(Schema.Array(Schema.String)),
+  original_registrar: Schema.NullOr(Schema.String),
   owner: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
-  paused: Schema.optional(Schema.Boolean),
-  permissions: Schema.optional(Schema.Array(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  permissions: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   plan: Schema.Unknown,
-  status: Schema.optional(Schema.Literal("initializing", "pending", "active", "moved")),
-  tenant: Schema.optional(Schema.Unknown),
-  tenant_unit: Schema.optional(Schema.Unknown),
-  type: Schema.optional(Schema.Literal("full", "partial", "secondary", "internal")),
-  vanity_name_servers: Schema.optional(Schema.Array(Schema.String)),
-  verification_key: Schema.optional(Schema.String)
+  status: Schema.optional(Schema.NullOr(Schema.Literal("initializing", "pending", "active", "moved"))),
+  tenant: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  tenant_unit: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("full", "partial", "secondary", "internal"))),
+  vanity_name_servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  verification_key: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -705,12 +705,12 @@ export interface PatchRequest {
 export const PatchRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  paused: Schema.optional(Schema.Boolean),
-  plan: Schema.optional(Schema.Struct({
-  id: Schema.optional(Schema.String)
-})),
-  type: Schema.optional(Schema.Literal("full", "partial", "secondary", "internal")),
-  vanity_name_servers: Schema.optional(Schema.Array(Schema.String))
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  plan: Schema.optional(Schema.NullOr(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("full", "partial", "secondary", "internal"))),
+  vanity_name_servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}" }),
@@ -724,43 +724,43 @@ export interface PatchResponse {
 export const PatchResponse = Schema.Struct({
   result: Schema.Struct({
   account: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String))
 }),
-  activated_on: Schema.Date,
-  cname_suffix: Schema.optional(Schema.String),
+  activated_on: Schema.NullOr(Schema.Date),
+  cname_suffix: Schema.optional(Schema.NullOr(Schema.String)),
   created_on: Schema.Date,
   development_mode: Schema.Number,
   id: Schema.String,
   meta: Schema.Struct({
-  cdn_only: Schema.optional(Schema.Boolean),
-  custom_certificate_quota: Schema.optional(Schema.Number),
-  dns_only: Schema.optional(Schema.Boolean),
-  foundation_dns: Schema.optional(Schema.Boolean),
-  page_rule_quota: Schema.optional(Schema.Number),
-  phishing_detected: Schema.optional(Schema.Boolean),
-  step: Schema.optional(Schema.Number)
+  cdn_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  custom_certificate_quota: Schema.optional(Schema.NullOr(Schema.Number)),
+  dns_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  foundation_dns: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  page_rule_quota: Schema.optional(Schema.NullOr(Schema.Number)),
+  phishing_detected: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  step: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   modified_on: Schema.Date,
   name: Schema.String,
   name_servers: Schema.Array(Schema.String),
-  original_dnshost: Schema.String,
-  original_name_servers: Schema.Array(Schema.String),
-  original_registrar: Schema.String,
+  original_dnshost: Schema.NullOr(Schema.String),
+  original_name_servers: Schema.NullOr(Schema.Array(Schema.String)),
+  original_registrar: Schema.NullOr(Schema.String),
   owner: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
-  paused: Schema.optional(Schema.Boolean),
-  permissions: Schema.optional(Schema.Array(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  permissions: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   plan: Schema.Unknown,
-  status: Schema.optional(Schema.Literal("initializing", "pending", "active", "moved")),
-  tenant: Schema.optional(Schema.Unknown),
-  tenant_unit: Schema.optional(Schema.Unknown),
-  type: Schema.optional(Schema.Literal("full", "partial", "secondary", "internal")),
-  vanity_name_servers: Schema.optional(Schema.Array(Schema.String)),
-  verification_key: Schema.optional(Schema.String)
+  status: Schema.optional(Schema.NullOr(Schema.Literal("initializing", "pending", "active", "moved"))),
+  tenant: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  tenant_unit: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("full", "partial", "secondary", "internal"))),
+  vanity_name_servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  verification_key: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -878,9 +878,9 @@ export interface ListShortLivedCertificateCAsResponse {
 
 export const ListShortLivedCertificateCAsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  aud: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  public_key: Schema.optional(Schema.String)
+  aud: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  public_key: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1044,9 +1044,9 @@ export interface GetAShortLivedCertificateCaResponse {
 
 export const GetAShortLivedCertificateCaResponse = Schema.Struct({
   result: Schema.Struct({
-  aud: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  public_key: Schema.optional(Schema.String)
+  aud: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  public_key: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1088,9 +1088,9 @@ export interface CreateAShortLivedCertificateCaResponse {
 
 export const CreateAShortLivedCertificateCaResponse = Schema.Struct({
   result: Schema.Struct({
-  aud: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  public_key: Schema.optional(Schema.String)
+  aud: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  public_key: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1172,24 +1172,24 @@ export interface ListAccessPoliciesResponse {
 
 export const ListAccessPoliciesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  approval_groups: Schema.optional(Schema.Array(Schema.Struct({
+  approval_groups: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   approvals_needed: Schema.Number,
-  email_addresses: Schema.optional(Schema.Array(Schema.Unknown)),
-  email_list_uuid: Schema.optional(Schema.String)
-}))),
-  approval_required: Schema.optional(Schema.Boolean),
-  created_at: Schema.optional(Schema.Date),
-  decision: Schema.optional(Schema.Literal("allow", "deny", "non_identity", "bypass")),
-  exclude: Schema.optional(Schema.Array(Schema.Struct({}))),
-  id: Schema.optional(Schema.String),
-  include: Schema.optional(Schema.Array(Schema.Struct({}))),
-  isolation_required: Schema.optional(Schema.Boolean),
-  name: Schema.optional(Schema.String),
-  precedence: Schema.optional(Schema.Number),
-  purpose_justification_prompt: Schema.optional(Schema.String),
-  purpose_justification_required: Schema.optional(Schema.Boolean),
-  require: Schema.optional(Schema.Array(Schema.Struct({}))),
-  updated_at: Schema.optional(Schema.Date)
+  email_addresses: Schema.optional(Schema.NullOr(Schema.Array(Schema.Unknown))),
+  email_list_uuid: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  approval_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  decision: Schema.optional(Schema.NullOr(Schema.Literal("allow", "deny", "non_identity", "bypass"))),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  isolation_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  precedence: Schema.optional(Schema.NullOr(Schema.Number)),
+  purpose_justification_prompt: Schema.optional(Schema.NullOr(Schema.String)),
+  purpose_justification_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1275,24 +1275,24 @@ export interface GetAnAccessPolicyResponse {
 
 export const GetAnAccessPolicyResponse = Schema.Struct({
   result: Schema.Struct({
-  approval_groups: Schema.optional(Schema.Array(Schema.Struct({
+  approval_groups: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   approvals_needed: Schema.Number,
-  email_addresses: Schema.optional(Schema.Array(Schema.Unknown)),
-  email_list_uuid: Schema.optional(Schema.String)
-}))),
-  approval_required: Schema.optional(Schema.Boolean),
-  created_at: Schema.optional(Schema.Date),
-  decision: Schema.optional(Schema.Literal("allow", "deny", "non_identity", "bypass")),
-  exclude: Schema.optional(Schema.Array(Schema.Struct({}))),
-  id: Schema.optional(Schema.String),
-  include: Schema.optional(Schema.Array(Schema.Struct({}))),
-  isolation_required: Schema.optional(Schema.Boolean),
-  name: Schema.optional(Schema.String),
-  precedence: Schema.optional(Schema.Number),
-  purpose_justification_prompt: Schema.optional(Schema.String),
-  purpose_justification_required: Schema.optional(Schema.Boolean),
-  require: Schema.optional(Schema.Array(Schema.Struct({}))),
-  updated_at: Schema.optional(Schema.Date)
+  email_addresses: Schema.optional(Schema.NullOr(Schema.Array(Schema.Unknown))),
+  email_list_uuid: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  approval_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  decision: Schema.optional(Schema.NullOr(Schema.Literal("allow", "deny", "non_identity", "bypass"))),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  isolation_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  precedence: Schema.optional(Schema.NullOr(Schema.Number)),
+  purpose_justification_prompt: Schema.optional(Schema.NullOr(Schema.String)),
+  purpose_justification_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1338,24 +1338,24 @@ export interface UpdateAnAccessPolicyResponse {
 
 export const UpdateAnAccessPolicyResponse = Schema.Struct({
   result: Schema.Struct({
-  approval_groups: Schema.optional(Schema.Array(Schema.Struct({
+  approval_groups: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   approvals_needed: Schema.Number,
-  email_addresses: Schema.optional(Schema.Array(Schema.Unknown)),
-  email_list_uuid: Schema.optional(Schema.String)
-}))),
-  approval_required: Schema.optional(Schema.Boolean),
-  created_at: Schema.optional(Schema.Date),
-  decision: Schema.optional(Schema.Literal("allow", "deny", "non_identity", "bypass")),
-  exclude: Schema.optional(Schema.Array(Schema.Struct({}))),
-  id: Schema.optional(Schema.String),
-  include: Schema.optional(Schema.Array(Schema.Struct({}))),
-  isolation_required: Schema.optional(Schema.Boolean),
-  name: Schema.optional(Schema.String),
-  precedence: Schema.optional(Schema.Number),
-  purpose_justification_prompt: Schema.optional(Schema.String),
-  purpose_justification_required: Schema.optional(Schema.Boolean),
-  require: Schema.optional(Schema.Array(Schema.Struct({}))),
-  updated_at: Schema.optional(Schema.Date)
+  email_addresses: Schema.optional(Schema.NullOr(Schema.Array(Schema.Unknown))),
+  email_list_uuid: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  approval_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  decision: Schema.optional(Schema.NullOr(Schema.Literal("allow", "deny", "non_identity", "bypass"))),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  isolation_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  precedence: Schema.optional(Schema.NullOr(Schema.Number)),
+  purpose_justification_prompt: Schema.optional(Schema.NullOr(Schema.String)),
+  purpose_justification_required: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1470,8 +1470,8 @@ export const UpdateAccessApplicationSettingsRequest = Schema.Struct({
   app_id: Schema.Union(Schema.String, Schema.String).pipe(T.HttpPath("app_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  allow_iframe: Schema.optional(Schema.Boolean),
-  skip_interstitial: Schema.optional(Schema.Boolean)
+  allow_iframe: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  skip_interstitial: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/access/apps/{app_id}/settings" }),
@@ -1515,8 +1515,8 @@ export const UpdateAccessApplicationSettings1Request = Schema.Struct({
   app_id: Schema.Union(Schema.String, Schema.String).pipe(T.HttpPath("app_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  allow_iframe: Schema.optional(Schema.Boolean),
-  skip_interstitial: Schema.optional(Schema.Boolean)
+  allow_iframe: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  skip_interstitial: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/access/apps/{app_id}/settings" }),
@@ -1569,29 +1569,29 @@ export interface ZoneLevelAccessApplicationsTestAccessPoliciesResponse {
 
 export const ZoneLevelAccessApplicationsTestAccessPoliciesResponse = Schema.Struct({
   result: Schema.Struct({
-  app_state: Schema.optional(Schema.Struct({
-  app_uid: Schema.optional(Schema.String),
-  aud: Schema.optional(Schema.String),
-  hostname: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  policies: Schema.optional(Schema.Array(Schema.Unknown)),
-  status: Schema.optional(Schema.String)
-})),
-  user_identity: Schema.optional(Schema.Struct({
-  account_id: Schema.optional(Schema.String),
-  device_sessions: Schema.optional(Schema.Struct({})),
-  email: Schema.optional(Schema.String),
-  geo: Schema.optional(Schema.Struct({
-  country: Schema.optional(Schema.String)
-})),
-  iat: Schema.optional(Schema.Number),
-  id: Schema.optional(Schema.String),
-  is_gateway: Schema.optional(Schema.Boolean),
-  is_warp: Schema.optional(Schema.Boolean),
-  name: Schema.optional(Schema.String),
-  user_uuid: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.Number)
-}))
+  app_state: Schema.optional(Schema.NullOr(Schema.Struct({
+  app_uid: Schema.optional(Schema.NullOr(Schema.String)),
+  aud: Schema.optional(Schema.NullOr(Schema.String)),
+  hostname: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  policies: Schema.optional(Schema.NullOr(Schema.Array(Schema.Unknown))),
+  status: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  user_identity: Schema.optional(Schema.NullOr(Schema.Struct({
+  account_id: Schema.optional(Schema.NullOr(Schema.String)),
+  device_sessions: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  email: Schema.optional(Schema.NullOr(Schema.String)),
+  geo: Schema.optional(Schema.NullOr(Schema.Struct({
+  country: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  iat: Schema.optional(Schema.NullOr(Schema.Number)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  is_gateway: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  is_warp: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  user_uuid: Schema.optional(Schema.NullOr(Schema.String)),
+  version: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1631,13 +1631,13 @@ export interface ListMtlsCertificatesResponse {
 
 export const ListMtlsCertificatesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  associated_hostnames: Schema.optional(Schema.Array(Schema.String)),
-  created_at: Schema.optional(Schema.Date),
-  expires_on: Schema.optional(Schema.Date),
-  fingerprint: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.Unknown),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Date)
+  associated_hostnames: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  expires_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  fingerprint: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1807,13 +1807,13 @@ export interface GetAnMtlsCertificateResponse {
 
 export const GetAnMtlsCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-  associated_hostnames: Schema.optional(Schema.Array(Schema.String)),
-  created_at: Schema.optional(Schema.Date),
-  expires_on: Schema.optional(Schema.Date),
-  fingerprint: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.Unknown),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Date)
+  associated_hostnames: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  expires_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  fingerprint: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1857,13 +1857,13 @@ export interface UpdateAnMtlsCertificateResponse {
 
 export const UpdateAnMtlsCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-  associated_hostnames: Schema.optional(Schema.Array(Schema.String)),
-  created_at: Schema.optional(Schema.Date),
-  expires_on: Schema.optional(Schema.Date),
-  fingerprint: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.Unknown),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Date)
+  associated_hostnames: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  expires_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  fingerprint: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1905,7 +1905,7 @@ export interface DeleteAnMtlsCertificateResponse {
 
 export const DeleteAnMtlsCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1945,13 +1945,13 @@ export interface ListAccessGroupsResponse {
 
 export const ListAccessGroupsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  exclude: Schema.optional(Schema.Array(Schema.Struct({}))),
-  id: Schema.optional(Schema.String),
-  include: Schema.optional(Schema.Array(Schema.Struct({}))),
-  name: Schema.optional(Schema.String),
-  require: Schema.optional(Schema.Array(Schema.Struct({}))),
-  updated_at: Schema.optional(Schema.Date)
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2033,13 +2033,13 @@ export interface GetAnAccessGroupResponse {
 
 export const GetAnAccessGroupResponse = Schema.Struct({
   result: Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  exclude: Schema.optional(Schema.Array(Schema.Struct({}))),
-  id: Schema.optional(Schema.String),
-  include: Schema.optional(Schema.Array(Schema.Struct({}))),
-  name: Schema.optional(Schema.String),
-  require: Schema.optional(Schema.Array(Schema.Struct({}))),
-  updated_at: Schema.optional(Schema.Date)
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2083,13 +2083,13 @@ export interface UpdateAnAccessGroupResponse {
 
 export const UpdateAnAccessGroupResponse = Schema.Struct({
   result: Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
-  exclude: Schema.optional(Schema.Array(Schema.Struct({}))),
-  id: Schema.optional(Schema.String),
-  include: Schema.optional(Schema.Array(Schema.Struct({}))),
-  name: Schema.optional(Schema.String),
-  require: Schema.optional(Schema.Array(Schema.Struct({}))),
-  updated_at: Schema.optional(Schema.Date)
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  require: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2369,14 +2369,14 @@ export interface GetYourZeroTrustOrganizationResponse {
 
 export const GetYourZeroTrustOrganizationResponse = Schema.Struct({
   result: Schema.Struct({
-  auth_domain: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Date),
-  is_ui_read_only: Schema.optional(Schema.Boolean),
-  login_design: Schema.optional(Schema.Unknown),
-  name: Schema.optional(Schema.String),
-  ui_read_only_toggle_reason: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Date),
-  user_seat_expiration_inactive_time: Schema.optional(Schema.String)
+  auth_domain: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  is_ui_read_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  login_design: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  ui_read_only_toggle_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  user_seat_expiration_inactive_time: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2458,14 +2458,14 @@ export interface UpdateYourZeroTrustOrganizationResponse {
 
 export const UpdateYourZeroTrustOrganizationResponse = Schema.Struct({
   result: Schema.Struct({
-  auth_domain: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Date),
-  is_ui_read_only: Schema.optional(Schema.Boolean),
-  login_design: Schema.optional(Schema.Unknown),
-  name: Schema.optional(Schema.String),
-  ui_read_only_toggle_reason: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Date),
-  user_seat_expiration_inactive_time: Schema.optional(Schema.String)
+  auth_domain: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  is_ui_read_only: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  login_design: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  ui_read_only_toggle_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  user_seat_expiration_inactive_time: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2545,14 +2545,14 @@ export interface ListServiceTokensResponse {
 
 export const ListServiceTokensResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  client_id: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Date),
-  duration: Schema.optional(Schema.String),
-  expires_at: Schema.optional(Schema.Date),
-  id: Schema.optional(Schema.Unknown),
-  last_seen_at: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Date)
+  client_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  duration: Schema.optional(Schema.NullOr(Schema.String)),
+  expires_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  last_seen_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2634,14 +2634,14 @@ export interface GetAServiceTokenResponse {
 
 export const GetAServiceTokenResponse = Schema.Struct({
   result: Schema.Struct({
-  client_id: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Date),
-  duration: Schema.optional(Schema.String),
-  expires_at: Schema.optional(Schema.Date),
-  id: Schema.optional(Schema.Unknown),
-  last_seen_at: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Date)
+  client_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  duration: Schema.optional(Schema.NullOr(Schema.String)),
+  expires_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  last_seen_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2685,14 +2685,14 @@ export interface UpdateAServiceTokenResponse {
 
 export const UpdateAServiceTokenResponse = Schema.Struct({
   result: Schema.Struct({
-  client_id: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Date),
-  duration: Schema.optional(Schema.String),
-  expires_at: Schema.optional(Schema.Date),
-  id: Schema.optional(Schema.Unknown),
-  last_seen_at: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Date)
+  client_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  duration: Schema.optional(Schema.NullOr(Schema.String)),
+  expires_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  last_seen_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2734,14 +2734,14 @@ export interface DeleteAServiceTokenResponse {
 
 export const DeleteAServiceTokenResponse = Schema.Struct({
   result: Schema.Struct({
-  client_id: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.Date),
-  duration: Schema.optional(Schema.String),
-  expires_at: Schema.optional(Schema.Date),
-  id: Schema.optional(Schema.Unknown),
-  last_seen_at: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  updated_at: Schema.optional(Schema.Date)
+  client_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  duration: Schema.optional(Schema.NullOr(Schema.String)),
+  expires_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  id: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  last_seen_at: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  updated_at: Schema.optional(Schema.NullOr(Schema.Date))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2936,7 +2936,7 @@ export interface Delete_1Response {
 
 export const Delete_1Response = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3054,7 +3054,7 @@ export interface PutZonesZoneIdActivationCheckResponse {
 
 export const PutZonesZoneIdActivationCheckResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3096,7 +3096,7 @@ export const ListHostnamesResponse = Schema.Struct({
   created_on: Schema.Unknown,
   hostname: Schema.String,
   region_key: Schema.String,
-  routing: Schema.optional(Schema.String)
+  routing: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3127,7 +3127,7 @@ export const CreateHostnameRequest = Schema.Struct({
   body: Schema.Struct({
   hostname: Schema.String,
   region_key: Schema.String,
-  routing: Schema.optional(Schema.String)
+  routing: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/addressing/regional_hostnames" }),
@@ -3143,7 +3143,7 @@ export const CreateHostnameResponse = Schema.Struct({
   created_on: Schema.Unknown,
   hostname: Schema.String,
   region_key: Schema.String,
-  routing: Schema.optional(Schema.String)
+  routing: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3185,7 +3185,7 @@ export const DlsAccountRegionalHostnamesAccountFetchHostnameResponse = Schema.St
   created_on: Schema.Unknown,
   hostname: Schema.String,
   region_key: Schema.String,
-  routing: Schema.optional(Schema.String)
+  routing: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3267,7 +3267,7 @@ export const PatchHostnameResponse = Schema.Struct({
   created_on: Schema.Unknown,
   hostname: Schema.String,
   region_key: Schema.String,
-  routing: Schema.optional(Schema.String)
+  routing: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3504,13 +3504,13 @@ export interface ApiShieldApiDiscoveryRetrieveDiscoveredOperationsOnAZoneRespons
 
 export const ApiShieldApiDiscoveryRetrieveDiscoveredOperationsOnAZoneResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  features: Schema.optional(Schema.Struct({
-  traffic_stats: Schema.optional(Schema.Struct({
+  features: Schema.optional(Schema.NullOr(Schema.Struct({
+  traffic_stats: Schema.optional(Schema.NullOr(Schema.Struct({
   last_updated: Schema.String,
   period_seconds: Schema.Number,
   requests: Schema.Number
-}))
-})),
+})))
+}))),
   id: Schema.String,
   last_updated: Schema.String,
   origin: Schema.Array(Schema.Literal("ML", "SessionIdentifier", "LabelDiscovery")),
@@ -3543,7 +3543,7 @@ export interface PatchDiscoveredOperationsRequest {
 
 export const PatchDiscoveredOperationsRequest = Schema.Struct({
   body: Schema.Record({ key: Schema.String, value: Schema.Struct({
-  state: Schema.optional(Schema.Literal("review", "ignored"))
+  state: Schema.optional(Schema.NullOr(Schema.Literal("review", "ignored")))
 }) }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/api_gateway/discovery/operations" }),
@@ -3556,7 +3556,7 @@ export interface PatchDiscoveredOperationsResponse {
 
 export const PatchDiscoveredOperationsResponse = Schema.Struct({
   result: Schema.Record({ key: Schema.String, value: Schema.Struct({
-  state: Schema.optional(Schema.Literal("review", "ignored"))
+  state: Schema.optional(Schema.NullOr(Schema.Literal("review", "ignored")))
 }) }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3585,7 +3585,7 @@ export interface PatchDiscoveredOperationRequest {
 
 export const PatchDiscoveredOperationRequest = Schema.Struct({
   body: Schema.Struct({
-  state: Schema.optional(Schema.Literal("review", "ignored"))
+  state: Schema.optional(Schema.NullOr(Schema.Literal("review", "ignored")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/api_gateway/discovery/operations/{operation_id}" }),
@@ -3598,7 +3598,7 @@ export interface PatchDiscoveredOperationResponse {
 
 export const PatchDiscoveredOperationResponse = Schema.Struct({
   result: Schema.Struct({
-  state: Schema.optional(Schema.Literal("review", "saved", "ignored"))
+  state: Schema.optional(Schema.NullOr(Schema.Literal("review", "saved", "ignored")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3681,7 +3681,7 @@ export interface ApiShieldEndpointManagementRetrieveInformationAboutAllOperation
 
 export const ApiShieldEndpointManagementRetrieveInformationAboutAllOperationsOnAZoneResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  features: Schema.optional(Schema.Struct({}))
+  features: Schema.optional(Schema.NullOr(Schema.Struct({})))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3725,7 +3725,7 @@ export interface ApiShieldEndpointManagementAddOperationsToAZoneResponse {
 
 export const ApiShieldEndpointManagementAddOperationsToAZoneResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  features: Schema.optional(Schema.Struct({}))
+  features: Schema.optional(Schema.NullOr(Schema.Struct({})))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3809,7 +3809,7 @@ export interface ApiShieldEndpointManagementAddOperationToAZoneResponse {
 
 export const ApiShieldEndpointManagementAddOperationToAZoneResponse = Schema.Struct({
   result: Schema.Struct({
-  features: Schema.optional(Schema.Struct({}))
+  features: Schema.optional(Schema.NullOr(Schema.Struct({})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3838,7 +3838,7 @@ export interface UpdateMultipleOperationLevelSettingsRequest {
 
 export const UpdateMultipleOperationLevelSettingsRequest = Schema.Struct({
   body: Schema.Record({ key: Schema.String, value: Schema.Struct({
-  mitigation_action: Schema.optional(Schema.Literal("log", "block", "none", null))
+  mitigation_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "block", "none", null)))
 }) }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/api_gateway/operations/schema_validation" }),
@@ -3851,7 +3851,7 @@ export interface UpdateMultipleOperationLevelSettingsResponse {
 
 export const UpdateMultipleOperationLevelSettingsResponse = Schema.Struct({
   result: Schema.Record({ key: Schema.String, value: Schema.Struct({
-  mitigation_action: Schema.optional(Schema.Literal("log", "block", "none", null))
+  mitigation_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "block", "none", null)))
 }) }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3890,7 +3890,7 @@ export interface ApiShieldEndpointManagementRetrieveInformationAboutAnOperationR
 
 export const ApiShieldEndpointManagementRetrieveInformationAboutAnOperationResponse = Schema.Struct({
   result: Schema.Struct({
-  features: Schema.optional(Schema.Struct({}))
+  features: Schema.optional(Schema.NullOr(Schema.Struct({})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -3993,7 +3993,7 @@ export interface UpdateOperationLevelSettingsRequest {
 
 export const UpdateOperationLevelSettingsRequest = Schema.Struct({
   body: Schema.Struct({
-  mitigation_action: Schema.optional(Schema.Literal("log", "block", "none", null))
+  mitigation_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "block", "none", null)))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/api_gateway/operations/{operation_id}/schema_validation" }),
@@ -4044,8 +4044,8 @@ export interface ApiShieldEndpointManagementRetrieveOperationsAndFeaturesAsOpenA
 
 export const ApiShieldEndpointManagementRetrieveOperationsAndFeaturesAsOpenApiSchemasResponse = Schema.Struct({
   result: Schema.Struct({
-  schemas: Schema.optional(Schema.Array(Schema.Struct({}))),
-  timestamp: Schema.optional(Schema.String)
+  schemas: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  timestamp: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4112,7 +4112,7 @@ export interface UpdateZoneLevelSettingsRequest {
 export const UpdateZoneLevelSettingsRequest = Schema.Struct({
   body: Schema.Struct({
   validation_default_mitigation_action: Schema.Literal("none", "log", "block"),
-  validation_override_mitigation_action: Schema.optional(Schema.Literal("none", "disable_override", null))
+  validation_override_mitigation_action: Schema.optional(Schema.NullOr(Schema.Literal("none", "disable_override", null)))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/api_gateway/settings/schema_validation" }),
@@ -4152,8 +4152,8 @@ export interface PatchZoneLevelSettingsRequest {
 
 export const PatchZoneLevelSettingsRequest = Schema.Struct({
   body: Schema.Struct({
-  validation_default_mitigation_action: Schema.optional(Schema.Literal("none", "log", "block", null)),
-  validation_override_mitigation_action: Schema.optional(Schema.Literal("none", "disable_override", null))
+  validation_default_mitigation_action: Schema.optional(Schema.NullOr(Schema.Literal("none", "log", "block", null))),
+  validation_override_mitigation_action: Schema.optional(Schema.NullOr(Schema.Literal("none", "disable_override", null)))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/api_gateway/settings/schema_validation" }),
@@ -4208,8 +4208,8 @@ export const ApiShieldSchemaValidationRetrieveInformationAboutAllSchemasResponse
   kind: Schema.Literal("openapi_v3"),
   name: Schema.String,
   schema_id: Schema.String,
-  source: Schema.optional(Schema.String),
-  validation_enabled: Schema.optional(Schema.Boolean)
+  source: Schema.optional(Schema.NullOr(Schema.String)),
+  validation_enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4254,16 +4254,16 @@ export const PostSchemaResponse = Schema.Struct({
   kind: Schema.Literal("openapi_v3"),
   name: Schema.String,
   schema_id: Schema.String,
-  source: Schema.optional(Schema.String),
-  validation_enabled: Schema.optional(Schema.Boolean)
+  source: Schema.optional(Schema.NullOr(Schema.String)),
+  validation_enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
-  upload_details: Schema.optional(Schema.Struct({
-  warnings: Schema.optional(Schema.Array(Schema.Struct({
+  upload_details: Schema.optional(Schema.NullOr(Schema.Struct({
+  warnings: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   code: Schema.Number,
-  locations: Schema.optional(Schema.Array(Schema.String)),
-  message: Schema.optional(Schema.String)
+  locations: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  message: Schema.optional(Schema.NullOr(Schema.String))
+}))))
 })))
-}))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4348,8 +4348,8 @@ export const ApiShieldSchemaValidationRetrieveInformationAboutSpecificSchemaResp
   kind: Schema.Literal("openapi_v3"),
   name: Schema.String,
   schema_id: Schema.String,
-  source: Schema.optional(Schema.String),
-  validation_enabled: Schema.optional(Schema.Boolean)
+  source: Schema.optional(Schema.NullOr(Schema.String)),
+  validation_enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4415,7 +4415,7 @@ export interface ApiShieldSchemaValidationEnableValidationForASchemaRequest {
 
 export const ApiShieldSchemaValidationEnableValidationForASchemaRequest = Schema.Struct({
   body: Schema.Struct({
-  validation_enabled: Schema.optional(Schema.Literal(true))
+  validation_enabled: Schema.optional(Schema.NullOr(Schema.Literal(true)))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/api_gateway/user_schemas/{schema_id}" }),
@@ -4432,8 +4432,8 @@ export const ApiShieldSchemaValidationEnableValidationForASchemaResponse = Schem
   kind: Schema.Literal("openapi_v3"),
   name: Schema.String,
   schema_id: Schema.String,
-  source: Schema.optional(Schema.String),
-  validation_enabled: Schema.optional(Schema.Boolean)
+  source: Schema.optional(Schema.NullOr(Schema.String)),
+  validation_enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4473,7 +4473,7 @@ export interface ApiShieldSchemaValidationExtractOperationsFromSchemaResponse {
 
 export const ApiShieldSchemaValidationExtractOperationsFromSchemaResponse = Schema.Struct({
   result: Schema.Array(Schema.Union(Schema.Struct({
-  features: Schema.optional(Schema.Struct({}))
+  features: Schema.optional(Schema.NullOr(Schema.Struct({})))
 }), Schema.Struct({
   endpoint: Schema.String,
   host: Schema.String,
@@ -4519,7 +4519,7 @@ export const GetArgoSmartRoutingSettingResponse = Schema.Struct({
   result: Schema.Struct({
   editable: Schema.Boolean,
   id: Schema.String,
-  modified_on: Schema.optional(Schema.Date),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
   value: Schema.Literal("on", "off")
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -4566,7 +4566,7 @@ export const PatchArgoSmartRoutingSettingResponse = Schema.Struct({
   result: Schema.Struct({
   editable: Schema.Boolean,
   id: Schema.String,
-  modified_on: Schema.optional(Schema.Date),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
   value: Schema.Literal("on", "off")
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -4687,16 +4687,16 @@ export interface ListAvailablePlansResponse {
 
 export const ListAvailablePlansResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  can_subscribe: Schema.optional(Schema.Boolean),
-  currency: Schema.optional(Schema.String),
-  externally_managed: Schema.optional(Schema.Boolean),
-  frequency: Schema.optional(Schema.Literal("weekly", "monthly", "quarterly", "yearly")),
-  id: Schema.optional(Schema.String),
-  is_subscribed: Schema.optional(Schema.Boolean),
-  legacy_discount: Schema.optional(Schema.Boolean),
-  legacy_id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  price: Schema.optional(Schema.Number)
+  can_subscribe: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  currency: Schema.optional(Schema.NullOr(Schema.String)),
+  externally_managed: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("weekly", "monthly", "quarterly", "yearly"))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  is_subscribed: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  legacy_discount: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  legacy_id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  price: Schema.optional(Schema.NullOr(Schema.Number))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4738,16 +4738,16 @@ export interface ZoneRatePlanAvailablePlanDetailsResponse {
 
 export const ZoneRatePlanAvailablePlanDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  can_subscribe: Schema.optional(Schema.Boolean),
-  currency: Schema.optional(Schema.String),
-  externally_managed: Schema.optional(Schema.Boolean),
-  frequency: Schema.optional(Schema.Literal("weekly", "monthly", "quarterly", "yearly")),
-  id: Schema.optional(Schema.String),
-  is_subscribed: Schema.optional(Schema.Boolean),
-  legacy_discount: Schema.optional(Schema.Boolean),
-  legacy_id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  price: Schema.optional(Schema.Number)
+  can_subscribe: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  currency: Schema.optional(Schema.NullOr(Schema.String)),
+  externally_managed: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("weekly", "monthly", "quarterly", "yearly"))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  is_subscribed: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  legacy_discount: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  legacy_id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  price: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -4932,7 +4932,7 @@ export interface Create1Request {
 export const Create1Request = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  created_at: Schema.optional(Schema.Date),
+  created_at: Schema.optional(Schema.NullOr(Schema.Date)),
   description: Schema.String,
   expression: Schema.String,
   first_request_seen_at: Schema.Date,
@@ -4944,7 +4944,7 @@ export const Create1Request = Schema.Struct({
 })) }),
   requests_by_score: Schema.Record({ key: Schema.String, value: Schema.Number }),
   requests_by_score_src: Schema.Record({ key: Schema.String, value: Schema.Number }),
-  subtype: Schema.optional(Schema.String),
+  subtype: Schema.optional(Schema.NullOr(Schema.String)),
   type: Schema.Literal("false_positive", "false_negative")
 }).pipe(T.HttpBody())
 }).pipe(
@@ -4998,7 +4998,7 @@ export interface ListHostnameAssociationsResponse {
 
 export const ListHostnameAssociationsResponse = Schema.Struct({
   result: Schema.Struct({
-  hostnames: Schema.optional(Schema.Array(Schema.String))
+  hostnames: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5029,8 +5029,8 @@ export interface PutHostnameAssociationsRequest {
 export const PutHostnameAssociationsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  hostnames: Schema.optional(Schema.Array(Schema.String)),
-  mtls_certificate_id: Schema.optional(Schema.String)
+  hostnames: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  mtls_certificate_id: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/certificate_authorities/hostname_associations" }),
@@ -5043,7 +5043,7 @@ export interface PutHostnameAssociationsResponse {
 
 export const PutHostnameAssociationsResponse = Schema.Struct({
   result: Schema.Struct({
-  hostnames: Schema.optional(Schema.Array(Schema.String))
+  hostnames: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5247,7 +5247,7 @@ export const ClientCertificateForAZoneEditClientCertificateRequest = Schema.Stru
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   client_certificate_id: Schema.String.pipe(T.HttpPath("client_certificate_id")),
   body: Schema.Struct({
-  reactivate: Schema.optional(Schema.Boolean)
+  reactivate: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/client_certificates/{client_certificate_id}" }),
@@ -5298,14 +5298,14 @@ export interface ZoneCloudConnectorRulesResponse {
 
 export const ZoneCloudConnectorRulesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  parameters: Schema.optional(Schema.Struct({
-  host: Schema.optional(Schema.String)
-})),
-  provider: Schema.optional(Schema.Literal("aws_s3", "cloudflare_r2", "gcp_storage", "azure_storage"))
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  parameters: Schema.optional(Schema.NullOr(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  provider: Schema.optional(Schema.NullOr(Schema.Literal("aws_s3", "cloudflare_r2", "gcp_storage", "azure_storage")))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5336,14 +5336,14 @@ export interface PutRequest {
 export const PutRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  parameters: Schema.optional(Schema.Struct({
-  host: Schema.optional(Schema.String)
-})),
-  provider: Schema.optional(Schema.Literal("aws_s3", "cloudflare_r2", "gcp_storage", "azure_storage"))
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  parameters: Schema.optional(Schema.NullOr(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  provider: Schema.optional(Schema.NullOr(Schema.Literal("aws_s3", "cloudflare_r2", "gcp_storage", "azure_storage")))
 })).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/cloud_connector/rules" }),
@@ -5356,14 +5356,14 @@ export interface PutResponse {
 
 export const PutResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  parameters: Schema.optional(Schema.Struct({
-  host: Schema.optional(Schema.String)
-})),
-  provider: Schema.optional(Schema.Literal("aws_s3", "cloudflare_r2", "gcp_storage", "azure_storage"))
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  parameters: Schema.optional(Schema.NullOr(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  provider: Schema.optional(Schema.NullOr(Schema.Literal("aws_s3", "cloudflare_r2", "gcp_storage", "azure_storage")))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5479,8 +5479,8 @@ export interface ListCustomScanExpressionsResponse {
 
 export const ListCustomScanExpressionsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  payload: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  payload: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5524,8 +5524,8 @@ export interface WafContentScanningAddCustomScanExpressionsResponse {
 
 export const WafContentScanningAddCustomScanExpressionsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  payload: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  payload: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5567,8 +5567,8 @@ export interface DeleteCustomScanExpressionsResponse {
 
 export const DeleteCustomScanExpressionsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  payload: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  payload: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5608,8 +5608,8 @@ export interface GetStatusResponse {
 
 export const GetStatusResponse = Schema.Struct({
   result: Schema.Struct({
-  modified: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
+  modified: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5653,8 +5653,8 @@ export interface UpdateSettingsResponse {
 
 export const UpdateSettingsResponse = Schema.Struct({
   result: Schema.Struct({
-  modified: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
+  modified: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5704,15 +5704,15 @@ export const ListSslConfigurationsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
   bundle_method: Schema.Literal("ubiquitous", "optimal", "force"),
   expires_on: Schema.Date,
-  geo_restrictions: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.Literal("us", "eu", "highest_security"))
-})),
+  geo_restrictions: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.Literal("us", "eu", "highest_security")))
+}))),
   hosts: Schema.Array(Schema.String),
   id: Schema.String,
   issuer: Schema.String,
-  keyless_server: Schema.optional(Schema.Struct({})),
+  keyless_server: Schema.optional(Schema.NullOr(Schema.Struct({}))),
   modified_on: Schema.Date,
-  policy: Schema.optional(Schema.String),
+  policy: Schema.optional(Schema.NullOr(Schema.String)),
   priority: Schema.Number,
   signature: Schema.String,
   status: Schema.Literal("active", "expired", "deleted", "pending", "initializing"),
@@ -5748,14 +5748,14 @@ export interface CreateSslConfigurationRequest {
 export const CreateSslConfigurationRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  bundle_method: Schema.optional(Schema.Literal("ubiquitous", "optimal", "force")),
+  bundle_method: Schema.optional(Schema.NullOr(Schema.Literal("ubiquitous", "optimal", "force"))),
   certificate: Schema.String,
-  geo_restrictions: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.Literal("us", "eu", "highest_security"))
-})),
-  policy: Schema.optional(Schema.String),
+  geo_restrictions: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.Literal("us", "eu", "highest_security")))
+}))),
+  policy: Schema.optional(Schema.NullOr(Schema.String)),
   private_key: Schema.String,
-  type: Schema.optional(Schema.Literal("legacy_custom", "sni_custom"))
+  type: Schema.optional(Schema.NullOr(Schema.Literal("legacy_custom", "sni_custom")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/custom_certificates" }),
@@ -5770,15 +5770,15 @@ export const CreateSslConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
   bundle_method: Schema.Literal("ubiquitous", "optimal", "force"),
   expires_on: Schema.Date,
-  geo_restrictions: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.Literal("us", "eu", "highest_security"))
-})),
+  geo_restrictions: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.Literal("us", "eu", "highest_security")))
+}))),
   hosts: Schema.Array(Schema.String),
   id: Schema.String,
   issuer: Schema.String,
-  keyless_server: Schema.optional(Schema.Struct({})),
+  keyless_server: Schema.optional(Schema.NullOr(Schema.Struct({}))),
   modified_on: Schema.Date,
-  policy: Schema.optional(Schema.String),
+  policy: Schema.optional(Schema.NullOr(Schema.String)),
   priority: Schema.Number,
   signature: Schema.String,
   status: Schema.Literal("active", "expired", "deleted", "pending", "initializing"),
@@ -5827,15 +5827,15 @@ export const CustomSslForAZoneRePrioritizeSslCertificatesResponse = Schema.Struc
   result: Schema.Array(Schema.Struct({
   bundle_method: Schema.Literal("ubiquitous", "optimal", "force"),
   expires_on: Schema.Date,
-  geo_restrictions: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.Literal("us", "eu", "highest_security"))
-})),
+  geo_restrictions: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.Literal("us", "eu", "highest_security")))
+}))),
   hosts: Schema.Array(Schema.String),
   id: Schema.String,
   issuer: Schema.String,
-  keyless_server: Schema.optional(Schema.Struct({})),
+  keyless_server: Schema.optional(Schema.NullOr(Schema.Struct({}))),
   modified_on: Schema.Date,
-  policy: Schema.optional(Schema.String),
+  policy: Schema.optional(Schema.NullOr(Schema.String)),
   priority: Schema.Number,
   signature: Schema.String,
   status: Schema.Literal("active", "expired", "deleted", "pending", "initializing"),
@@ -5884,15 +5884,15 @@ export const CustomSslForAZoneSslConfigurationDetailsResponse = Schema.Struct({
   result: Schema.Struct({
   bundle_method: Schema.Literal("ubiquitous", "optimal", "force"),
   expires_on: Schema.Date,
-  geo_restrictions: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.Literal("us", "eu", "highest_security"))
-})),
+  geo_restrictions: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.Literal("us", "eu", "highest_security")))
+}))),
   hosts: Schema.Array(Schema.String),
   id: Schema.String,
   issuer: Schema.String,
-  keyless_server: Schema.optional(Schema.Struct({})),
+  keyless_server: Schema.optional(Schema.NullOr(Schema.Struct({}))),
   modified_on: Schema.Date,
-  policy: Schema.optional(Schema.String),
+  policy: Schema.optional(Schema.NullOr(Schema.String)),
   priority: Schema.Number,
   signature: Schema.String,
   status: Schema.Literal("active", "expired", "deleted", "pending", "initializing"),
@@ -5939,7 +5939,7 @@ export interface DeleteSslConfigurationResponse {
 
 export const DeleteSslConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -5972,13 +5972,13 @@ export const CustomSslForAZoneEditSslConfigurationRequest = Schema.Struct({
   custom_certificate_id: Schema.String.pipe(T.HttpPath("custom_certificate_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  bundle_method: Schema.optional(Schema.Literal("ubiquitous", "optimal", "force")),
-  certificate: Schema.optional(Schema.String),
-  geo_restrictions: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.Literal("us", "eu", "highest_security"))
-})),
-  policy: Schema.optional(Schema.String),
-  private_key: Schema.optional(Schema.String)
+  bundle_method: Schema.optional(Schema.NullOr(Schema.Literal("ubiquitous", "optimal", "force"))),
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
+  geo_restrictions: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.Literal("us", "eu", "highest_security")))
+}))),
+  policy: Schema.optional(Schema.NullOr(Schema.String)),
+  private_key: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/custom_certificates/{custom_certificate_id}" }),
@@ -5993,15 +5993,15 @@ export const CustomSslForAZoneEditSslConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
   bundle_method: Schema.Literal("ubiquitous", "optimal", "force"),
   expires_on: Schema.Date,
-  geo_restrictions: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.Literal("us", "eu", "highest_security"))
-})),
+  geo_restrictions: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.Literal("us", "eu", "highest_security")))
+}))),
   hosts: Schema.Array(Schema.String),
   id: Schema.String,
   issuer: Schema.String,
-  keyless_server: Schema.optional(Schema.Struct({})),
+  keyless_server: Schema.optional(Schema.NullOr(Schema.Struct({}))),
   modified_on: Schema.Date,
-  policy: Schema.optional(Schema.String),
+  policy: Schema.optional(Schema.NullOr(Schema.String)),
   priority: Schema.Number,
   signature: Schema.String,
   status: Schema.Literal("active", "expired", "deleted", "pending", "initializing"),
@@ -6093,7 +6093,7 @@ export interface CreateCustomHostnameRequest {
 export const CreateCustomHostnameRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  custom_metadata: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.String })),
+  custom_metadata: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.String }))),
   hostname: Schema.String,
   ssl: Schema.Struct({})
 }).pipe(T.HttpBody())
@@ -6337,10 +6337,10 @@ export const CustomHostnameForAZoneEditCustomHostnameRequest = Schema.Struct({
   custom_hostname_id: Schema.String.pipe(T.HttpPath("custom_hostname_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  custom_metadata: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.String })),
-  custom_origin_server: Schema.optional(Schema.String),
-  custom_origin_sni: Schema.optional(Schema.String),
-  ssl: Schema.optional(Schema.Struct({}))
+  custom_metadata: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.String }))),
+  custom_origin_server: Schema.optional(Schema.NullOr(Schema.String)),
+  custom_origin_sni: Schema.optional(Schema.NullOr(Schema.String)),
+  ssl: Schema.optional(Schema.NullOr(Schema.Struct({})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/custom_hostnames/{custom_hostname_id}" }),
@@ -6513,8 +6513,8 @@ export interface AccountLevelCustomNameserversUsageForAZoneSetAccountCustomNames
 export const AccountLevelCustomNameserversUsageForAZoneSetAccountCustomNameserverRelatedZoneMetadataRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  ns_set: Schema.optional(Schema.Number)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ns_set: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/custom_ns" }),
@@ -6871,20 +6871,20 @@ export interface DnssecDnssecDetailsResponse {
 
 export const DnssecDnssecDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  algorithm: Schema.optional(Schema.String),
-  digest: Schema.optional(Schema.String),
-  digest_algorithm: Schema.optional(Schema.String),
-  digest_type: Schema.optional(Schema.String),
-  dnssec_multi_signer: Schema.optional(Schema.Boolean),
-  dnssec_presigned: Schema.optional(Schema.Boolean),
-  dnssec_use_nsec3: Schema.optional(Schema.Boolean),
-  ds: Schema.optional(Schema.String),
-  flags: Schema.optional(Schema.Number),
-  key_tag: Schema.optional(Schema.Number),
-  key_type: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  public_key: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("active", "pending", "disabled", "pending-disabled", "error"))
+  algorithm: Schema.optional(Schema.NullOr(Schema.String)),
+  digest: Schema.optional(Schema.NullOr(Schema.String)),
+  digest_algorithm: Schema.optional(Schema.NullOr(Schema.String)),
+  digest_type: Schema.optional(Schema.NullOr(Schema.String)),
+  dnssec_multi_signer: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  dnssec_presigned: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  dnssec_use_nsec3: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ds: Schema.optional(Schema.NullOr(Schema.String)),
+  flags: Schema.optional(Schema.NullOr(Schema.Number)),
+  key_tag: Schema.optional(Schema.NullOr(Schema.Number)),
+  key_type: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  public_key: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "pending", "disabled", "pending-disabled", "error")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -6953,10 +6953,10 @@ export interface DnssecEditDnssecStatusRequest {
 export const DnssecEditDnssecStatusRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  dnssec_multi_signer: Schema.optional(Schema.Boolean),
-  dnssec_presigned: Schema.optional(Schema.Boolean),
-  dnssec_use_nsec3: Schema.optional(Schema.Boolean),
-  status: Schema.optional(Schema.Literal("active", "disabled"))
+  dnssec_multi_signer: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  dnssec_presigned: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  dnssec_use_nsec3: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "disabled")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/dnssec" }),
@@ -6969,20 +6969,20 @@ export interface DnssecEditDnssecStatusResponse {
 
 export const DnssecEditDnssecStatusResponse = Schema.Struct({
   result: Schema.Struct({
-  algorithm: Schema.optional(Schema.String),
-  digest: Schema.optional(Schema.String),
-  digest_algorithm: Schema.optional(Schema.String),
-  digest_type: Schema.optional(Schema.String),
-  dnssec_multi_signer: Schema.optional(Schema.Boolean),
-  dnssec_presigned: Schema.optional(Schema.Boolean),
-  dnssec_use_nsec3: Schema.optional(Schema.Boolean),
-  ds: Schema.optional(Schema.String),
-  flags: Schema.optional(Schema.Number),
-  key_tag: Schema.optional(Schema.Number),
-  key_type: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  public_key: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("active", "pending", "disabled", "pending-disabled", "error"))
+  algorithm: Schema.optional(Schema.NullOr(Schema.String)),
+  digest: Schema.optional(Schema.NullOr(Schema.String)),
+  digest_algorithm: Schema.optional(Schema.NullOr(Schema.String)),
+  digest_type: Schema.optional(Schema.NullOr(Schema.String)),
+  dnssec_multi_signer: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  dnssec_presigned: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  dnssec_use_nsec3: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ds: Schema.optional(Schema.NullOr(Schema.String)),
+  flags: Schema.optional(Schema.NullOr(Schema.Number)),
+  key_tag: Schema.optional(Schema.NullOr(Schema.Number)),
+  key_type: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  public_key: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "pending", "disabled", "pending-disabled", "error")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -7129,7 +7129,7 @@ export interface EmailRoutingSettingsEnableEmailRoutingDnsRequest {
 export const EmailRoutingSettingsEnableEmailRoutingDnsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  name: Schema.optional(Schema.String)
+  name: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/email/routing/dns" }),
@@ -7171,7 +7171,7 @@ export interface EmailRoutingSettingsDisableEmailRoutingDnsRequest {
 export const EmailRoutingSettingsDisableEmailRoutingDnsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  name: Schema.optional(Schema.String)
+  name: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "DELETE", path: "/zones/{zone_id}/email/routing/dns" }),
@@ -7213,7 +7213,7 @@ export interface EmailRoutingSettingsUnlockEmailRoutingDnsRequest {
 export const EmailRoutingSettingsUnlockEmailRoutingDnsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  name: Schema.optional(Schema.String)
+  name: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/email/routing/dns" }),
@@ -7339,16 +7339,16 @@ export const CreateRoutingRuleRequest = Schema.Struct({
   body: Schema.Struct({
   actions: Schema.Array(Schema.Struct({
   type: Schema.Literal("drop", "forward", "worker"),
-  value: Schema.optional(Schema.Array(Schema.String))
+  value: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 })),
-  enabled: Schema.optional(Schema.Literal(true, false)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Literal(true, false))),
   matchers: Schema.Array(Schema.Struct({
-  field: Schema.optional(Schema.Literal("to")),
+  field: Schema.optional(Schema.NullOr(Schema.Literal("to"))),
   type: Schema.Literal("all", "literal"),
-  value: Schema.optional(Schema.String)
+  value: Schema.optional(Schema.NullOr(Schema.String))
 })),
-  name: Schema.optional(Schema.String),
-  priority: Schema.optional(Schema.Number)
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  priority: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/email/routing/rules" }),
@@ -7399,17 +7399,17 @@ export interface GetCatchAllRuleResponse {
 
 export const GetCatchAllRuleResponse = Schema.Struct({
   result: Schema.Struct({
-  actions: Schema.optional(Schema.Array(Schema.Struct({
+  actions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   type: Schema.Literal("drop", "forward", "worker"),
-  value: Schema.optional(Schema.Array(Schema.String))
-}))),
-  enabled: Schema.optional(Schema.Literal(true, false)),
-  id: Schema.optional(Schema.String),
-  matchers: Schema.optional(Schema.Array(Schema.Struct({
+  value: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+})))),
+  enabled: Schema.optional(Schema.NullOr(Schema.Literal(true, false))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  matchers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   type: Schema.Literal("all")
-}))),
-  name: Schema.optional(Schema.String),
-  tag: Schema.optional(Schema.String)
+})))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  tag: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -7442,13 +7442,13 @@ export const UpdateCatchAllRuleRequest = Schema.Struct({
   body: Schema.Struct({
   actions: Schema.Array(Schema.Struct({
   type: Schema.Literal("drop", "forward", "worker"),
-  value: Schema.optional(Schema.Array(Schema.String))
+  value: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 })),
-  enabled: Schema.optional(Schema.Literal(true, false)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Literal(true, false))),
   matchers: Schema.Array(Schema.Struct({
   type: Schema.Literal("all")
 })),
-  name: Schema.optional(Schema.String)
+  name: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/email/routing/rules/catch_all" }),
@@ -7461,17 +7461,17 @@ export interface UpdateCatchAllRuleResponse {
 
 export const UpdateCatchAllRuleResponse = Schema.Struct({
   result: Schema.Struct({
-  actions: Schema.optional(Schema.Array(Schema.Struct({
+  actions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   type: Schema.Literal("drop", "forward", "worker"),
-  value: Schema.optional(Schema.Array(Schema.String))
-}))),
-  enabled: Schema.optional(Schema.Literal(true, false)),
-  id: Schema.optional(Schema.String),
-  matchers: Schema.optional(Schema.Array(Schema.Struct({
+  value: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+})))),
+  enabled: Schema.optional(Schema.NullOr(Schema.Literal(true, false))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  matchers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   type: Schema.Literal("all")
-}))),
-  name: Schema.optional(Schema.String),
-  tag: Schema.optional(Schema.String)
+})))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  tag: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -7546,16 +7546,16 @@ export const UpdateRoutingRuleRequest = Schema.Struct({
   body: Schema.Struct({
   actions: Schema.Array(Schema.Struct({
   type: Schema.Literal("drop", "forward", "worker"),
-  value: Schema.optional(Schema.Array(Schema.String))
+  value: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 })),
-  enabled: Schema.optional(Schema.Literal(true, false)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Literal(true, false))),
   matchers: Schema.Array(Schema.Struct({
-  field: Schema.optional(Schema.Literal("to")),
+  field: Schema.optional(Schema.NullOr(Schema.Literal("to"))),
   type: Schema.Literal("all", "literal"),
-  value: Schema.optional(Schema.String)
+  value: Schema.optional(Schema.NullOr(Schema.String))
 })),
-  name: Schema.optional(Schema.String),
-  priority: Schema.optional(Schema.Number)
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  priority: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/email/routing/rules/{rule_identifier}" }),
@@ -7660,11 +7660,11 @@ export interface ListFiltersResponse {
 
 export const ListFiltersResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  ref: Schema.optional(Schema.String)
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ref: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -7695,11 +7695,11 @@ export interface CreateFiltersRequest {
 export const CreateFiltersRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  ref: Schema.optional(Schema.String)
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ref: Schema.optional(Schema.NullOr(Schema.String))
 })).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/filters" }),
@@ -7712,11 +7712,11 @@ export interface CreateFiltersResponse {
 
 export const CreateFiltersResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  ref: Schema.optional(Schema.String)
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ref: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -7747,7 +7747,7 @@ export interface UpdateFiltersRequest {
 export const UpdateFiltersRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Array(Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 })).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/filters" }),
@@ -7760,11 +7760,11 @@ export interface UpdateFiltersResponse {
 
 export const UpdateFiltersResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  ref: Schema.optional(Schema.String)
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ref: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -7806,7 +7806,7 @@ export interface DeleteFiltersResponse {
 
 export const DeleteFiltersResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -7848,11 +7848,11 @@ export interface GetAFilterResponse {
 
 export const GetAFilterResponse = Schema.Struct({
   result: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  ref: Schema.optional(Schema.String)
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ref: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -7885,11 +7885,11 @@ export const UpdateAFilterRequest = Schema.Struct({
   filter_id: Schema.String.pipe(T.HttpPath("filter_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  ref: Schema.optional(Schema.String)
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ref: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/filters/{filter_id}" }),
@@ -7902,11 +7902,11 @@ export interface UpdateAFilterResponse {
 
 export const UpdateAFilterResponse = Schema.Struct({
   result: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  ref: Schema.optional(Schema.String)
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ref: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -7988,36 +7988,36 @@ export interface ListHealthChecksResponse {
 
 export const ListHealthChecksResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8049,30 +8049,30 @@ export const CreateHealthCheckRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   address: Schema.String,
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  description: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  interval: Schema.optional(Schema.Number),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
   name: Schema.String,
-  retries: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/healthchecks" }),
@@ -8085,36 +8085,36 @@ export interface CreateHealthCheckResponse {
 
 export const CreateHealthCheckResponse = Schema.Struct({
   result: Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8146,30 +8146,30 @@ export const CreatePreviewHealthCheckRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   address: Schema.String,
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  description: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  interval: Schema.optional(Schema.Number),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
   name: Schema.String,
-  retries: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/healthchecks/preview" }),
@@ -8182,36 +8182,36 @@ export interface CreatePreviewHealthCheckResponse {
 
 export const CreatePreviewHealthCheckResponse = Schema.Struct({
   result: Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8253,36 +8253,36 @@ export interface HealthChecksHealthCheckPreviewDetailsResponse {
 
 export const HealthChecksHealthCheckPreviewDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8324,7 +8324,7 @@ export interface DeletePreviewHealthCheckResponse {
 
 export const DeletePreviewHealthCheckResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8366,36 +8366,36 @@ export interface HealthChecksHealthCheckDetailsResponse {
 
 export const HealthChecksHealthCheckDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8429,30 +8429,30 @@ export const UpdateHealthCheckRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   address: Schema.String,
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  description: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  interval: Schema.optional(Schema.Number),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
   name: Schema.String,
-  retries: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/healthchecks/{healthcheck_id}" }),
@@ -8465,36 +8465,36 @@ export interface UpdateHealthCheckResponse {
 
 export const UpdateHealthCheckResponse = Schema.Struct({
   result: Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8536,7 +8536,7 @@ export interface DeleteHealthCheckResponse {
 
 export const DeleteHealthCheckResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8570,30 +8570,30 @@ export const PatchHealthCheckRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   address: Schema.String,
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  description: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  interval: Schema.optional(Schema.Number),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
   name: Schema.String,
-  retries: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/healthchecks/{healthcheck_id}" }),
@@ -8606,36 +8606,36 @@ export interface PatchHealthCheckResponse {
 
 export const PatchHealthCheckResponse = Schema.Struct({
   result: Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8675,9 +8675,9 @@ export interface Get_3Response {
 
 export const Get_3Response = Schema.Struct({
   result: Schema.Struct({
-  hold: Schema.optional(Schema.Boolean),
-  hold_after: Schema.optional(Schema.String),
-  include_subdomains: Schema.optional(Schema.String)
+  hold: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  hold_after: Schema.optional(Schema.NullOr(Schema.String)),
+  include_subdomains: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8719,9 +8719,9 @@ export interface Post1Response {
 
 export const Post1Response = Schema.Struct({
   result: Schema.Struct({
-  hold: Schema.optional(Schema.Boolean),
-  hold_after: Schema.optional(Schema.String),
-  include_subdomains: Schema.optional(Schema.String)
+  hold: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  hold_after: Schema.optional(Schema.NullOr(Schema.String)),
+  include_subdomains: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8763,9 +8763,9 @@ export interface Delete_2Response {
 
 export const Delete_2Response = Schema.Struct({
   result: Schema.Struct({
-  hold: Schema.optional(Schema.Boolean),
-  hold_after: Schema.optional(Schema.String),
-  include_subdomains: Schema.optional(Schema.String)
+  hold: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  hold_after: Schema.optional(Schema.NullOr(Schema.String)),
+  include_subdomains: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -8796,8 +8796,8 @@ export interface Patch1Request {
 export const Patch1Request = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  hold_after: Schema.optional(Schema.String),
-  include_subdomains: Schema.optional(Schema.Boolean)
+  hold_after: Schema.optional(Schema.NullOr(Schema.String)),
+  include_subdomains: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/hold" }),
@@ -8810,9 +8810,9 @@ export interface Patch1Response {
 
 export const Patch1Response = Schema.Struct({
   result: Schema.Struct({
-  hold: Schema.optional(Schema.Boolean),
-  hold_after: Schema.optional(Schema.String),
-  include_subdomains: Schema.optional(Schema.String)
+  hold: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  hold_after: Schema.optional(Schema.NullOr(Schema.String)),
+  include_subdomains: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -9055,15 +9055,15 @@ export interface CreateKeylessSslConfigurationRequest {
 export const CreateKeylessSslConfigurationRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  bundle_method: Schema.optional(Schema.Literal("ubiquitous", "optimal", "force")),
+  bundle_method: Schema.optional(Schema.NullOr(Schema.Literal("ubiquitous", "optimal", "force"))),
   certificate: Schema.String,
   host: Schema.String,
-  name: Schema.optional(Schema.String),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
   port: Schema.Number,
-  tunnel: Schema.optional(Schema.Struct({
+  tunnel: Schema.optional(Schema.NullOr(Schema.Struct({
   private_ip: Schema.String,
   vnet_id: Schema.String
-}))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/keyless_certificates" }),
@@ -9156,7 +9156,7 @@ export interface DeleteKeylessSslConfigurationResponse {
 
 export const DeleteKeylessSslConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -9189,14 +9189,14 @@ export const KeylessSslForAZoneEditKeylessSslConfigurationRequest = Schema.Struc
   keyless_certificate_id: Schema.String.pipe(T.HttpPath("keyless_certificate_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  host: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number),
-  tunnel: Schema.optional(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number)),
+  tunnel: Schema.optional(Schema.NullOr(Schema.Struct({
   private_ip: Schema.String,
   vnet_id: Schema.String
-}))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/keyless_certificates/{keyless_certificate_id}" }),
@@ -9247,7 +9247,7 @@ export interface GetStatus1Response {
 
 export const GetStatus1Response = Schema.Struct({
   result: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -9278,7 +9278,7 @@ export interface WafProductApiLeakedCredentialsSetStatusRequest {
 export const WafProductApiLeakedCredentialsSetStatusRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/leaked-credential-checks" }),
@@ -9291,7 +9291,7 @@ export interface WafProductApiLeakedCredentialsSetStatusResponse {
 
 export const WafProductApiLeakedCredentialsSetStatusResponse = Schema.Struct({
   result: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -9331,9 +9331,9 @@ export interface ListDetectionsResponse {
 
 export const ListDetectionsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  password: Schema.optional(Schema.String),
-  username: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  password: Schema.optional(Schema.NullOr(Schema.String)),
+  username: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -9364,9 +9364,9 @@ export interface CreateDetectionRequest {
 export const CreateDetectionRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  password: Schema.optional(Schema.String),
-  username: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  password: Schema.optional(Schema.NullOr(Schema.String)),
+  username: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/leaked-credential-checks/detections" }),
@@ -9379,9 +9379,9 @@ export interface CreateDetectionResponse {
 
 export const CreateDetectionResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  password: Schema.optional(Schema.String),
-  username: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  password: Schema.optional(Schema.NullOr(Schema.String)),
+  username: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -9423,9 +9423,9 @@ export interface GetDetectionResponse {
 
 export const GetDetectionResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  password: Schema.optional(Schema.String),
-  username: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  password: Schema.optional(Schema.NullOr(Schema.String)),
+  username: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -9458,9 +9458,9 @@ export const UpdateDetectionRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   detection_id: Schema.String.pipe(T.HttpPath("detection_id")),
   body: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  password: Schema.optional(Schema.String),
-  username: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  password: Schema.optional(Schema.NullOr(Schema.String)),
+  username: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/leaked-credential-checks/detections/{detection_id}" }),
@@ -9473,9 +9473,9 @@ export interface UpdateDetectionResponse {
 
 export const UpdateDetectionResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  password: Schema.optional(Schema.String),
-  username: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  password: Schema.optional(Schema.NullOr(Schema.String)),
+  username: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -9555,86 +9555,86 @@ export interface ListLoadBalancersResponse {
 
 export const ListLoadBalancersResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  created_on: Schema.optional(Schema.Date),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  fallback_pool: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  networks: Schema.optional(Schema.Array(Schema.String)),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  proxied: Schema.optional(Schema.Boolean),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  rules: Schema.optional(Schema.Array(Schema.Struct({
-  condition: Schema.optional(Schema.String),
-  disabled: Schema.optional(Schema.Boolean),
-  fixed_response: Schema.optional(Schema.Struct({
-  content_type: Schema.optional(Schema.String),
-  location: Schema.optional(Schema.String),
-  message_body: Schema.optional(Schema.String),
-  status_code: Schema.optional(Schema.Number)
-})),
-  name: Schema.optional(Schema.String),
-  overrides: Schema.optional(Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  fallback_pool: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number)
-})),
-  priority: Schema.optional(Schema.Number),
-  terminates: Schema.optional(Schema.Boolean)
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
 }))),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number),
-  zone_name: Schema.optional(Schema.String)
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  networks: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  proxied: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  rules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  condition: Schema.optional(Schema.NullOr(Schema.String)),
+  disabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fixed_response: Schema.optional(Schema.NullOr(Schema.Struct({
+  content_type: Schema.optional(Schema.NullOr(Schema.String)),
+  location: Schema.optional(Schema.NullOr(Schema.String)),
+  message_body: Schema.optional(Schema.NullOr(Schema.String)),
+  status_code: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  overrides: Schema.optional(Schema.NullOr(Schema.Struct({
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  terminates: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  zone_name: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -9665,81 +9665,81 @@ export interface CreateLoadBalancerRequest {
 export const CreateLoadBalancerRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  default_pools: Schema.Array(Schema.String),
-  description: Schema.optional(Schema.String),
-  fallback_pool: Schema.String,
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  name: Schema.String,
-  networks: Schema.optional(Schema.Array(Schema.String)),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  proxied: Schema.optional(Schema.Boolean),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  rules: Schema.optional(Schema.Array(Schema.Struct({
-  condition: Schema.optional(Schema.String),
-  disabled: Schema.optional(Schema.Boolean),
-  fixed_response: Schema.optional(Schema.Struct({
-  content_type: Schema.optional(Schema.String),
-  location: Schema.optional(Schema.String),
-  message_body: Schema.optional(Schema.String),
-  status_code: Schema.optional(Schema.Number)
-})),
-  name: Schema.optional(Schema.String),
-  overrides: Schema.optional(Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  fallback_pool: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number)
-})),
-  priority: Schema.optional(Schema.Number),
-  terminates: Schema.optional(Schema.Boolean)
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
 }))),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number)
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  default_pools: Schema.Array(Schema.String),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  fallback_pool: Schema.String,
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  name: Schema.String,
+  networks: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  proxied: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  rules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  condition: Schema.optional(Schema.NullOr(Schema.String)),
+  disabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fixed_response: Schema.optional(Schema.NullOr(Schema.Struct({
+  content_type: Schema.optional(Schema.NullOr(Schema.String)),
+  location: Schema.optional(Schema.NullOr(Schema.String)),
+  message_body: Schema.optional(Schema.NullOr(Schema.String)),
+  status_code: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  overrides: Schema.optional(Schema.NullOr(Schema.Struct({
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  terminates: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/load_balancers" }),
@@ -9752,86 +9752,86 @@ export interface CreateLoadBalancerResponse {
 
 export const CreateLoadBalancerResponse = Schema.Struct({
   result: Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  created_on: Schema.optional(Schema.Date),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  fallback_pool: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  networks: Schema.optional(Schema.Array(Schema.String)),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  proxied: Schema.optional(Schema.Boolean),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  rules: Schema.optional(Schema.Array(Schema.Struct({
-  condition: Schema.optional(Schema.String),
-  disabled: Schema.optional(Schema.Boolean),
-  fixed_response: Schema.optional(Schema.Struct({
-  content_type: Schema.optional(Schema.String),
-  location: Schema.optional(Schema.String),
-  message_body: Schema.optional(Schema.String),
-  status_code: Schema.optional(Schema.Number)
-})),
-  name: Schema.optional(Schema.String),
-  overrides: Schema.optional(Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  fallback_pool: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number)
-})),
-  priority: Schema.optional(Schema.Number),
-  terminates: Schema.optional(Schema.Boolean)
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
 }))),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number),
-  zone_name: Schema.optional(Schema.String)
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  networks: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  proxied: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  rules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  condition: Schema.optional(Schema.NullOr(Schema.String)),
+  disabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fixed_response: Schema.optional(Schema.NullOr(Schema.Struct({
+  content_type: Schema.optional(Schema.NullOr(Schema.String)),
+  location: Schema.optional(Schema.NullOr(Schema.String)),
+  message_body: Schema.optional(Schema.NullOr(Schema.String)),
+  status_code: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  overrides: Schema.optional(Schema.NullOr(Schema.Struct({
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  terminates: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  zone_name: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -9873,86 +9873,86 @@ export interface LoadBalancersLoadBalancerDetailsResponse {
 
 export const LoadBalancersLoadBalancerDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  created_on: Schema.optional(Schema.Date),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  fallback_pool: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  networks: Schema.optional(Schema.Array(Schema.String)),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  proxied: Schema.optional(Schema.Boolean),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  rules: Schema.optional(Schema.Array(Schema.Struct({
-  condition: Schema.optional(Schema.String),
-  disabled: Schema.optional(Schema.Boolean),
-  fixed_response: Schema.optional(Schema.Struct({
-  content_type: Schema.optional(Schema.String),
-  location: Schema.optional(Schema.String),
-  message_body: Schema.optional(Schema.String),
-  status_code: Schema.optional(Schema.Number)
-})),
-  name: Schema.optional(Schema.String),
-  overrides: Schema.optional(Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  fallback_pool: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number)
-})),
-  priority: Schema.optional(Schema.Number),
-  terminates: Schema.optional(Schema.Boolean)
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
 }))),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number),
-  zone_name: Schema.optional(Schema.String)
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  networks: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  proxied: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  rules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  condition: Schema.optional(Schema.NullOr(Schema.String)),
+  disabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fixed_response: Schema.optional(Schema.NullOr(Schema.Struct({
+  content_type: Schema.optional(Schema.NullOr(Schema.String)),
+  location: Schema.optional(Schema.NullOr(Schema.String)),
+  message_body: Schema.optional(Schema.NullOr(Schema.String)),
+  status_code: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  overrides: Schema.optional(Schema.NullOr(Schema.Struct({
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  terminates: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  zone_name: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -9985,82 +9985,82 @@ export const UpdateLoadBalancerRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   load_balancer_id: Schema.String.pipe(T.HttpPath("load_balancer_id")),
   body: Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  default_pools: Schema.Array(Schema.String),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  fallback_pool: Schema.String,
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  name: Schema.String,
-  networks: Schema.optional(Schema.Array(Schema.String)),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  proxied: Schema.optional(Schema.Boolean),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  rules: Schema.optional(Schema.Array(Schema.Struct({
-  condition: Schema.optional(Schema.String),
-  disabled: Schema.optional(Schema.Boolean),
-  fixed_response: Schema.optional(Schema.Struct({
-  content_type: Schema.optional(Schema.String),
-  location: Schema.optional(Schema.String),
-  message_body: Schema.optional(Schema.String),
-  status_code: Schema.optional(Schema.Number)
-})),
-  name: Schema.optional(Schema.String),
-  overrides: Schema.optional(Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  fallback_pool: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number)
-})),
-  priority: Schema.optional(Schema.Number),
-  terminates: Schema.optional(Schema.Boolean)
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
 }))),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number)
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  default_pools: Schema.Array(Schema.String),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fallback_pool: Schema.String,
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  name: Schema.String,
+  networks: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  proxied: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  rules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  condition: Schema.optional(Schema.NullOr(Schema.String)),
+  disabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fixed_response: Schema.optional(Schema.NullOr(Schema.Struct({
+  content_type: Schema.optional(Schema.NullOr(Schema.String)),
+  location: Schema.optional(Schema.NullOr(Schema.String)),
+  message_body: Schema.optional(Schema.NullOr(Schema.String)),
+  status_code: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  overrides: Schema.optional(Schema.NullOr(Schema.Struct({
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  terminates: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/load_balancers/{load_balancer_id}" }),
@@ -10073,86 +10073,86 @@ export interface UpdateLoadBalancerResponse {
 
 export const UpdateLoadBalancerResponse = Schema.Struct({
   result: Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  created_on: Schema.optional(Schema.Date),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  fallback_pool: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  networks: Schema.optional(Schema.Array(Schema.String)),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  proxied: Schema.optional(Schema.Boolean),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  rules: Schema.optional(Schema.Array(Schema.Struct({
-  condition: Schema.optional(Schema.String),
-  disabled: Schema.optional(Schema.Boolean),
-  fixed_response: Schema.optional(Schema.Struct({
-  content_type: Schema.optional(Schema.String),
-  location: Schema.optional(Schema.String),
-  message_body: Schema.optional(Schema.String),
-  status_code: Schema.optional(Schema.Number)
-})),
-  name: Schema.optional(Schema.String),
-  overrides: Schema.optional(Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  fallback_pool: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number)
-})),
-  priority: Schema.optional(Schema.Number),
-  terminates: Schema.optional(Schema.Boolean)
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
 }))),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number),
-  zone_name: Schema.optional(Schema.String)
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  networks: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  proxied: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  rules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  condition: Schema.optional(Schema.NullOr(Schema.String)),
+  disabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fixed_response: Schema.optional(Schema.NullOr(Schema.Struct({
+  content_type: Schema.optional(Schema.NullOr(Schema.String)),
+  location: Schema.optional(Schema.NullOr(Schema.String)),
+  message_body: Schema.optional(Schema.NullOr(Schema.String)),
+  status_code: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  overrides: Schema.optional(Schema.NullOr(Schema.Struct({
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  terminates: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  zone_name: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -10194,7 +10194,7 @@ export interface DeleteLoadBalancerResponse {
 
 export const DeleteLoadBalancerResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -10227,81 +10227,81 @@ export const PatchLoadBalancerRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   load_balancer_id: Schema.String.pipe(T.HttpPath("load_balancer_id")),
   body: Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  fallback_pool: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  name: Schema.optional(Schema.String),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  proxied: Schema.optional(Schema.Boolean),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  rules: Schema.optional(Schema.Array(Schema.Struct({
-  condition: Schema.optional(Schema.String),
-  disabled: Schema.optional(Schema.Boolean),
-  fixed_response: Schema.optional(Schema.Struct({
-  content_type: Schema.optional(Schema.String),
-  location: Schema.optional(Schema.String),
-  message_body: Schema.optional(Schema.String),
-  status_code: Schema.optional(Schema.Number)
-})),
-  name: Schema.optional(Schema.String),
-  overrides: Schema.optional(Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  fallback_pool: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number)
-})),
-  priority: Schema.optional(Schema.Number),
-  terminates: Schema.optional(Schema.Boolean)
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
 }))),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number)
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  proxied: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  rules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  condition: Schema.optional(Schema.NullOr(Schema.String)),
+  disabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fixed_response: Schema.optional(Schema.NullOr(Schema.Struct({
+  content_type: Schema.optional(Schema.NullOr(Schema.String)),
+  location: Schema.optional(Schema.NullOr(Schema.String)),
+  message_body: Schema.optional(Schema.NullOr(Schema.String)),
+  status_code: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  overrides: Schema.optional(Schema.NullOr(Schema.Struct({
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  terminates: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/load_balancers/{load_balancer_id}" }),
@@ -10314,86 +10314,86 @@ export interface PatchLoadBalancerResponse {
 
 export const PatchLoadBalancerResponse = Schema.Struct({
   result: Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  created_on: Schema.optional(Schema.Date),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  fallback_pool: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  networks: Schema.optional(Schema.Array(Schema.String)),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  proxied: Schema.optional(Schema.Boolean),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  rules: Schema.optional(Schema.Array(Schema.Struct({
-  condition: Schema.optional(Schema.String),
-  disabled: Schema.optional(Schema.Boolean),
-  fixed_response: Schema.optional(Schema.Struct({
-  content_type: Schema.optional(Schema.String),
-  location: Schema.optional(Schema.String),
-  message_body: Schema.optional(Schema.String),
-  status_code: Schema.optional(Schema.Number)
-})),
-  name: Schema.optional(Schema.String),
-  overrides: Schema.optional(Schema.Struct({
-  adaptive_routing: Schema.optional(Schema.Struct({
-  failover_across_pools: Schema.optional(Schema.Boolean)
-})),
-  country_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  default_pools: Schema.optional(Schema.Array(Schema.String)),
-  fallback_pool: Schema.optional(Schema.String),
-  location_strategy: Schema.optional(Schema.Struct({
-  mode: Schema.optional(Schema.Literal("pop", "resolver_ip")),
-  prefer_ecs: Schema.optional(Schema.Literal("always", "never", "proximity", "geo"))
-})),
-  pop_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  random_steering: Schema.optional(Schema.Struct({
-  default_weight: Schema.optional(Schema.Number),
-  pool_weights: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Number }))
-})),
-  region_pools: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number)
-})),
-  priority: Schema.optional(Schema.Number),
-  terminates: Schema.optional(Schema.Boolean)
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
 }))),
-  session_affinity: Schema.optional(Schema.Literal("none", "cookie", "ip_cookie", "header")),
-  session_affinity_attributes: Schema.optional(Schema.Struct({
-  drain_duration: Schema.optional(Schema.Number),
-  headers: Schema.optional(Schema.Array(Schema.String)),
-  require_all_headers: Schema.optional(Schema.Boolean),
-  samesite: Schema.optional(Schema.Literal("Auto", "Lax", "None", "Strict")),
-  secure: Schema.optional(Schema.Literal("Auto", "Always", "Never")),
-  zero_downtime_failover: Schema.optional(Schema.Literal("none", "temporary", "sticky"))
-})),
-  session_affinity_ttl: Schema.optional(Schema.Number),
-  steering_policy: Schema.optional(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", "")),
-  ttl: Schema.optional(Schema.Number),
-  zone_name: Schema.optional(Schema.String)
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  networks: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  proxied: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  rules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  condition: Schema.optional(Schema.NullOr(Schema.String)),
+  disabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  fixed_response: Schema.optional(Schema.NullOr(Schema.Struct({
+  content_type: Schema.optional(Schema.NullOr(Schema.String)),
+  location: Schema.optional(Schema.NullOr(Schema.String)),
+  message_body: Schema.optional(Schema.NullOr(Schema.String)),
+  status_code: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  overrides: Schema.optional(Schema.NullOr(Schema.Struct({
+  adaptive_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  failover_across_pools: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  country_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  default_pools: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  fallback_pool: Schema.optional(Schema.NullOr(Schema.String)),
+  location_strategy: Schema.optional(Schema.NullOr(Schema.Struct({
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("pop", "resolver_ip"))),
+  prefer_ecs: Schema.optional(Schema.NullOr(Schema.Literal("always", "never", "proximity", "geo")))
+}))),
+  pop_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  random_steering: Schema.optional(Schema.NullOr(Schema.Struct({
+  default_weight: Schema.optional(Schema.NullOr(Schema.Number)),
+  pool_weights: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Number })))
+}))),
+  region_pools: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  terminates: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))),
+  session_affinity: Schema.optional(Schema.NullOr(Schema.Literal("none", "cookie", "ip_cookie", "header"))),
+  session_affinity_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  drain_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  headers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  require_all_headers: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Lax", "None", "Strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("Auto", "Always", "Never"))),
+  zero_downtime_failover: Schema.optional(Schema.NullOr(Schema.Literal("none", "temporary", "sticky")))
+}))),
+  session_affinity_ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  steering_policy: Schema.optional(Schema.NullOr(Schema.Literal("off", "geo", "random", "dynamic_latency", "proximity", "least_outstanding_requests", "least_connections", ""))),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  zone_name: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -10475,34 +10475,34 @@ export interface GetZonesZoneIdLogpushDatasetsDatasetIdJobsResponse {
 
 export const GetZonesZoneIdLogpushDatasetsDatasetIdJobsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  dataset: Schema.optional(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions")),
-  destination_conf: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  error_message: Schema.optional(Schema.String),
-  frequency: Schema.optional(Schema.Literal("high", "low")),
-  id: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("", "edge")),
-  last_complete: Schema.optional(Schema.Date),
-  last_error: Schema.optional(Schema.Date),
-  logpull_options: Schema.optional(Schema.String),
-  max_upload_bytes: Schema.optional(Schema.Number),
-  max_upload_interval_seconds: Schema.optional(Schema.Number),
-  max_upload_records: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  output_options: Schema.optional(Schema.Struct({
-  "CVE-2021-44228": Schema.optional(Schema.Boolean),
-  batch_prefix: Schema.optional(Schema.String),
-  batch_suffix: Schema.optional(Schema.String),
-  field_delimiter: Schema.optional(Schema.String),
-  field_names: Schema.optional(Schema.Array(Schema.String)),
-  output_type: Schema.optional(Schema.Literal("ndjson", "csv")),
-  record_delimiter: Schema.optional(Schema.String),
-  record_prefix: Schema.optional(Schema.String),
-  record_suffix: Schema.optional(Schema.String),
-  record_template: Schema.optional(Schema.String),
-  sample_rate: Schema.optional(Schema.Number),
-  timestamp_format: Schema.optional(Schema.Literal("unixnano", "unix", "rfc3339"))
-}))
+  dataset: Schema.optional(Schema.NullOr(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions"))),
+  destination_conf: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("high", "low"))),
+  id: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("", "edge"))),
+  last_complete: Schema.optional(Schema.NullOr(Schema.Date)),
+  last_error: Schema.optional(Schema.NullOr(Schema.Date)),
+  logpull_options: Schema.optional(Schema.NullOr(Schema.String)),
+  max_upload_bytes: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_interval_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_records: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  output_options: Schema.optional(Schema.NullOr(Schema.Struct({
+  "CVE-2021-44228": Schema.optional(Schema.NullOr(Schema.Boolean)),
+  batch_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  batch_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  field_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  field_names: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  output_type: Schema.optional(Schema.NullOr(Schema.Literal("ndjson", "csv"))),
+  record_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  record_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_template: Schema.optional(Schema.NullOr(Schema.String)),
+  sample_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  timestamp_format: Schema.optional(Schema.NullOr(Schema.Literal("unixnano", "unix", "rfc3339")))
+})))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -10542,11 +10542,11 @@ export interface GetZonesZoneIdLogpushEdgeJobsResponse {
 
 export const GetZonesZoneIdLogpushEdgeJobsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  destination_conf: Schema.optional(Schema.String),
-  fields: Schema.optional(Schema.String),
-  filter: Schema.optional(Schema.String),
-  sample: Schema.optional(Schema.Number),
-  session_id: Schema.optional(Schema.String)
+  destination_conf: Schema.optional(Schema.NullOr(Schema.String)),
+  fields: Schema.optional(Schema.NullOr(Schema.String)),
+  filter: Schema.optional(Schema.NullOr(Schema.String)),
+  sample: Schema.optional(Schema.NullOr(Schema.Number)),
+  session_id: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -10577,9 +10577,9 @@ export interface PostZonesZoneIdLogpushEdgeJobsRequest {
 export const PostZonesZoneIdLogpushEdgeJobsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  fields: Schema.optional(Schema.String),
-  filter: Schema.optional(Schema.String),
-  sample: Schema.optional(Schema.Number)
+  fields: Schema.optional(Schema.NullOr(Schema.String)),
+  filter: Schema.optional(Schema.NullOr(Schema.String)),
+  sample: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/logpush/edge/jobs" }),
@@ -10592,11 +10592,11 @@ export interface PostZonesZoneIdLogpushEdgeJobsResponse {
 
 export const PostZonesZoneIdLogpushEdgeJobsResponse = Schema.Struct({
   result: Schema.Struct({
-  destination_conf: Schema.optional(Schema.String),
-  fields: Schema.optional(Schema.String),
-  filter: Schema.optional(Schema.String),
-  sample: Schema.optional(Schema.Number),
-  session_id: Schema.optional(Schema.String)
+  destination_conf: Schema.optional(Schema.NullOr(Schema.String)),
+  fields: Schema.optional(Schema.NullOr(Schema.String)),
+  filter: Schema.optional(Schema.NullOr(Schema.String)),
+  sample: Schema.optional(Schema.NullOr(Schema.Number)),
+  session_id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -10636,34 +10636,34 @@ export interface GetZonesZoneIdLogpushJobsResponse {
 
 export const GetZonesZoneIdLogpushJobsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  dataset: Schema.optional(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions")),
-  destination_conf: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  error_message: Schema.optional(Schema.String),
-  frequency: Schema.optional(Schema.Literal("high", "low")),
-  id: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("", "edge")),
-  last_complete: Schema.optional(Schema.Date),
-  last_error: Schema.optional(Schema.Date),
-  logpull_options: Schema.optional(Schema.String),
-  max_upload_bytes: Schema.optional(Schema.Number),
-  max_upload_interval_seconds: Schema.optional(Schema.Number),
-  max_upload_records: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  output_options: Schema.optional(Schema.Struct({
-  "CVE-2021-44228": Schema.optional(Schema.Boolean),
-  batch_prefix: Schema.optional(Schema.String),
-  batch_suffix: Schema.optional(Schema.String),
-  field_delimiter: Schema.optional(Schema.String),
-  field_names: Schema.optional(Schema.Array(Schema.String)),
-  output_type: Schema.optional(Schema.Literal("ndjson", "csv")),
-  record_delimiter: Schema.optional(Schema.String),
-  record_prefix: Schema.optional(Schema.String),
-  record_suffix: Schema.optional(Schema.String),
-  record_template: Schema.optional(Schema.String),
-  sample_rate: Schema.optional(Schema.Number),
-  timestamp_format: Schema.optional(Schema.Literal("unixnano", "unix", "rfc3339"))
-}))
+  dataset: Schema.optional(Schema.NullOr(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions"))),
+  destination_conf: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("high", "low"))),
+  id: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("", "edge"))),
+  last_complete: Schema.optional(Schema.NullOr(Schema.Date)),
+  last_error: Schema.optional(Schema.NullOr(Schema.Date)),
+  logpull_options: Schema.optional(Schema.NullOr(Schema.String)),
+  max_upload_bytes: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_interval_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_records: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  output_options: Schema.optional(Schema.NullOr(Schema.Struct({
+  "CVE-2021-44228": Schema.optional(Schema.NullOr(Schema.Boolean)),
+  batch_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  batch_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  field_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  field_names: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  output_type: Schema.optional(Schema.NullOr(Schema.Literal("ndjson", "csv"))),
+  record_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  record_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_template: Schema.optional(Schema.NullOr(Schema.String)),
+  sample_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  timestamp_format: Schema.optional(Schema.NullOr(Schema.Literal("unixnano", "unix", "rfc3339")))
+})))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -10694,32 +10694,32 @@ export interface PostZonesZoneIdLogpushJobsRequest {
 export const PostZonesZoneIdLogpushJobsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  dataset: Schema.optional(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions")),
+  dataset: Schema.optional(Schema.NullOr(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions"))),
   destination_conf: Schema.String,
-  enabled: Schema.optional(Schema.Boolean),
-  filter: Schema.optional(Schema.String),
-  frequency: Schema.optional(Schema.Literal("high", "low")),
-  kind: Schema.optional(Schema.Literal("", "edge")),
-  logpull_options: Schema.optional(Schema.String),
-  max_upload_bytes: Schema.optional(Schema.Number),
-  max_upload_interval_seconds: Schema.optional(Schema.Number),
-  max_upload_records: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  output_options: Schema.optional(Schema.Struct({
-  "CVE-2021-44228": Schema.optional(Schema.Boolean),
-  batch_prefix: Schema.optional(Schema.String),
-  batch_suffix: Schema.optional(Schema.String),
-  field_delimiter: Schema.optional(Schema.String),
-  field_names: Schema.optional(Schema.Array(Schema.String)),
-  output_type: Schema.optional(Schema.Literal("ndjson", "csv")),
-  record_delimiter: Schema.optional(Schema.String),
-  record_prefix: Schema.optional(Schema.String),
-  record_suffix: Schema.optional(Schema.String),
-  record_template: Schema.optional(Schema.String),
-  sample_rate: Schema.optional(Schema.Number),
-  timestamp_format: Schema.optional(Schema.Literal("unixnano", "unix", "rfc3339"))
-})),
-  ownership_challenge: Schema.optional(Schema.String)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  filter: Schema.optional(Schema.NullOr(Schema.String)),
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("high", "low"))),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("", "edge"))),
+  logpull_options: Schema.optional(Schema.NullOr(Schema.String)),
+  max_upload_bytes: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_interval_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_records: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  output_options: Schema.optional(Schema.NullOr(Schema.Struct({
+  "CVE-2021-44228": Schema.optional(Schema.NullOr(Schema.Boolean)),
+  batch_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  batch_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  field_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  field_names: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  output_type: Schema.optional(Schema.NullOr(Schema.Literal("ndjson", "csv"))),
+  record_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  record_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_template: Schema.optional(Schema.NullOr(Schema.String)),
+  sample_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  timestamp_format: Schema.optional(Schema.NullOr(Schema.Literal("unixnano", "unix", "rfc3339")))
+}))),
+  ownership_challenge: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/logpush/jobs" }),
@@ -10732,34 +10732,34 @@ export interface PostZonesZoneIdLogpushJobsResponse {
 
 export const PostZonesZoneIdLogpushJobsResponse = Schema.Struct({
   result: Schema.Struct({
-  dataset: Schema.optional(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions")),
-  destination_conf: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  error_message: Schema.optional(Schema.String),
-  frequency: Schema.optional(Schema.Literal("high", "low")),
-  id: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("", "edge")),
-  last_complete: Schema.optional(Schema.Date),
-  last_error: Schema.optional(Schema.Date),
-  logpull_options: Schema.optional(Schema.String),
-  max_upload_bytes: Schema.optional(Schema.Number),
-  max_upload_interval_seconds: Schema.optional(Schema.Number),
-  max_upload_records: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  output_options: Schema.optional(Schema.Struct({
-  "CVE-2021-44228": Schema.optional(Schema.Boolean),
-  batch_prefix: Schema.optional(Schema.String),
-  batch_suffix: Schema.optional(Schema.String),
-  field_delimiter: Schema.optional(Schema.String),
-  field_names: Schema.optional(Schema.Array(Schema.String)),
-  output_type: Schema.optional(Schema.Literal("ndjson", "csv")),
-  record_delimiter: Schema.optional(Schema.String),
-  record_prefix: Schema.optional(Schema.String),
-  record_suffix: Schema.optional(Schema.String),
-  record_template: Schema.optional(Schema.String),
-  sample_rate: Schema.optional(Schema.Number),
-  timestamp_format: Schema.optional(Schema.Literal("unixnano", "unix", "rfc3339"))
-}))
+  dataset: Schema.optional(Schema.NullOr(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions"))),
+  destination_conf: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("high", "low"))),
+  id: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("", "edge"))),
+  last_complete: Schema.optional(Schema.NullOr(Schema.Date)),
+  last_error: Schema.optional(Schema.NullOr(Schema.Date)),
+  logpull_options: Schema.optional(Schema.NullOr(Schema.String)),
+  max_upload_bytes: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_interval_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_records: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  output_options: Schema.optional(Schema.NullOr(Schema.Struct({
+  "CVE-2021-44228": Schema.optional(Schema.NullOr(Schema.Boolean)),
+  batch_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  batch_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  field_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  field_names: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  output_type: Schema.optional(Schema.NullOr(Schema.Literal("ndjson", "csv"))),
+  record_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  record_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_template: Schema.optional(Schema.NullOr(Schema.String)),
+  sample_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  timestamp_format: Schema.optional(Schema.NullOr(Schema.Literal("unixnano", "unix", "rfc3339")))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -10801,34 +10801,34 @@ export interface GetZonesZoneIdLogpushJobsJobIdResponse {
 
 export const GetZonesZoneIdLogpushJobsJobIdResponse = Schema.Struct({
   result: Schema.Struct({
-  dataset: Schema.optional(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions")),
-  destination_conf: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  error_message: Schema.optional(Schema.String),
-  frequency: Schema.optional(Schema.Literal("high", "low")),
-  id: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("", "edge")),
-  last_complete: Schema.optional(Schema.Date),
-  last_error: Schema.optional(Schema.Date),
-  logpull_options: Schema.optional(Schema.String),
-  max_upload_bytes: Schema.optional(Schema.Number),
-  max_upload_interval_seconds: Schema.optional(Schema.Number),
-  max_upload_records: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  output_options: Schema.optional(Schema.Struct({
-  "CVE-2021-44228": Schema.optional(Schema.Boolean),
-  batch_prefix: Schema.optional(Schema.String),
-  batch_suffix: Schema.optional(Schema.String),
-  field_delimiter: Schema.optional(Schema.String),
-  field_names: Schema.optional(Schema.Array(Schema.String)),
-  output_type: Schema.optional(Schema.Literal("ndjson", "csv")),
-  record_delimiter: Schema.optional(Schema.String),
-  record_prefix: Schema.optional(Schema.String),
-  record_suffix: Schema.optional(Schema.String),
-  record_template: Schema.optional(Schema.String),
-  sample_rate: Schema.optional(Schema.Number),
-  timestamp_format: Schema.optional(Schema.Literal("unixnano", "unix", "rfc3339"))
-}))
+  dataset: Schema.optional(Schema.NullOr(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions"))),
+  destination_conf: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("high", "low"))),
+  id: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("", "edge"))),
+  last_complete: Schema.optional(Schema.NullOr(Schema.Date)),
+  last_error: Schema.optional(Schema.NullOr(Schema.Date)),
+  logpull_options: Schema.optional(Schema.NullOr(Schema.String)),
+  max_upload_bytes: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_interval_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_records: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  output_options: Schema.optional(Schema.NullOr(Schema.Struct({
+  "CVE-2021-44228": Schema.optional(Schema.NullOr(Schema.Boolean)),
+  batch_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  batch_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  field_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  field_names: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  output_type: Schema.optional(Schema.NullOr(Schema.Literal("ndjson", "csv"))),
+  record_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  record_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_template: Schema.optional(Schema.NullOr(Schema.String)),
+  sample_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  timestamp_format: Schema.optional(Schema.NullOr(Schema.Literal("unixnano", "unix", "rfc3339")))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -10861,31 +10861,31 @@ export const PutZonesZoneIdLogpushJobsJobIdRequest = Schema.Struct({
   job_id: Schema.Number.pipe(T.HttpPath("job_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  destination_conf: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  filter: Schema.optional(Schema.String),
-  frequency: Schema.optional(Schema.Literal("high", "low")),
-  kind: Schema.optional(Schema.Literal("", "edge")),
-  logpull_options: Schema.optional(Schema.String),
-  max_upload_bytes: Schema.optional(Schema.Number),
-  max_upload_interval_seconds: Schema.optional(Schema.Number),
-  max_upload_records: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  output_options: Schema.optional(Schema.Struct({
-  "CVE-2021-44228": Schema.optional(Schema.Boolean),
-  batch_prefix: Schema.optional(Schema.String),
-  batch_suffix: Schema.optional(Schema.String),
-  field_delimiter: Schema.optional(Schema.String),
-  field_names: Schema.optional(Schema.Array(Schema.String)),
-  output_type: Schema.optional(Schema.Literal("ndjson", "csv")),
-  record_delimiter: Schema.optional(Schema.String),
-  record_prefix: Schema.optional(Schema.String),
-  record_suffix: Schema.optional(Schema.String),
-  record_template: Schema.optional(Schema.String),
-  sample_rate: Schema.optional(Schema.Number),
-  timestamp_format: Schema.optional(Schema.Literal("unixnano", "unix", "rfc3339"))
-})),
-  ownership_challenge: Schema.optional(Schema.String)
+  destination_conf: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  filter: Schema.optional(Schema.NullOr(Schema.String)),
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("high", "low"))),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("", "edge"))),
+  logpull_options: Schema.optional(Schema.NullOr(Schema.String)),
+  max_upload_bytes: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_interval_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_records: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  output_options: Schema.optional(Schema.NullOr(Schema.Struct({
+  "CVE-2021-44228": Schema.optional(Schema.NullOr(Schema.Boolean)),
+  batch_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  batch_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  field_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  field_names: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  output_type: Schema.optional(Schema.NullOr(Schema.Literal("ndjson", "csv"))),
+  record_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  record_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_template: Schema.optional(Schema.NullOr(Schema.String)),
+  sample_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  timestamp_format: Schema.optional(Schema.NullOr(Schema.Literal("unixnano", "unix", "rfc3339")))
+}))),
+  ownership_challenge: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/logpush/jobs/{job_id}" }),
@@ -10898,34 +10898,34 @@ export interface PutZonesZoneIdLogpushJobsJobIdResponse {
 
 export const PutZonesZoneIdLogpushJobsJobIdResponse = Schema.Struct({
   result: Schema.Struct({
-  dataset: Schema.optional(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions")),
-  destination_conf: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  error_message: Schema.optional(Schema.String),
-  frequency: Schema.optional(Schema.Literal("high", "low")),
-  id: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("", "edge")),
-  last_complete: Schema.optional(Schema.Date),
-  last_error: Schema.optional(Schema.Date),
-  logpull_options: Schema.optional(Schema.String),
-  max_upload_bytes: Schema.optional(Schema.Number),
-  max_upload_interval_seconds: Schema.optional(Schema.Number),
-  max_upload_records: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  output_options: Schema.optional(Schema.Struct({
-  "CVE-2021-44228": Schema.optional(Schema.Boolean),
-  batch_prefix: Schema.optional(Schema.String),
-  batch_suffix: Schema.optional(Schema.String),
-  field_delimiter: Schema.optional(Schema.String),
-  field_names: Schema.optional(Schema.Array(Schema.String)),
-  output_type: Schema.optional(Schema.Literal("ndjson", "csv")),
-  record_delimiter: Schema.optional(Schema.String),
-  record_prefix: Schema.optional(Schema.String),
-  record_suffix: Schema.optional(Schema.String),
-  record_template: Schema.optional(Schema.String),
-  sample_rate: Schema.optional(Schema.Number),
-  timestamp_format: Schema.optional(Schema.Literal("unixnano", "unix", "rfc3339"))
-}))
+  dataset: Schema.optional(Schema.NullOr(Schema.Literal("access_requests", "audit_logs", "audit_logs_v2", "biso_user_actions", "casb_findings", "device_posture_results", "dex_application_tests", "dex_device_state_events", "dlp_forensic_copies", "dns_firewall_logs", "dns_logs", "email_security_alerts", "firewall_events", "gateway_dns", "gateway_http", "gateway_network", "http_requests", "ipsec_logs", "magic_ids_detections", "nel_reports", "network_analytics_logs", "page_shield_events", "sinkhole_http_logs", "spectrum_events", "ssh_logs", "warp_config_changes", "warp_toggle_changes", "workers_trace_events", "zaraz_events", "zero_trust_network_sessions"))),
+  destination_conf: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("high", "low"))),
+  id: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("", "edge"))),
+  last_complete: Schema.optional(Schema.NullOr(Schema.Date)),
+  last_error: Schema.optional(Schema.NullOr(Schema.Date)),
+  logpull_options: Schema.optional(Schema.NullOr(Schema.String)),
+  max_upload_bytes: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_interval_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_upload_records: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  output_options: Schema.optional(Schema.NullOr(Schema.Struct({
+  "CVE-2021-44228": Schema.optional(Schema.NullOr(Schema.Boolean)),
+  batch_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  batch_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  field_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  field_names: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  output_type: Schema.optional(Schema.NullOr(Schema.Literal("ndjson", "csv"))),
+  record_delimiter: Schema.optional(Schema.NullOr(Schema.String)),
+  record_prefix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  record_template: Schema.optional(Schema.NullOr(Schema.String)),
+  sample_rate: Schema.optional(Schema.NullOr(Schema.Number)),
+  timestamp_format: Schema.optional(Schema.NullOr(Schema.Literal("unixnano", "unix", "rfc3339")))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -10967,7 +10967,7 @@ export interface DeleteZonesZoneIdLogpushJobsJobIdResponse {
 
 export const DeleteZonesZoneIdLogpushJobsJobIdResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11011,9 +11011,9 @@ export interface PostZonesZoneIdLogpushOwnershipResponse {
 
 export const PostZonesZoneIdLogpushOwnershipResponse = Schema.Struct({
   result: Schema.Struct({
-  filename: Schema.optional(Schema.String),
-  message: Schema.optional(Schema.String),
-  valid: Schema.optional(Schema.Boolean)
+  filename: Schema.optional(Schema.NullOr(Schema.String)),
+  message: Schema.optional(Schema.NullOr(Schema.String)),
+  valid: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11058,7 +11058,7 @@ export interface PostZonesZoneIdLogpushOwnershipValidateResponse {
 
 export const PostZonesZoneIdLogpushOwnershipValidateResponse = Schema.Struct({
   result: Schema.Struct({
-  valid: Schema.optional(Schema.Boolean)
+  valid: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11102,8 +11102,8 @@ export interface PostZonesZoneIdLogpushValidateDestinationResponse {
 
 export const PostZonesZoneIdLogpushValidateDestinationResponse = Schema.Struct({
   result: Schema.Struct({
-  message: Schema.optional(Schema.String),
-  valid: Schema.optional(Schema.Boolean)
+  message: Schema.optional(Schema.NullOr(Schema.String)),
+  valid: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11147,7 +11147,7 @@ export interface PostZonesZoneIdLogpushValidateDestinationExistsResponse {
 
 export const PostZonesZoneIdLogpushValidateDestinationExistsResponse = Schema.Struct({
   result: Schema.Struct({
-  exists: Schema.optional(Schema.Boolean)
+  exists: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11178,7 +11178,7 @@ export interface PostZonesZoneIdLogpushValidateOriginRequest {
 export const PostZonesZoneIdLogpushValidateOriginRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  logpull_options: Schema.String
+  logpull_options: Schema.NullOr(Schema.String)
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/logpush/validate/origin" }),
@@ -11191,8 +11191,8 @@ export interface PostZonesZoneIdLogpushValidateOriginResponse {
 
 export const PostZonesZoneIdLogpushValidateOriginResponse = Schema.Struct({
   result: Schema.Struct({
-  message: Schema.optional(Schema.String),
-  valid: Schema.optional(Schema.Boolean)
+  message: Schema.optional(Schema.NullOr(Schema.String)),
+  valid: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11232,7 +11232,7 @@ export interface GetZonesZoneIdLogsControlRetentionFlagResponse {
 
 export const GetZonesZoneIdLogsControlRetentionFlagResponse = Schema.Struct({
   result: Schema.Struct({
-  flag: Schema.optional(Schema.Boolean)
+  flag: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11263,7 +11263,7 @@ export interface PostZonesZoneIdLogsControlRetentionFlagRequest {
 export const PostZonesZoneIdLogsControlRetentionFlagRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  flag: Schema.optional(Schema.Boolean)
+  flag: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/logs/control/retention/flag" }),
@@ -11276,7 +11276,7 @@ export interface PostZonesZoneIdLogsControlRetentionFlagResponse {
 
 export const PostZonesZoneIdLogsControlRetentionFlagResponse = Schema.Struct({
   result: Schema.Struct({
-  flag: Schema.optional(Schema.Boolean)
+  flag: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11567,10 +11567,10 @@ export interface ListCertificatesResponse {
 
 export const ListCertificatesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  certificate: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  private_key: Schema.optional(Schema.String)
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  private_key: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11615,10 +11615,10 @@ export interface ZoneLevelAuthenticatedOriginPullsUploadCertificateResponse {
 
 export const ZoneLevelAuthenticatedOriginPullsUploadCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-  certificate: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  private_key: Schema.optional(Schema.String)
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  private_key: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11660,12 +11660,12 @@ export interface PerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForCl
 
 export const PerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  cert_id: Schema.optional(Schema.String),
-  certificate: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  hostname: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  private_key: Schema.optional(Schema.String)
+  cert_id: Schema.optional(Schema.NullOr(Schema.String)),
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  hostname: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  private_key: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11705,12 +11705,12 @@ export interface ListCertificates1Response {
 
 export const ListCertificates1Response = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  cert_id: Schema.optional(Schema.String),
-  certificate: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  hostname: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  private_key: Schema.optional(Schema.String)
+  cert_id: Schema.optional(Schema.NullOr(Schema.String)),
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  hostname: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  private_key: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -11995,10 +11995,10 @@ export interface GetCertificateDetailsResponse {
 
 export const GetCertificateDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  certificate: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  private_key: Schema.optional(Schema.String)
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  private_key: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -12040,10 +12040,10 @@ export interface DeleteCertificateResponse {
 
 export const DeleteCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-  certificate: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  private_key: Schema.optional(Schema.String)
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  private_key: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -12682,124 +12682,124 @@ export interface ListPageRulesResponse {
 export const ListPageRulesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
   actions: Schema.Array(Schema.Union(Schema.Struct({
-  id: Schema.optional(Schema.Literal("always_use_https"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("always_use_https")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("automatic_https_rewrites")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("automatic_https_rewrites"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_check")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_check"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("bypass_cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("bypass_cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_by_device_type")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_by_device_type"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_deception_armor")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_deception_armor"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_key_fields")),
-  value: Schema.optional(Schema.Struct({
-  cookie: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  header: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  exclude: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  host: Schema.optional(Schema.Struct({
-  resolved: Schema.optional(Schema.Boolean)
-})),
-  query_string: Schema.optional(Schema.Struct({
-  exclude: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))),
-  include: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))
-})),
-  user: Schema.optional(Schema.Struct({
-  device_type: Schema.optional(Schema.Boolean),
-  geo: Schema.optional(Schema.Boolean),
-  lang: Schema.optional(Schema.Boolean)
-}))
-}))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_key_fields"))),
+  value: Schema.optional(Schema.NullOr(Schema.Struct({
+  cookie: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  header: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  host: Schema.optional(Schema.NullOr(Schema.Struct({
+  resolved: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  query_string: Schema.optional(Schema.NullOr(Schema.Struct({
+  exclude: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))),
+  include: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))))
+}))),
+  user: Schema.optional(Schema.NullOr(Schema.Struct({
+  device_type: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  geo: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  lang: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+})))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_level")),
-  value: Schema.optional(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_ttl_by_status")),
-  value: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) }))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_ttl_by_status"))),
+  value: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) })))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_apps"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_apps")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_performance"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_performance")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_security"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_security")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_zaraz"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_zaraz")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("edge_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("edge_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("email_obfuscation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("email_obfuscation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("explicit_cache_control")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("explicit_cache_control"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("forwarding_url")),
-  value: Schema.optional(Schema.Unknown)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("forwarding_url"))),
+  value: Schema.optional(Schema.NullOr(Schema.Unknown))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("host_header_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("host_header_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ip_geolocation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ip_geolocation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("mirage")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("mirage"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("opportunistic_encryption")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("opportunistic_encryption"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("origin_error_page_pass_thru")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("origin_error_page_pass_thru"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("polish")),
-  value: Schema.optional(Schema.Literal("off", "lossless", "lossy"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("polish"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "lossless", "lossy")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("resolve_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("resolve_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("respect_strong_etag")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("respect_strong_etag"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("response_buffering")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("response_buffering"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("rocket_loader")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("rocket_loader"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("security_level")),
-  value: Schema.optional(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("security_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("sort_query_string_for_cache")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("sort_query_string_for_cache"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ssl")),
-  value: Schema.optional(Schema.Literal("off", "flexible", "full", "strict", "origin_pull"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ssl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict", "origin_pull")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("true_client_ip_header")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("true_client_ip_header"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("waf")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("waf"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }))),
   created_on: Schema.Date,
   id: Schema.String,
@@ -12807,8 +12807,8 @@ export const ListPageRulesResponse = Schema.Struct({
   priority: Schema.Number,
   status: Schema.Literal("active", "disabled"),
   targets: Schema.Array(Schema.Union(Schema.Struct({
-  constraint: Schema.optional(Schema.Struct({})),
-  target: Schema.optional(Schema.Literal("url"))
+  constraint: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("url")))
 })))
 })),
   result_info: Schema.optional(Schema.Struct({
@@ -12841,130 +12841,130 @@ export const CreateAPageRuleRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   actions: Schema.Array(Schema.Union(Schema.Struct({
-  id: Schema.optional(Schema.Literal("always_use_https"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("always_use_https")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("automatic_https_rewrites")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("automatic_https_rewrites"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_check")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_check"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("bypass_cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("bypass_cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_by_device_type")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_by_device_type"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_deception_armor")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_deception_armor"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_key_fields")),
-  value: Schema.optional(Schema.Struct({
-  cookie: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  header: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  exclude: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  host: Schema.optional(Schema.Struct({
-  resolved: Schema.optional(Schema.Boolean)
-})),
-  query_string: Schema.optional(Schema.Struct({
-  exclude: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))),
-  include: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))
-})),
-  user: Schema.optional(Schema.Struct({
-  device_type: Schema.optional(Schema.Boolean),
-  geo: Schema.optional(Schema.Boolean),
-  lang: Schema.optional(Schema.Boolean)
-}))
-}))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_level")),
-  value: Schema.optional(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_on_cookie")),
-  value: Schema.optional(Schema.String)
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_ttl_by_status")),
-  value: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) }))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_apps"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_performance"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_security"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_zaraz"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("edge_cache_ttl")),
-  value: Schema.optional(Schema.Number)
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("email_obfuscation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("explicit_cache_control")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("forwarding_url")),
-  value: Schema.optional(Schema.Unknown)
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("host_header_override")),
-  value: Schema.optional(Schema.String)
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ip_geolocation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("mirage")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("opportunistic_encryption")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("origin_error_page_pass_thru")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("polish")),
-  value: Schema.optional(Schema.Literal("off", "lossless", "lossy"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("resolve_override")),
-  value: Schema.optional(Schema.String)
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("respect_strong_etag")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("response_buffering")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("rocket_loader")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("security_level")),
-  value: Schema.optional(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("sort_query_string_for_cache")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ssl")),
-  value: Schema.optional(Schema.Literal("off", "flexible", "full", "strict", "origin_pull"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("true_client_ip_header")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("waf")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_key_fields"))),
+  value: Schema.optional(Schema.NullOr(Schema.Struct({
+  cookie: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }))),
-  priority: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("active", "disabled")),
+  header: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  host: Schema.optional(Schema.NullOr(Schema.Struct({
+  resolved: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  query_string: Schema.optional(Schema.NullOr(Schema.Struct({
+  exclude: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))),
+  include: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))))
+}))),
+  user: Schema.optional(Schema.NullOr(Schema.Struct({
+  device_type: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  geo: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  lang: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+})))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_ttl_by_status"))),
+  value: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) })))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_apps")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_performance")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_security")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_zaraz")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("edge_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("email_obfuscation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("explicit_cache_control"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("forwarding_url"))),
+  value: Schema.optional(Schema.NullOr(Schema.Unknown))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("host_header_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ip_geolocation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("mirage"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("opportunistic_encryption"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("origin_error_page_pass_thru"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("polish"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "lossless", "lossy")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("resolve_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("respect_strong_etag"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("response_buffering"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("rocket_loader"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("security_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("sort_query_string_for_cache"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ssl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict", "origin_pull")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("true_client_ip_header"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("waf"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}))),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "disabled"))),
   targets: Schema.Array(Schema.Union(Schema.Struct({
-  constraint: Schema.optional(Schema.Struct({})),
-  target: Schema.optional(Schema.Literal("url"))
+  constraint: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("url")))
 })))
 }).pipe(T.HttpBody())
 }).pipe(
@@ -12979,124 +12979,124 @@ export interface CreateAPageRuleResponse {
 export const CreateAPageRuleResponse = Schema.Struct({
   result: Schema.Struct({
   actions: Schema.Array(Schema.Union(Schema.Struct({
-  id: Schema.optional(Schema.Literal("always_use_https"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("always_use_https")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("automatic_https_rewrites")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("automatic_https_rewrites"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_check")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_check"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("bypass_cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("bypass_cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_by_device_type")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_by_device_type"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_deception_armor")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_deception_armor"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_key_fields")),
-  value: Schema.optional(Schema.Struct({
-  cookie: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  header: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  exclude: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  host: Schema.optional(Schema.Struct({
-  resolved: Schema.optional(Schema.Boolean)
-})),
-  query_string: Schema.optional(Schema.Struct({
-  exclude: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))),
-  include: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))
-})),
-  user: Schema.optional(Schema.Struct({
-  device_type: Schema.optional(Schema.Boolean),
-  geo: Schema.optional(Schema.Boolean),
-  lang: Schema.optional(Schema.Boolean)
-}))
-}))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_key_fields"))),
+  value: Schema.optional(Schema.NullOr(Schema.Struct({
+  cookie: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  header: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  host: Schema.optional(Schema.NullOr(Schema.Struct({
+  resolved: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  query_string: Schema.optional(Schema.NullOr(Schema.Struct({
+  exclude: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))),
+  include: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))))
+}))),
+  user: Schema.optional(Schema.NullOr(Schema.Struct({
+  device_type: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  geo: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  lang: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+})))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_level")),
-  value: Schema.optional(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_ttl_by_status")),
-  value: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) }))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_ttl_by_status"))),
+  value: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) })))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_apps"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_apps")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_performance"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_performance")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_security"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_security")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_zaraz"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_zaraz")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("edge_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("edge_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("email_obfuscation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("email_obfuscation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("explicit_cache_control")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("explicit_cache_control"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("forwarding_url")),
-  value: Schema.optional(Schema.Unknown)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("forwarding_url"))),
+  value: Schema.optional(Schema.NullOr(Schema.Unknown))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("host_header_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("host_header_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ip_geolocation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ip_geolocation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("mirage")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("mirage"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("opportunistic_encryption")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("opportunistic_encryption"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("origin_error_page_pass_thru")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("origin_error_page_pass_thru"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("polish")),
-  value: Schema.optional(Schema.Literal("off", "lossless", "lossy"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("polish"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "lossless", "lossy")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("resolve_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("resolve_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("respect_strong_etag")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("respect_strong_etag"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("response_buffering")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("response_buffering"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("rocket_loader")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("rocket_loader"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("security_level")),
-  value: Schema.optional(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("security_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("sort_query_string_for_cache")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("sort_query_string_for_cache"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ssl")),
-  value: Schema.optional(Schema.Literal("off", "flexible", "full", "strict", "origin_pull"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ssl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict", "origin_pull")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("true_client_ip_header")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("true_client_ip_header"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("waf")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("waf"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }))),
   created_on: Schema.Date,
   id: Schema.String,
@@ -13104,8 +13104,8 @@ export const CreateAPageRuleResponse = Schema.Struct({
   priority: Schema.Number,
   status: Schema.Literal("active", "disabled"),
   targets: Schema.Array(Schema.Union(Schema.Struct({
-  constraint: Schema.optional(Schema.Struct({})),
-  target: Schema.optional(Schema.Literal("url"))
+  constraint: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("url")))
 })))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -13187,124 +13187,124 @@ export interface GetAPageRuleResponse {
 export const GetAPageRuleResponse = Schema.Struct({
   result: Schema.Struct({
   actions: Schema.Array(Schema.Union(Schema.Struct({
-  id: Schema.optional(Schema.Literal("always_use_https"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("always_use_https")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("automatic_https_rewrites")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("automatic_https_rewrites"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_check")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_check"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("bypass_cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("bypass_cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_by_device_type")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_by_device_type"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_deception_armor")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_deception_armor"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_key_fields")),
-  value: Schema.optional(Schema.Struct({
-  cookie: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  header: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  exclude: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  host: Schema.optional(Schema.Struct({
-  resolved: Schema.optional(Schema.Boolean)
-})),
-  query_string: Schema.optional(Schema.Struct({
-  exclude: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))),
-  include: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))
-})),
-  user: Schema.optional(Schema.Struct({
-  device_type: Schema.optional(Schema.Boolean),
-  geo: Schema.optional(Schema.Boolean),
-  lang: Schema.optional(Schema.Boolean)
-}))
-}))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_key_fields"))),
+  value: Schema.optional(Schema.NullOr(Schema.Struct({
+  cookie: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  header: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  host: Schema.optional(Schema.NullOr(Schema.Struct({
+  resolved: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  query_string: Schema.optional(Schema.NullOr(Schema.Struct({
+  exclude: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))),
+  include: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))))
+}))),
+  user: Schema.optional(Schema.NullOr(Schema.Struct({
+  device_type: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  geo: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  lang: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+})))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_level")),
-  value: Schema.optional(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_ttl_by_status")),
-  value: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) }))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_ttl_by_status"))),
+  value: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) })))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_apps"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_apps")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_performance"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_performance")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_security"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_security")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_zaraz"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_zaraz")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("edge_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("edge_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("email_obfuscation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("email_obfuscation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("explicit_cache_control")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("explicit_cache_control"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("forwarding_url")),
-  value: Schema.optional(Schema.Unknown)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("forwarding_url"))),
+  value: Schema.optional(Schema.NullOr(Schema.Unknown))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("host_header_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("host_header_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ip_geolocation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ip_geolocation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("mirage")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("mirage"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("opportunistic_encryption")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("opportunistic_encryption"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("origin_error_page_pass_thru")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("origin_error_page_pass_thru"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("polish")),
-  value: Schema.optional(Schema.Literal("off", "lossless", "lossy"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("polish"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "lossless", "lossy")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("resolve_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("resolve_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("respect_strong_etag")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("respect_strong_etag"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("response_buffering")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("response_buffering"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("rocket_loader")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("rocket_loader"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("security_level")),
-  value: Schema.optional(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("security_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("sort_query_string_for_cache")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("sort_query_string_for_cache"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ssl")),
-  value: Schema.optional(Schema.Literal("off", "flexible", "full", "strict", "origin_pull"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ssl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict", "origin_pull")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("true_client_ip_header")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("true_client_ip_header"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("waf")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("waf"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }))),
   created_on: Schema.Date,
   id: Schema.String,
@@ -13312,8 +13312,8 @@ export const GetAPageRuleResponse = Schema.Struct({
   priority: Schema.Number,
   status: Schema.Literal("active", "disabled"),
   targets: Schema.Array(Schema.Union(Schema.Struct({
-  constraint: Schema.optional(Schema.Struct({})),
-  target: Schema.optional(Schema.Literal("url"))
+  constraint: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("url")))
 })))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -13348,130 +13348,130 @@ export const UpdateAPageRuleRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   actions: Schema.Array(Schema.Union(Schema.Struct({
-  id: Schema.optional(Schema.Literal("always_use_https"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("always_use_https")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("automatic_https_rewrites")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("automatic_https_rewrites"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_check")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_check"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("bypass_cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("bypass_cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_by_device_type")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_by_device_type"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_deception_armor")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_deception_armor"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_key_fields")),
-  value: Schema.optional(Schema.Struct({
-  cookie: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  header: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  exclude: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  host: Schema.optional(Schema.Struct({
-  resolved: Schema.optional(Schema.Boolean)
-})),
-  query_string: Schema.optional(Schema.Struct({
-  exclude: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))),
-  include: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))
-})),
-  user: Schema.optional(Schema.Struct({
-  device_type: Schema.optional(Schema.Boolean),
-  geo: Schema.optional(Schema.Boolean),
-  lang: Schema.optional(Schema.Boolean)
-}))
-}))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_level")),
-  value: Schema.optional(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_on_cookie")),
-  value: Schema.optional(Schema.String)
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_ttl_by_status")),
-  value: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) }))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_apps"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_performance"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_security"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_zaraz"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("edge_cache_ttl")),
-  value: Schema.optional(Schema.Number)
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("email_obfuscation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("explicit_cache_control")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("forwarding_url")),
-  value: Schema.optional(Schema.Unknown)
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("host_header_override")),
-  value: Schema.optional(Schema.String)
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ip_geolocation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("mirage")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("opportunistic_encryption")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("origin_error_page_pass_thru")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("polish")),
-  value: Schema.optional(Schema.Literal("off", "lossless", "lossy"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("resolve_override")),
-  value: Schema.optional(Schema.String)
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("respect_strong_etag")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("response_buffering")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("rocket_loader")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("security_level")),
-  value: Schema.optional(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("sort_query_string_for_cache")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ssl")),
-  value: Schema.optional(Schema.Literal("off", "flexible", "full", "strict", "origin_pull"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("true_client_ip_header")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-}), Schema.Struct({
-  id: Schema.optional(Schema.Literal("waf")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_key_fields"))),
+  value: Schema.optional(Schema.NullOr(Schema.Struct({
+  cookie: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }))),
-  priority: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("active", "disabled")),
+  header: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  host: Schema.optional(Schema.NullOr(Schema.Struct({
+  resolved: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  query_string: Schema.optional(Schema.NullOr(Schema.Struct({
+  exclude: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))),
+  include: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))))
+}))),
+  user: Schema.optional(Schema.NullOr(Schema.Struct({
+  device_type: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  geo: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  lang: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+})))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_ttl_by_status"))),
+  value: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) })))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_apps")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_performance")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_security")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_zaraz")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("edge_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("email_obfuscation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("explicit_cache_control"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("forwarding_url"))),
+  value: Schema.optional(Schema.NullOr(Schema.Unknown))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("host_header_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ip_geolocation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("mirage"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("opportunistic_encryption"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("origin_error_page_pass_thru"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("polish"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "lossless", "lossy")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("resolve_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("respect_strong_etag"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("response_buffering"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("rocket_loader"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("security_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("sort_query_string_for_cache"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ssl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict", "origin_pull")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("true_client_ip_header"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}), Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("waf"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}))),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "disabled"))),
   targets: Schema.Array(Schema.Union(Schema.Struct({
-  constraint: Schema.optional(Schema.Struct({})),
-  target: Schema.optional(Schema.Literal("url"))
+  constraint: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("url")))
 })))
 }).pipe(T.HttpBody())
 }).pipe(
@@ -13486,124 +13486,124 @@ export interface UpdateAPageRuleResponse {
 export const UpdateAPageRuleResponse = Schema.Struct({
   result: Schema.Struct({
   actions: Schema.Array(Schema.Union(Schema.Struct({
-  id: Schema.optional(Schema.Literal("always_use_https"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("always_use_https")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("automatic_https_rewrites")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("automatic_https_rewrites"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_check")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_check"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("bypass_cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("bypass_cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_by_device_type")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_by_device_type"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_deception_armor")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_deception_armor"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_key_fields")),
-  value: Schema.optional(Schema.Struct({
-  cookie: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  header: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  exclude: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  host: Schema.optional(Schema.Struct({
-  resolved: Schema.optional(Schema.Boolean)
-})),
-  query_string: Schema.optional(Schema.Struct({
-  exclude: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))),
-  include: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))
-})),
-  user: Schema.optional(Schema.Struct({
-  device_type: Schema.optional(Schema.Boolean),
-  geo: Schema.optional(Schema.Boolean),
-  lang: Schema.optional(Schema.Boolean)
-}))
-}))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_key_fields"))),
+  value: Schema.optional(Schema.NullOr(Schema.Struct({
+  cookie: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  header: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  host: Schema.optional(Schema.NullOr(Schema.Struct({
+  resolved: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  query_string: Schema.optional(Schema.NullOr(Schema.Struct({
+  exclude: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))),
+  include: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))))
+}))),
+  user: Schema.optional(Schema.NullOr(Schema.Struct({
+  device_type: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  geo: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  lang: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+})))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_level")),
-  value: Schema.optional(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_ttl_by_status")),
-  value: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) }))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_ttl_by_status"))),
+  value: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) })))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_apps"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_apps")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_performance"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_performance")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_security"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_security")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_zaraz"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_zaraz")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("edge_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("edge_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("email_obfuscation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("email_obfuscation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("explicit_cache_control")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("explicit_cache_control"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("forwarding_url")),
-  value: Schema.optional(Schema.Unknown)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("forwarding_url"))),
+  value: Schema.optional(Schema.NullOr(Schema.Unknown))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("host_header_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("host_header_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ip_geolocation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ip_geolocation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("mirage")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("mirage"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("opportunistic_encryption")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("opportunistic_encryption"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("origin_error_page_pass_thru")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("origin_error_page_pass_thru"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("polish")),
-  value: Schema.optional(Schema.Literal("off", "lossless", "lossy"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("polish"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "lossless", "lossy")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("resolve_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("resolve_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("respect_strong_etag")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("respect_strong_etag"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("response_buffering")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("response_buffering"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("rocket_loader")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("rocket_loader"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("security_level")),
-  value: Schema.optional(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("security_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("sort_query_string_for_cache")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("sort_query_string_for_cache"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ssl")),
-  value: Schema.optional(Schema.Literal("off", "flexible", "full", "strict", "origin_pull"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ssl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict", "origin_pull")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("true_client_ip_header")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("true_client_ip_header"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("waf")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("waf"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }))),
   created_on: Schema.Date,
   id: Schema.String,
@@ -13611,8 +13611,8 @@ export const UpdateAPageRuleResponse = Schema.Struct({
   priority: Schema.Number,
   status: Schema.Literal("active", "disabled"),
   targets: Schema.Array(Schema.Union(Schema.Struct({
-  constraint: Schema.optional(Schema.Struct({})),
-  target: Schema.optional(Schema.Literal("url"))
+  constraint: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("url")))
 })))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -13688,132 +13688,132 @@ export const PageRulesEditAPageRuleRequest = Schema.Struct({
   pagerule_id: Schema.String.pipe(T.HttpPath("pagerule_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  actions: Schema.optional(Schema.Array(Schema.Union(Schema.Struct({
-  id: Schema.optional(Schema.Literal("always_use_https"))
+  actions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Literal("always_use_https")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("automatic_https_rewrites")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("automatic_https_rewrites"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_check")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_check"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("bypass_cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("bypass_cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_by_device_type")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_by_device_type"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_deception_armor")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_deception_armor"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_key_fields")),
-  value: Schema.optional(Schema.Struct({
-  cookie: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  header: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  exclude: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  host: Schema.optional(Schema.Struct({
-  resolved: Schema.optional(Schema.Boolean)
-})),
-  query_string: Schema.optional(Schema.Struct({
-  exclude: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))),
-  include: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))
-})),
-  user: Schema.optional(Schema.Struct({
-  device_type: Schema.optional(Schema.Boolean),
-  geo: Schema.optional(Schema.Boolean),
-  lang: Schema.optional(Schema.Boolean)
-}))
-}))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_key_fields"))),
+  value: Schema.optional(Schema.NullOr(Schema.Struct({
+  cookie: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  header: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  host: Schema.optional(Schema.NullOr(Schema.Struct({
+  resolved: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  query_string: Schema.optional(Schema.NullOr(Schema.Struct({
+  exclude: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))),
+  include: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))))
+}))),
+  user: Schema.optional(Schema.NullOr(Schema.Struct({
+  device_type: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  geo: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  lang: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+})))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_level")),
-  value: Schema.optional(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_ttl_by_status")),
-  value: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) }))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_ttl_by_status"))),
+  value: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) })))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_apps"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_apps")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_performance"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_performance")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_security"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_security")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_zaraz"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_zaraz")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("edge_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("edge_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("email_obfuscation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("email_obfuscation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("explicit_cache_control")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("explicit_cache_control"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("forwarding_url")),
-  value: Schema.optional(Schema.Unknown)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("forwarding_url"))),
+  value: Schema.optional(Schema.NullOr(Schema.Unknown))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("host_header_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("host_header_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ip_geolocation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ip_geolocation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("mirage")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("mirage"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("opportunistic_encryption")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("opportunistic_encryption"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("origin_error_page_pass_thru")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("origin_error_page_pass_thru"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("polish")),
-  value: Schema.optional(Schema.Literal("off", "lossless", "lossy"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("polish"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "lossless", "lossy")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("resolve_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("resolve_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("respect_strong_etag")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("respect_strong_etag"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("response_buffering")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("response_buffering"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("rocket_loader")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("rocket_loader"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("security_level")),
-  value: Schema.optional(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("security_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("sort_query_string_for_cache")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("sort_query_string_for_cache"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ssl")),
-  value: Schema.optional(Schema.Literal("off", "flexible", "full", "strict", "origin_pull"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ssl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict", "origin_pull")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("true_client_ip_header")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("true_client_ip_header"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("waf")),
-  value: Schema.optional(Schema.Literal("on", "off"))
-})))),
-  priority: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("active", "disabled")),
-  targets: Schema.optional(Schema.Array(Schema.Union(Schema.Struct({
-  constraint: Schema.optional(Schema.Struct({})),
-  target: Schema.optional(Schema.Literal("url"))
-}))))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("waf"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}))))),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "disabled"))),
+  targets: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  constraint: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("url")))
+})))))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/pagerules/{pagerule_id}" }),
@@ -13827,124 +13827,124 @@ export interface PageRulesEditAPageRuleResponse {
 export const PageRulesEditAPageRuleResponse = Schema.Struct({
   result: Schema.Struct({
   actions: Schema.Array(Schema.Union(Schema.Struct({
-  id: Schema.optional(Schema.Literal("always_use_https"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("always_use_https")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("automatic_https_rewrites")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("automatic_https_rewrites"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("browser_check")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("browser_check"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("bypass_cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("bypass_cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_by_device_type")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_by_device_type"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_deception_armor")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_deception_armor"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_key_fields")),
-  value: Schema.optional(Schema.Struct({
-  cookie: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  header: Schema.optional(Schema.Struct({
-  check_presence: Schema.optional(Schema.Array(Schema.String)),
-  exclude: Schema.optional(Schema.Array(Schema.String)),
-  include: Schema.optional(Schema.Array(Schema.String))
-})),
-  host: Schema.optional(Schema.Struct({
-  resolved: Schema.optional(Schema.Boolean)
-})),
-  query_string: Schema.optional(Schema.Struct({
-  exclude: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))),
-  include: Schema.optional(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))
-})),
-  user: Schema.optional(Schema.Struct({
-  device_type: Schema.optional(Schema.Boolean),
-  geo: Schema.optional(Schema.Boolean),
-  lang: Schema.optional(Schema.Boolean)
-}))
-}))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_key_fields"))),
+  value: Schema.optional(Schema.NullOr(Schema.Struct({
+  cookie: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  header: Schema.optional(Schema.NullOr(Schema.Struct({
+  check_presence: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  host: Schema.optional(Schema.NullOr(Schema.Struct({
+  resolved: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  query_string: Schema.optional(Schema.NullOr(Schema.Struct({
+  exclude: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String)))),
+  include: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("*"), Schema.Array(Schema.String))))
+}))),
+  user: Schema.optional(Schema.NullOr(Schema.Struct({
+  device_type: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  geo: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  lang: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+})))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_level")),
-  value: Schema.optional(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("bypass", "basic", "simplified", "aggressive", "cache_everything")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_on_cookie")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_on_cookie"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("cache_ttl_by_status")),
-  value: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) }))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("cache_ttl_by_status"))),
+  value: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Union(Schema.Literal("no-cache", "no-store"), Schema.Number) })))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_apps"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_apps")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_performance"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_performance")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_security"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_security")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("disable_zaraz"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("disable_zaraz")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("edge_cache_ttl")),
-  value: Schema.optional(Schema.Number)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("edge_cache_ttl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("email_obfuscation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("email_obfuscation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("explicit_cache_control")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("explicit_cache_control"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("forwarding_url")),
-  value: Schema.optional(Schema.Unknown)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("forwarding_url"))),
+  value: Schema.optional(Schema.NullOr(Schema.Unknown))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("host_header_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("host_header_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ip_geolocation")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ip_geolocation"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("mirage")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("mirage"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("opportunistic_encryption")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("opportunistic_encryption"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("origin_error_page_pass_thru")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("origin_error_page_pass_thru"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("polish")),
-  value: Schema.optional(Schema.Literal("off", "lossless", "lossy"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("polish"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "lossless", "lossy")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("resolve_override")),
-  value: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.Literal("resolve_override"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("respect_strong_etag")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("respect_strong_etag"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("response_buffering")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("response_buffering"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("rocket_loader")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("rocket_loader"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("security_level")),
-  value: Schema.optional(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("security_level"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("sort_query_string_for_cache")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("sort_query_string_for_cache"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("ssl")),
-  value: Schema.optional(Schema.Literal("off", "flexible", "full", "strict", "origin_pull"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("ssl"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict", "origin_pull")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("true_client_ip_header")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("true_client_ip_header"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }), Schema.Struct({
-  id: Schema.optional(Schema.Literal("waf")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("waf"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }))),
   created_on: Schema.Date,
   id: Schema.String,
@@ -13952,8 +13952,8 @@ export const PageRulesEditAPageRuleResponse = Schema.Struct({
   priority: Schema.Number,
   status: Schema.Literal("active", "disabled"),
   targets: Schema.Array(Schema.Union(Schema.Struct({
-  constraint: Schema.optional(Schema.Struct({})),
-  target: Schema.optional(Schema.Literal("url"))
+  constraint: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("url")))
 })))
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -13994,9 +13994,9 @@ export interface PayPerCrawlgetconfigResponse {
 
 export const PayPerCrawlgetconfigResponse = Schema.Struct({
   result: Schema.Struct({
-  bot_overrides: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Literal("charge", "bypass") })),
-  enabled: Schema.optional(Schema.Boolean),
-  price_usd_microcents: Schema.optional(Schema.Number)
+  bot_overrides: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Literal("charge", "bypass") }))),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  price_usd_microcents: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -14027,9 +14027,9 @@ export interface PayPerCrawlcreateconfigRequest {
 export const PayPerCrawlcreateconfigRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  bot_overrides: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Literal("charge", "bypass") })),
-  enabled: Schema.optional(Schema.Boolean),
-  price_usd_microcents: Schema.optional(Schema.Number)
+  bot_overrides: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Literal("charge", "bypass") }))),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  price_usd_microcents: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/pay-per-crawl/configuration" }),
@@ -14042,9 +14042,9 @@ export interface PayPerCrawlcreateconfigResponse {
 
 export const PayPerCrawlcreateconfigResponse = Schema.Struct({
   result: Schema.Struct({
-  bot_overrides: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Literal("charge", "bypass") })),
-  enabled: Schema.optional(Schema.Boolean),
-  price_usd_microcents: Schema.optional(Schema.Number)
+  bot_overrides: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Literal("charge", "bypass") }))),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  price_usd_microcents: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -14075,9 +14075,9 @@ export interface PayPerCrawlpatchconfigRequest {
 export const PayPerCrawlpatchconfigRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  bot_overrides: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Literal("charge", "bypass") })),
-  enabled: Schema.optional(Schema.Boolean),
-  price_usd_microcents: Schema.optional(Schema.Number)
+  bot_overrides: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Literal("charge", "bypass") }))),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  price_usd_microcents: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/pay-per-crawl/configuration" }),
@@ -14090,9 +14090,9 @@ export interface PayPerCrawlpatchconfigResponse {
 
 export const PayPerCrawlpatchconfigResponse = Schema.Struct({
   result: Schema.Struct({
-  bot_overrides: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Literal("charge", "bypass") })),
-  enabled: Schema.optional(Schema.Boolean),
-  price_usd_microcents: Schema.optional(Schema.Number)
+  bot_overrides: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Literal("charge", "bypass") }))),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  price_usd_microcents: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -14123,20 +14123,20 @@ export interface ZonePurgeRequest {
 export const ZonePurgeRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Union(Schema.Struct({
-  tags: Schema.optional(Schema.Array(Schema.String))
+  tags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }), Schema.Struct({
-  hosts: Schema.optional(Schema.Array(Schema.String))
+  hosts: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }), Schema.Struct({
-  prefixes: Schema.optional(Schema.Array(Schema.String))
+  prefixes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }), Schema.Struct({
-  purge_everything: Schema.optional(Schema.Boolean)
+  purge_everything: Schema.optional(Schema.NullOr(Schema.Boolean))
 }), Schema.Struct({
-  files: Schema.optional(Schema.Array(Schema.String))
+  files: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }), Schema.Struct({
-  files: Schema.optional(Schema.Array(Schema.Struct({
-  headers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.String })),
-  url: Schema.optional(Schema.String)
-})))
+  files: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  headers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.String }))),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))))
 })).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/purge_cache" }),
@@ -14365,7 +14365,7 @@ export interface DeleteARateLimitResponse {
 
 export const DeleteARateLimitResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -15250,7 +15250,7 @@ export interface SchemaValidationEditSchemaRequest {
 
 export const SchemaValidationEditSchemaRequest = Schema.Struct({
   body: Schema.Struct({
-  validation_enabled: Schema.optional(Schema.Boolean)
+  validation_enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/schema_validation/schemas/{schema_id}" }),
@@ -15403,8 +15403,8 @@ export interface SchemaValidationEditSettingsRequest {
 
 export const SchemaValidationEditSettingsRequest = Schema.Struct({
   body: Schema.Struct({
-  validation_default_mitigation_action: Schema.optional(Schema.Literal("none", "log", "block")),
-  validation_override_mitigation_action: Schema.optional(Schema.Literal("none", null))
+  validation_default_mitigation_action: Schema.optional(Schema.NullOr(Schema.Literal("none", "log", "block"))),
+  validation_override_mitigation_action: Schema.optional(Schema.NullOr(Schema.Literal("none", null)))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/schema_validation/settings" }),
@@ -15481,7 +15481,7 @@ export interface SchemaValidationBulkEditPerOperationSettingsRequest {
 
 export const SchemaValidationBulkEditPerOperationSettingsRequest = Schema.Struct({
   body: Schema.Record({ key: Schema.String, value: Schema.Struct({
-  mitigation_action: Schema.optional(Schema.Literal("none", "log", "block", null))
+  mitigation_action: Schema.optional(Schema.NullOr(Schema.Literal("none", "log", "block", null)))
 }) }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/schema_validation/settings/operations" }),
@@ -15682,14 +15682,14 @@ export interface SecondaryDnsSecondaryZoneSecondaryZoneConfigurationDetailsRespo
 
 export const SecondaryDnsSecondaryZoneSecondaryZoneConfigurationDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  auto_refresh_seconds: Schema.optional(Schema.Number),
-  checked_time: Schema.optional(Schema.String),
-  created_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_time: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  peers: Schema.optional(Schema.Array(Schema.String)),
-  soa_serial: Schema.optional(Schema.Number)
+  auto_refresh_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  checked_time: Schema.optional(Schema.NullOr(Schema.String)),
+  created_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_time: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  peers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  soa_serial: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -15736,14 +15736,14 @@ export interface CreateSecondaryZoneConfigurationResponse {
 
 export const CreateSecondaryZoneConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  auto_refresh_seconds: Schema.optional(Schema.Number),
-  checked_time: Schema.optional(Schema.String),
-  created_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_time: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  peers: Schema.optional(Schema.Array(Schema.String)),
-  soa_serial: Schema.optional(Schema.Number)
+  auto_refresh_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  checked_time: Schema.optional(Schema.NullOr(Schema.String)),
+  created_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_time: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  peers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  soa_serial: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -15790,14 +15790,14 @@ export interface UpdateSecondaryZoneConfigurationResponse {
 
 export const UpdateSecondaryZoneConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  auto_refresh_seconds: Schema.optional(Schema.Number),
-  checked_time: Schema.optional(Schema.String),
-  created_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_time: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  peers: Schema.optional(Schema.Array(Schema.String)),
-  soa_serial: Schema.optional(Schema.Number)
+  auto_refresh_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  checked_time: Schema.optional(Schema.NullOr(Schema.String)),
+  created_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_time: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  peers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  soa_serial: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -15837,7 +15837,7 @@ export interface DeleteSecondaryZoneConfigurationResponse {
 
 export const DeleteSecondaryZoneConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -15877,13 +15877,13 @@ export interface SecondaryDnsPrimaryZonePrimaryZoneConfigurationDetailsResponse 
 
 export const SecondaryDnsPrimaryZonePrimaryZoneConfigurationDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  checked_time: Schema.optional(Schema.String),
-  created_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  last_transferred_time: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  peers: Schema.optional(Schema.Array(Schema.String)),
-  soa_serial: Schema.optional(Schema.Number)
+  checked_time: Schema.optional(Schema.NullOr(Schema.String)),
+  created_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  last_transferred_time: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  peers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  soa_serial: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -15925,13 +15925,13 @@ export interface CreatePrimaryZoneConfigurationResponse {
 
 export const CreatePrimaryZoneConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  checked_time: Schema.optional(Schema.String),
-  created_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  last_transferred_time: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  peers: Schema.optional(Schema.Array(Schema.String)),
-  soa_serial: Schema.optional(Schema.Number)
+  checked_time: Schema.optional(Schema.NullOr(Schema.String)),
+  created_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  last_transferred_time: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  peers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  soa_serial: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -15973,13 +15973,13 @@ export interface UpdatePrimaryZoneConfigurationResponse {
 
 export const UpdatePrimaryZoneConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  checked_time: Schema.optional(Schema.String),
-  created_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  last_transferred_time: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  peers: Schema.optional(Schema.Array(Schema.String)),
-  soa_serial: Schema.optional(Schema.Number)
+  checked_time: Schema.optional(Schema.NullOr(Schema.String)),
+  created_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  last_transferred_time: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  peers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  soa_serial: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -16019,7 +16019,7 @@ export interface DeletePrimaryZoneConfigurationResponse {
 
 export const DeletePrimaryZoneConfigurationResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -16237,25 +16237,25 @@ export interface GetZoneSecurityCenterInsightsResponse {
 
 export const GetZoneSecurityCenterInsightsResponse = Schema.Struct({
   result: Schema.Union(Schema.Struct({
-  count: Schema.optional(Schema.Number),
-  issues: Schema.optional(Schema.Array(Schema.Struct({
-  dismissed: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  issue_class: Schema.optional(Schema.String),
-  issue_type: Schema.optional(Schema.Literal("compliance_violation", "email_security", "exposed_infrastructure", "insecure_configuration", "weak_authentication", "configuration_suggestion")),
-  payload: Schema.optional(Schema.Struct({
-  detection_method: Schema.optional(Schema.String),
-  zone_tag: Schema.optional(Schema.String)
-})),
-  resolve_link: Schema.optional(Schema.String),
-  resolve_text: Schema.optional(Schema.String),
-  severity: Schema.optional(Schema.Literal("Low", "Moderate", "Critical")),
-  since: Schema.optional(Schema.Date),
-  subject: Schema.optional(Schema.String),
-  timestamp: Schema.optional(Schema.Date)
+  count: Schema.optional(Schema.NullOr(Schema.Number)),
+  issues: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  dismissed: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  issue_class: Schema.optional(Schema.NullOr(Schema.String)),
+  issue_type: Schema.optional(Schema.NullOr(Schema.Literal("compliance_violation", "email_security", "exposed_infrastructure", "insecure_configuration", "weak_authentication", "configuration_suggestion"))),
+  payload: Schema.optional(Schema.NullOr(Schema.Struct({
+  detection_method: Schema.optional(Schema.NullOr(Schema.String)),
+  zone_tag: Schema.optional(Schema.NullOr(Schema.String))
 }))),
-  page: Schema.optional(Schema.Number),
-  per_page: Schema.optional(Schema.Number)
+  resolve_link: Schema.optional(Schema.NullOr(Schema.String)),
+  resolve_text: Schema.optional(Schema.NullOr(Schema.String)),
+  severity: Schema.optional(Schema.NullOr(Schema.Literal("Low", "Moderate", "Critical"))),
+  since: Schema.optional(Schema.NullOr(Schema.Date)),
+  subject: Schema.optional(Schema.NullOr(Schema.String)),
+  timestamp: Schema.optional(Schema.NullOr(Schema.Date))
+})))),
+  page: Schema.optional(Schema.NullOr(Schema.Number)),
+  per_page: Schema.optional(Schema.NullOr(Schema.Number))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -16317,8 +16317,8 @@ export interface GetZoneSecurityCenterInsightCountsByClassResponse {
 
 export const GetZoneSecurityCenterInsightCountsByClassResponse = Schema.Struct({
   result: Schema.Union(Schema.Array(Schema.Struct({
-  count: Schema.optional(Schema.Number),
-  value: Schema.optional(Schema.String)
+  count: Schema.optional(Schema.NullOr(Schema.Number)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }))),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -16380,8 +16380,8 @@ export interface GetZoneSecurityCenterInsightCountsBySeverityResponse {
 
 export const GetZoneSecurityCenterInsightCountsBySeverityResponse = Schema.Struct({
   result: Schema.Union(Schema.Array(Schema.Struct({
-  count: Schema.optional(Schema.Number),
-  value: Schema.optional(Schema.String)
+  count: Schema.optional(Schema.NullOr(Schema.Number)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }))),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -16443,8 +16443,8 @@ export interface GetZoneSecurityCenterInsightCountsByTypeResponse {
 
 export const GetZoneSecurityCenterInsightCountsByTypeResponse = Schema.Struct({
   result: Schema.Union(Schema.Array(Schema.Struct({
-  count: Schema.optional(Schema.Number),
-  value: Schema.optional(Schema.String)
+  count: Schema.optional(Schema.NullOr(Schema.Number)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }))),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -16477,7 +16477,7 @@ export const ArchiveZoneSecurityCenterInsightRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   issue_id: Schema.String.pipe(T.HttpPath("issue_id")),
   body: Schema.Struct({
-  dismiss: Schema.optional(Schema.Boolean)
+  dismiss: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/security-center/insights/{issue_id}/dismiss" }),
@@ -16528,15 +16528,15 @@ export interface GetSecurityTxtResponse {
 
 export const GetSecurityTxtResponse = Schema.Struct({
   result: Schema.Union(Schema.Struct({
-  acknowledgments: Schema.optional(Schema.Array(Schema.String)),
-  canonical: Schema.optional(Schema.Array(Schema.String)),
-  contact: Schema.optional(Schema.Array(Schema.String)),
-  enabled: Schema.optional(Schema.Boolean),
-  encryption: Schema.optional(Schema.Array(Schema.String)),
-  expires: Schema.optional(Schema.Date),
-  hiring: Schema.optional(Schema.Array(Schema.String)),
-  policy: Schema.optional(Schema.Array(Schema.String)),
-  preferredLanguages: Schema.optional(Schema.String)
+  acknowledgments: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  canonical: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  contact: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  encryption: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  expires: Schema.optional(Schema.NullOr(Schema.Date)),
+  hiring: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  policy: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  preferredLanguages: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -16567,15 +16567,15 @@ export interface UpdateSecurityTxtRequest {
 export const UpdateSecurityTxtRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  acknowledgments: Schema.optional(Schema.Array(Schema.String)),
-  canonical: Schema.optional(Schema.Array(Schema.String)),
-  contact: Schema.optional(Schema.Array(Schema.String)),
-  enabled: Schema.optional(Schema.Boolean),
-  encryption: Schema.optional(Schema.Array(Schema.String)),
-  expires: Schema.optional(Schema.Date),
-  hiring: Schema.optional(Schema.Array(Schema.String)),
-  policy: Schema.optional(Schema.Array(Schema.String)),
-  preferredLanguages: Schema.optional(Schema.String)
+  acknowledgments: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  canonical: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  contact: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  encryption: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  expires: Schema.optional(Schema.NullOr(Schema.Date)),
+  hiring: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  policy: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  preferredLanguages: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/security-center/securitytxt" }),
@@ -16772,8 +16772,8 @@ export const ZoneCacheSettingsChangeAegisSettingRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   value: Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  pool_id: Schema.optional(Schema.String)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  pool_id: Schema.optional(Schema.NullOr(Schema.String))
 })
 }).pipe(T.HttpBody())
 }).pipe(
@@ -16825,8 +16825,8 @@ export interface GetFontsSettingResponse {
 
 export const GetFontsSettingResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.Literal("fonts")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("fonts"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -16870,8 +16870,8 @@ export interface ZoneSettingsChangeFontsSettingResponse {
 
 export const ZoneSettingsChangeFontsSettingResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.Literal("fonts")),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  id: Schema.optional(Schema.NullOr(Schema.Literal("fonts"))),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -17071,9 +17071,9 @@ export interface GetRumStatusResponse {
 
 export const GetRumStatusResponse = Schema.Struct({
   result: Schema.Struct({
-  editable: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
+  editable: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -17104,7 +17104,7 @@ export interface WebAnalyticsToggleRumRequest {
 export const WebAnalyticsToggleRumRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  value: Schema.optional(Schema.String)
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/settings/rum" }),
@@ -17117,9 +17117,9 @@ export interface WebAnalyticsToggleRumResponse {
 
 export const WebAnalyticsToggleRumResponse = Schema.Struct({
   result: Schema.Struct({
-  editable: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
+  editable: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -17159,7 +17159,7 @@ export interface GetSpeedBrainSettingResponse {
 
 export const GetSpeedBrainSettingResponse = Schema.Struct({
   result: Schema.Struct({
-  value: Schema.optional(Schema.String)
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -17203,7 +17203,7 @@ export interface ZoneSettingsChangeSpeedBrainSettingResponse {
 
 export const ZoneSettingsChangeSpeedBrainSettingResponse = Schema.Struct({
   result: Schema.Struct({
-  value: Schema.optional(Schema.String)
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -17246,7 +17246,7 @@ export const GetEnrollmentResponse = Schema.Struct({
   editable: Schema.Boolean,
   id: Schema.String,
   modified_on: Schema.Date,
-  next_scheduled_scan: Schema.optional(Schema.Date),
+  next_scheduled_scan: Schema.optional(Schema.NullOr(Schema.Date)),
   value: Schema.Literal("auto", "custom")
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -17294,7 +17294,7 @@ export const PatchEnrollmentResponse = Schema.Struct({
   editable: Schema.Boolean,
   id: Schema.String,
   modified_on: Schema.Date,
-  next_scheduled_scan: Schema.optional(Schema.Date),
+  next_scheduled_scan: Schema.optional(Schema.NullOr(Schema.Date)),
   value: Schema.Literal("auto", "custom")
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -17770,13 +17770,13 @@ export const ZoneSettingsEditSingleSettingRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   setting_id: Schema.String.pipe(T.HttpPath("setting_id")),
   body: Schema.Union(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }), Schema.Struct({
-  value: Schema.optional(Schema.Union(Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  pool_id: Schema.optional(Schema.String)
+  value: Schema.optional(Schema.NullOr(Schema.Union(Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  pool_id: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal("off", "on"), Schema.Number, Schema.Literal("on", "off"), Schema.Literal("aggressive", "basic", "simplified"), Schema.Literal(300, 900, 1800, 2700, 3600, 7200, 10800, 14400, 28800, 57600, 86400, 604800, 2592000, 31536000), Schema.Literal("on", "off"), Schema.Array(Schema.String), Schema.Literal("flatten_at_root", "flatten_all"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal(30, 60, 300, 1200, 1800, 3600, 7200, 10800, 14400, 18000, 28800, 43200, 57600, 72000, 86400, 172800, 259200, 345600, 432000, 518400, 604800), Schema.Literal("on", "off"), Schema.Literal("on", "off", "custom"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal("on", "off", "open"), Schema.Literal("on", "off"), Schema.Literal("off", "on"), Schema.Literal(100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500, 1000), Schema.Literal("1.0", "1.1", "1.2", "1.3"), Schema.Literal("on", "off"), Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 }), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Number, Schema.Literal("2", "1"), Schema.Literal("off", "lossless", "lossy"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Number, Schema.Literal("off", "add_header", "overwrite_header"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Struct({
   cache_by_device_type: Schema.Boolean,
   cf: Schema.Boolean,
@@ -17785,14 +17785,14 @@ export const ZoneSettingsEditSingleSettingRequest = Schema.Struct({
   wordpress: Schema.Boolean,
   wp_plugin: Schema.Boolean
 }), Schema.Struct({
-  strict_transport_security: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean),
-  include_subdomains: Schema.optional(Schema.Boolean),
-  max_age: Schema.optional(Schema.Number),
-  nosniff: Schema.optional(Schema.Boolean),
-  preload: Schema.optional(Schema.Boolean)
-}))
-}), Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack"), Schema.Literal("on", "off"), Schema.Literal("off", "on"), Schema.Literal("on", "off"), Schema.Literal("off", "flexible", "full", "strict"), Schema.Literal("off", "on"), Schema.Literal("on", "off", "zrt"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal("off", "on"), Schema.Literal("off", "on")))
+  strict_transport_security: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  include_subdomains: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  max_age: Schema.optional(Schema.NullOr(Schema.Number)),
+  nosniff: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  preload: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+}), Schema.Literal("off", "essentially_off", "low", "medium", "high", "under_attack"), Schema.Literal("on", "off"), Schema.Literal("off", "on"), Schema.Literal("on", "off"), Schema.Literal("off", "flexible", "full", "strict"), Schema.Literal("off", "on"), Schema.Literal("on", "off", "zrt"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal("on", "off"), Schema.Literal("off", "on"), Schema.Literal("off", "on"))))
 })).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/settings/{setting_id}" }),
@@ -17872,18 +17872,18 @@ export interface PatchSettingsRequest {
 export const PatchSettingsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  cache_reserve: Schema.optional(Schema.Struct({
-  value: Schema.optional(Schema.Literal("on", "off"))
-})),
-  regional_tiered_cache: Schema.optional(Schema.Struct({
-  value: Schema.optional(Schema.Literal("on", "off"))
-})),
-  smart_routing: Schema.optional(Schema.Struct({
-  value: Schema.optional(Schema.Literal("on", "off"))
-})),
-  smart_tiered_cache: Schema.optional(Schema.Struct({
-  value: Schema.optional(Schema.Literal("on", "off"))
-}))
+  cache_reserve: Schema.optional(Schema.NullOr(Schema.Struct({
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}))),
+  regional_tiered_cache: Schema.optional(Schema.NullOr(Schema.Struct({
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}))),
+  smart_routing: Schema.optional(Schema.NullOr(Schema.Struct({
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+}))),
+  smart_tiered_cache: Schema.optional(Schema.NullOr(Schema.Struct({
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/smart_shield" }),
@@ -17897,10 +17897,10 @@ export interface PatchSettingsResponse {
 export const PatchSettingsResponse = Schema.Struct({
   result: Schema.Struct({
   smart_tiered_cache: Schema.Struct({
-  editable: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("on", "off"))
+  editable: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 })
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -18017,36 +18017,36 @@ export interface ListHealthChecks1Response {
 
 export const ListHealthChecks1Response = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -18078,30 +18078,30 @@ export const CreateHealthCheck1Request = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   address: Schema.String,
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  description: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  interval: Schema.optional(Schema.Number),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
   name: Schema.String,
-  retries: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/smart_shield/healthchecks" }),
@@ -18114,36 +18114,36 @@ export interface CreateHealthCheck1Response {
 
 export const CreateHealthCheck1Response = Schema.Struct({
   result: Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -18185,36 +18185,36 @@ export interface SmartShieldHealthCheckDetailsResponse {
 
 export const SmartShieldHealthCheckDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -18247,38 +18247,38 @@ export const UpdateHealthCheck1Request = Schema.Struct({
   healthcheck_id: Schema.String.pipe(T.HttpPath("healthcheck_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  result: Schema.optional(Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
-}))
+  result: Schema.optional(Schema.NullOr(Schema.Struct({
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/smart_shield/healthchecks/{healthcheck_id}" }),
@@ -18291,36 +18291,36 @@ export interface UpdateHealthCheck1Response {
 
 export const UpdateHealthCheck1Response = Schema.Struct({
   result: Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -18362,7 +18362,7 @@ export interface DeleteHealthCheck1Response {
 
 export const DeleteHealthCheck1Response = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -18396,30 +18396,30 @@ export const PatchHealthCheck1Request = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   address: Schema.String,
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  description: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  interval: Schema.optional(Schema.Number),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
   name: Schema.String,
-  retries: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/smart_shield/healthchecks/{healthcheck_id}" }),
@@ -18432,36 +18432,36 @@ export interface PatchHealthCheck1Response {
 
 export const PatchHealthCheck1Response = Schema.Struct({
   result: Schema.Struct({
-  address: Schema.optional(Schema.String),
-  check_regions: Schema.optional(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS"))),
-  consecutive_fails: Schema.optional(Schema.Number),
-  consecutive_successes: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  failure_reason: Schema.optional(Schema.String),
-  http_config: Schema.optional(Schema.Struct({
-  allow_insecure: Schema.optional(Schema.Boolean),
-  expected_body: Schema.optional(Schema.String),
-  expected_codes: Schema.optional(Schema.Array(Schema.String)),
-  follow_redirects: Schema.optional(Schema.Boolean),
-  header: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) })),
-  method: Schema.optional(Schema.Literal("GET", "HEAD")),
-  path: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  interval: Schema.optional(Schema.Number),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("unknown", "healthy", "unhealthy", "suspended")),
-  suspended: Schema.optional(Schema.Boolean),
-  tcp_config: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.Literal("connection_established")),
-  port: Schema.optional(Schema.Number)
-})),
-  timeout: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.String)
+  address: Schema.optional(Schema.NullOr(Schema.String)),
+  check_regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("WNAM", "ENAM", "WEU", "EEU", "NSAM", "SSAM", "OC", "ME", "NAF", "SAF", "IN", "SEAS", "NEAS", "ALL_REGIONS")))),
+  consecutive_fails: Schema.optional(Schema.NullOr(Schema.Number)),
+  consecutive_successes: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  failure_reason: Schema.optional(Schema.NullOr(Schema.String)),
+  http_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  allow_insecure: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expected_body: Schema.optional(Schema.NullOr(Schema.String)),
+  expected_codes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  follow_redirects: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  header: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Array(Schema.String) }))),
+  method: Schema.optional(Schema.NullOr(Schema.Literal("GET", "HEAD"))),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  interval: Schema.optional(Schema.NullOr(Schema.Number)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("unknown", "healthy", "unhealthy", "suspended"))),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  tcp_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.Literal("connection_established"))),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  timeout: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -18573,8 +18573,8 @@ export const UpdatezonesnippetrulesRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   rules: Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
   expression: Schema.String,
   id: Schema.String,
   last_updated: Schema.Date,
@@ -18893,23 +18893,23 @@ export interface GetAnalyticsByTimeResponse {
 export const GetAnalyticsByTimeResponse = Schema.Struct({
   result: Schema.Struct({
   data: Schema.Array(Schema.Struct({
-  dimensions: Schema.optional(Schema.Array(Schema.String)),
-  metrics: Schema.optional(Schema.Union(Schema.Array(Schema.Number), Schema.Array(Schema.Array(Schema.Number))))
+  dimensions: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  metrics: Schema.optional(Schema.NullOr(Schema.Union(Schema.Array(Schema.Number), Schema.Array(Schema.Array(Schema.Number)))))
 })),
   data_lag: Schema.Number,
   max: Schema.Unknown,
   min: Schema.Unknown,
   query: Schema.Struct({
-  dimensions: Schema.optional(Schema.Array(Schema.Literal("event", "appID", "coloName", "ipVersion"))),
-  filters: Schema.optional(Schema.String),
-  limit: Schema.optional(Schema.Number),
-  metrics: Schema.optional(Schema.Array(Schema.Literal("count", "bytesIngress", "bytesEgress", "durationAvg", "durationMedian", "duration90th", "duration99th"))),
-  since: Schema.optional(Schema.Unknown),
-  sort: Schema.optional(Schema.Array(Schema.String)),
-  until: Schema.optional(Schema.Unknown)
+  dimensions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("event", "appID", "coloName", "ipVersion")))),
+  filters: Schema.optional(Schema.NullOr(Schema.String)),
+  limit: Schema.optional(Schema.NullOr(Schema.Number)),
+  metrics: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("count", "bytesIngress", "bytesEgress", "durationAvg", "durationMedian", "duration90th", "duration99th")))),
+  since: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  sort: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  until: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   rows: Schema.Number,
-  time_intervals: Schema.optional(Schema.Array(Schema.Array(Schema.Date))),
+  time_intervals: Schema.optional(Schema.NullOr(Schema.Array(Schema.Array(Schema.Date)))),
   totals: Schema.Unknown
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -18963,23 +18963,23 @@ export interface GetAnalyticsSummaryResponse {
 export const GetAnalyticsSummaryResponse = Schema.Struct({
   result: Schema.Struct({
   data: Schema.Array(Schema.Struct({
-  dimensions: Schema.optional(Schema.Array(Schema.String)),
-  metrics: Schema.optional(Schema.Union(Schema.Array(Schema.Number), Schema.Array(Schema.Array(Schema.Number))))
+  dimensions: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  metrics: Schema.optional(Schema.NullOr(Schema.Union(Schema.Array(Schema.Number), Schema.Array(Schema.Array(Schema.Number)))))
 })),
   data_lag: Schema.Number,
   max: Schema.Unknown,
   min: Schema.Unknown,
   query: Schema.Struct({
-  dimensions: Schema.optional(Schema.Array(Schema.Literal("event", "appID", "coloName", "ipVersion"))),
-  filters: Schema.optional(Schema.String),
-  limit: Schema.optional(Schema.Number),
-  metrics: Schema.optional(Schema.Array(Schema.Literal("count", "bytesIngress", "bytesEgress", "durationAvg", "durationMedian", "duration90th", "duration99th"))),
-  since: Schema.optional(Schema.Unknown),
-  sort: Schema.optional(Schema.Array(Schema.String)),
-  until: Schema.optional(Schema.Unknown)
+  dimensions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("event", "appID", "coloName", "ipVersion")))),
+  filters: Schema.optional(Schema.NullOr(Schema.String)),
+  limit: Schema.optional(Schema.NullOr(Schema.Number)),
+  metrics: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("count", "bytesIngress", "bytesEgress", "durationAvg", "durationMedian", "duration90th", "duration99th")))),
+  since: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  sort: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  until: Schema.optional(Schema.NullOr(Schema.Unknown))
 }),
   rows: Schema.Number,
-  time_intervals: Schema.optional(Schema.Array(Schema.Array(Schema.Date))),
+  time_intervals: Schema.optional(Schema.NullOr(Schema.Array(Schema.Array(Schema.Date)))),
   totals: Schema.Unknown
 }),
   result_info: Schema.optional(Schema.Struct({
@@ -19028,36 +19028,36 @@ export interface ListSpectrumApplicationsResponse {
 
 export const ListSpectrumApplicationsResponse = Schema.Struct({
   result: Schema.Union(Schema.Array(Schema.Struct({
-  argo_smart_routing: Schema.optional(Schema.Boolean),
+  argo_smart_routing: Schema.optional(Schema.NullOr(Schema.Boolean)),
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  edge_ips: Schema.optional(Schema.Union(Schema.Struct({
-  connectivity: Schema.optional(Schema.Literal("all", "ipv4", "ipv6")),
-  type: Schema.optional(Schema.Literal("dynamic"))
+  edge_ips: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  connectivity: Schema.optional(Schema.NullOr(Schema.Literal("all", "ipv4", "ipv6"))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("dynamic")))
 }), Schema.Struct({
-  ips: Schema.optional(Schema.Array(Schema.String)),
-  type: Schema.optional(Schema.Literal("static"))
+  ips: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("static")))
+})))),
+  ip_firewall: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  origin_dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("", "A", "AAAA", "SRV")))
 }))),
-  ip_firewall: Schema.optional(Schema.Boolean),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
-  origin_dns: Schema.optional(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  ttl: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.Literal("", "A", "AAAA", "SRV"))
-})),
-  origin_port: Schema.optional(Schema.Union(Schema.Number, Schema.String)),
+  origin_port: Schema.optional(Schema.NullOr(Schema.Union(Schema.Number, Schema.String))),
   protocol: Schema.String,
-  proxy_protocol: Schema.optional(Schema.Literal("off", "v1", "v2", "simple")),
-  tls: Schema.optional(Schema.Literal("off", "flexible", "full", "strict")),
+  proxy_protocol: Schema.optional(Schema.NullOr(Schema.Literal("off", "v1", "v2", "simple"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict"))),
   traffic_type: Schema.Literal("direct", "http", "https")
 })), Schema.Array(Schema.Struct({
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   protocol: Schema.String
 }))),
   result_info: Schema.optional(Schema.Struct({
@@ -19089,36 +19089,36 @@ export interface CreateSpectrumApplicationUsingANameForTheOriginRequest {
 export const CreateSpectrumApplicationUsingANameForTheOriginRequest = Schema.Struct({
   zone_id: Schema.Unknown.pipe(T.HttpPath("zone_id")),
   body: Schema.Union(Schema.Struct({
-  argo_smart_routing: Schema.optional(Schema.Boolean),
+  argo_smart_routing: Schema.optional(Schema.NullOr(Schema.Boolean)),
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  edge_ips: Schema.optional(Schema.Union(Schema.Struct({
-  connectivity: Schema.optional(Schema.Literal("all", "ipv4", "ipv6")),
-  type: Schema.optional(Schema.Literal("dynamic"))
+  edge_ips: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  connectivity: Schema.optional(Schema.NullOr(Schema.Literal("all", "ipv4", "ipv6"))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("dynamic")))
 }), Schema.Struct({
-  ips: Schema.optional(Schema.Array(Schema.String)),
-  type: Schema.optional(Schema.Literal("static"))
+  ips: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("static")))
+})))),
+  ip_firewall: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  origin_dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("", "A", "AAAA", "SRV")))
 }))),
-  ip_firewall: Schema.optional(Schema.Boolean),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
-  origin_dns: Schema.optional(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  ttl: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.Literal("", "A", "AAAA", "SRV"))
-})),
-  origin_port: Schema.optional(Schema.Union(Schema.Number, Schema.String)),
+  origin_port: Schema.optional(Schema.NullOr(Schema.Union(Schema.Number, Schema.String))),
   protocol: Schema.String,
-  proxy_protocol: Schema.optional(Schema.Literal("off", "v1", "v2", "simple")),
-  tls: Schema.optional(Schema.Literal("off", "flexible", "full", "strict")),
+  proxy_protocol: Schema.optional(Schema.NullOr(Schema.Literal("off", "v1", "v2", "simple"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict"))),
   traffic_type: Schema.Literal("direct", "http", "https")
 }), Schema.Struct({
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   protocol: Schema.String
 })).pipe(T.HttpBody())
 }).pipe(
@@ -19132,36 +19132,36 @@ export interface CreateSpectrumApplicationUsingANameForTheOriginResponse {
 
 export const CreateSpectrumApplicationUsingANameForTheOriginResponse = Schema.Struct({
   result: Schema.Union(Schema.Struct({
-  argo_smart_routing: Schema.optional(Schema.Boolean),
+  argo_smart_routing: Schema.optional(Schema.NullOr(Schema.Boolean)),
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  edge_ips: Schema.optional(Schema.Union(Schema.Struct({
-  connectivity: Schema.optional(Schema.Literal("all", "ipv4", "ipv6")),
-  type: Schema.optional(Schema.Literal("dynamic"))
+  edge_ips: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  connectivity: Schema.optional(Schema.NullOr(Schema.Literal("all", "ipv4", "ipv6"))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("dynamic")))
 }), Schema.Struct({
-  ips: Schema.optional(Schema.Array(Schema.String)),
-  type: Schema.optional(Schema.Literal("static"))
+  ips: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("static")))
+})))),
+  ip_firewall: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  origin_dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("", "A", "AAAA", "SRV")))
 }))),
-  ip_firewall: Schema.optional(Schema.Boolean),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
-  origin_dns: Schema.optional(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  ttl: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.Literal("", "A", "AAAA", "SRV"))
-})),
-  origin_port: Schema.optional(Schema.Union(Schema.Number, Schema.String)),
+  origin_port: Schema.optional(Schema.NullOr(Schema.Union(Schema.Number, Schema.String))),
   protocol: Schema.String,
-  proxy_protocol: Schema.optional(Schema.Literal("off", "v1", "v2", "simple")),
-  tls: Schema.optional(Schema.Literal("off", "flexible", "full", "strict")),
+  proxy_protocol: Schema.optional(Schema.NullOr(Schema.Literal("off", "v1", "v2", "simple"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict"))),
   traffic_type: Schema.Literal("direct", "http", "https")
 }), Schema.Struct({
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   protocol: Schema.String
 })),
   result_info: Schema.optional(Schema.Struct({
@@ -19204,36 +19204,36 @@ export interface GetSpectrumApplicationConfigurationResponse {
 
 export const GetSpectrumApplicationConfigurationResponse = Schema.Struct({
   result: Schema.Union(Schema.Struct({
-  argo_smart_routing: Schema.optional(Schema.Boolean),
+  argo_smart_routing: Schema.optional(Schema.NullOr(Schema.Boolean)),
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  edge_ips: Schema.optional(Schema.Union(Schema.Struct({
-  connectivity: Schema.optional(Schema.Literal("all", "ipv4", "ipv6")),
-  type: Schema.optional(Schema.Literal("dynamic"))
+  edge_ips: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  connectivity: Schema.optional(Schema.NullOr(Schema.Literal("all", "ipv4", "ipv6"))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("dynamic")))
 }), Schema.Struct({
-  ips: Schema.optional(Schema.Array(Schema.String)),
-  type: Schema.optional(Schema.Literal("static"))
+  ips: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("static")))
+})))),
+  ip_firewall: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  origin_dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("", "A", "AAAA", "SRV")))
 }))),
-  ip_firewall: Schema.optional(Schema.Boolean),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
-  origin_dns: Schema.optional(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  ttl: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.Literal("", "A", "AAAA", "SRV"))
-})),
-  origin_port: Schema.optional(Schema.Union(Schema.Number, Schema.String)),
+  origin_port: Schema.optional(Schema.NullOr(Schema.Union(Schema.Number, Schema.String))),
   protocol: Schema.String,
-  proxy_protocol: Schema.optional(Schema.Literal("off", "v1", "v2", "simple")),
-  tls: Schema.optional(Schema.Literal("off", "flexible", "full", "strict")),
+  proxy_protocol: Schema.optional(Schema.NullOr(Schema.Literal("off", "v1", "v2", "simple"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict"))),
   traffic_type: Schema.Literal("direct", "http", "https")
 }), Schema.Struct({
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   protocol: Schema.String
 })),
   result_info: Schema.optional(Schema.Struct({
@@ -19267,36 +19267,36 @@ export const UpdateSpectrumApplicationConfigurationUsingANameForTheOriginRequest
   app_id: Schema.Unknown.pipe(T.HttpPath("app_id")),
   zone_id: Schema.Unknown.pipe(T.HttpPath("zone_id")),
   body: Schema.Union(Schema.Struct({
-  argo_smart_routing: Schema.optional(Schema.Boolean),
+  argo_smart_routing: Schema.optional(Schema.NullOr(Schema.Boolean)),
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  edge_ips: Schema.optional(Schema.Union(Schema.Struct({
-  connectivity: Schema.optional(Schema.Literal("all", "ipv4", "ipv6")),
-  type: Schema.optional(Schema.Literal("dynamic"))
+  edge_ips: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  connectivity: Schema.optional(Schema.NullOr(Schema.Literal("all", "ipv4", "ipv6"))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("dynamic")))
 }), Schema.Struct({
-  ips: Schema.optional(Schema.Array(Schema.String)),
-  type: Schema.optional(Schema.Literal("static"))
+  ips: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("static")))
+})))),
+  ip_firewall: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  origin_dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("", "A", "AAAA", "SRV")))
 }))),
-  ip_firewall: Schema.optional(Schema.Boolean),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
-  origin_dns: Schema.optional(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  ttl: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.Literal("", "A", "AAAA", "SRV"))
-})),
-  origin_port: Schema.optional(Schema.Union(Schema.Number, Schema.String)),
+  origin_port: Schema.optional(Schema.NullOr(Schema.Union(Schema.Number, Schema.String))),
   protocol: Schema.String,
-  proxy_protocol: Schema.optional(Schema.Literal("off", "v1", "v2", "simple")),
-  tls: Schema.optional(Schema.Literal("off", "flexible", "full", "strict")),
+  proxy_protocol: Schema.optional(Schema.NullOr(Schema.Literal("off", "v1", "v2", "simple"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict"))),
   traffic_type: Schema.Literal("direct", "http", "https")
 }), Schema.Struct({
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   protocol: Schema.String
 })).pipe(T.HttpBody())
 }).pipe(
@@ -19310,36 +19310,36 @@ export interface UpdateSpectrumApplicationConfigurationUsingANameForTheOriginRes
 
 export const UpdateSpectrumApplicationConfigurationUsingANameForTheOriginResponse = Schema.Struct({
   result: Schema.Union(Schema.Struct({
-  argo_smart_routing: Schema.optional(Schema.Boolean),
+  argo_smart_routing: Schema.optional(Schema.NullOr(Schema.Boolean)),
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  edge_ips: Schema.optional(Schema.Union(Schema.Struct({
-  connectivity: Schema.optional(Schema.Literal("all", "ipv4", "ipv6")),
-  type: Schema.optional(Schema.Literal("dynamic"))
+  edge_ips: Schema.optional(Schema.NullOr(Schema.Union(Schema.Struct({
+  connectivity: Schema.optional(Schema.NullOr(Schema.Literal("all", "ipv4", "ipv6"))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("dynamic")))
 }), Schema.Struct({
-  ips: Schema.optional(Schema.Array(Schema.String)),
-  type: Schema.optional(Schema.Literal("static"))
+  ips: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("static")))
+})))),
+  ip_firewall: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  origin_dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  ttl: Schema.optional(Schema.NullOr(Schema.Number)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("", "A", "AAAA", "SRV")))
 }))),
-  ip_firewall: Schema.optional(Schema.Boolean),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
-  origin_dns: Schema.optional(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  ttl: Schema.optional(Schema.Number),
-  type: Schema.optional(Schema.Literal("", "A", "AAAA", "SRV"))
-})),
-  origin_port: Schema.optional(Schema.Union(Schema.Number, Schema.String)),
+  origin_port: Schema.optional(Schema.NullOr(Schema.Union(Schema.Number, Schema.String))),
   protocol: Schema.String,
-  proxy_protocol: Schema.optional(Schema.Literal("off", "v1", "v2", "simple")),
-  tls: Schema.optional(Schema.Literal("off", "flexible", "full", "strict")),
+  proxy_protocol: Schema.optional(Schema.NullOr(Schema.Literal("off", "v1", "v2", "simple"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Literal("off", "flexible", "full", "strict"))),
   traffic_type: Schema.Literal("direct", "http", "https")
 }), Schema.Struct({
   dns: Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("CNAME", "ADDRESS"))
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("CNAME", "ADDRESS")))
 }),
-  origin_direct: Schema.optional(Schema.Array(Schema.String)),
+  origin_direct: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   protocol: Schema.String
 })),
   result_info: Schema.optional(Schema.Struct({
@@ -19422,49 +19422,49 @@ export interface GetAvailabilitiesResponse {
 
 export const GetAvailabilitiesResponse = Schema.Struct({
   result: Schema.Struct({
-  quota: Schema.optional(Schema.Struct({
-  plan: Schema.optional(Schema.String),
-  quotasPerPlan: Schema.optional(Schema.Struct({
-  value: Schema.optional(Schema.Struct({
-  business: Schema.optional(Schema.Number),
-  enterprise: Schema.optional(Schema.Number),
-  free: Schema.optional(Schema.Number),
-  pro: Schema.optional(Schema.Number)
-}))
-})),
-  remainingSchedules: Schema.optional(Schema.Number),
-  remainingTests: Schema.optional(Schema.Number),
-  scheduleQuotasPerPlan: Schema.optional(Schema.Struct({
-  value: Schema.optional(Schema.Struct({
-  business: Schema.optional(Schema.Number),
-  enterprise: Schema.optional(Schema.Number),
-  free: Schema.optional(Schema.Number),
-  pro: Schema.optional(Schema.Number)
-}))
-}))
-})),
-  regions: Schema.optional(Schema.Array(Schema.Struct({
-  label: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))
-}))),
-  regionsPerPlan: Schema.optional(Schema.Struct({
-  business: Schema.optional(Schema.Array(Schema.Struct({
-  label: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))
-}))),
-  enterprise: Schema.optional(Schema.Array(Schema.Struct({
-  label: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))
-}))),
-  free: Schema.optional(Schema.Array(Schema.Struct({
-  label: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))
-}))),
-  pro: Schema.optional(Schema.Array(Schema.Struct({
-  label: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))
+  quota: Schema.optional(Schema.NullOr(Schema.Struct({
+  plan: Schema.optional(Schema.NullOr(Schema.String)),
+  quotasPerPlan: Schema.optional(Schema.NullOr(Schema.Struct({
+  value: Schema.optional(Schema.NullOr(Schema.Struct({
+  business: Schema.optional(Schema.NullOr(Schema.Number)),
+  enterprise: Schema.optional(Schema.NullOr(Schema.Number)),
+  free: Schema.optional(Schema.NullOr(Schema.Number)),
+  pro: Schema.optional(Schema.NullOr(Schema.Number))
 })))
-}))
+}))),
+  remainingSchedules: Schema.optional(Schema.NullOr(Schema.Number)),
+  remainingTests: Schema.optional(Schema.NullOr(Schema.Number)),
+  scheduleQuotasPerPlan: Schema.optional(Schema.NullOr(Schema.Struct({
+  value: Schema.optional(Schema.NullOr(Schema.Struct({
+  business: Schema.optional(Schema.NullOr(Schema.Number)),
+  enterprise: Schema.optional(Schema.NullOr(Schema.Number)),
+  free: Schema.optional(Schema.NullOr(Schema.Number)),
+  pro: Schema.optional(Schema.NullOr(Schema.Number))
+})))
+})))
+}))),
+  regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")))
+})))),
+  regionsPerPlan: Schema.optional(Schema.NullOr(Schema.Struct({
+  business: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")))
+})))),
+  enterprise: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")))
+})))),
+  free: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")))
+})))),
+  pro: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")))
+}))))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -19504,58 +19504,58 @@ export interface ListPagesResponse {
 
 export const ListPagesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  region: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))
-})),
-  scheduleFrequency: Schema.optional(Schema.Literal("DAILY", "WEEKLY")),
-  tests: Schema.optional(Schema.Array(Schema.Struct({
-  date: Schema.optional(Schema.Date),
-  desktopReport: Schema.optional(Schema.Struct({
-  cls: Schema.optional(Schema.Number),
-  deviceType: Schema.optional(Schema.Literal("DESKTOP", "MOBILE")),
-  error: Schema.optional(Schema.Struct({
-  code: Schema.optional(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN")),
-  detail: Schema.optional(Schema.String),
-  finalDisplayedUrl: Schema.optional(Schema.String)
-})),
-  fcp: Schema.optional(Schema.Number),
-  jsonReportUrl: Schema.optional(Schema.String),
-  lcp: Schema.optional(Schema.Number),
-  performanceScore: Schema.optional(Schema.Number),
-  si: Schema.optional(Schema.Number),
-  state: Schema.optional(Schema.Literal("RUNNING", "COMPLETE", "FAILED")),
-  tbt: Schema.optional(Schema.Number),
-  ttfb: Schema.optional(Schema.Number),
-  tti: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  mobileReport: Schema.optional(Schema.Struct({
-  cls: Schema.optional(Schema.Number),
-  deviceType: Schema.optional(Schema.Literal("DESKTOP", "MOBILE")),
-  error: Schema.optional(Schema.Struct({
-  code: Schema.optional(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN")),
-  detail: Schema.optional(Schema.String),
-  finalDisplayedUrl: Schema.optional(Schema.String)
-})),
-  fcp: Schema.optional(Schema.Number),
-  jsonReportUrl: Schema.optional(Schema.String),
-  lcp: Schema.optional(Schema.Number),
-  performanceScore: Schema.optional(Schema.Number),
-  si: Schema.optional(Schema.Number),
-  state: Schema.optional(Schema.Literal("RUNNING", "COMPLETE", "FAILED")),
-  tbt: Schema.optional(Schema.Number),
-  ttfb: Schema.optional(Schema.Number),
-  tti: Schema.optional(Schema.Number)
-})),
-  region: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))
-})),
-  scheduleFrequency: Schema.optional(Schema.Literal("DAILY", "WEEKLY")),
-  url: Schema.optional(Schema.String)
+  region: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")))
 }))),
-  url: Schema.optional(Schema.String)
+  scheduleFrequency: Schema.optional(Schema.NullOr(Schema.Literal("DAILY", "WEEKLY"))),
+  tests: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  date: Schema.optional(Schema.NullOr(Schema.Date)),
+  desktopReport: Schema.optional(Schema.NullOr(Schema.Struct({
+  cls: Schema.optional(Schema.NullOr(Schema.Number)),
+  deviceType: Schema.optional(Schema.NullOr(Schema.Literal("DESKTOP", "MOBILE"))),
+  error: Schema.optional(Schema.NullOr(Schema.Struct({
+  code: Schema.optional(Schema.NullOr(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN"))),
+  detail: Schema.optional(Schema.NullOr(Schema.String)),
+  finalDisplayedUrl: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  fcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  jsonReportUrl: Schema.optional(Schema.NullOr(Schema.String)),
+  lcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  performanceScore: Schema.optional(Schema.NullOr(Schema.Number)),
+  si: Schema.optional(Schema.NullOr(Schema.Number)),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("RUNNING", "COMPLETE", "FAILED"))),
+  tbt: Schema.optional(Schema.NullOr(Schema.Number)),
+  ttfb: Schema.optional(Schema.NullOr(Schema.Number)),
+  tti: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  mobileReport: Schema.optional(Schema.NullOr(Schema.Struct({
+  cls: Schema.optional(Schema.NullOr(Schema.Number)),
+  deviceType: Schema.optional(Schema.NullOr(Schema.Literal("DESKTOP", "MOBILE"))),
+  error: Schema.optional(Schema.NullOr(Schema.Struct({
+  code: Schema.optional(Schema.NullOr(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN"))),
+  detail: Schema.optional(Schema.NullOr(Schema.String)),
+  finalDisplayedUrl: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  fcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  jsonReportUrl: Schema.optional(Schema.NullOr(Schema.String)),
+  lcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  performanceScore: Schema.optional(Schema.NullOr(Schema.Number)),
+  si: Schema.optional(Schema.NullOr(Schema.Number)),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("RUNNING", "COMPLETE", "FAILED"))),
+  tbt: Schema.optional(Schema.NullOr(Schema.Number)),
+  ttfb: Schema.optional(Schema.NullOr(Schema.Number)),
+  tti: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  region: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")))
+}))),
+  scheduleFrequency: Schema.optional(Schema.NullOr(Schema.Literal("DAILY", "WEEKLY"))),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  url: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -19603,50 +19603,50 @@ export interface ListTestHistoryResponse {
 
 export const ListTestHistoryResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  date: Schema.optional(Schema.Date),
-  desktopReport: Schema.optional(Schema.Struct({
-  cls: Schema.optional(Schema.Number),
-  deviceType: Schema.optional(Schema.Literal("DESKTOP", "MOBILE")),
-  error: Schema.optional(Schema.Struct({
-  code: Schema.optional(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN")),
-  detail: Schema.optional(Schema.String),
-  finalDisplayedUrl: Schema.optional(Schema.String)
-})),
-  fcp: Schema.optional(Schema.Number),
-  jsonReportUrl: Schema.optional(Schema.String),
-  lcp: Schema.optional(Schema.Number),
-  performanceScore: Schema.optional(Schema.Number),
-  si: Schema.optional(Schema.Number),
-  state: Schema.optional(Schema.Literal("RUNNING", "COMPLETE", "FAILED")),
-  tbt: Schema.optional(Schema.Number),
-  ttfb: Schema.optional(Schema.Number),
-  tti: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  mobileReport: Schema.optional(Schema.Struct({
-  cls: Schema.optional(Schema.Number),
-  deviceType: Schema.optional(Schema.Literal("DESKTOP", "MOBILE")),
-  error: Schema.optional(Schema.Struct({
-  code: Schema.optional(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN")),
-  detail: Schema.optional(Schema.String),
-  finalDisplayedUrl: Schema.optional(Schema.String)
-})),
-  fcp: Schema.optional(Schema.Number),
-  jsonReportUrl: Schema.optional(Schema.String),
-  lcp: Schema.optional(Schema.Number),
-  performanceScore: Schema.optional(Schema.Number),
-  si: Schema.optional(Schema.Number),
-  state: Schema.optional(Schema.Literal("RUNNING", "COMPLETE", "FAILED")),
-  tbt: Schema.optional(Schema.Number),
-  ttfb: Schema.optional(Schema.Number),
-  tti: Schema.optional(Schema.Number)
-})),
-  region: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))
-})),
-  scheduleFrequency: Schema.optional(Schema.Literal("DAILY", "WEEKLY")),
-  url: Schema.optional(Schema.String)
+  date: Schema.optional(Schema.NullOr(Schema.Date)),
+  desktopReport: Schema.optional(Schema.NullOr(Schema.Struct({
+  cls: Schema.optional(Schema.NullOr(Schema.Number)),
+  deviceType: Schema.optional(Schema.NullOr(Schema.Literal("DESKTOP", "MOBILE"))),
+  error: Schema.optional(Schema.NullOr(Schema.Struct({
+  code: Schema.optional(Schema.NullOr(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN"))),
+  detail: Schema.optional(Schema.NullOr(Schema.String)),
+  finalDisplayedUrl: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  fcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  jsonReportUrl: Schema.optional(Schema.NullOr(Schema.String)),
+  lcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  performanceScore: Schema.optional(Schema.NullOr(Schema.Number)),
+  si: Schema.optional(Schema.NullOr(Schema.Number)),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("RUNNING", "COMPLETE", "FAILED"))),
+  tbt: Schema.optional(Schema.NullOr(Schema.Number)),
+  ttfb: Schema.optional(Schema.NullOr(Schema.Number)),
+  tti: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  mobileReport: Schema.optional(Schema.NullOr(Schema.Struct({
+  cls: Schema.optional(Schema.NullOr(Schema.Number)),
+  deviceType: Schema.optional(Schema.NullOr(Schema.Literal("DESKTOP", "MOBILE"))),
+  error: Schema.optional(Schema.NullOr(Schema.Struct({
+  code: Schema.optional(Schema.NullOr(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN"))),
+  detail: Schema.optional(Schema.NullOr(Schema.String)),
+  finalDisplayedUrl: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  fcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  jsonReportUrl: Schema.optional(Schema.NullOr(Schema.String)),
+  lcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  performanceScore: Schema.optional(Schema.NullOr(Schema.Number)),
+  si: Schema.optional(Schema.NullOr(Schema.Number)),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("RUNNING", "COMPLETE", "FAILED"))),
+  tbt: Schema.optional(Schema.NullOr(Schema.Number)),
+  ttfb: Schema.optional(Schema.NullOr(Schema.Number)),
+  tti: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  region: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")))
+}))),
+  scheduleFrequency: Schema.optional(Schema.NullOr(Schema.Literal("DAILY", "WEEKLY"))),
+  url: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -19679,7 +19679,7 @@ export const CreateTestRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   url: Schema.String.pipe(T.HttpPath("url")),
   body: Schema.Struct({
-  region: Schema.optional(Schema.String)
+  region: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/speed_api/pages/{url}/tests" }),
@@ -19692,50 +19692,50 @@ export interface CreateTestResponse {
 
 export const CreateTestResponse = Schema.Struct({
   result: Schema.Struct({
-  date: Schema.optional(Schema.Date),
-  desktopReport: Schema.optional(Schema.Struct({
-  cls: Schema.optional(Schema.Number),
-  deviceType: Schema.optional(Schema.Literal("DESKTOP", "MOBILE")),
-  error: Schema.optional(Schema.Struct({
-  code: Schema.optional(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN")),
-  detail: Schema.optional(Schema.String),
-  finalDisplayedUrl: Schema.optional(Schema.String)
-})),
-  fcp: Schema.optional(Schema.Number),
-  jsonReportUrl: Schema.optional(Schema.String),
-  lcp: Schema.optional(Schema.Number),
-  performanceScore: Schema.optional(Schema.Number),
-  si: Schema.optional(Schema.Number),
-  state: Schema.optional(Schema.Literal("RUNNING", "COMPLETE", "FAILED")),
-  tbt: Schema.optional(Schema.Number),
-  ttfb: Schema.optional(Schema.Number),
-  tti: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  mobileReport: Schema.optional(Schema.Struct({
-  cls: Schema.optional(Schema.Number),
-  deviceType: Schema.optional(Schema.Literal("DESKTOP", "MOBILE")),
-  error: Schema.optional(Schema.Struct({
-  code: Schema.optional(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN")),
-  detail: Schema.optional(Schema.String),
-  finalDisplayedUrl: Schema.optional(Schema.String)
-})),
-  fcp: Schema.optional(Schema.Number),
-  jsonReportUrl: Schema.optional(Schema.String),
-  lcp: Schema.optional(Schema.Number),
-  performanceScore: Schema.optional(Schema.Number),
-  si: Schema.optional(Schema.Number),
-  state: Schema.optional(Schema.Literal("RUNNING", "COMPLETE", "FAILED")),
-  tbt: Schema.optional(Schema.Number),
-  ttfb: Schema.optional(Schema.Number),
-  tti: Schema.optional(Schema.Number)
-})),
-  region: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))
-})),
-  scheduleFrequency: Schema.optional(Schema.Literal("DAILY", "WEEKLY")),
-  url: Schema.optional(Schema.String)
+  date: Schema.optional(Schema.NullOr(Schema.Date)),
+  desktopReport: Schema.optional(Schema.NullOr(Schema.Struct({
+  cls: Schema.optional(Schema.NullOr(Schema.Number)),
+  deviceType: Schema.optional(Schema.NullOr(Schema.Literal("DESKTOP", "MOBILE"))),
+  error: Schema.optional(Schema.NullOr(Schema.Struct({
+  code: Schema.optional(Schema.NullOr(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN"))),
+  detail: Schema.optional(Schema.NullOr(Schema.String)),
+  finalDisplayedUrl: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  fcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  jsonReportUrl: Schema.optional(Schema.NullOr(Schema.String)),
+  lcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  performanceScore: Schema.optional(Schema.NullOr(Schema.Number)),
+  si: Schema.optional(Schema.NullOr(Schema.Number)),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("RUNNING", "COMPLETE", "FAILED"))),
+  tbt: Schema.optional(Schema.NullOr(Schema.Number)),
+  ttfb: Schema.optional(Schema.NullOr(Schema.Number)),
+  tti: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  mobileReport: Schema.optional(Schema.NullOr(Schema.Struct({
+  cls: Schema.optional(Schema.NullOr(Schema.Number)),
+  deviceType: Schema.optional(Schema.NullOr(Schema.Literal("DESKTOP", "MOBILE"))),
+  error: Schema.optional(Schema.NullOr(Schema.Struct({
+  code: Schema.optional(Schema.NullOr(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN"))),
+  detail: Schema.optional(Schema.NullOr(Schema.String)),
+  finalDisplayedUrl: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  fcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  jsonReportUrl: Schema.optional(Schema.NullOr(Schema.String)),
+  lcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  performanceScore: Schema.optional(Schema.NullOr(Schema.Number)),
+  si: Schema.optional(Schema.NullOr(Schema.Number)),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("RUNNING", "COMPLETE", "FAILED"))),
+  tbt: Schema.optional(Schema.NullOr(Schema.Number)),
+  ttfb: Schema.optional(Schema.NullOr(Schema.Number)),
+  tti: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  region: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")))
+}))),
+  scheduleFrequency: Schema.optional(Schema.NullOr(Schema.Literal("DAILY", "WEEKLY"))),
+  url: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -19779,7 +19779,7 @@ export interface DeleteTestsResponse {
 
 export const DeleteTestsResponse = Schema.Struct({
   result: Schema.Struct({
-  count: Schema.optional(Schema.Number)
+  count: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -19823,50 +19823,50 @@ export interface GetTestResponse {
 
 export const GetTestResponse = Schema.Struct({
   result: Schema.Struct({
-  date: Schema.optional(Schema.Date),
-  desktopReport: Schema.optional(Schema.Struct({
-  cls: Schema.optional(Schema.Number),
-  deviceType: Schema.optional(Schema.Literal("DESKTOP", "MOBILE")),
-  error: Schema.optional(Schema.Struct({
-  code: Schema.optional(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN")),
-  detail: Schema.optional(Schema.String),
-  finalDisplayedUrl: Schema.optional(Schema.String)
-})),
-  fcp: Schema.optional(Schema.Number),
-  jsonReportUrl: Schema.optional(Schema.String),
-  lcp: Schema.optional(Schema.Number),
-  performanceScore: Schema.optional(Schema.Number),
-  si: Schema.optional(Schema.Number),
-  state: Schema.optional(Schema.Literal("RUNNING", "COMPLETE", "FAILED")),
-  tbt: Schema.optional(Schema.Number),
-  ttfb: Schema.optional(Schema.Number),
-  tti: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  mobileReport: Schema.optional(Schema.Struct({
-  cls: Schema.optional(Schema.Number),
-  deviceType: Schema.optional(Schema.Literal("DESKTOP", "MOBILE")),
-  error: Schema.optional(Schema.Struct({
-  code: Schema.optional(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN")),
-  detail: Schema.optional(Schema.String),
-  finalDisplayedUrl: Schema.optional(Schema.String)
-})),
-  fcp: Schema.optional(Schema.Number),
-  jsonReportUrl: Schema.optional(Schema.String),
-  lcp: Schema.optional(Schema.Number),
-  performanceScore: Schema.optional(Schema.Number),
-  si: Schema.optional(Schema.Number),
-  state: Schema.optional(Schema.Literal("RUNNING", "COMPLETE", "FAILED")),
-  tbt: Schema.optional(Schema.Number),
-  ttfb: Schema.optional(Schema.Number),
-  tti: Schema.optional(Schema.Number)
-})),
-  region: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))
-})),
-  scheduleFrequency: Schema.optional(Schema.Literal("DAILY", "WEEKLY")),
-  url: Schema.optional(Schema.String)
+  date: Schema.optional(Schema.NullOr(Schema.Date)),
+  desktopReport: Schema.optional(Schema.NullOr(Schema.Struct({
+  cls: Schema.optional(Schema.NullOr(Schema.Number)),
+  deviceType: Schema.optional(Schema.NullOr(Schema.Literal("DESKTOP", "MOBILE"))),
+  error: Schema.optional(Schema.NullOr(Schema.Struct({
+  code: Schema.optional(Schema.NullOr(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN"))),
+  detail: Schema.optional(Schema.NullOr(Schema.String)),
+  finalDisplayedUrl: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  fcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  jsonReportUrl: Schema.optional(Schema.NullOr(Schema.String)),
+  lcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  performanceScore: Schema.optional(Schema.NullOr(Schema.Number)),
+  si: Schema.optional(Schema.NullOr(Schema.Number)),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("RUNNING", "COMPLETE", "FAILED"))),
+  tbt: Schema.optional(Schema.NullOr(Schema.Number)),
+  ttfb: Schema.optional(Schema.NullOr(Schema.Number)),
+  tti: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  mobileReport: Schema.optional(Schema.NullOr(Schema.Struct({
+  cls: Schema.optional(Schema.NullOr(Schema.Number)),
+  deviceType: Schema.optional(Schema.NullOr(Schema.Literal("DESKTOP", "MOBILE"))),
+  error: Schema.optional(Schema.NullOr(Schema.Struct({
+  code: Schema.optional(Schema.NullOr(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN"))),
+  detail: Schema.optional(Schema.NullOr(Schema.String)),
+  finalDisplayedUrl: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  fcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  jsonReportUrl: Schema.optional(Schema.NullOr(Schema.String)),
+  lcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  performanceScore: Schema.optional(Schema.NullOr(Schema.Number)),
+  si: Schema.optional(Schema.NullOr(Schema.Number)),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("RUNNING", "COMPLETE", "FAILED"))),
+  tbt: Schema.optional(Schema.NullOr(Schema.Number)),
+  ttfb: Schema.optional(Schema.NullOr(Schema.Number)),
+  tti: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  region: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")))
+}))),
+  scheduleFrequency: Schema.optional(Schema.NullOr(Schema.Literal("DAILY", "WEEKLY"))),
+  url: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -19920,14 +19920,14 @@ export interface ListPageTrendResponse {
 
 export const ListPageTrendResponse = Schema.Struct({
   result: Schema.Struct({
-  cls: Schema.optional(Schema.Array(Schema.Number)),
-  fcp: Schema.optional(Schema.Array(Schema.Number)),
-  lcp: Schema.optional(Schema.Array(Schema.Number)),
-  performanceScore: Schema.optional(Schema.Array(Schema.Number)),
-  si: Schema.optional(Schema.Array(Schema.Number)),
-  tbt: Schema.optional(Schema.Array(Schema.Number)),
-  ttfb: Schema.optional(Schema.Array(Schema.Number)),
-  tti: Schema.optional(Schema.Array(Schema.Number))
+  cls: Schema.optional(Schema.NullOr(Schema.Array(Schema.Number))),
+  fcp: Schema.optional(Schema.NullOr(Schema.Array(Schema.Number))),
+  lcp: Schema.optional(Schema.NullOr(Schema.Array(Schema.Number))),
+  performanceScore: Schema.optional(Schema.NullOr(Schema.Array(Schema.Number))),
+  si: Schema.optional(Schema.NullOr(Schema.Array(Schema.Number))),
+  tbt: Schema.optional(Schema.NullOr(Schema.Array(Schema.Number))),
+  ttfb: Schema.optional(Schema.NullOr(Schema.Array(Schema.Number))),
+  tti: Schema.optional(Schema.NullOr(Schema.Array(Schema.Number)))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -19971,9 +19971,9 @@ export interface GetScheduledTestResponse {
 
 export const GetScheduledTestResponse = Schema.Struct({
   result: Schema.Struct({
-  frequency: Schema.optional(Schema.Literal("DAILY", "WEEKLY")),
-  region: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")),
-  url: Schema.optional(Schema.String)
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("DAILY", "WEEKLY"))),
+  region: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))),
+  url: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -20017,57 +20017,57 @@ export interface CreateScheduledTestResponse {
 
 export const CreateScheduledTestResponse = Schema.Struct({
   result: Schema.Struct({
-  schedule: Schema.optional(Schema.Struct({
-  frequency: Schema.optional(Schema.Literal("DAILY", "WEEKLY")),
-  region: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")),
-  url: Schema.optional(Schema.String)
-})),
-  test: Schema.optional(Schema.Struct({
-  date: Schema.optional(Schema.Date),
-  desktopReport: Schema.optional(Schema.Struct({
-  cls: Schema.optional(Schema.Number),
-  deviceType: Schema.optional(Schema.Literal("DESKTOP", "MOBILE")),
-  error: Schema.optional(Schema.Struct({
-  code: Schema.optional(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN")),
-  detail: Schema.optional(Schema.String),
-  finalDisplayedUrl: Schema.optional(Schema.String)
-})),
-  fcp: Schema.optional(Schema.Number),
-  jsonReportUrl: Schema.optional(Schema.String),
-  lcp: Schema.optional(Schema.Number),
-  performanceScore: Schema.optional(Schema.Number),
-  si: Schema.optional(Schema.Number),
-  state: Schema.optional(Schema.Literal("RUNNING", "COMPLETE", "FAILED")),
-  tbt: Schema.optional(Schema.Number),
-  ttfb: Schema.optional(Schema.Number),
-  tti: Schema.optional(Schema.Number)
-})),
-  id: Schema.optional(Schema.String),
-  mobileReport: Schema.optional(Schema.Struct({
-  cls: Schema.optional(Schema.Number),
-  deviceType: Schema.optional(Schema.Literal("DESKTOP", "MOBILE")),
-  error: Schema.optional(Schema.Struct({
-  code: Schema.optional(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN")),
-  detail: Schema.optional(Schema.String),
-  finalDisplayedUrl: Schema.optional(Schema.String)
-})),
-  fcp: Schema.optional(Schema.Number),
-  jsonReportUrl: Schema.optional(Schema.String),
-  lcp: Schema.optional(Schema.Number),
-  performanceScore: Schema.optional(Schema.Number),
-  si: Schema.optional(Schema.Number),
-  state: Schema.optional(Schema.Literal("RUNNING", "COMPLETE", "FAILED")),
-  tbt: Schema.optional(Schema.Number),
-  ttfb: Schema.optional(Schema.Number),
-  tti: Schema.optional(Schema.Number)
-})),
-  region: Schema.optional(Schema.Struct({
-  label: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))
-})),
-  scheduleFrequency: Schema.optional(Schema.Literal("DAILY", "WEEKLY")),
-  url: Schema.optional(Schema.String)
-}))
+  schedule: Schema.optional(Schema.NullOr(Schema.Struct({
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("DAILY", "WEEKLY"))),
+  region: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1"))),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  test: Schema.optional(Schema.NullOr(Schema.Struct({
+  date: Schema.optional(Schema.NullOr(Schema.Date)),
+  desktopReport: Schema.optional(Schema.NullOr(Schema.Struct({
+  cls: Schema.optional(Schema.NullOr(Schema.Number)),
+  deviceType: Schema.optional(Schema.NullOr(Schema.Literal("DESKTOP", "MOBILE"))),
+  error: Schema.optional(Schema.NullOr(Schema.Struct({
+  code: Schema.optional(Schema.NullOr(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN"))),
+  detail: Schema.optional(Schema.NullOr(Schema.String)),
+  finalDisplayedUrl: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  fcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  jsonReportUrl: Schema.optional(Schema.NullOr(Schema.String)),
+  lcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  performanceScore: Schema.optional(Schema.NullOr(Schema.Number)),
+  si: Schema.optional(Schema.NullOr(Schema.Number)),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("RUNNING", "COMPLETE", "FAILED"))),
+  tbt: Schema.optional(Schema.NullOr(Schema.Number)),
+  ttfb: Schema.optional(Schema.NullOr(Schema.Number)),
+  tti: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  mobileReport: Schema.optional(Schema.NullOr(Schema.Struct({
+  cls: Schema.optional(Schema.NullOr(Schema.Number)),
+  deviceType: Schema.optional(Schema.NullOr(Schema.Literal("DESKTOP", "MOBILE"))),
+  error: Schema.optional(Schema.NullOr(Schema.Struct({
+  code: Schema.optional(Schema.NullOr(Schema.Literal("NOT_REACHABLE", "DNS_FAILURE", "NOT_HTML", "LIGHTHOUSE_TIMEOUT", "UNKNOWN"))),
+  detail: Schema.optional(Schema.NullOr(Schema.String)),
+  finalDisplayedUrl: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  fcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  jsonReportUrl: Schema.optional(Schema.NullOr(Schema.String)),
+  lcp: Schema.optional(Schema.NullOr(Schema.Number)),
+  performanceScore: Schema.optional(Schema.NullOr(Schema.Number)),
+  si: Schema.optional(Schema.NullOr(Schema.Number)),
+  state: Schema.optional(Schema.NullOr(Schema.Literal("RUNNING", "COMPLETE", "FAILED"))),
+  tbt: Schema.optional(Schema.NullOr(Schema.Number)),
+  ttfb: Schema.optional(Schema.NullOr(Schema.Number)),
+  tti: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  region: Schema.optional(Schema.NullOr(Schema.Struct({
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.Literal("asia-east1", "asia-northeast1", "asia-northeast2", "asia-south1", "asia-southeast1", "australia-southeast1", "europe-north1", "europe-southwest1", "europe-west1", "europe-west2", "europe-west3", "europe-west4", "europe-west8", "europe-west9", "me-west1", "southamerica-east1", "us-central1", "us-east1", "us-east4", "us-south1", "us-west1")))
+}))),
+  scheduleFrequency: Schema.optional(Schema.NullOr(Schema.Literal("DAILY", "WEEKLY"))),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -20111,7 +20111,7 @@ export interface DeleteTestScheduleResponse {
 
 export const DeleteTestScheduleResponse = Schema.Struct({
   result: Schema.Struct({
-  count: Schema.optional(Schema.Number)
+  count: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -20180,33 +20180,33 @@ export interface CreateZoneSubscriptionRequest {
 export const CreateZoneSubscriptionRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  app: Schema.optional(Schema.Unknown),
-  component_values: Schema.optional(Schema.Array(Schema.Struct({
-  default: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  price: Schema.optional(Schema.Number),
-  value: Schema.optional(Schema.Number)
+  app: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  component_values: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  default: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  price: Schema.optional(Schema.NullOr(Schema.Number)),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
+})))),
+  currency: Schema.optional(Schema.NullOr(Schema.String)),
+  current_period_end: Schema.optional(Schema.NullOr(Schema.Date)),
+  current_period_start: Schema.optional(Schema.NullOr(Schema.Date)),
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("weekly", "monthly", "quarterly", "yearly"))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  price: Schema.optional(Schema.NullOr(Schema.Number)),
+  rate_plan: Schema.optional(Schema.NullOr(Schema.Struct({
+  currency: Schema.optional(Schema.NullOr(Schema.String)),
+  externally_managed: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  is_contract: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  public_name: Schema.optional(Schema.NullOr(Schema.String)),
+  scope: Schema.optional(Schema.NullOr(Schema.String)),
+  sets: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }))),
-  currency: Schema.optional(Schema.String),
-  current_period_end: Schema.optional(Schema.Date),
-  current_period_start: Schema.optional(Schema.Date),
-  frequency: Schema.optional(Schema.Literal("weekly", "monthly", "quarterly", "yearly")),
-  id: Schema.optional(Schema.String),
-  price: Schema.optional(Schema.Number),
-  rate_plan: Schema.optional(Schema.Struct({
-  currency: Schema.optional(Schema.String),
-  externally_managed: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  is_contract: Schema.optional(Schema.Boolean),
-  public_name: Schema.optional(Schema.String),
-  scope: Schema.optional(Schema.String),
-  sets: Schema.optional(Schema.Array(Schema.String))
-})),
-  state: Schema.optional(Schema.Literal("Trial", "Provisioned", "Paid", "AwaitingPayment", "Cancelled", "Failed", "Expired")),
-  zone: Schema.optional(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String)
-}))
+  state: Schema.optional(Schema.NullOr(Schema.Literal("Trial", "Provisioned", "Paid", "AwaitingPayment", "Cancelled", "Failed", "Expired"))),
+  zone: Schema.optional(Schema.NullOr(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/subscription" }),
@@ -20248,33 +20248,33 @@ export interface UpdateZoneSubscriptionRequest {
 export const UpdateZoneSubscriptionRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  app: Schema.optional(Schema.Unknown),
-  component_values: Schema.optional(Schema.Array(Schema.Struct({
-  default: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  price: Schema.optional(Schema.Number),
-  value: Schema.optional(Schema.Number)
+  app: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  component_values: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  default: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  price: Schema.optional(Schema.NullOr(Schema.Number)),
+  value: Schema.optional(Schema.NullOr(Schema.Number))
+})))),
+  currency: Schema.optional(Schema.NullOr(Schema.String)),
+  current_period_end: Schema.optional(Schema.NullOr(Schema.Date)),
+  current_period_start: Schema.optional(Schema.NullOr(Schema.Date)),
+  frequency: Schema.optional(Schema.NullOr(Schema.Literal("weekly", "monthly", "quarterly", "yearly"))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  price: Schema.optional(Schema.NullOr(Schema.Number)),
+  rate_plan: Schema.optional(Schema.NullOr(Schema.Struct({
+  currency: Schema.optional(Schema.NullOr(Schema.String)),
+  externally_managed: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  is_contract: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  public_name: Schema.optional(Schema.NullOr(Schema.String)),
+  scope: Schema.optional(Schema.NullOr(Schema.String)),
+  sets: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }))),
-  currency: Schema.optional(Schema.String),
-  current_period_end: Schema.optional(Schema.Date),
-  current_period_start: Schema.optional(Schema.Date),
-  frequency: Schema.optional(Schema.Literal("weekly", "monthly", "quarterly", "yearly")),
-  id: Schema.optional(Schema.String),
-  price: Schema.optional(Schema.Number),
-  rate_plan: Schema.optional(Schema.Struct({
-  currency: Schema.optional(Schema.String),
-  externally_managed: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  is_contract: Schema.optional(Schema.Boolean),
-  public_name: Schema.optional(Schema.String),
-  scope: Schema.optional(Schema.String),
-  sets: Schema.optional(Schema.Array(Schema.String))
-})),
-  state: Schema.optional(Schema.Literal("Trial", "Provisioned", "Paid", "AwaitingPayment", "Cancelled", "Failed", "Expired")),
-  zone: Schema.optional(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String)
-}))
+  state: Schema.optional(Schema.NullOr(Schema.Literal("Trial", "Provisioned", "Paid", "AwaitingPayment", "Cancelled", "Failed", "Expired"))),
+  zone: Schema.optional(Schema.NullOr(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/subscription" }),
@@ -20471,9 +20471,9 @@ export interface TokenValidationConfigEditRequest {
 
 export const TokenValidationConfigEditRequest = Schema.Struct({
   body: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  title: Schema.optional(Schema.String),
-  token_sources: Schema.optional(Schema.Array(Schema.Union(Schema.String, Schema.String)))
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  title: Schema.optional(Schema.NullOr(Schema.String)),
+  token_sources: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.String, Schema.String))))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/token_validation/config/{config_id}" }),
@@ -20729,12 +20729,12 @@ export const TokenValidationRulesPreviewRequest = Schema.Struct({
   method: Schema.optional(Schema.Array(Schema.Literal("GET", "POST", "HEAD", "OPTIONS", "PUT", "DELETE", "CONNECT", "PATCH", "TRACE"))).pipe(T.HttpQuery("method")),
   endpoint: Schema.optional(Schema.Array(Schema.String)).pipe(T.HttpQuery("endpoint")),
   body: Schema.Struct({
-  exclude: Schema.optional(Schema.Array(Schema.Struct({
-  operation_ids: Schema.optional(Schema.Array(Schema.String))
-}))),
-  include: Schema.optional(Schema.Array(Schema.Struct({
-  host: Schema.optional(Schema.Array(Schema.String))
-})))
+  exclude: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  operation_ids: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+})))),
+  include: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/token_validation/rules/preview" }),
@@ -20848,7 +20848,7 @@ export interface TokenValidationRulesEditRequest {
 
 export const TokenValidationRulesEditRequest = Schema.Struct({
   body: Schema.Struct({
-  position: Schema.optional(Schema.Struct({}))
+  position: Schema.optional(Schema.NullOr(Schema.Struct({})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/token_validation/rules/{rule_id}" }),
@@ -21018,38 +21018,38 @@ export interface ListWaitingRoomsResponse {
 
 export const ListWaitingRoomsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  additional_routes: Schema.optional(Schema.Array(Schema.Struct({
-  host: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String)
+  additional_routes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  cookie_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("auto", "lax", "none", "strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("auto", "always", "never")))
 }))),
-  cookie_attributes: Schema.optional(Schema.Struct({
-  samesite: Schema.optional(Schema.Literal("auto", "lax", "none", "strict")),
-  secure: Schema.optional(Schema.Literal("auto", "always", "never"))
-})),
-  cookie_suffix: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  custom_page_html: Schema.optional(Schema.String),
-  default_template_language: Schema.optional(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN")),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  enabled_origin_commands: Schema.optional(Schema.Array(Schema.Literal("revoke"))),
-  host: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  json_response_enabled: Schema.optional(Schema.Boolean),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  new_users_per_minute: Schema.optional(Schema.Number),
-  next_event_prequeue_start_time: Schema.optional(Schema.String),
-  next_event_start_time: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  queue_all: Schema.optional(Schema.Boolean),
-  queueing_method: Schema.optional(Schema.Literal("fifo", "random", "passthrough", "reject")),
-  queueing_status_code: Schema.optional(Schema.Literal(200, 202, 429)),
-  session_duration: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  cookie_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  default_template_language: Schema.optional(Schema.NullOr(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  enabled_origin_commands: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("revoke")))),
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  json_response_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  next_event_prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  next_event_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_all: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.Literal("fifo", "random", "passthrough", "reject"))),
+  queueing_status_code: Schema.optional(Schema.NullOr(Schema.Literal(200, 202, 429))),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21080,33 +21080,33 @@ export interface CreateWaitingRoomRequest {
 export const CreateWaitingRoomRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  additional_routes: Schema.optional(Schema.Array(Schema.Struct({
-  host: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String)
+  additional_routes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  cookie_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("auto", "lax", "none", "strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("auto", "always", "never")))
 }))),
-  cookie_attributes: Schema.optional(Schema.Struct({
-  samesite: Schema.optional(Schema.Literal("auto", "lax", "none", "strict")),
-  secure: Schema.optional(Schema.Literal("auto", "always", "never"))
-})),
-  cookie_suffix: Schema.optional(Schema.String),
-  custom_page_html: Schema.optional(Schema.String),
-  default_template_language: Schema.optional(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN")),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  enabled_origin_commands: Schema.optional(Schema.Array(Schema.Literal("revoke"))),
+  cookie_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  default_template_language: Schema.optional(Schema.NullOr(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  enabled_origin_commands: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("revoke")))),
   host: Schema.String,
-  json_response_enabled: Schema.optional(Schema.Boolean),
+  json_response_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
   name: Schema.String,
   new_users_per_minute: Schema.Number,
-  path: Schema.optional(Schema.String),
-  queue_all: Schema.optional(Schema.Boolean),
-  queueing_method: Schema.optional(Schema.Literal("fifo", "random", "passthrough", "reject")),
-  queueing_status_code: Schema.optional(Schema.Literal(200, 202, 429)),
-  session_duration: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_all: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.Literal("fifo", "random", "passthrough", "reject"))),
+  queueing_status_code: Schema.optional(Schema.NullOr(Schema.Literal(200, 202, 429))),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
   total_active_users: Schema.Number,
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/waiting_rooms" }),
@@ -21119,38 +21119,38 @@ export interface CreateWaitingRoomResponse {
 
 export const CreateWaitingRoomResponse = Schema.Struct({
   result: Schema.Struct({
-  additional_routes: Schema.optional(Schema.Array(Schema.Struct({
-  host: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String)
+  additional_routes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  cookie_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("auto", "lax", "none", "strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("auto", "always", "never")))
 }))),
-  cookie_attributes: Schema.optional(Schema.Struct({
-  samesite: Schema.optional(Schema.Literal("auto", "lax", "none", "strict")),
-  secure: Schema.optional(Schema.Literal("auto", "always", "never"))
-})),
-  cookie_suffix: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  custom_page_html: Schema.optional(Schema.String),
-  default_template_language: Schema.optional(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN")),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  enabled_origin_commands: Schema.optional(Schema.Array(Schema.Literal("revoke"))),
-  host: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  json_response_enabled: Schema.optional(Schema.Boolean),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  new_users_per_minute: Schema.optional(Schema.Number),
-  next_event_prequeue_start_time: Schema.optional(Schema.String),
-  next_event_start_time: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  queue_all: Schema.optional(Schema.Boolean),
-  queueing_method: Schema.optional(Schema.Literal("fifo", "random", "passthrough", "reject")),
-  queueing_status_code: Schema.optional(Schema.Literal(200, 202, 429)),
-  session_duration: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  cookie_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  default_template_language: Schema.optional(Schema.NullOr(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  enabled_origin_commands: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("revoke")))),
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  json_response_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  next_event_prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  next_event_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_all: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.Literal("fifo", "random", "passthrough", "reject"))),
+  queueing_status_code: Schema.optional(Schema.NullOr(Schema.Literal(200, 202, 429))),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21194,7 +21194,7 @@ export interface CreateACustomWaitingRoomPagePreviewResponse {
 
 export const CreateACustomWaitingRoomPagePreviewResponse = Schema.Struct({
   result: Schema.Struct({
-  preview_url: Schema.optional(Schema.String)
+  preview_url: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21265,7 +21265,7 @@ export interface UpdateZoneSettingsRequest {
 export const UpdateZoneSettingsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  search_engine_crawler_bypass: Schema.optional(Schema.Boolean)
+  search_engine_crawler_bypass: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/waiting_rooms/settings" }),
@@ -21309,7 +21309,7 @@ export interface PatchZoneSettingsRequest {
 export const PatchZoneSettingsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  search_engine_crawler_bypass: Schema.optional(Schema.Boolean)
+  search_engine_crawler_bypass: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/waiting_rooms/settings" }),
@@ -21364,38 +21364,38 @@ export interface WaitingRoomWaitingRoomDetailsResponse {
 
 export const WaitingRoomWaitingRoomDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  additional_routes: Schema.optional(Schema.Array(Schema.Struct({
-  host: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String)
+  additional_routes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  cookie_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("auto", "lax", "none", "strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("auto", "always", "never")))
 }))),
-  cookie_attributes: Schema.optional(Schema.Struct({
-  samesite: Schema.optional(Schema.Literal("auto", "lax", "none", "strict")),
-  secure: Schema.optional(Schema.Literal("auto", "always", "never"))
-})),
-  cookie_suffix: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  custom_page_html: Schema.optional(Schema.String),
-  default_template_language: Schema.optional(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN")),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  enabled_origin_commands: Schema.optional(Schema.Array(Schema.Literal("revoke"))),
-  host: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  json_response_enabled: Schema.optional(Schema.Boolean),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  new_users_per_minute: Schema.optional(Schema.Number),
-  next_event_prequeue_start_time: Schema.optional(Schema.String),
-  next_event_start_time: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  queue_all: Schema.optional(Schema.Boolean),
-  queueing_method: Schema.optional(Schema.Literal("fifo", "random", "passthrough", "reject")),
-  queueing_status_code: Schema.optional(Schema.Literal(200, 202, 429)),
-  session_duration: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  cookie_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  default_template_language: Schema.optional(Schema.NullOr(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  enabled_origin_commands: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("revoke")))),
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  json_response_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  next_event_prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  next_event_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_all: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.Literal("fifo", "random", "passthrough", "reject"))),
+  queueing_status_code: Schema.optional(Schema.NullOr(Schema.Literal(200, 202, 429))),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21428,33 +21428,33 @@ export const UpdateWaitingRoomRequest = Schema.Struct({
   waiting_room_id: Schema.String.pipe(T.HttpPath("waiting_room_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  additional_routes: Schema.optional(Schema.Array(Schema.Struct({
-  host: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String)
+  additional_routes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  cookie_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("auto", "lax", "none", "strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("auto", "always", "never")))
 }))),
-  cookie_attributes: Schema.optional(Schema.Struct({
-  samesite: Schema.optional(Schema.Literal("auto", "lax", "none", "strict")),
-  secure: Schema.optional(Schema.Literal("auto", "always", "never"))
-})),
-  cookie_suffix: Schema.optional(Schema.String),
-  custom_page_html: Schema.optional(Schema.String),
-  default_template_language: Schema.optional(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN")),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  enabled_origin_commands: Schema.optional(Schema.Array(Schema.Literal("revoke"))),
+  cookie_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  default_template_language: Schema.optional(Schema.NullOr(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  enabled_origin_commands: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("revoke")))),
   host: Schema.String,
-  json_response_enabled: Schema.optional(Schema.Boolean),
+  json_response_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
   name: Schema.String,
   new_users_per_minute: Schema.Number,
-  path: Schema.optional(Schema.String),
-  queue_all: Schema.optional(Schema.Boolean),
-  queueing_method: Schema.optional(Schema.Literal("fifo", "random", "passthrough", "reject")),
-  queueing_status_code: Schema.optional(Schema.Literal(200, 202, 429)),
-  session_duration: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_all: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.Literal("fifo", "random", "passthrough", "reject"))),
+  queueing_status_code: Schema.optional(Schema.NullOr(Schema.Literal(200, 202, 429))),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
   total_active_users: Schema.Number,
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/waiting_rooms/{waiting_room_id}" }),
@@ -21467,38 +21467,38 @@ export interface UpdateWaitingRoomResponse {
 
 export const UpdateWaitingRoomResponse = Schema.Struct({
   result: Schema.Struct({
-  additional_routes: Schema.optional(Schema.Array(Schema.Struct({
-  host: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String)
+  additional_routes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  cookie_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("auto", "lax", "none", "strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("auto", "always", "never")))
 }))),
-  cookie_attributes: Schema.optional(Schema.Struct({
-  samesite: Schema.optional(Schema.Literal("auto", "lax", "none", "strict")),
-  secure: Schema.optional(Schema.Literal("auto", "always", "never"))
-})),
-  cookie_suffix: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  custom_page_html: Schema.optional(Schema.String),
-  default_template_language: Schema.optional(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN")),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  enabled_origin_commands: Schema.optional(Schema.Array(Schema.Literal("revoke"))),
-  host: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  json_response_enabled: Schema.optional(Schema.Boolean),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  new_users_per_minute: Schema.optional(Schema.Number),
-  next_event_prequeue_start_time: Schema.optional(Schema.String),
-  next_event_start_time: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  queue_all: Schema.optional(Schema.Boolean),
-  queueing_method: Schema.optional(Schema.Literal("fifo", "random", "passthrough", "reject")),
-  queueing_status_code: Schema.optional(Schema.Literal(200, 202, 429)),
-  session_duration: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  cookie_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  default_template_language: Schema.optional(Schema.NullOr(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  enabled_origin_commands: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("revoke")))),
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  json_response_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  next_event_prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  next_event_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_all: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.Literal("fifo", "random", "passthrough", "reject"))),
+  queueing_status_code: Schema.optional(Schema.NullOr(Schema.Literal(200, 202, 429))),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21540,7 +21540,7 @@ export interface DeleteWaitingRoomResponse {
 
 export const DeleteWaitingRoomResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21573,33 +21573,33 @@ export const PatchWaitingRoomRequest = Schema.Struct({
   waiting_room_id: Schema.String.pipe(T.HttpPath("waiting_room_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  additional_routes: Schema.optional(Schema.Array(Schema.Struct({
-  host: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String)
+  additional_routes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  cookie_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("auto", "lax", "none", "strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("auto", "always", "never")))
 }))),
-  cookie_attributes: Schema.optional(Schema.Struct({
-  samesite: Schema.optional(Schema.Literal("auto", "lax", "none", "strict")),
-  secure: Schema.optional(Schema.Literal("auto", "always", "never"))
-})),
-  cookie_suffix: Schema.optional(Schema.String),
-  custom_page_html: Schema.optional(Schema.String),
-  default_template_language: Schema.optional(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN")),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  enabled_origin_commands: Schema.optional(Schema.Array(Schema.Literal("revoke"))),
+  cookie_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  default_template_language: Schema.optional(Schema.NullOr(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  enabled_origin_commands: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("revoke")))),
   host: Schema.String,
-  json_response_enabled: Schema.optional(Schema.Boolean),
+  json_response_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
   name: Schema.String,
   new_users_per_minute: Schema.Number,
-  path: Schema.optional(Schema.String),
-  queue_all: Schema.optional(Schema.Boolean),
-  queueing_method: Schema.optional(Schema.Literal("fifo", "random", "passthrough", "reject")),
-  queueing_status_code: Schema.optional(Schema.Literal(200, 202, 429)),
-  session_duration: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_all: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.Literal("fifo", "random", "passthrough", "reject"))),
+  queueing_status_code: Schema.optional(Schema.NullOr(Schema.Literal(200, 202, 429))),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
   total_active_users: Schema.Number,
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/waiting_rooms/{waiting_room_id}" }),
@@ -21612,38 +21612,38 @@ export interface PatchWaitingRoomResponse {
 
 export const PatchWaitingRoomResponse = Schema.Struct({
   result: Schema.Struct({
-  additional_routes: Schema.optional(Schema.Array(Schema.Struct({
-  host: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String)
+  additional_routes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  cookie_attributes: Schema.optional(Schema.NullOr(Schema.Struct({
+  samesite: Schema.optional(Schema.NullOr(Schema.Literal("auto", "lax", "none", "strict"))),
+  secure: Schema.optional(Schema.NullOr(Schema.Literal("auto", "always", "never")))
 }))),
-  cookie_attributes: Schema.optional(Schema.Struct({
-  samesite: Schema.optional(Schema.Literal("auto", "lax", "none", "strict")),
-  secure: Schema.optional(Schema.Literal("auto", "always", "never"))
-})),
-  cookie_suffix: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  custom_page_html: Schema.optional(Schema.String),
-  default_template_language: Schema.optional(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN")),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  enabled_origin_commands: Schema.optional(Schema.Array(Schema.Literal("revoke"))),
-  host: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  json_response_enabled: Schema.optional(Schema.Boolean),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  new_users_per_minute: Schema.optional(Schema.Number),
-  next_event_prequeue_start_time: Schema.optional(Schema.String),
-  next_event_start_time: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  queue_all: Schema.optional(Schema.Boolean),
-  queueing_method: Schema.optional(Schema.Literal("fifo", "random", "passthrough", "reject")),
-  queueing_status_code: Schema.optional(Schema.Literal(200, 202, 429)),
-  session_duration: Schema.optional(Schema.Number),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  cookie_suffix: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  default_template_language: Schema.optional(Schema.NullOr(Schema.Literal("en-US", "es-ES", "de-DE", "fr-FR", "it-IT", "ja-JP", "ko-KR", "pt-BR", "zh-CN", "zh-TW", "nl-NL", "pl-PL", "id-ID", "tr-TR", "ar-EG", "ru-RU", "fa-IR", "bg-BG", "hr-HR", "cs-CZ", "da-DK", "fi-FI", "lt-LT", "ms-MY", "nb-NO", "ro-RO", "el-GR", "he-IL", "hi-IN", "hu-HU", "sr-BA", "sk-SK", "sl-SI", "sv-SE", "tl-PH", "th-TH", "uk-UA", "vi-VN"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  enabled_origin_commands: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("revoke")))),
+  host: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  json_response_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  next_event_prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  next_event_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_all: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.Literal("fifo", "random", "passthrough", "reject"))),
+  queueing_status_code: Schema.optional(Schema.NullOr(Schema.Literal(200, 202, 429))),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21685,24 +21685,24 @@ export interface ListEventsResponse {
 
 export const ListEventsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  custom_page_html: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  event_end_time: Schema.optional(Schema.String),
-  event_start_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  new_users_per_minute: Schema.optional(Schema.Number),
-  prequeue_start_time: Schema.optional(Schema.String),
-  queueing_method: Schema.optional(Schema.String),
-  session_duration: Schema.optional(Schema.Number),
-  shuffle_at_event_start: Schema.optional(Schema.Boolean),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  event_end_time: Schema.optional(Schema.NullOr(Schema.String)),
+  event_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.String)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  shuffle_at_event_start: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21735,21 +21735,21 @@ export const CreateEventRequest = Schema.Struct({
   waiting_room_id: Schema.String.pipe(T.HttpPath("waiting_room_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  custom_page_html: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
   event_end_time: Schema.String,
   event_start_time: Schema.String,
   name: Schema.String,
-  new_users_per_minute: Schema.optional(Schema.Number),
-  prequeue_start_time: Schema.optional(Schema.String),
-  queueing_method: Schema.optional(Schema.String),
-  session_duration: Schema.optional(Schema.Number),
-  shuffle_at_event_start: Schema.optional(Schema.Boolean),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.String)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  shuffle_at_event_start: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/waiting_rooms/{waiting_room_id}/events" }),
@@ -21762,24 +21762,24 @@ export interface CreateEventResponse {
 
 export const CreateEventResponse = Schema.Struct({
   result: Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  custom_page_html: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  event_end_time: Schema.optional(Schema.String),
-  event_start_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  new_users_per_minute: Schema.optional(Schema.Number),
-  prequeue_start_time: Schema.optional(Schema.String),
-  queueing_method: Schema.optional(Schema.String),
-  session_duration: Schema.optional(Schema.Number),
-  shuffle_at_event_start: Schema.optional(Schema.Boolean),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  event_end_time: Schema.optional(Schema.NullOr(Schema.String)),
+  event_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.String)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  shuffle_at_event_start: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21823,24 +21823,24 @@ export interface WaitingRoomEventDetailsResponse {
 
 export const WaitingRoomEventDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  custom_page_html: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  event_end_time: Schema.optional(Schema.String),
-  event_start_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  new_users_per_minute: Schema.optional(Schema.Number),
-  prequeue_start_time: Schema.optional(Schema.String),
-  queueing_method: Schema.optional(Schema.String),
-  session_duration: Schema.optional(Schema.Number),
-  shuffle_at_event_start: Schema.optional(Schema.Boolean),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  event_end_time: Schema.optional(Schema.NullOr(Schema.String)),
+  event_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.String)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  shuffle_at_event_start: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21875,21 +21875,21 @@ export const UpdateEventRequest = Schema.Struct({
   waiting_room_id: Schema.String.pipe(T.HttpPath("waiting_room_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  custom_page_html: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
   event_end_time: Schema.String,
   event_start_time: Schema.String,
   name: Schema.String,
-  new_users_per_minute: Schema.optional(Schema.Number),
-  prequeue_start_time: Schema.optional(Schema.String),
-  queueing_method: Schema.optional(Schema.String),
-  session_duration: Schema.optional(Schema.Number),
-  shuffle_at_event_start: Schema.optional(Schema.Boolean),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.String)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  shuffle_at_event_start: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/waiting_rooms/{waiting_room_id}/events/{event_id}" }),
@@ -21902,24 +21902,24 @@ export interface UpdateEventResponse {
 
 export const UpdateEventResponse = Schema.Struct({
   result: Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  custom_page_html: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  event_end_time: Schema.optional(Schema.String),
-  event_start_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  new_users_per_minute: Schema.optional(Schema.Number),
-  prequeue_start_time: Schema.optional(Schema.String),
-  queueing_method: Schema.optional(Schema.String),
-  session_duration: Schema.optional(Schema.Number),
-  shuffle_at_event_start: Schema.optional(Schema.Boolean),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  event_end_time: Schema.optional(Schema.NullOr(Schema.String)),
+  event_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.String)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  shuffle_at_event_start: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21963,7 +21963,7 @@ export interface DeleteEventResponse {
 
 export const DeleteEventResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -21998,21 +21998,21 @@ export const PatchEventRequest = Schema.Struct({
   waiting_room_id: Schema.String.pipe(T.HttpPath("waiting_room_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  custom_page_html: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
   event_end_time: Schema.String,
   event_start_time: Schema.String,
   name: Schema.String,
-  new_users_per_minute: Schema.optional(Schema.Number),
-  prequeue_start_time: Schema.optional(Schema.String),
-  queueing_method: Schema.optional(Schema.String),
-  session_duration: Schema.optional(Schema.Number),
-  shuffle_at_event_start: Schema.optional(Schema.Boolean),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.String)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  shuffle_at_event_start: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/waiting_rooms/{waiting_room_id}/events/{event_id}" }),
@@ -22025,24 +22025,24 @@ export interface PatchEventResponse {
 
 export const PatchEventResponse = Schema.Struct({
   result: Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  custom_page_html: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  event_end_time: Schema.optional(Schema.String),
-  event_start_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  new_users_per_minute: Schema.optional(Schema.Number),
-  prequeue_start_time: Schema.optional(Schema.String),
-  queueing_method: Schema.optional(Schema.String),
-  session_duration: Schema.optional(Schema.Number),
-  shuffle_at_event_start: Schema.optional(Schema.Boolean),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number),
-  turnstile_action: Schema.optional(Schema.Literal("log", "infinite_queue")),
-  turnstile_mode: Schema.optional(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed"))
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  event_end_time: Schema.optional(Schema.NullOr(Schema.String)),
+  event_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.String)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  shuffle_at_event_start: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  turnstile_action: Schema.optional(Schema.NullOr(Schema.Literal("log", "infinite_queue"))),
+  turnstile_mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "invisible", "visible_non_interactive", "visible_managed")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22086,22 +22086,22 @@ export interface WaitingRoomPreviewActiveEventDetailsResponse {
 
 export const WaitingRoomPreviewActiveEventDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  custom_page_html: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  disable_session_renewal: Schema.optional(Schema.Boolean),
-  event_end_time: Schema.optional(Schema.String),
-  event_start_time: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  new_users_per_minute: Schema.optional(Schema.Number),
-  prequeue_start_time: Schema.optional(Schema.String),
-  queueing_method: Schema.optional(Schema.String),
-  session_duration: Schema.optional(Schema.Number),
-  shuffle_at_event_start: Schema.optional(Schema.Boolean),
-  suspended: Schema.optional(Schema.Boolean),
-  total_active_users: Schema.optional(Schema.Number)
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  custom_page_html: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  disable_session_renewal: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  event_end_time: Schema.optional(Schema.NullOr(Schema.String)),
+  event_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  new_users_per_minute: Schema.optional(Schema.NullOr(Schema.Number)),
+  prequeue_start_time: Schema.optional(Schema.NullOr(Schema.String)),
+  queueing_method: Schema.optional(Schema.NullOr(Schema.String)),
+  session_duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  shuffle_at_event_start: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  suspended: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  total_active_users: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22143,13 +22143,13 @@ export interface ListWaitingRoomRulesResponse {
 
 export const ListWaitingRoomRulesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  action: Schema.optional(Schema.Literal("bypass_waiting_room")),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  last_updated: Schema.optional(Schema.Date),
-  version: Schema.optional(Schema.String)
+  action: Schema.optional(Schema.NullOr(Schema.Literal("bypass_waiting_room"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  last_updated: Schema.optional(Schema.NullOr(Schema.Date)),
+  version: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22183,8 +22183,8 @@ export const CreateWaitingRoomRuleRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   action: Schema.Literal("bypass_waiting_room"),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
   expression: Schema.String
 }).pipe(T.HttpBody())
 }).pipe(
@@ -22198,13 +22198,13 @@ export interface CreateWaitingRoomRuleResponse {
 
 export const CreateWaitingRoomRuleResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  action: Schema.optional(Schema.Literal("bypass_waiting_room")),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  last_updated: Schema.optional(Schema.Date),
-  version: Schema.optional(Schema.String)
+  action: Schema.optional(Schema.NullOr(Schema.Literal("bypass_waiting_room"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  last_updated: Schema.optional(Schema.NullOr(Schema.Date)),
+  version: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22238,8 +22238,8 @@ export const WaitingRoomReplaceWaitingRoomRulesRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Array(Schema.Struct({
   action: Schema.Literal("bypass_waiting_room"),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
   expression: Schema.String
 })).pipe(T.HttpBody())
 }).pipe(
@@ -22253,13 +22253,13 @@ export interface WaitingRoomReplaceWaitingRoomRulesResponse {
 
 export const WaitingRoomReplaceWaitingRoomRulesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  action: Schema.optional(Schema.Literal("bypass_waiting_room")),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  last_updated: Schema.optional(Schema.Date),
-  version: Schema.optional(Schema.String)
+  action: Schema.optional(Schema.NullOr(Schema.Literal("bypass_waiting_room"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  last_updated: Schema.optional(Schema.NullOr(Schema.Date)),
+  version: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22303,13 +22303,13 @@ export interface DeleteWaitingRoomRuleResponse {
 
 export const DeleteWaitingRoomRuleResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  action: Schema.optional(Schema.Literal("bypass_waiting_room")),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  last_updated: Schema.optional(Schema.Date),
-  version: Schema.optional(Schema.String)
+  action: Schema.optional(Schema.NullOr(Schema.Literal("bypass_waiting_room"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  last_updated: Schema.optional(Schema.NullOr(Schema.Date)),
+  version: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22345,10 +22345,10 @@ export const PatchWaitingRoomRuleRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   action: Schema.Literal("bypass_waiting_room"),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
   expression: Schema.String,
-  position: Schema.optional(Schema.Struct({}))
+  position: Schema.optional(Schema.NullOr(Schema.Struct({})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/waiting_rooms/{waiting_room_id}/rules/{rule_id}" }),
@@ -22361,13 +22361,13 @@ export interface PatchWaitingRoomRuleResponse {
 
 export const PatchWaitingRoomRuleResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  action: Schema.optional(Schema.Literal("bypass_waiting_room")),
-  description: Schema.optional(Schema.String),
-  enabled: Schema.optional(Schema.Boolean),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  last_updated: Schema.optional(Schema.Date),
-  version: Schema.optional(Schema.String)
+  action: Schema.optional(Schema.NullOr(Schema.Literal("bypass_waiting_room"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  last_updated: Schema.optional(Schema.NullOr(Schema.Date)),
+  version: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22409,11 +22409,11 @@ export interface GetWaitingRoomStatusResponse {
 
 export const GetWaitingRoomStatusResponse = Schema.Struct({
   result: Schema.Struct({
-  estimated_queued_users: Schema.optional(Schema.Number),
-  estimated_total_active_users: Schema.optional(Schema.Number),
-  event_id: Schema.optional(Schema.String),
-  max_estimated_time_minutes: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Literal("event_prequeueing", "not_queueing", "queueing", "suspended"))
+  estimated_queued_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  estimated_total_active_users: Schema.optional(Schema.NullOr(Schema.Number)),
+  event_id: Schema.optional(Schema.NullOr(Schema.String)),
+  max_estimated_time_minutes: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("event_prequeueing", "not_queueing", "queueing", "suspended")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22453,14 +22453,14 @@ export interface ListWeb3HostnamesResponse {
 
 export const ListWeb3HostnamesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  dnslink: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("active", "pending", "deleting", "error")),
-  target: Schema.optional(Schema.Literal("ethereum", "ipfs", "ipfs_universal_path"))
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  dnslink: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "pending", "deleting", "error"))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ethereum", "ipfs", "ipfs_universal_path")))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22491,8 +22491,8 @@ export interface CreateWeb3HostnameRequest {
 export const CreateWeb3HostnameRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  dnslink: Schema.optional(Schema.String),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  dnslink: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String,
   target: Schema.Literal("ethereum", "ipfs", "ipfs_universal_path")
 }).pipe(T.HttpBody())
@@ -22507,14 +22507,14 @@ export interface CreateWeb3HostnameResponse {
 
 export const CreateWeb3HostnameResponse = Schema.Struct({
   result: Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  dnslink: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("active", "pending", "deleting", "error")),
-  target: Schema.optional(Schema.Literal("ethereum", "ipfs", "ipfs_universal_path"))
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  dnslink: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "pending", "deleting", "error"))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ethereum", "ipfs", "ipfs_universal_path")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22556,14 +22556,14 @@ export interface Web3HostnameWeb3HostnameDetailsResponse {
 
 export const Web3HostnameWeb3HostnameDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  dnslink: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("active", "pending", "deleting", "error")),
-  target: Schema.optional(Schema.Literal("ethereum", "ipfs", "ipfs_universal_path"))
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  dnslink: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "pending", "deleting", "error"))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ethereum", "ipfs", "ipfs_universal_path")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22638,8 +22638,8 @@ export const Web3HostnameEditWeb3HostnameRequest = Schema.Struct({
   identifier: Schema.String.pipe(T.HttpPath("identifier")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  dnslink: Schema.optional(Schema.String)
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  dnslink: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/web3/hostnames/{identifier}" }),
@@ -22652,14 +22652,14 @@ export interface Web3HostnameEditWeb3HostnameResponse {
 
 export const Web3HostnameEditWeb3HostnameResponse = Schema.Struct({
   result: Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  dnslink: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  name: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("active", "pending", "deleting", "error")),
-  target: Schema.optional(Schema.Literal("ethereum", "ipfs", "ipfs_universal_path"))
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  dnslink: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "pending", "deleting", "error"))),
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ethereum", "ipfs", "ipfs_universal_path")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22701,7 +22701,7 @@ export interface ListDetails1Response {
 
 export const ListDetails1Response = Schema.Struct({
   result: Schema.Struct({
-  action: Schema.optional(Schema.Literal("block"))
+  action: Schema.optional(Schema.NullOr(Schema.Literal("block")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22736,12 +22736,12 @@ export const List4Request = Schema.Struct({
   body: Schema.Struct({
   action: Schema.Literal("block"),
   entries: Schema.Array(Schema.Struct({
-  content: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  type: Schema.optional(Schema.Literal("cid", "content_path"))
+  content: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("cid", "content_path")))
 }))
 }).pipe(T.HttpBody())
 }).pipe(
@@ -22755,7 +22755,7 @@ export interface List4Response {
 
 export const List4Response = Schema.Struct({
   result: Schema.Struct({
-  action: Schema.optional(Schema.Literal("block"))
+  action: Schema.optional(Schema.NullOr(Schema.Literal("block")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22797,14 +22797,14 @@ export interface ListEntriesResponse {
 
 export const ListEntriesResponse = Schema.Struct({
   result: Schema.Struct({
-  entries: Schema.optional(Schema.Array(Schema.Struct({
-  content: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  type: Schema.optional(Schema.Literal("cid", "content_path"))
-})))
+  entries: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  content: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("cid", "content_path")))
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22838,7 +22838,7 @@ export const ListEntryRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   content: Schema.String,
-  description: Schema.optional(Schema.String),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
   type: Schema.Literal("cid", "content_path")
 }).pipe(T.HttpBody())
 }).pipe(
@@ -22852,12 +22852,12 @@ export interface ListEntryResponse {
 
 export const ListEntryResponse = Schema.Struct({
   result: Schema.Struct({
-  content: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  type: Schema.optional(Schema.Literal("cid", "content_path"))
+  content: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("cid", "content_path")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22901,12 +22901,12 @@ export interface ListEntryDetailsResponse {
 
 export const ListEntryDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  content: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  type: Schema.optional(Schema.Literal("cid", "content_path"))
+  content: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("cid", "content_path")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -22942,7 +22942,7 @@ export const ListEntry1Request = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   content: Schema.String,
-  description: Schema.optional(Schema.String),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
   type: Schema.Literal("cid", "content_path")
 }).pipe(T.HttpBody())
 }).pipe(
@@ -22956,12 +22956,12 @@ export interface ListEntry1Response {
 
 export const ListEntry1Response = Schema.Struct({
   result: Schema.Struct({
-  content: Schema.optional(Schema.String),
-  created_on: Schema.optional(Schema.Date),
-  description: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.Date),
-  type: Schema.optional(Schema.Literal("cid", "content_path"))
+  content: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("cid", "content_path")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -23047,7 +23047,7 @@ export const ListRoutesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
   id: Schema.String,
   pattern: Schema.String,
-  script: Schema.optional(Schema.String)
+  script: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -23080,7 +23080,7 @@ export const CreateRouteRequest = Schema.Struct({
   body: Schema.Struct({
   id: Schema.String,
   pattern: Schema.String,
-  script: Schema.optional(Schema.String)
+  script: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/workers/routes" }),
@@ -23095,7 +23095,7 @@ export const CreateRouteResponse = Schema.Struct({
   result: Schema.Struct({
   id: Schema.String,
   pattern: Schema.String,
-  script: Schema.optional(Schema.String)
+  script: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -23139,7 +23139,7 @@ export const GetRouteResponse = Schema.Struct({
   result: Schema.Struct({
   id: Schema.String,
   pattern: Schema.String,
-  script: Schema.optional(Schema.String)
+  script: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -23174,7 +23174,7 @@ export const UpdateRouteRequest = Schema.Struct({
   body: Schema.Struct({
   id: Schema.String,
   pattern: Schema.String,
-  script: Schema.optional(Schema.String)
+  script: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/workers/routes/{route_id}" }),
@@ -23189,7 +23189,7 @@ export const UpdateRouteResponse = Schema.Struct({
   result: Schema.Struct({
   id: Schema.String,
   pattern: Schema.String,
-  script: Schema.optional(Schema.String)
+  script: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -23231,7 +23231,7 @@ export interface DeleteRouteResponse {
 
 export const DeleteRouteResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

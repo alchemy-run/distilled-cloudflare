@@ -62,47 +62,47 @@ export interface ListVideosResponse {
 
 export const ListVideosResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  allowedOrigins: Schema.optional(Schema.Array(Schema.String)),
-  created: Schema.optional(Schema.Date),
-  creator: Schema.optional(Schema.String),
-  duration: Schema.optional(Schema.Number),
-  input: Schema.optional(Schema.Struct({
-  height: Schema.optional(Schema.Number),
-  width: Schema.optional(Schema.Number)
-})),
-  liveInput: Schema.optional(Schema.String),
-  maxDurationSeconds: Schema.optional(Schema.Number),
-  meta: Schema.optional(Schema.Struct({})),
-  modified: Schema.optional(Schema.Date),
-  playback: Schema.optional(Schema.Struct({
-  dash: Schema.optional(Schema.String),
-  hls: Schema.optional(Schema.String)
-})),
-  preview: Schema.optional(Schema.String),
-  readyToStream: Schema.optional(Schema.Boolean),
-  readyToStreamAt: Schema.optional(Schema.Date),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  scheduledDeletion: Schema.optional(Schema.Date),
-  size: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Unknown),
-  thumbnail: Schema.optional(Schema.String),
-  thumbnailTimestampPct: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  uploadExpiry: Schema.optional(Schema.Date),
-  uploaded: Schema.optional(Schema.Date),
-  watermark: Schema.optional(Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  downloadedFrom: Schema.optional(Schema.String),
-  height: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  opacity: Schema.optional(Schema.Number),
-  padding: Schema.optional(Schema.Number),
-  position: Schema.optional(Schema.String),
-  scale: Schema.optional(Schema.Number),
-  size: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  width: Schema.optional(Schema.Number)
-}))
+  allowedOrigins: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  input: Schema.optional(Schema.NullOr(Schema.Struct({
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  liveInput: Schema.optional(Schema.NullOr(Schema.String)),
+  maxDurationSeconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  modified: Schema.optional(Schema.NullOr(Schema.Date)),
+  playback: Schema.optional(Schema.NullOr(Schema.Struct({
+  dash: Schema.optional(Schema.NullOr(Schema.String)),
+  hls: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  preview: Schema.optional(Schema.NullOr(Schema.String)),
+  readyToStream: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  readyToStreamAt: Schema.optional(Schema.NullOr(Schema.Date)),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  scheduledDeletion: Schema.optional(Schema.NullOr(Schema.Date)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  thumbnail: Schema.optional(Schema.NullOr(Schema.String)),
+  thumbnailTimestampPct: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  uploadExpiry: Schema.optional(Schema.NullOr(Schema.Date)),
+  uploaded: Schema.optional(Schema.NullOr(Schema.Date)),
+  watermark: Schema.optional(Schema.NullOr(Schema.Struct({
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  downloadedFrom: Schema.optional(Schema.NullOr(Schema.String)),
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  opacity: Schema.optional(Schema.NullOr(Schema.Number)),
+  padding: Schema.optional(Schema.NullOr(Schema.Number)),
+  position: Schema.optional(Schema.NullOr(Schema.String)),
+  scale: Schema.optional(Schema.NullOr(Schema.Number)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -181,17 +181,17 @@ export interface StreamVideoClippingClipVideosGivenAStartAndEndTimeRequest {
 export const StreamVideoClippingClipVideosGivenAStartAndEndTimeRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  allowedOrigins: Schema.optional(Schema.Array(Schema.String)),
+  allowedOrigins: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   clippedFromVideoUID: Schema.String,
-  creator: Schema.optional(Schema.String),
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
   endTimeSeconds: Schema.Number,
-  maxDurationSeconds: Schema.optional(Schema.Number),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
+  maxDurationSeconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
   startTimeSeconds: Schema.Number,
-  thumbnailTimestampPct: Schema.optional(Schema.Number),
-  watermark: Schema.optional(Schema.Struct({
-  uid: Schema.optional(Schema.String)
-}))
+  thumbnailTimestampPct: Schema.optional(Schema.NullOr(Schema.Number)),
+  watermark: Schema.optional(Schema.NullOr(Schema.Struct({
+  uid: Schema.optional(Schema.NullOr(Schema.String))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/stream/clip" }),
@@ -246,47 +246,47 @@ export interface StreamVideosUploadVideosFromAUrlResponse {
 
 export const StreamVideosUploadVideosFromAUrlResponse = Schema.Struct({
   result: Schema.Struct({
-  allowedOrigins: Schema.optional(Schema.Array(Schema.String)),
-  created: Schema.optional(Schema.Date),
-  creator: Schema.optional(Schema.String),
-  duration: Schema.optional(Schema.Number),
-  input: Schema.optional(Schema.Struct({
-  height: Schema.optional(Schema.Number),
-  width: Schema.optional(Schema.Number)
-})),
-  liveInput: Schema.optional(Schema.String),
-  maxDurationSeconds: Schema.optional(Schema.Number),
-  meta: Schema.optional(Schema.Struct({})),
-  modified: Schema.optional(Schema.Date),
-  playback: Schema.optional(Schema.Struct({
-  dash: Schema.optional(Schema.String),
-  hls: Schema.optional(Schema.String)
-})),
-  preview: Schema.optional(Schema.String),
-  readyToStream: Schema.optional(Schema.Boolean),
-  readyToStreamAt: Schema.optional(Schema.Date),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  scheduledDeletion: Schema.optional(Schema.Date),
-  size: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Unknown),
-  thumbnail: Schema.optional(Schema.String),
-  thumbnailTimestampPct: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  uploadExpiry: Schema.optional(Schema.Date),
-  uploaded: Schema.optional(Schema.Date),
-  watermark: Schema.optional(Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  downloadedFrom: Schema.optional(Schema.String),
-  height: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  opacity: Schema.optional(Schema.Number),
-  padding: Schema.optional(Schema.Number),
-  position: Schema.optional(Schema.String),
-  scale: Schema.optional(Schema.Number),
-  size: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  width: Schema.optional(Schema.Number)
-}))
+  allowedOrigins: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  input: Schema.optional(Schema.NullOr(Schema.Struct({
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  liveInput: Schema.optional(Schema.NullOr(Schema.String)),
+  maxDurationSeconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  modified: Schema.optional(Schema.NullOr(Schema.Date)),
+  playback: Schema.optional(Schema.NullOr(Schema.Struct({
+  dash: Schema.optional(Schema.NullOr(Schema.String)),
+  hls: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  preview: Schema.optional(Schema.NullOr(Schema.String)),
+  readyToStream: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  readyToStreamAt: Schema.optional(Schema.NullOr(Schema.Date)),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  scheduledDeletion: Schema.optional(Schema.NullOr(Schema.Date)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  thumbnail: Schema.optional(Schema.NullOr(Schema.String)),
+  thumbnailTimestampPct: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  uploadExpiry: Schema.optional(Schema.NullOr(Schema.Date)),
+  uploaded: Schema.optional(Schema.NullOr(Schema.Date)),
+  watermark: Schema.optional(Schema.NullOr(Schema.Struct({
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  downloadedFrom: Schema.optional(Schema.NullOr(Schema.String)),
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  opacity: Schema.optional(Schema.NullOr(Schema.Number)),
+  padding: Schema.optional(Schema.NullOr(Schema.Number)),
+  position: Schema.optional(Schema.NullOr(Schema.String)),
+  scale: Schema.optional(Schema.NullOr(Schema.Number)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -319,17 +319,17 @@ export const StreamVideosUploadVideosViaDirectUploadUrLsRequest = Schema.Struct(
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   "Upload-Creator": Schema.optional(Schema.String).pipe(T.HttpHeader("Upload-Creator")),
   body: Schema.Struct({
-  allowedOrigins: Schema.optional(Schema.Array(Schema.String)),
-  creator: Schema.optional(Schema.String),
-  expiry: Schema.optional(Schema.Date),
+  allowedOrigins: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  expiry: Schema.optional(Schema.NullOr(Schema.Date)),
   maxDurationSeconds: Schema.Number,
-  meta: Schema.optional(Schema.Struct({})),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  scheduledDeletion: Schema.optional(Schema.Date),
-  thumbnailTimestampPct: Schema.optional(Schema.Number),
-  watermark: Schema.optional(Schema.Struct({
-  uid: Schema.optional(Schema.String)
-}))
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  scheduledDeletion: Schema.optional(Schema.NullOr(Schema.Date)),
+  thumbnailTimestampPct: Schema.optional(Schema.NullOr(Schema.Number)),
+  watermark: Schema.optional(Schema.NullOr(Schema.Struct({
+  uid: Schema.optional(Schema.NullOr(Schema.String))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/stream/direct_upload" }),
@@ -342,22 +342,22 @@ export interface StreamVideosUploadVideosViaDirectUploadUrLsResponse {
 
 export const StreamVideosUploadVideosViaDirectUploadUrLsResponse = Schema.Struct({
   result: Schema.Struct({
-  scheduledDeletion: Schema.optional(Schema.Date),
-  uid: Schema.optional(Schema.String),
-  uploadURL: Schema.optional(Schema.String),
-  watermark: Schema.optional(Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  downloadedFrom: Schema.optional(Schema.String),
-  height: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  opacity: Schema.optional(Schema.Number),
-  padding: Schema.optional(Schema.Number),
-  position: Schema.optional(Schema.String),
-  scale: Schema.optional(Schema.Number),
-  size: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  width: Schema.optional(Schema.Number)
-}))
+  scheduledDeletion: Schema.optional(Schema.NullOr(Schema.Date)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  uploadURL: Schema.optional(Schema.NullOr(Schema.String)),
+  watermark: Schema.optional(Schema.NullOr(Schema.Struct({
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  downloadedFrom: Schema.optional(Schema.NullOr(Schema.String)),
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  opacity: Schema.optional(Schema.NullOr(Schema.Number)),
+  padding: Schema.optional(Schema.NullOr(Schema.Number)),
+  position: Schema.optional(Schema.NullOr(Schema.String)),
+  scale: Schema.optional(Schema.NullOr(Schema.Number)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -397,8 +397,8 @@ export interface ListSigningKeysResponse {
 
 export const ListSigningKeysResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  id: Schema.optional(Schema.String)
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  id: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -438,10 +438,10 @@ export interface CreateSigningKeysResponse {
 
 export const CreateSigningKeysResponse = Schema.Struct({
   result: Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  id: Schema.optional(Schema.String),
-  jwk: Schema.optional(Schema.String),
-  pem: Schema.optional(Schema.String)
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  jwk: Schema.optional(Schema.NullOr(Schema.String)),
+  pem: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -523,9 +523,9 @@ export interface ListLiveInputsResponse {
 
 export const ListLiveInputsResponse = Schema.Struct({
   result: Schema.Struct({
-  liveInputs: Schema.optional(Schema.Array(Schema.Unknown)),
-  range: Schema.optional(Schema.Number),
-  total: Schema.optional(Schema.Number)
+  liveInputs: Schema.optional(Schema.NullOr(Schema.Array(Schema.Unknown))),
+  range: Schema.optional(Schema.NullOr(Schema.Number)),
+  total: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -567,43 +567,43 @@ export interface CreateALiveInputResponse {
 
 export const CreateALiveInputResponse = Schema.Struct({
   result: Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  deleteRecordingAfterDays: Schema.optional(Schema.Number),
-  meta: Schema.optional(Schema.Struct({})),
-  modified: Schema.optional(Schema.Date),
-  recording: Schema.optional(Schema.Struct({
-  allowedOrigins: Schema.optional(Schema.Array(Schema.String)),
-  hideLiveViewerCount: Schema.optional(Schema.Boolean),
-  mode: Schema.optional(Schema.Literal("off", "automatic")),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  timeoutSeconds: Schema.optional(Schema.Number)
-})),
-  rtmps: Schema.optional(Schema.Struct({
-  streamKey: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  rtmpsPlayback: Schema.optional(Schema.Struct({
-  streamKey: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  srt: Schema.optional(Schema.Struct({
-  passphrase: Schema.optional(Schema.String),
-  streamId: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  srtPlayback: Schema.optional(Schema.Struct({
-  passphrase: Schema.optional(Schema.String),
-  streamId: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  status: Schema.optional(Schema.Literal(null, "connected", "reconnected", "reconnecting", "client_disconnect", "ttl_exceeded", "failed_to_connect", "failed_to_reconnect", "new_configuration_accepted")),
-  uid: Schema.optional(Schema.String),
-  webRTC: Schema.optional(Schema.Struct({
-  url: Schema.optional(Schema.String)
-})),
-  webRTCPlayback: Schema.optional(Schema.Struct({
-  url: Schema.optional(Schema.String)
-}))
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  deleteRecordingAfterDays: Schema.optional(Schema.NullOr(Schema.Number)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  modified: Schema.optional(Schema.NullOr(Schema.Date)),
+  recording: Schema.optional(Schema.NullOr(Schema.Struct({
+  allowedOrigins: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  hideLiveViewerCount: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "automatic"))),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  timeoutSeconds: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  rtmps: Schema.optional(Schema.NullOr(Schema.Struct({
+  streamKey: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  rtmpsPlayback: Schema.optional(Schema.NullOr(Schema.Struct({
+  streamKey: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  srt: Schema.optional(Schema.NullOr(Schema.Struct({
+  passphrase: Schema.optional(Schema.NullOr(Schema.String)),
+  streamId: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  srtPlayback: Schema.optional(Schema.NullOr(Schema.Struct({
+  passphrase: Schema.optional(Schema.NullOr(Schema.String)),
+  streamId: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  status: Schema.optional(Schema.NullOr(Schema.Literal(null, "connected", "reconnected", "reconnecting", "client_disconnect", "ttl_exceeded", "failed_to_connect", "failed_to_reconnect", "new_configuration_accepted"))),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  webRTC: Schema.optional(Schema.NullOr(Schema.Struct({
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  webRTCPlayback: Schema.optional(Schema.NullOr(Schema.Struct({
+  url: Schema.optional(Schema.NullOr(Schema.String))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -645,43 +645,43 @@ export interface StreamLiveInputsRetrieveALiveInputResponse {
 
 export const StreamLiveInputsRetrieveALiveInputResponse = Schema.Struct({
   result: Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  deleteRecordingAfterDays: Schema.optional(Schema.Number),
-  meta: Schema.optional(Schema.Struct({})),
-  modified: Schema.optional(Schema.Date),
-  recording: Schema.optional(Schema.Struct({
-  allowedOrigins: Schema.optional(Schema.Array(Schema.String)),
-  hideLiveViewerCount: Schema.optional(Schema.Boolean),
-  mode: Schema.optional(Schema.Literal("off", "automatic")),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  timeoutSeconds: Schema.optional(Schema.Number)
-})),
-  rtmps: Schema.optional(Schema.Struct({
-  streamKey: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  rtmpsPlayback: Schema.optional(Schema.Struct({
-  streamKey: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  srt: Schema.optional(Schema.Struct({
-  passphrase: Schema.optional(Schema.String),
-  streamId: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  srtPlayback: Schema.optional(Schema.Struct({
-  passphrase: Schema.optional(Schema.String),
-  streamId: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  status: Schema.optional(Schema.Literal(null, "connected", "reconnected", "reconnecting", "client_disconnect", "ttl_exceeded", "failed_to_connect", "failed_to_reconnect", "new_configuration_accepted")),
-  uid: Schema.optional(Schema.String),
-  webRTC: Schema.optional(Schema.Struct({
-  url: Schema.optional(Schema.String)
-})),
-  webRTCPlayback: Schema.optional(Schema.Struct({
-  url: Schema.optional(Schema.String)
-}))
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  deleteRecordingAfterDays: Schema.optional(Schema.NullOr(Schema.Number)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  modified: Schema.optional(Schema.NullOr(Schema.Date)),
+  recording: Schema.optional(Schema.NullOr(Schema.Struct({
+  allowedOrigins: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  hideLiveViewerCount: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "automatic"))),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  timeoutSeconds: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  rtmps: Schema.optional(Schema.NullOr(Schema.Struct({
+  streamKey: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  rtmpsPlayback: Schema.optional(Schema.NullOr(Schema.Struct({
+  streamKey: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  srt: Schema.optional(Schema.NullOr(Schema.Struct({
+  passphrase: Schema.optional(Schema.NullOr(Schema.String)),
+  streamId: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  srtPlayback: Schema.optional(Schema.NullOr(Schema.Struct({
+  passphrase: Schema.optional(Schema.NullOr(Schema.String)),
+  streamId: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  status: Schema.optional(Schema.NullOr(Schema.Literal(null, "connected", "reconnected", "reconnecting", "client_disconnect", "ttl_exceeded", "failed_to_connect", "failed_to_reconnect", "new_configuration_accepted"))),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  webRTC: Schema.optional(Schema.NullOr(Schema.Struct({
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  webRTCPlayback: Schema.optional(Schema.NullOr(Schema.Struct({
+  url: Schema.optional(Schema.NullOr(Schema.String))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -725,43 +725,43 @@ export interface UpdateALiveInputResponse {
 
 export const UpdateALiveInputResponse = Schema.Struct({
   result: Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  deleteRecordingAfterDays: Schema.optional(Schema.Number),
-  meta: Schema.optional(Schema.Struct({})),
-  modified: Schema.optional(Schema.Date),
-  recording: Schema.optional(Schema.Struct({
-  allowedOrigins: Schema.optional(Schema.Array(Schema.String)),
-  hideLiveViewerCount: Schema.optional(Schema.Boolean),
-  mode: Schema.optional(Schema.Literal("off", "automatic")),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  timeoutSeconds: Schema.optional(Schema.Number)
-})),
-  rtmps: Schema.optional(Schema.Struct({
-  streamKey: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  rtmpsPlayback: Schema.optional(Schema.Struct({
-  streamKey: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  srt: Schema.optional(Schema.Struct({
-  passphrase: Schema.optional(Schema.String),
-  streamId: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  srtPlayback: Schema.optional(Schema.Struct({
-  passphrase: Schema.optional(Schema.String),
-  streamId: Schema.optional(Schema.String),
-  url: Schema.optional(Schema.String)
-})),
-  status: Schema.optional(Schema.Literal(null, "connected", "reconnected", "reconnecting", "client_disconnect", "ttl_exceeded", "failed_to_connect", "failed_to_reconnect", "new_configuration_accepted")),
-  uid: Schema.optional(Schema.String),
-  webRTC: Schema.optional(Schema.Struct({
-  url: Schema.optional(Schema.String)
-})),
-  webRTCPlayback: Schema.optional(Schema.Struct({
-  url: Schema.optional(Schema.String)
-}))
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  deleteRecordingAfterDays: Schema.optional(Schema.NullOr(Schema.Number)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  modified: Schema.optional(Schema.NullOr(Schema.Date)),
+  recording: Schema.optional(Schema.NullOr(Schema.Struct({
+  allowedOrigins: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  hideLiveViewerCount: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("off", "automatic"))),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  timeoutSeconds: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  rtmps: Schema.optional(Schema.NullOr(Schema.Struct({
+  streamKey: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  rtmpsPlayback: Schema.optional(Schema.NullOr(Schema.Struct({
+  streamKey: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  srt: Schema.optional(Schema.NullOr(Schema.Struct({
+  passphrase: Schema.optional(Schema.NullOr(Schema.String)),
+  streamId: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  srtPlayback: Schema.optional(Schema.NullOr(Schema.Struct({
+  passphrase: Schema.optional(Schema.NullOr(Schema.String)),
+  streamId: Schema.optional(Schema.NullOr(Schema.String)),
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  status: Schema.optional(Schema.NullOr(Schema.Literal(null, "connected", "reconnected", "reconnecting", "client_disconnect", "ttl_exceeded", "failed_to_connect", "failed_to_reconnect", "new_configuration_accepted"))),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  webRTC: Schema.optional(Schema.NullOr(Schema.Struct({
+  url: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  webRTCPlayback: Schema.optional(Schema.NullOr(Schema.Struct({
+  url: Schema.optional(Schema.NullOr(Schema.String))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1011,10 +1011,10 @@ export interface StreamVideosStorageUsageResponse {
 
 export const StreamVideosStorageUsageResponse = Schema.Struct({
   result: Schema.Struct({
-  creator: Schema.optional(Schema.String),
-  totalStorageMinutes: Schema.optional(Schema.Number),
-  totalStorageMinutesLimit: Schema.optional(Schema.Number),
-  videoCount: Schema.optional(Schema.Number)
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  totalStorageMinutes: Schema.optional(Schema.NullOr(Schema.Number)),
+  totalStorageMinutesLimit: Schema.optional(Schema.NullOr(Schema.Number)),
+  videoCount: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1054,17 +1054,17 @@ export interface ListWatermarkProfilesResponse {
 
 export const ListWatermarkProfilesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  downloadedFrom: Schema.optional(Schema.String),
-  height: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  opacity: Schema.optional(Schema.Number),
-  padding: Schema.optional(Schema.Number),
-  position: Schema.optional(Schema.String),
-  scale: Schema.optional(Schema.Number),
-  size: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  width: Schema.optional(Schema.Number)
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  downloadedFrom: Schema.optional(Schema.NullOr(Schema.String)),
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  opacity: Schema.optional(Schema.NullOr(Schema.Number)),
+  padding: Schema.optional(Schema.NullOr(Schema.Number)),
+  position: Schema.optional(Schema.NullOr(Schema.String)),
+  scale: Schema.optional(Schema.NullOr(Schema.Number)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1106,17 +1106,17 @@ export interface CreateWatermarkProfilesViaBasicUploadResponse {
 
 export const CreateWatermarkProfilesViaBasicUploadResponse = Schema.Struct({
   result: Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  downloadedFrom: Schema.optional(Schema.String),
-  height: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  opacity: Schema.optional(Schema.Number),
-  padding: Schema.optional(Schema.Number),
-  position: Schema.optional(Schema.String),
-  scale: Schema.optional(Schema.Number),
-  size: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  width: Schema.optional(Schema.Number)
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  downloadedFrom: Schema.optional(Schema.NullOr(Schema.String)),
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  opacity: Schema.optional(Schema.NullOr(Schema.Number)),
+  padding: Schema.optional(Schema.NullOr(Schema.Number)),
+  position: Schema.optional(Schema.NullOr(Schema.String)),
+  scale: Schema.optional(Schema.NullOr(Schema.Number)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1158,17 +1158,17 @@ export interface StreamWatermarkProfileWatermarkProfileDetailsResponse {
 
 export const StreamWatermarkProfileWatermarkProfileDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  downloadedFrom: Schema.optional(Schema.String),
-  height: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  opacity: Schema.optional(Schema.Number),
-  padding: Schema.optional(Schema.Number),
-  position: Schema.optional(Schema.String),
-  scale: Schema.optional(Schema.Number),
-  size: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  width: Schema.optional(Schema.Number)
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  downloadedFrom: Schema.optional(Schema.NullOr(Schema.String)),
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  opacity: Schema.optional(Schema.NullOr(Schema.Number)),
+  padding: Schema.optional(Schema.NullOr(Schema.Number)),
+  position: Schema.optional(Schema.NullOr(Schema.String)),
+  scale: Schema.optional(Schema.NullOr(Schema.Number)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1366,47 +1366,47 @@ export interface StreamVideosRetrieveVideoDetailsResponse {
 
 export const StreamVideosRetrieveVideoDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  allowedOrigins: Schema.optional(Schema.Array(Schema.String)),
-  created: Schema.optional(Schema.Date),
-  creator: Schema.optional(Schema.String),
-  duration: Schema.optional(Schema.Number),
-  input: Schema.optional(Schema.Struct({
-  height: Schema.optional(Schema.Number),
-  width: Schema.optional(Schema.Number)
-})),
-  liveInput: Schema.optional(Schema.String),
-  maxDurationSeconds: Schema.optional(Schema.Number),
-  meta: Schema.optional(Schema.Struct({})),
-  modified: Schema.optional(Schema.Date),
-  playback: Schema.optional(Schema.Struct({
-  dash: Schema.optional(Schema.String),
-  hls: Schema.optional(Schema.String)
-})),
-  preview: Schema.optional(Schema.String),
-  readyToStream: Schema.optional(Schema.Boolean),
-  readyToStreamAt: Schema.optional(Schema.Date),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  scheduledDeletion: Schema.optional(Schema.Date),
-  size: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Unknown),
-  thumbnail: Schema.optional(Schema.String),
-  thumbnailTimestampPct: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  uploadExpiry: Schema.optional(Schema.Date),
-  uploaded: Schema.optional(Schema.Date),
-  watermark: Schema.optional(Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  downloadedFrom: Schema.optional(Schema.String),
-  height: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  opacity: Schema.optional(Schema.Number),
-  padding: Schema.optional(Schema.Number),
-  position: Schema.optional(Schema.String),
-  scale: Schema.optional(Schema.Number),
-  size: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  width: Schema.optional(Schema.Number)
-}))
+  allowedOrigins: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  input: Schema.optional(Schema.NullOr(Schema.Struct({
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  liveInput: Schema.optional(Schema.NullOr(Schema.String)),
+  maxDurationSeconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  modified: Schema.optional(Schema.NullOr(Schema.Date)),
+  playback: Schema.optional(Schema.NullOr(Schema.Struct({
+  dash: Schema.optional(Schema.NullOr(Schema.String)),
+  hls: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  preview: Schema.optional(Schema.NullOr(Schema.String)),
+  readyToStream: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  readyToStreamAt: Schema.optional(Schema.NullOr(Schema.Date)),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  scheduledDeletion: Schema.optional(Schema.NullOr(Schema.Date)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  thumbnail: Schema.optional(Schema.NullOr(Schema.String)),
+  thumbnailTimestampPct: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  uploadExpiry: Schema.optional(Schema.NullOr(Schema.Date)),
+  uploaded: Schema.optional(Schema.NullOr(Schema.Date)),
+  watermark: Schema.optional(Schema.NullOr(Schema.Struct({
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  downloadedFrom: Schema.optional(Schema.NullOr(Schema.String)),
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  opacity: Schema.optional(Schema.NullOr(Schema.Number)),
+  padding: Schema.optional(Schema.NullOr(Schema.Number)),
+  position: Schema.optional(Schema.NullOr(Schema.String)),
+  scale: Schema.optional(Schema.NullOr(Schema.Number)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1439,14 +1439,14 @@ export const UpdateVideoDetailsRequest = Schema.Struct({
   identifier: Schema.String.pipe(T.HttpPath("identifier")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  allowedOrigins: Schema.optional(Schema.Array(Schema.String)),
-  creator: Schema.optional(Schema.String),
-  maxDurationSeconds: Schema.optional(Schema.Number),
-  meta: Schema.optional(Schema.Struct({})),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  scheduledDeletion: Schema.optional(Schema.Date),
-  thumbnailTimestampPct: Schema.optional(Schema.Number),
-  uploadExpiry: Schema.optional(Schema.Date)
+  allowedOrigins: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  maxDurationSeconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  scheduledDeletion: Schema.optional(Schema.NullOr(Schema.Date)),
+  thumbnailTimestampPct: Schema.optional(Schema.NullOr(Schema.Number)),
+  uploadExpiry: Schema.optional(Schema.NullOr(Schema.Date))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/stream/{identifier}" }),
@@ -1459,47 +1459,47 @@ export interface UpdateVideoDetailsResponse {
 
 export const UpdateVideoDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  allowedOrigins: Schema.optional(Schema.Array(Schema.String)),
-  created: Schema.optional(Schema.Date),
-  creator: Schema.optional(Schema.String),
-  duration: Schema.optional(Schema.Number),
-  input: Schema.optional(Schema.Struct({
-  height: Schema.optional(Schema.Number),
-  width: Schema.optional(Schema.Number)
-})),
-  liveInput: Schema.optional(Schema.String),
-  maxDurationSeconds: Schema.optional(Schema.Number),
-  meta: Schema.optional(Schema.Struct({})),
-  modified: Schema.optional(Schema.Date),
-  playback: Schema.optional(Schema.Struct({
-  dash: Schema.optional(Schema.String),
-  hls: Schema.optional(Schema.String)
-})),
-  preview: Schema.optional(Schema.String),
-  readyToStream: Schema.optional(Schema.Boolean),
-  readyToStreamAt: Schema.optional(Schema.Date),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  scheduledDeletion: Schema.optional(Schema.Date),
-  size: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.Unknown),
-  thumbnail: Schema.optional(Schema.String),
-  thumbnailTimestampPct: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  uploadExpiry: Schema.optional(Schema.Date),
-  uploaded: Schema.optional(Schema.Date),
-  watermark: Schema.optional(Schema.Struct({
-  created: Schema.optional(Schema.Date),
-  downloadedFrom: Schema.optional(Schema.String),
-  height: Schema.optional(Schema.Number),
-  name: Schema.optional(Schema.String),
-  opacity: Schema.optional(Schema.Number),
-  padding: Schema.optional(Schema.Number),
-  position: Schema.optional(Schema.String),
-  scale: Schema.optional(Schema.Number),
-  size: Schema.optional(Schema.Number),
-  uid: Schema.optional(Schema.String),
-  width: Schema.optional(Schema.Number)
-}))
+  allowedOrigins: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  duration: Schema.optional(Schema.NullOr(Schema.Number)),
+  input: Schema.optional(Schema.NullOr(Schema.Struct({
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  liveInput: Schema.optional(Schema.NullOr(Schema.String)),
+  maxDurationSeconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  modified: Schema.optional(Schema.NullOr(Schema.Date)),
+  playback: Schema.optional(Schema.NullOr(Schema.Struct({
+  dash: Schema.optional(Schema.NullOr(Schema.String)),
+  hls: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  preview: Schema.optional(Schema.NullOr(Schema.String)),
+  readyToStream: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  readyToStreamAt: Schema.optional(Schema.NullOr(Schema.Date)),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  scheduledDeletion: Schema.optional(Schema.NullOr(Schema.Date)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.Unknown)),
+  thumbnail: Schema.optional(Schema.NullOr(Schema.String)),
+  thumbnailTimestampPct: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  uploadExpiry: Schema.optional(Schema.NullOr(Schema.Date)),
+  uploaded: Schema.optional(Schema.NullOr(Schema.Date)),
+  watermark: Schema.optional(Schema.NullOr(Schema.Struct({
+  created: Schema.optional(Schema.NullOr(Schema.Date)),
+  downloadedFrom: Schema.optional(Schema.NullOr(Schema.String)),
+  height: Schema.optional(Schema.NullOr(Schema.Number)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  opacity: Schema.optional(Schema.NullOr(Schema.Number)),
+  padding: Schema.optional(Schema.NullOr(Schema.Number)),
+  position: Schema.optional(Schema.NullOr(Schema.String)),
+  scale: Schema.optional(Schema.NullOr(Schema.Number)),
+  size: Schema.optional(Schema.NullOr(Schema.Number)),
+  uid: Schema.optional(Schema.NullOr(Schema.String)),
+  width: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1581,10 +1581,10 @@ export interface ListAudioTracksResponse {
 
 export const ListAudioTracksResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  default: Schema.optional(Schema.Boolean),
-  label: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("queued", "ready", "error")),
-  uid: Schema.optional(Schema.String)
+  default: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("queued", "ready", "error"))),
+  uid: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1618,7 +1618,7 @@ export const AddAudioTrackRequest = Schema.Struct({
   identifier: Schema.String.pipe(T.HttpPath("identifier")),
   body: Schema.Struct({
   label: Schema.String,
-  url: Schema.optional(Schema.String)
+  url: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/stream/{identifier}/audio/copy" }),
@@ -1631,10 +1631,10 @@ export interface AddAudioTrackResponse {
 
 export const AddAudioTrackResponse = Schema.Struct({
   result: Schema.Struct({
-  default: Schema.optional(Schema.Boolean),
-  label: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("queued", "ready", "error")),
-  uid: Schema.optional(Schema.String)
+  default: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("queued", "ready", "error"))),
+  uid: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1711,8 +1711,8 @@ export const EditAudioTracksRequest = Schema.Struct({
   identifier: Schema.String.pipe(T.HttpPath("identifier")),
   audio_identifier: Schema.String.pipe(T.HttpPath("audio_identifier")),
   body: Schema.Struct({
-  default: Schema.optional(Schema.Boolean),
-  label: Schema.optional(Schema.String)
+  default: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  label: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/accounts/{account_id}/stream/{identifier}/audio/{audio_identifier}" }),
@@ -1725,10 +1725,10 @@ export interface EditAudioTracksResponse {
 
 export const EditAudioTracksResponse = Schema.Struct({
   result: Schema.Struct({
-  default: Schema.optional(Schema.Boolean),
-  label: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("queued", "ready", "error")),
-  uid: Schema.optional(Schema.String)
+  default: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("queued", "ready", "error"))),
+  uid: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1770,10 +1770,10 @@ export interface ListCaptionsOrSubtitlesResponse {
 
 export const ListCaptionsOrSubtitlesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  generated: Schema.optional(Schema.Boolean),
-  label: Schema.optional(Schema.String),
-  language: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("ready", "inprogress", "error"))
+  generated: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  language: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("ready", "inprogress", "error")))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1817,10 +1817,10 @@ export interface GetCaptionOrSubtitleForLanguageResponse {
 
 export const GetCaptionOrSubtitleForLanguageResponse = Schema.Struct({
   result: Schema.Struct({
-  generated: Schema.optional(Schema.Boolean),
-  label: Schema.optional(Schema.String),
-  language: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("ready", "inprogress", "error"))
+  generated: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  language: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("ready", "inprogress", "error")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1866,10 +1866,10 @@ export interface StreamSubtitlesCaptionsUploadCaptionsOrSubtitlesResponse {
 
 export const StreamSubtitlesCaptionsUploadCaptionsOrSubtitlesResponse = Schema.Struct({
   result: Schema.Struct({
-  generated: Schema.optional(Schema.Boolean),
-  label: Schema.optional(Schema.String),
-  language: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("ready", "inprogress", "error"))
+  generated: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  language: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("ready", "inprogress", "error")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1955,10 +1955,10 @@ export interface StreamSubtitlesCaptionsGenerateCaptionOrSubtitleForLanguageResp
 
 export const StreamSubtitlesCaptionsGenerateCaptionOrSubtitleForLanguageResponse = Schema.Struct({
   result: Schema.Struct({
-  generated: Schema.optional(Schema.Boolean),
-  label: Schema.optional(Schema.String),
-  language: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.Literal("ready", "inprogress", "error"))
+  generated: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  label: Schema.optional(Schema.NullOr(Schema.String)),
+  language: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("ready", "inprogress", "error")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -2277,17 +2277,17 @@ export const CreateSignedUrlTokensForVideosRequest = Schema.Struct({
   identifier: Schema.String.pipe(T.HttpPath("identifier")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  accessRules: Schema.optional(Schema.Array(Schema.Struct({
-  action: Schema.optional(Schema.Literal("allow", "block")),
-  country: Schema.optional(Schema.Array(Schema.String)),
-  ip: Schema.optional(Schema.Array(Schema.String)),
-  type: Schema.optional(Schema.Literal("any", "ip.src", "ip.geoip.country"))
-}))),
-  downloadable: Schema.optional(Schema.Boolean),
-  exp: Schema.optional(Schema.Number),
-  id: Schema.optional(Schema.String),
-  nbf: Schema.optional(Schema.Number),
-  pem: Schema.optional(Schema.String)
+  accessRules: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  action: Schema.optional(Schema.NullOr(Schema.Literal("allow", "block"))),
+  country: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  ip: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("any", "ip.src", "ip.geoip.country")))
+})))),
+  downloadable: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  exp: Schema.optional(Schema.NullOr(Schema.Number)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  nbf: Schema.optional(Schema.NullOr(Schema.Number)),
+  pem: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/stream/{identifier}/token" }),
@@ -2300,7 +2300,7 @@ export interface CreateSignedUrlTokensForVideosResponse {
 
 export const CreateSignedUrlTokensForVideosResponse = Schema.Struct({
   result: Schema.Struct({
-  token: Schema.optional(Schema.String)
+  token: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

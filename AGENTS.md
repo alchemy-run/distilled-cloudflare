@@ -260,77 +260,92 @@ Run tests again and repeat steps 2-7 for any remaining unknown errors.
 
 ### OpenAPI Schema Patches
 
-The Cloudflare OpenAPI spec has bugs. Use `spec/openapi.patch.json` to fix them.
+The Cloudflare OpenAPI spec has bugs. Use `spec/openapi.patch.jsonc` to fix them.
 
-**Patch behavior:**
-- **Path patches** (`paths`): Deep merged with existing paths
-- **Schema patches** (`components.schemas`): **Fully replace** the existing schema (not merged)
+**Format:** RFC 6902 JSON Patch stored as JSONC (JSON with comments).
 
-This means schema patches must be complete - include all properties you want to keep.
+**Every patch MUST have a comment** explaining:
+- What the patch fixes
+- Why the original spec is wrong
+- How the issue was discovered
+
+#### JSON Pointer Escaping
+
+JSON Patch uses JSON Pointer (RFC 6901) for paths. Special characters must be escaped:
+- `/` becomes `~1`
+- `~` becomes `~0`
+
+Example: `/accounts/{account_id}/workers` becomes `/paths/~1accounts~1{account_id}~1workers`
+
+#### Patch Operations
+
+| Operation | Use Case |
+|-----------|----------|
+| `add` | Add new paths, schemas, or properties |
+| `replace` | Fix existing values (enums, required arrays) |
+| `remove` | Remove incorrect constraints |
 
 #### Common Spec Bugs
 
-1. **Enum case mismatch**: Spec has lowercase, API returns uppercase
+1. **Enum case mismatch**: API returns uppercase, spec has lowercase
 
-```json
+```jsonc
+// R2: Add uppercase location enum values.
+//
+// Problem: The API returns uppercase values (WNAM, EEUR, etc.) but the
+// OpenAPI spec only defines lowercase values (wnam, eeur, etc.).
 {
-  "components": {
-    "schemas": {
-      "r2_bucket_location": {
-        "description": "Location of the bucket. API returns uppercase but spec has lowercase.",
-        "enum": ["APAC", "EEUR", "ENAM", "WEUR", "WNAM", "OC", "apac", "eeur", "enam", "weur", "wnam", "oc"],
-        "type": "string"
-      }
-    }
-  }
+  "op": "replace",
+  "path": "/components/schemas/r2_bucket_location/enum",
+  "value": ["apac", "eeur", "enam", "weur", "wnam", "oc", "APAC", "EEUR", "ENAM", "WEUR", "WNAM", "OC"]
 }
 ```
 
 2. **Required fields that are optional**: Spec marks fields required but API returns empty objects
 
-```json
+```jsonc
+// R2: Make conditions optional in lifecycle rules.
+//
+// Problem: The spec marks 'conditions' as required, but the API returns
+// lifecycle rules with empty/missing conditions objects.
 {
-  "components": {
-    "schemas": {
-      "r2_lifecycle-rule": {
-        "properties": {
-          "conditions": {
-            "properties": { "prefix": { "type": "string" } },
-            "type": "object"
-          },
-          "enabled": { "type": "boolean" },
-          "id": { "type": "string" }
-        },
-        "required": ["id", "enabled"],
-        "type": "object"
-      }
-    }
-  }
+  "op": "replace",
+  "path": "/components/schemas/r2_lifecycle-rule/required",
+  "value": ["id", "enabled"]
 }
 ```
 
-3. **Missing endpoints**: Add entirely new paths for undocumented APIs
+3. **Remove incorrect constraints**: Spec requires a field the API doesn't return
 
-```json
+```jsonc
+// Workers: Make startup_time_ms optional in upload response.
+//
+// Problem: The spec marks 'startup_time_ms' as required in the upload
+// response, but the API doesn't always return this field.
 {
-  "paths": {
-    "/accounts/{account_id}/containers/applications": {
-      "get": {
-        "operationId": "listContainerApplications",
-        "tags": ["Containers"],
-        "parameters": [
-          { "name": "account_id", "in": "path", "required": true, "schema": { "type": "string" } }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": { "properties": { "result": { "type": "array" } } }
-              }
-            }
-          }
-        }
-      }
+  "op": "remove",
+  "path": "/components/schemas/workers_script-response-upload/allOf/1/required"
+}
+```
+
+4. **Add undocumented endpoints**: Add entirely new paths for undocumented APIs
+
+```jsonc
+// Containers API: List and create applications (undocumented).
+//
+// The Containers API is not included in the official OpenAPI spec.
+// Schema reverse-engineered from API responses.
+{
+  "op": "add",
+  "path": "/paths/~1accounts~1{account_id}~1containers~1applications",
+  "value": {
+    "get": {
+      "operationId": "listContainerApplications",
+      "tags": ["Containers"],
+      "parameters": [
+        { "name": "account_id", "in": "path", "required": true, "schema": { "type": "string" } }
+      ],
+      "responses": { "200": { "content": { "application/json": { "schema": { "type": "object" } } } } }
     }
   }
 }
@@ -343,7 +358,7 @@ When you see `CloudflareHttpError: Schema decode failed`:
 1. The error body shows the actual API response
 2. Compare with the generated schema in `src/services/{service}.ts`
 3. Identify the mismatch (wrong enum values, required fields, type differences)
-4. Add a schema patch to `spec/openapi.patch.json`
+4. Add a minimal patch to `spec/openapi.patch.jsonc` with a comment explaining the fix
 5. Regenerate: `bun generate --service {service}`
 
 ## ERROR CATALOG FORMAT
@@ -391,7 +406,7 @@ When you see `CloudflareHttpError: Schema decode failed`:
 `scripts/generate-clients.ts`:
 
 1. Loads OpenAPI spec (fetches or uses cache)
-2. Applies patches from `spec/openapi.patch.json` (schema patches fully replace, path patches deep merge)
+2. Applies patches from `spec/openapi.patch.jsonc` using RFC 6902 JSON Patch
 3. Groups operations by service (based on path patterns)
 4. Generates Effect Schema classes for request/response types
 5. Applies HTTP binding traits from parameter definitions

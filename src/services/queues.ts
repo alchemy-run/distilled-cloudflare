@@ -49,19 +49,19 @@ export interface ListResponse {
 
 export const ListResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  consumers: Schema.optional(Schema.Array(Schema.Struct({}))),
-  consumers_total_count: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.String),
-  producers: Schema.optional(Schema.Array(Schema.Struct({}))),
-  producers_total_count: Schema.optional(Schema.Number),
-  queue_id: Schema.optional(Schema.String),
-  queue_name: Schema.optional(Schema.String),
-  settings: Schema.optional(Schema.Struct({
-  delivery_delay: Schema.optional(Schema.Number),
-  delivery_paused: Schema.optional(Schema.Boolean),
-  message_retention_period: Schema.optional(Schema.Number)
-}))
+  consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_name: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  message_retention_period: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -105,19 +105,19 @@ export interface CreateResponse {
 
 export const CreateResponse = Schema.Struct({
   result: Schema.Struct({
-  consumers: Schema.optional(Schema.Array(Schema.Struct({}))),
-  consumers_total_count: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.String),
-  producers: Schema.optional(Schema.Array(Schema.Struct({}))),
-  producers_total_count: Schema.optional(Schema.Number),
-  queue_id: Schema.optional(Schema.String),
-  queue_name: Schema.optional(Schema.String),
-  settings: Schema.optional(Schema.Struct({
-  delivery_delay: Schema.optional(Schema.Number),
-  delivery_paused: Schema.optional(Schema.Boolean),
-  message_retention_period: Schema.optional(Schema.Number)
-}))
+  consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_name: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  message_retention_period: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -159,19 +159,19 @@ export interface Get_Response {
 
 export const Get_Response = Schema.Struct({
   result: Schema.Struct({
-  consumers: Schema.optional(Schema.Array(Schema.Struct({}))),
-  consumers_total_count: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.String),
-  producers: Schema.optional(Schema.Array(Schema.Struct({}))),
-  producers_total_count: Schema.optional(Schema.Number),
-  queue_id: Schema.optional(Schema.String),
-  queue_name: Schema.optional(Schema.String),
-  settings: Schema.optional(Schema.Struct({
-  delivery_delay: Schema.optional(Schema.Number),
-  delivery_paused: Schema.optional(Schema.Boolean),
-  message_retention_period: Schema.optional(Schema.Number)
-}))
+  consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_name: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  message_retention_period: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -204,19 +204,19 @@ export const UpdateRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  consumers: Schema.optional(Schema.Array(Schema.Struct({}))),
-  consumers_total_count: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.String),
-  producers: Schema.optional(Schema.Array(Schema.Struct({}))),
-  producers_total_count: Schema.optional(Schema.Number),
-  queue_id: Schema.optional(Schema.String),
-  queue_name: Schema.optional(Schema.String),
-  settings: Schema.optional(Schema.Struct({
-  delivery_delay: Schema.optional(Schema.Number),
-  delivery_paused: Schema.optional(Schema.Boolean),
-  message_retention_period: Schema.optional(Schema.Number)
-}))
+  consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_name: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  message_retention_period: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/accounts/{account_id}/queues/{queue_id}" }),
@@ -300,19 +300,19 @@ export const UpdatePartialRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  consumers: Schema.optional(Schema.Array(Schema.Struct({}))),
-  consumers_total_count: Schema.optional(Schema.Number),
-  created_on: Schema.optional(Schema.String),
-  modified_on: Schema.optional(Schema.String),
-  producers: Schema.optional(Schema.Array(Schema.Struct({}))),
-  producers_total_count: Schema.optional(Schema.Number),
-  queue_id: Schema.optional(Schema.String),
-  queue_name: Schema.optional(Schema.String),
-  settings: Schema.optional(Schema.Struct({
-  delivery_delay: Schema.optional(Schema.Number),
-  delivery_paused: Schema.optional(Schema.Boolean),
-  message_retention_period: Schema.optional(Schema.Number)
-}))
+  consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_name: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  message_retention_period: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/accounts/{account_id}/queues/{queue_id}" }),
@@ -566,7 +566,7 @@ export const QueuesPushMessageRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  delay_seconds: Schema.optional(Schema.Number)
+  delay_seconds: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages" }),
@@ -610,13 +610,13 @@ export const QueuesAckMessagesRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  acks: Schema.optional(Schema.Array(Schema.Struct({
-  lease_id: Schema.optional(Schema.String)
-}))),
-  retries: Schema.optional(Schema.Array(Schema.Struct({
-  delay_seconds: Schema.optional(Schema.Number),
-  lease_id: Schema.optional(Schema.String)
-})))
+  acks: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  lease_id: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  retries: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  delay_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  lease_id: Schema.optional(Schema.NullOr(Schema.String))
+}))))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages/ack" }),
@@ -629,9 +629,9 @@ export interface QueuesAckMessagesResponse {
 
 export const QueuesAckMessagesResponse = Schema.Struct({
   result: Schema.Struct({
-  ackCount: Schema.optional(Schema.Number),
-  retryCount: Schema.optional(Schema.Number),
-  warnings: Schema.optional(Schema.Array(Schema.String))
+  ackCount: Schema.optional(Schema.NullOr(Schema.Number)),
+  retryCount: Schema.optional(Schema.NullOr(Schema.Number)),
+  warnings: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -664,10 +664,10 @@ export const QueuesPushMessagesRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  delay_seconds: Schema.optional(Schema.Number),
-  messages: Schema.optional(Schema.Array(Schema.Struct({
-  delay_seconds: Schema.optional(Schema.Number)
-})))
+  delay_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  messages: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  delay_seconds: Schema.optional(Schema.NullOr(Schema.Number))
+}))))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages/batch" }),
@@ -711,8 +711,8 @@ export const QueuesPullMessagesRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  batch_size: Schema.optional(Schema.Number),
-  visibility_timeout_ms: Schema.optional(Schema.Number)
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages/pull" }),
@@ -725,15 +725,15 @@ export interface QueuesPullMessagesResponse {
 
 export const QueuesPullMessagesResponse = Schema.Struct({
   result: Schema.Struct({
-  message_backlog_count: Schema.optional(Schema.Number),
-  messages: Schema.optional(Schema.Array(Schema.Struct({
-  attempts: Schema.optional(Schema.Number),
-  body: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  lease_id: Schema.optional(Schema.String),
-  metadata: Schema.optional(Schema.Struct({})),
-  timestamp_ms: Schema.optional(Schema.Number)
-})))
+  message_backlog_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  messages: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  attempts: Schema.optional(Schema.NullOr(Schema.Number)),
+  body: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  lease_id: Schema.optional(Schema.NullOr(Schema.String)),
+  metadata: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  timestamp_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -775,8 +775,8 @@ export interface Get_1Response {
 
 export const Get_1Response = Schema.Struct({
   result: Schema.Struct({
-  completed: Schema.optional(Schema.String),
-  started_at: Schema.optional(Schema.String)
+  completed: Schema.optional(Schema.NullOr(Schema.String)),
+  started_at: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -809,7 +809,7 @@ export const QueuesPurgeRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  delete_messages_permanently: Schema.optional(Schema.Boolean)
+  delete_messages_permanently: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/purge" }),

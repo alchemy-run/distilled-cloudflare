@@ -183,14 +183,14 @@ export interface DnsRecordsForAZoneBatchDnsRecordsRequest {
 export const DnsRecordsForAZoneBatchDnsRecordsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  deletes: Schema.optional(Schema.Array(Schema.Struct({}))),
-  patches: Schema.optional(Schema.Array(Schema.Struct({
+  deletes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  patches: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   id: Schema.String
-}))),
-  posts: Schema.optional(Schema.Array(Schema.Struct({}))),
-  puts: Schema.optional(Schema.Array(Schema.Struct({
+})))),
+  posts: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  puts: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
   id: Schema.String
-})))
+}))))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/dns_records/batch" }),
@@ -203,10 +203,10 @@ export interface DnsRecordsForAZoneBatchDnsRecordsResponse {
 
 export const DnsRecordsForAZoneBatchDnsRecordsResponse = Schema.Struct({
   result: Schema.Struct({
-  deletes: Schema.optional(Schema.Array(Schema.Struct({}))),
-  patches: Schema.optional(Schema.Array(Schema.Struct({}))),
-  posts: Schema.optional(Schema.Array(Schema.Struct({}))),
-  puts: Schema.optional(Schema.Array(Schema.Struct({})))
+  deletes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  patches: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  posts: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  puts: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -286,8 +286,8 @@ export interface DnsRecordsForAZoneImportDnsRecordsResponse {
 
 export const DnsRecordsForAZoneImportDnsRecordsResponse = Schema.Struct({
   result: Schema.Struct({
-  recs_added: Schema.optional(Schema.Number),
-  total_records_parsed: Schema.optional(Schema.Number)
+  recs_added: Schema.optional(Schema.NullOr(Schema.Number)),
+  total_records_parsed: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -327,8 +327,8 @@ export interface DnsRecordsForAZoneScanDnsRecordsResponse {
 
 export const DnsRecordsForAZoneScanDnsRecordsResponse = Schema.Struct({
   result: Schema.Struct({
-  recs_added: Schema.optional(Schema.Number),
-  total_records_parsed: Schema.optional(Schema.Number)
+  recs_added: Schema.optional(Schema.NullOr(Schema.Number)),
+  total_records_parsed: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -397,8 +397,8 @@ export interface DnsRecordsForAZoneApplyDnsScanResultsRequest {
 export const DnsRecordsForAZoneApplyDnsScanResultsRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  accepts: Schema.optional(Schema.Array(Schema.Struct({}))),
-  rejects: Schema.optional(Schema.Array(Schema.Struct({})))
+  accepts: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  rejects: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({}))))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/dns_records/scan/review" }),
@@ -411,8 +411,8 @@ export interface DnsRecordsForAZoneApplyDnsScanResultsResponse {
 
 export const DnsRecordsForAZoneApplyDnsScanResultsResponse = Schema.Struct({
   result: Schema.Struct({
-  accepts: Schema.optional(Schema.Array(Schema.Struct({}))),
-  rejects: Schema.optional(Schema.Array(Schema.String))
+  accepts: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  rejects: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -490,8 +490,8 @@ export interface GetUsageResponse {
 
 export const GetUsageResponse = Schema.Struct({
   result: Schema.Struct({
-  record_quota: Schema.optional(Schema.Number),
-  record_usage: Schema.optional(Schema.Number)
+  record_quota: Schema.optional(Schema.NullOr(Schema.Number)),
+  record_usage: Schema.optional(Schema.NullOr(Schema.Number))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -615,7 +615,7 @@ export interface DeleteDnsRecordResponse {
 
 export const DeleteDnsRecordResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

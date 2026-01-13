@@ -46,27 +46,27 @@ export const OrganizationListorganizationsResponse = Schema.Struct({
   create_time: Schema.Date,
   id: Schema.String,
   meta: Schema.Struct({
-  flags: Schema.optional(Schema.Struct({
+  flags: Schema.optional(Schema.NullOr(Schema.Struct({
   account_creation: Schema.String,
   account_deletion: Schema.String,
   account_migration: Schema.String,
   account_mobility: Schema.String,
   sub_org_creation: Schema.String
-})),
-  managed_by: Schema.optional(Schema.String)
+}))),
+  managed_by: Schema.optional(Schema.NullOr(Schema.String))
 }),
   name: Schema.String,
-  parent: Schema.optional(Schema.Struct({
+  parent: Schema.optional(Schema.NullOr(Schema.Struct({
   id: Schema.String,
   name: Schema.String
-})),
-  profile: Schema.optional(Schema.Struct({
+}))),
+  profile: Schema.optional(Schema.NullOr(Schema.Struct({
   business_address: Schema.String,
   business_email: Schema.String,
   business_name: Schema.String,
   business_phone: Schema.String,
   external_metadata: Schema.String
-}))
+})))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -98,27 +98,27 @@ export const OrganizationsCreateuserorganizationRequest = Schema.Struct({
   create_time: Schema.Date,
   id: Schema.String,
   meta: Schema.Struct({
-  flags: Schema.optional(Schema.Struct({
+  flags: Schema.optional(Schema.NullOr(Schema.Struct({
   account_creation: Schema.String,
   account_deletion: Schema.String,
   account_migration: Schema.String,
   account_mobility: Schema.String,
   sub_org_creation: Schema.String
-})),
-  managed_by: Schema.optional(Schema.String)
+}))),
+  managed_by: Schema.optional(Schema.NullOr(Schema.String))
 }),
   name: Schema.String,
-  parent: Schema.optional(Schema.Struct({
+  parent: Schema.optional(Schema.NullOr(Schema.Struct({
   id: Schema.String,
   name: Schema.String
-})),
-  profile: Schema.optional(Schema.Struct({
+}))),
+  profile: Schema.optional(Schema.NullOr(Schema.Struct({
   business_address: Schema.String,
   business_email: Schema.String,
   business_name: Schema.String,
   business_phone: Schema.String,
   external_metadata: Schema.String
-}))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/organizations" }),
@@ -134,27 +134,27 @@ export const OrganizationsCreateuserorganizationResponse = Schema.Struct({
   create_time: Schema.Date,
   id: Schema.String,
   meta: Schema.Struct({
-  flags: Schema.optional(Schema.Struct({
+  flags: Schema.optional(Schema.NullOr(Schema.Struct({
   account_creation: Schema.String,
   account_deletion: Schema.String,
   account_migration: Schema.String,
   account_mobility: Schema.String,
   sub_org_creation: Schema.String
-})),
-  managed_by: Schema.optional(Schema.String)
+}))),
+  managed_by: Schema.optional(Schema.NullOr(Schema.String))
 }),
   name: Schema.String,
-  parent: Schema.optional(Schema.Struct({
+  parent: Schema.optional(Schema.NullOr(Schema.Struct({
   id: Schema.String,
   name: Schema.String
-})),
-  profile: Schema.optional(Schema.Struct({
+}))),
+  profile: Schema.optional(Schema.NullOr(Schema.Struct({
   business_address: Schema.String,
   business_email: Schema.String,
   business_name: Schema.String,
   business_phone: Schema.String,
   external_metadata: Schema.String
-}))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -197,27 +197,27 @@ export const OrganizationsRetrieveResponse = Schema.Struct({
   create_time: Schema.Date,
   id: Schema.String,
   meta: Schema.Struct({
-  flags: Schema.optional(Schema.Struct({
+  flags: Schema.optional(Schema.NullOr(Schema.Struct({
   account_creation: Schema.String,
   account_deletion: Schema.String,
   account_migration: Schema.String,
   account_mobility: Schema.String,
   sub_org_creation: Schema.String
-})),
-  managed_by: Schema.optional(Schema.String)
+}))),
+  managed_by: Schema.optional(Schema.NullOr(Schema.String))
 }),
   name: Schema.String,
-  parent: Schema.optional(Schema.Struct({
+  parent: Schema.optional(Schema.NullOr(Schema.Struct({
   id: Schema.String,
   name: Schema.String
-})),
-  profile: Schema.optional(Schema.Struct({
+}))),
+  profile: Schema.optional(Schema.NullOr(Schema.Struct({
   business_address: Schema.String,
   business_email: Schema.String,
   business_name: Schema.String,
   business_phone: Schema.String,
   external_metadata: Schema.String
-}))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -251,27 +251,27 @@ export const OrganizationsModifyRequest = Schema.Struct({
   create_time: Schema.Date,
   id: Schema.String,
   meta: Schema.Struct({
-  flags: Schema.optional(Schema.Struct({
+  flags: Schema.optional(Schema.NullOr(Schema.Struct({
   account_creation: Schema.String,
   account_deletion: Schema.String,
   account_migration: Schema.String,
   account_mobility: Schema.String,
   sub_org_creation: Schema.String
-})),
-  managed_by: Schema.optional(Schema.String)
+}))),
+  managed_by: Schema.optional(Schema.NullOr(Schema.String))
 }),
   name: Schema.String,
-  parent: Schema.optional(Schema.Struct({
+  parent: Schema.optional(Schema.NullOr(Schema.Struct({
   id: Schema.String,
   name: Schema.String
-})),
-  profile: Schema.optional(Schema.Struct({
+}))),
+  profile: Schema.optional(Schema.NullOr(Schema.Struct({
   business_address: Schema.String,
   business_email: Schema.String,
   business_name: Schema.String,
   business_phone: Schema.String,
   external_metadata: Schema.String
-}))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/organizations/{organization_id}" }),
@@ -287,27 +287,27 @@ export const OrganizationsModifyResponse = Schema.Struct({
   create_time: Schema.Date,
   id: Schema.String,
   meta: Schema.Struct({
-  flags: Schema.optional(Schema.Struct({
+  flags: Schema.optional(Schema.NullOr(Schema.Struct({
   account_creation: Schema.String,
   account_deletion: Schema.String,
   account_migration: Schema.String,
   account_mobility: Schema.String,
   sub_org_creation: Schema.String
-})),
-  managed_by: Schema.optional(Schema.String)
+}))),
+  managed_by: Schema.optional(Schema.NullOr(Schema.String))
 }),
   name: Schema.String,
-  parent: Schema.optional(Schema.Struct({
+  parent: Schema.optional(Schema.NullOr(Schema.Struct({
   id: Schema.String,
   name: Schema.String
-})),
-  profile: Schema.optional(Schema.Struct({
+}))),
+  profile: Schema.optional(Schema.NullOr(Schema.Struct({
   business_address: Schema.String,
   business_email: Schema.String,
   business_name: Schema.String,
   business_phone: Schema.String,
   external_metadata: Schema.String
-}))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -405,14 +405,14 @@ export const OrganizationsGetaccountsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
   created_on: Schema.Date,
   id: Schema.String,
-  name: Schema.String,
+  name: Schema.NullOr(Schema.String),
   settings: Schema.Struct({
-  abuse_contact_email: Schema.String,
-  access_approval_expiry: Schema.Date,
-  api_access_enabled: Schema.Boolean,
-  default_nameservers: Schema.String,
-  enforce_twofactor: Schema.Boolean,
-  use_account_custom_ns_by_default: Schema.Boolean
+  abuse_contact_email: Schema.NullOr(Schema.String),
+  access_approval_expiry: Schema.NullOr(Schema.Date),
+  api_access_enabled: Schema.NullOr(Schema.Boolean),
+  default_nameservers: Schema.NullOr(Schema.String),
+  enforce_twofactor: Schema.NullOr(Schema.Boolean),
+  use_account_custom_ns_by_default: Schema.NullOr(Schema.Boolean)
 }),
   type: Schema.Literal("standard", "enterprise")
 })),
@@ -506,7 +506,7 @@ export const CreateRequest = Schema.Struct({
   organization_id: Schema.String.pipe(T.HttpPath("organization_id")),
   body: Schema.Struct({
   member: Schema.Struct({
-  status: Schema.optional(Schema.Literal("active", "canceled")),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "canceled"))),
   user: Schema.Struct({
   email: Schema.String
 })
@@ -661,7 +661,7 @@ export const MembersBatchcreateRequest = Schema.Struct({
   organization_id: Schema.String.pipe(T.HttpPath("organization_id")),
   body: Schema.Struct({
   members: Schema.Array(Schema.Struct({
-  status: Schema.optional(Schema.Literal("active", "canceled")),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("active", "canceled"))),
   user: Schema.Struct({
   email: Schema.String
 })

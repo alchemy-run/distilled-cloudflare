@@ -64,11 +64,11 @@ export const ListIpAccessRulesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
   allowed_modes: Schema.Array(Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge")),
   configuration: Schema.Struct({}),
-  created_on: Schema.optional(Schema.Date),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
   id: Schema.String,
   mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
-  modified_on: Schema.optional(Schema.Date),
-  notes: Schema.optional(Schema.String)
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  notes: Schema.optional(Schema.NullOr(Schema.String))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -101,7 +101,7 @@ export const CreateAnIpAccessRuleRequest = Schema.Struct({
   body: Schema.Struct({
   configuration: Schema.Struct({}),
   mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
-  notes: Schema.optional(Schema.Unknown)
+  notes: Schema.optional(Schema.NullOr(Schema.Unknown))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/firewall/access_rules/rules" }),
@@ -116,11 +116,11 @@ export const CreateAnIpAccessRuleResponse = Schema.Struct({
   result: Schema.Struct({
   allowed_modes: Schema.Array(Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge")),
   configuration: Schema.Struct({}),
-  created_on: Schema.optional(Schema.Date),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
   id: Schema.String,
   mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
-  modified_on: Schema.optional(Schema.Date),
-  notes: Schema.optional(Schema.String)
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  notes: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -153,7 +153,7 @@ export const DeleteAnIpAccessRuleRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   rule_id: Schema.String.pipe(T.HttpPath("rule_id")),
   body: Schema.Struct({
-  cascade: Schema.optional(Schema.Literal("none", "basic", "aggressive"))
+  cascade: Schema.optional(Schema.NullOr(Schema.Literal("none", "basic", "aggressive")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "DELETE", path: "/zones/{zone_id}/firewall/access_rules/rules/{rule_id}" }),
@@ -166,7 +166,7 @@ export interface DeleteAnIpAccessRuleResponse {
 
 export const DeleteAnIpAccessRuleResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -199,8 +199,8 @@ export const UpdateAnIpAccessRuleRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   rule_id: Schema.String.pipe(T.HttpPath("rule_id")),
   body: Schema.Struct({
-  mode: Schema.optional(Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge")),
-  notes: Schema.optional(Schema.String)
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"))),
+  notes: Schema.optional(Schema.NullOr(Schema.String))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/firewall/access_rules/rules/{rule_id}" }),
@@ -215,11 +215,11 @@ export const UpdateAnIpAccessRuleResponse = Schema.Struct({
   result: Schema.Struct({
   allowed_modes: Schema.Array(Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge")),
   configuration: Schema.Struct({}),
-  created_on: Schema.optional(Schema.Date),
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
   id: Schema.String,
   mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
-  modified_on: Schema.optional(Schema.Date),
-  notes: Schema.optional(Schema.String)
+  modified_on: Schema.optional(Schema.NullOr(Schema.Date)),
+  notes: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -282,11 +282,11 @@ export interface ListZoneLockdownRulesResponse {
 export const ListZoneLockdownRulesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
   configurations: Schema.Array(Schema.Union(Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip_range")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }))),
   created_on: Schema.Date,
   description: Schema.String,
@@ -325,15 +325,15 @@ export const CreateAZoneLockdownRuleRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   configurations: Schema.Array(Schema.Union(Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip_range")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }))),
-  description: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  priority: Schema.optional(Schema.Number),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
   urls: Schema.Array(Schema.String)
 }).pipe(T.HttpBody())
 }).pipe(
@@ -348,11 +348,11 @@ export interface CreateAZoneLockdownRuleResponse {
 export const CreateAZoneLockdownRuleResponse = Schema.Struct({
   result: Schema.Struct({
   configurations: Schema.Array(Schema.Union(Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip_range")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }))),
   created_on: Schema.Date,
   description: Schema.String,
@@ -402,11 +402,11 @@ export interface GetAZoneLockdownRuleResponse {
 export const GetAZoneLockdownRuleResponse = Schema.Struct({
   result: Schema.Struct({
   configurations: Schema.Array(Schema.Union(Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip_range")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }))),
   created_on: Schema.Date,
   description: Schema.String,
@@ -447,11 +447,11 @@ export const UpdateAZoneLockdownRuleRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   configurations: Schema.Array(Schema.Union(Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip_range")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }))),
   urls: Schema.Array(Schema.String)
 }).pipe(T.HttpBody())
@@ -467,11 +467,11 @@ export interface UpdateAZoneLockdownRuleResponse {
 export const UpdateAZoneLockdownRuleResponse = Schema.Struct({
   result: Schema.Struct({
   configurations: Schema.Array(Schema.Union(Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }), Schema.Struct({
-  target: Schema.optional(Schema.Literal("ip_range")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ip_range"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }))),
   created_on: Schema.Date,
   description: Schema.String,
@@ -520,7 +520,7 @@ export interface DeleteAZoneLockdownRuleResponse {
 
 export const DeleteAZoneLockdownRuleResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -603,11 +603,11 @@ export const CreateFirewallRulesRequest = Schema.Struct({
   body: Schema.Struct({
   action: Schema.Struct({}),
   filter: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  ref: Schema.optional(Schema.String)
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ref: Schema.optional(Schema.NullOr(Schema.String))
 })
 }).pipe(T.HttpBody())
 }).pipe(
@@ -818,11 +818,11 @@ export const UpdateAFirewallRuleRequest = Schema.Struct({
   body: Schema.Struct({
   action: Schema.Struct({}),
   filter: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  expression: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  ref: Schema.optional(Schema.String)
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  expression: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  ref: Schema.optional(Schema.NullOr(Schema.String))
 }),
   id: Schema.String
 }).pipe(T.HttpBody())
@@ -868,7 +868,7 @@ export const DeleteAFirewallRuleRequest = Schema.Struct({
   rule_id: Schema.String.pipe(T.HttpPath("rule_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  delete_filter_if_unused: Schema.optional(Schema.Boolean)
+  delete_filter_if_unused: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "DELETE", path: "/zones/{zone_id}/firewall/rules/{rule_id}" }),
@@ -1003,12 +1003,12 @@ export const CreateAUserAgentBlockingRuleRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   configuration: Schema.Struct({
-  target: Schema.optional(Schema.Literal("ua")),
-  value: Schema.optional(Schema.String)
+  target: Schema.optional(Schema.NullOr(Schema.Literal("ua"))),
+  value: Schema.optional(Schema.NullOr(Schema.String))
 }),
-  description: Schema.optional(Schema.String),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
   mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
-  paused: Schema.optional(Schema.Boolean)
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/zones/{zone_id}/firewall/ua_rules" }),
@@ -1093,10 +1093,10 @@ export const UpdateAUserAgentBlockingRuleRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   configuration: Schema.Struct({}),
-  description: Schema.optional(Schema.String),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
   id: Schema.String,
   mode: Schema.Literal("block", "challenge", "whitelist", "js_challenge", "managed_challenge"),
-  paused: Schema.optional(Schema.Boolean)
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PUT", path: "/zones/{zone_id}/firewall/ua_rules/{ua_rule_id}" }),
@@ -1191,20 +1191,20 @@ export interface ListWafOverridesResponse {
 
 export const ListWafOverridesResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  description: Schema.optional(Schema.String),
-  groups: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  priority: Schema.optional(Schema.Number),
-  rewrite_action: Schema.optional(Schema.Struct({
-  block: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  challenge: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  default: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  disable: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  simulate: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default"))
-})),
-  rules: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Literal("challenge", "block", "simulate", "disable", "default") })),
-  urls: Schema.optional(Schema.Array(Schema.String))
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  groups: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Unknown }))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  rewrite_action: Schema.optional(Schema.NullOr(Schema.Struct({
+  block: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  challenge: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  default: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  disable: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  simulate: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default")))
+}))),
+  rules: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Literal("challenge", "block", "simulate", "disable", "default") }))),
+  urls: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1248,20 +1248,20 @@ export interface CreateAWafOverrideResponse {
 
 export const CreateAWafOverrideResponse = Schema.Struct({
   result: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  groups: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  priority: Schema.optional(Schema.Number),
-  rewrite_action: Schema.optional(Schema.Struct({
-  block: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  challenge: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  default: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  disable: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  simulate: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default"))
-})),
-  rules: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Literal("challenge", "block", "simulate", "disable", "default") })),
-  urls: Schema.optional(Schema.Array(Schema.String))
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  groups: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Unknown }))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  rewrite_action: Schema.optional(Schema.NullOr(Schema.Struct({
+  block: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  challenge: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  default: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  disable: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  simulate: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default")))
+}))),
+  rules: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Literal("challenge", "block", "simulate", "disable", "default") }))),
+  urls: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1303,20 +1303,20 @@ export interface GetAWafOverrideResponse {
 
 export const GetAWafOverrideResponse = Schema.Struct({
   result: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  groups: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  priority: Schema.optional(Schema.Number),
-  rewrite_action: Schema.optional(Schema.Struct({
-  block: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  challenge: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  default: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  disable: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  simulate: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default"))
-})),
-  rules: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Literal("challenge", "block", "simulate", "disable", "default") })),
-  urls: Schema.optional(Schema.Array(Schema.String))
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  groups: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Unknown }))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  rewrite_action: Schema.optional(Schema.NullOr(Schema.Struct({
+  block: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  challenge: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  default: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  disable: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  simulate: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default")))
+}))),
+  rules: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Literal("challenge", "block", "simulate", "disable", "default") }))),
+  urls: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1351,11 +1351,11 @@ export const UpdateWafOverrideRequest = Schema.Struct({
   body: Schema.Struct({
   id: Schema.String,
   rewrite_action: Schema.Struct({
-  block: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  challenge: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  default: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  disable: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  simulate: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default"))
+  block: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  challenge: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  default: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  disable: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  simulate: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default")))
 }),
   rules: Schema.Record({ key: Schema.String, value: Schema.Literal("challenge", "block", "simulate", "disable", "default") }),
   urls: Schema.Array(Schema.String)
@@ -1371,20 +1371,20 @@ export interface UpdateWafOverrideResponse {
 
 export const UpdateWafOverrideResponse = Schema.Struct({
   result: Schema.Struct({
-  description: Schema.optional(Schema.String),
-  groups: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
-  id: Schema.optional(Schema.String),
-  paused: Schema.optional(Schema.Boolean),
-  priority: Schema.optional(Schema.Number),
-  rewrite_action: Schema.optional(Schema.Struct({
-  block: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  challenge: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  default: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  disable: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default")),
-  simulate: Schema.optional(Schema.Literal("challenge", "block", "simulate", "disable", "default"))
-})),
-  rules: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Literal("challenge", "block", "simulate", "disable", "default") })),
-  urls: Schema.optional(Schema.Array(Schema.String))
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  groups: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Unknown }))),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  priority: Schema.optional(Schema.NullOr(Schema.Number)),
+  rewrite_action: Schema.optional(Schema.NullOr(Schema.Struct({
+  block: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  challenge: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  default: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  disable: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default"))),
+  simulate: Schema.optional(Schema.NullOr(Schema.Literal("challenge", "block", "simulate", "disable", "default")))
+}))),
+  rules: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Literal("challenge", "block", "simulate", "disable", "default") }))),
+  urls: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1426,7 +1426,7 @@ export interface DeleteAWafOverrideResponse {
 
 export const DeleteAWafOverrideResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String)
+  id: Schema.optional(Schema.NullOr(Schema.String))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1549,8 +1549,8 @@ export const UpdateAWafPackageRequest = Schema.Struct({
   package_id: Schema.String.pipe(T.HttpPath("package_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  action_mode: Schema.optional(Schema.Literal("simulate", "block", "challenge")),
-  sensitivity: Schema.optional(Schema.Literal("high", "medium", "low", "off"))
+  action_mode: Schema.optional(Schema.NullOr(Schema.Literal("simulate", "block", "challenge"))),
+  sensitivity: Schema.optional(Schema.NullOr(Schema.Literal("high", "medium", "low", "off")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/firewall/waf/packages/{package_id}" }),
@@ -1563,11 +1563,11 @@ export interface UpdateAWafPackageResponse {
 
 export const UpdateAWafPackageResponse = Schema.Struct({
   result: Schema.Struct({
-  action_mode: Schema.optional(Schema.Literal("simulate", "block", "challenge")),
-  description: Schema.optional(Schema.String),
-  detection_mode: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  sensitivity: Schema.optional(Schema.Literal("high", "medium", "low", "off"))
+  action_mode: Schema.optional(Schema.NullOr(Schema.Literal("simulate", "block", "challenge"))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  detection_mode: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  sensitivity: Schema.optional(Schema.NullOr(Schema.Literal("high", "medium", "low", "off")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1700,7 +1700,7 @@ export const UpdateAWafRuleGroupRequest = Schema.Struct({
   package_id: Schema.String.pipe(T.HttpPath("package_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  mode: Schema.optional(Schema.Literal("on", "off"))
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/firewall/waf/packages/{package_id}/groups/{group_id}" }),
@@ -1771,12 +1771,12 @@ export interface ListWafRulesResponse {
 
 export const ListWafRulesResponse = Schema.Struct({
   result: Schema.Array(Schema.Union(Schema.Struct({}), Schema.Struct({
-  allowed_modes: Schema.optional(Schema.Array(Schema.Literal("default", "disable", "simulate", "block", "challenge"))),
-  default_mode: Schema.optional(Schema.Literal("disable", "simulate", "block", "challenge")),
-  mode: Schema.optional(Schema.Literal("default", "disable", "simulate", "block", "challenge"))
+  allowed_modes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("default", "disable", "simulate", "block", "challenge")))),
+  default_mode: Schema.optional(Schema.NullOr(Schema.Literal("disable", "simulate", "block", "challenge"))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("default", "disable", "simulate", "block", "challenge")))
 }), Schema.Struct({
-  allowed_modes: Schema.optional(Schema.Array(Schema.Literal("on", "off"))),
-  mode: Schema.optional(Schema.Literal("on", "off"))
+  allowed_modes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("on", "off")))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 }))),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1853,7 +1853,7 @@ export const UpdateAWafRuleRequest = Schema.Struct({
   package_id: Schema.String.pipe(T.HttpPath("package_id")),
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
-  mode: Schema.optional(Schema.Literal("default", "disable", "simulate", "block", "challenge", "on", "off"))
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("default", "disable", "simulate", "block", "challenge", "on", "off")))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/zones/{zone_id}/firewall/waf/packages/{package_id}/rules/{rule_id}" }),
@@ -1866,12 +1866,12 @@ export interface UpdateAWafRuleResponse {
 
 export const UpdateAWafRuleResponse = Schema.Struct({
   result: Schema.Union(Schema.Struct({}), Schema.Struct({
-  allowed_modes: Schema.optional(Schema.Array(Schema.Literal("default", "disable", "simulate", "block", "challenge"))),
-  default_mode: Schema.optional(Schema.Literal("disable", "simulate", "block", "challenge")),
-  mode: Schema.optional(Schema.Literal("default", "disable", "simulate", "block", "challenge"))
+  allowed_modes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("default", "disable", "simulate", "block", "challenge")))),
+  default_mode: Schema.optional(Schema.NullOr(Schema.Literal("disable", "simulate", "block", "challenge"))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("default", "disable", "simulate", "block", "challenge")))
 }), Schema.Struct({
-  allowed_modes: Schema.optional(Schema.Array(Schema.Literal("on", "off"))),
-  mode: Schema.optional(Schema.Literal("on", "off"))
+  allowed_modes: Schema.optional(Schema.NullOr(Schema.Array(Schema.Literal("on", "off")))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("on", "off")))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

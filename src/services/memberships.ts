@@ -94,75 +94,75 @@ export interface UserSAccountMembershipsMembershipDetailsResponse {
 
 export const UserSAccountMembershipsMembershipDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  account: Schema.optional(Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
+  account: Schema.optional(Schema.NullOr(Schema.Struct({
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
   id: Schema.String,
-  managed_by: Schema.optional(Schema.Struct({
-  parent_org_id: Schema.optional(Schema.String),
-  parent_org_name: Schema.optional(Schema.String)
-})),
+  managed_by: Schema.optional(Schema.NullOr(Schema.Struct({
+  parent_org_id: Schema.optional(Schema.NullOr(Schema.String)),
+  parent_org_name: Schema.optional(Schema.NullOr(Schema.String))
+}))),
   name: Schema.String,
-  settings: Schema.optional(Schema.Struct({
-  abuse_contact_email: Schema.optional(Schema.String),
-  enforce_twofactor: Schema.optional(Schema.Boolean)
-})),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  abuse_contact_email: Schema.optional(Schema.NullOr(Schema.String)),
+  enforce_twofactor: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
   type: Schema.Literal("standard", "enterprise")
-})),
-  api_access_enabled: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  permissions: Schema.optional(Schema.Struct({
-  analytics: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  billing: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  cache_purge: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  dns: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  dns_records: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  lb: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  logs: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  organization: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  ssl: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  waf: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  zone_settings: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  zones: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-}))
-})),
-  policies: Schema.optional(Schema.Array(Schema.Unknown)),
-  roles: Schema.optional(Schema.Array(Schema.String)),
-  status: Schema.optional(Schema.Literal("accepted", "pending", "rejected"))
+}))),
+  api_access_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  permissions: Schema.optional(Schema.NullOr(Schema.Struct({
+  analytics: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  billing: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  cache_purge: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  dns_records: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  lb: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  organization: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  ssl: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  waf: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  zone_settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  zones: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+}))),
+  policies: Schema.optional(Schema.NullOr(Schema.Array(Schema.Unknown))),
+  roles: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("accepted", "pending", "rejected")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -204,75 +204,75 @@ export interface UpdateMembershipResponse {
 
 export const UpdateMembershipResponse = Schema.Struct({
   result: Schema.Struct({
-  account: Schema.optional(Schema.Struct({
-  created_on: Schema.optional(Schema.Date),
+  account: Schema.optional(Schema.NullOr(Schema.Struct({
+  created_on: Schema.optional(Schema.NullOr(Schema.Date)),
   id: Schema.String,
-  managed_by: Schema.optional(Schema.Struct({
-  parent_org_id: Schema.optional(Schema.String),
-  parent_org_name: Schema.optional(Schema.String)
-})),
+  managed_by: Schema.optional(Schema.NullOr(Schema.Struct({
+  parent_org_id: Schema.optional(Schema.NullOr(Schema.String)),
+  parent_org_name: Schema.optional(Schema.NullOr(Schema.String))
+}))),
   name: Schema.String,
-  settings: Schema.optional(Schema.Struct({
-  abuse_contact_email: Schema.optional(Schema.String),
-  enforce_twofactor: Schema.optional(Schema.Boolean)
-})),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  abuse_contact_email: Schema.optional(Schema.NullOr(Schema.String)),
+  enforce_twofactor: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
   type: Schema.Literal("standard", "enterprise")
-})),
-  api_access_enabled: Schema.optional(Schema.Boolean),
-  id: Schema.optional(Schema.String),
-  permissions: Schema.optional(Schema.Struct({
-  analytics: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  billing: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  cache_purge: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  dns: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  dns_records: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  lb: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  logs: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  organization: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  ssl: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  waf: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  zone_settings: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-})),
-  zones: Schema.optional(Schema.Struct({
-  read: Schema.optional(Schema.Boolean),
-  write: Schema.optional(Schema.Boolean)
-}))
-})),
-  policies: Schema.optional(Schema.Array(Schema.Unknown)),
-  roles: Schema.optional(Schema.Array(Schema.String)),
-  status: Schema.optional(Schema.Literal("accepted", "pending", "rejected"))
+}))),
+  api_access_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  permissions: Schema.optional(Schema.NullOr(Schema.Struct({
+  analytics: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  billing: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  cache_purge: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  dns_records: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  lb: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  organization: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  ssl: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  waf: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  zone_settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+}))),
+  zones: Schema.optional(Schema.NullOr(Schema.Struct({
+  read: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  write: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+}))),
+  policies: Schema.optional(Schema.NullOr(Schema.Array(Schema.Unknown))),
+  roles: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  status: Schema.optional(Schema.NullOr(Schema.Literal("accepted", "pending", "rejected")))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

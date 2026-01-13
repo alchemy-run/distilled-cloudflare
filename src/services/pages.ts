@@ -48,125 +48,125 @@ export interface GetProjectsResponse {
 
 export const GetProjectsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  build_config: Schema.optional(Schema.Struct({
-  build_caching: Schema.optional(Schema.Boolean),
-  build_command: Schema.optional(Schema.String),
-  destination_dir: Schema.optional(Schema.String),
-  root_dir: Schema.optional(Schema.String),
-  web_analytics_tag: Schema.String,
-  web_analytics_token: Schema.String
-})),
+  build_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  build_caching: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  build_command: Schema.optional(Schema.NullOr(Schema.String)),
+  destination_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  root_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_tag: Schema.NullOr(Schema.String),
+  web_analytics_token: Schema.NullOr(Schema.String)
+}))),
   canonical_deployment: Schema.Struct({}),
   created_on: Schema.Date,
   deployment_configs: Schema.Struct({
   preview: Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
+}) }))),
   always_use_latest_compatibility_date: Schema.Boolean,
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
   build_image_major_version: Schema.Number,
   compatibility_date: Schema.String,
   compatibility_flags: Schema.Array(Schema.String),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+}) }))),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   fail_open: Schema.Boolean,
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
   environment: Schema.String,
   service: Schema.String
-}) })),
+}) }))),
   usage_model: Schema.Literal("standard", "bundled", "unbound"),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
 }),
   production: Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
+}) }))),
   always_use_latest_compatibility_date: Schema.Boolean,
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
   build_image_major_version: Schema.Number,
   compatibility_date: Schema.String,
   compatibility_flags: Schema.Array(Schema.String),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+}) }))),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   fail_open: Schema.Boolean,
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
   environment: Schema.String,
   service: Schema.String
-}) })),
+}) }))),
   usage_model: Schema.Literal("standard", "bundled", "unbound"),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
 })
 }),
-  domains: Schema.optional(Schema.Array(Schema.String)),
+  domains: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   framework: Schema.String,
   framework_version: Schema.String,
   id: Schema.String,
@@ -175,7 +175,7 @@ export const GetProjectsResponse = Schema.Struct({
   preview_script_name: Schema.String,
   production_branch: Schema.String,
   production_script_name: Schema.String,
-  source: Schema.optional(Schema.Struct({
+  source: Schema.optional(Schema.NullOr(Schema.Struct({
   config: Schema.Struct({
   deployments_enabled: Schema.Boolean,
   owner: Schema.String,
@@ -192,9 +192,9 @@ export const GetProjectsResponse = Schema.Struct({
   repo_name: Schema.String
 }),
   type: Schema.Literal("github", "gitlab")
-})),
-  subdomain: Schema.optional(Schema.String),
-  uses_functions: Schema.Boolean
+}))),
+  subdomain: Schema.optional(Schema.NullOr(Schema.String)),
+  uses_functions: Schema.NullOr(Schema.Boolean)
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -225,142 +225,142 @@ export interface CreateProjectRequest {
 export const CreateProjectRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  build_config: Schema.optional(Schema.Struct({
-  build_caching: Schema.optional(Schema.Boolean),
-  build_command: Schema.optional(Schema.String),
-  destination_dir: Schema.optional(Schema.String),
-  root_dir: Schema.optional(Schema.String),
-  web_analytics_tag: Schema.optional(Schema.String),
-  web_analytics_token: Schema.optional(Schema.String)
-})),
-  deployment_configs: Schema.optional(Schema.Struct({
-  preview: Schema.optional(Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  build_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  build_caching: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  build_command: Schema.optional(Schema.NullOr(Schema.String)),
+  destination_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  root_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_tag: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_token: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  deployment_configs: Schema.optional(Schema.NullOr(Schema.Struct({
+  preview: Schema.optional(Schema.NullOr(Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
-  always_use_latest_compatibility_date: Schema.optional(Schema.Boolean),
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  always_use_latest_compatibility_date: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
-  build_image_major_version: Schema.optional(Schema.Number),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
+  build_image_major_version: Schema.optional(Schema.NullOr(Schema.Number)),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
-  fail_open: Schema.optional(Schema.Boolean),
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  env_vars: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
+  fail_open: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
-  environment: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
   service: Schema.String
-}) })),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound")),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound"))),
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
-})),
-  production: Schema.optional(Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  production: Schema.optional(Schema.NullOr(Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
-  always_use_latest_compatibility_date: Schema.optional(Schema.Boolean),
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  always_use_latest_compatibility_date: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
-  build_image_major_version: Schema.optional(Schema.Number),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
+  build_image_major_version: Schema.optional(Schema.NullOr(Schema.Number)),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
-  fail_open: Schema.optional(Schema.Boolean),
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  env_vars: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
+  fail_open: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
-  environment: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
   service: Schema.String
-}) })),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound")),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound"))),
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
-}))
-})),
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
+})))
+}))),
   name: Schema.String,
   production_branch: Schema.String,
-  source: Schema.optional(Schema.Struct({
+  source: Schema.optional(Schema.NullOr(Schema.Struct({
   config: Schema.Struct({
-  deployments_enabled: Schema.optional(Schema.Boolean),
-  owner: Schema.optional(Schema.String),
-  owner_id: Schema.optional(Schema.String),
-  path_excludes: Schema.optional(Schema.Array(Schema.String)),
-  path_includes: Schema.optional(Schema.Array(Schema.String)),
-  pr_comments_enabled: Schema.optional(Schema.Boolean),
-  preview_branch_excludes: Schema.optional(Schema.Array(Schema.String)),
-  preview_branch_includes: Schema.optional(Schema.Array(Schema.String)),
-  preview_deployment_setting: Schema.optional(Schema.Literal("all", "none", "custom")),
-  production_branch: Schema.optional(Schema.String),
-  production_deployments_enabled: Schema.optional(Schema.Boolean),
-  repo_id: Schema.optional(Schema.String),
-  repo_name: Schema.optional(Schema.String)
+  deployments_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  owner: Schema.optional(Schema.NullOr(Schema.String)),
+  owner_id: Schema.optional(Schema.NullOr(Schema.String)),
+  path_excludes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  path_includes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  pr_comments_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  preview_branch_excludes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  preview_branch_includes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  preview_deployment_setting: Schema.optional(Schema.NullOr(Schema.Literal("all", "none", "custom"))),
+  production_branch: Schema.optional(Schema.NullOr(Schema.String)),
+  production_deployments_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  repo_id: Schema.optional(Schema.NullOr(Schema.String)),
+  repo_name: Schema.optional(Schema.NullOr(Schema.String))
 }),
   type: Schema.Literal("github", "gitlab")
-}))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/pages/projects" }),
@@ -373,125 +373,125 @@ export interface CreateProjectResponse {
 
 export const CreateProjectResponse = Schema.Struct({
   result: Schema.Struct({
-  build_config: Schema.optional(Schema.Struct({
-  build_caching: Schema.optional(Schema.Boolean),
-  build_command: Schema.optional(Schema.String),
-  destination_dir: Schema.optional(Schema.String),
-  root_dir: Schema.optional(Schema.String),
-  web_analytics_tag: Schema.String,
-  web_analytics_token: Schema.String
-})),
+  build_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  build_caching: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  build_command: Schema.optional(Schema.NullOr(Schema.String)),
+  destination_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  root_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_tag: Schema.NullOr(Schema.String),
+  web_analytics_token: Schema.NullOr(Schema.String)
+}))),
   canonical_deployment: Schema.Struct({}),
   created_on: Schema.Date,
   deployment_configs: Schema.Struct({
   preview: Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
+}) }))),
   always_use_latest_compatibility_date: Schema.Boolean,
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
   build_image_major_version: Schema.Number,
   compatibility_date: Schema.String,
   compatibility_flags: Schema.Array(Schema.String),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+}) }))),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   fail_open: Schema.Boolean,
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
   environment: Schema.String,
   service: Schema.String
-}) })),
+}) }))),
   usage_model: Schema.Literal("standard", "bundled", "unbound"),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
 }),
   production: Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
+}) }))),
   always_use_latest_compatibility_date: Schema.Boolean,
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
   build_image_major_version: Schema.Number,
   compatibility_date: Schema.String,
   compatibility_flags: Schema.Array(Schema.String),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+}) }))),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   fail_open: Schema.Boolean,
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
   environment: Schema.String,
   service: Schema.String
-}) })),
+}) }))),
   usage_model: Schema.Literal("standard", "bundled", "unbound"),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
 })
 }),
-  domains: Schema.optional(Schema.Array(Schema.String)),
+  domains: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   framework: Schema.String,
   framework_version: Schema.String,
   id: Schema.String,
@@ -500,7 +500,7 @@ export const CreateProjectResponse = Schema.Struct({
   preview_script_name: Schema.String,
   production_branch: Schema.String,
   production_script_name: Schema.String,
-  source: Schema.optional(Schema.Struct({
+  source: Schema.optional(Schema.NullOr(Schema.Struct({
   config: Schema.Struct({
   deployments_enabled: Schema.Boolean,
   owner: Schema.String,
@@ -517,9 +517,9 @@ export const CreateProjectResponse = Schema.Struct({
   repo_name: Schema.String
 }),
   type: Schema.Literal("github", "gitlab")
-})),
-  subdomain: Schema.optional(Schema.String),
-  uses_functions: Schema.Boolean
+}))),
+  subdomain: Schema.optional(Schema.NullOr(Schema.String)),
+  uses_functions: Schema.NullOr(Schema.Boolean)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -561,125 +561,125 @@ export interface GetProjectResponse {
 
 export const GetProjectResponse = Schema.Struct({
   result: Schema.Struct({
-  build_config: Schema.optional(Schema.Struct({
-  build_caching: Schema.optional(Schema.Boolean),
-  build_command: Schema.optional(Schema.String),
-  destination_dir: Schema.optional(Schema.String),
-  root_dir: Schema.optional(Schema.String),
-  web_analytics_tag: Schema.String,
-  web_analytics_token: Schema.String
-})),
+  build_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  build_caching: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  build_command: Schema.optional(Schema.NullOr(Schema.String)),
+  destination_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  root_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_tag: Schema.NullOr(Schema.String),
+  web_analytics_token: Schema.NullOr(Schema.String)
+}))),
   canonical_deployment: Schema.Struct({}),
   created_on: Schema.Date,
   deployment_configs: Schema.Struct({
   preview: Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
+}) }))),
   always_use_latest_compatibility_date: Schema.Boolean,
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
   build_image_major_version: Schema.Number,
   compatibility_date: Schema.String,
   compatibility_flags: Schema.Array(Schema.String),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+}) }))),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   fail_open: Schema.Boolean,
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
   environment: Schema.String,
   service: Schema.String
-}) })),
+}) }))),
   usage_model: Schema.Literal("standard", "bundled", "unbound"),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
 }),
   production: Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
+}) }))),
   always_use_latest_compatibility_date: Schema.Boolean,
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
   build_image_major_version: Schema.Number,
   compatibility_date: Schema.String,
   compatibility_flags: Schema.Array(Schema.String),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+}) }))),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   fail_open: Schema.Boolean,
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
   environment: Schema.String,
   service: Schema.String
-}) })),
+}) }))),
   usage_model: Schema.Literal("standard", "bundled", "unbound"),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
 })
 }),
-  domains: Schema.optional(Schema.Array(Schema.String)),
+  domains: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   framework: Schema.String,
   framework_version: Schema.String,
   id: Schema.String,
@@ -688,7 +688,7 @@ export const GetProjectResponse = Schema.Struct({
   preview_script_name: Schema.String,
   production_branch: Schema.String,
   production_script_name: Schema.String,
-  source: Schema.optional(Schema.Struct({
+  source: Schema.optional(Schema.NullOr(Schema.Struct({
   config: Schema.Struct({
   deployments_enabled: Schema.Boolean,
   owner: Schema.String,
@@ -705,9 +705,9 @@ export const GetProjectResponse = Schema.Struct({
   repo_name: Schema.String
 }),
   type: Schema.Literal("github", "gitlab")
-})),
-  subdomain: Schema.optional(Schema.String),
-  uses_functions: Schema.Boolean
+}))),
+  subdomain: Schema.optional(Schema.NullOr(Schema.String)),
+  uses_functions: Schema.NullOr(Schema.Boolean)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -780,142 +780,142 @@ export const UpdateProjectRequest = Schema.Struct({
   project_name: Schema.String.pipe(T.HttpPath("project_name")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  build_config: Schema.optional(Schema.Struct({
-  build_caching: Schema.optional(Schema.Boolean),
-  build_command: Schema.optional(Schema.String),
-  destination_dir: Schema.optional(Schema.String),
-  root_dir: Schema.optional(Schema.String),
-  web_analytics_tag: Schema.optional(Schema.String),
-  web_analytics_token: Schema.optional(Schema.String)
-})),
-  deployment_configs: Schema.optional(Schema.Struct({
-  preview: Schema.optional(Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  build_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  build_caching: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  build_command: Schema.optional(Schema.NullOr(Schema.String)),
+  destination_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  root_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_tag: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_token: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  deployment_configs: Schema.optional(Schema.NullOr(Schema.Struct({
+  preview: Schema.optional(Schema.NullOr(Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
-  always_use_latest_compatibility_date: Schema.optional(Schema.Boolean),
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  always_use_latest_compatibility_date: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
-  build_image_major_version: Schema.optional(Schema.Number),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
+  build_image_major_version: Schema.optional(Schema.NullOr(Schema.Number)),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
-  fail_open: Schema.optional(Schema.Boolean),
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  env_vars: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
+  fail_open: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
-  environment: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
   service: Schema.String
-}) })),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound")),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound"))),
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
-})),
-  production: Schema.optional(Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  production: Schema.optional(Schema.NullOr(Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
-  always_use_latest_compatibility_date: Schema.optional(Schema.Boolean),
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  always_use_latest_compatibility_date: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
-  build_image_major_version: Schema.optional(Schema.Number),
-  compatibility_date: Schema.optional(Schema.String),
-  compatibility_flags: Schema.optional(Schema.Array(Schema.String)),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
+  build_image_major_version: Schema.optional(Schema.NullOr(Schema.Number)),
+  compatibility_date: Schema.optional(Schema.NullOr(Schema.String)),
+  compatibility_flags: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
-  fail_open: Schema.optional(Schema.Boolean),
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  env_vars: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
+  fail_open: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
-  environment: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
+  environment: Schema.optional(Schema.NullOr(Schema.String)),
   service: Schema.String
-}) })),
-  usage_model: Schema.optional(Schema.Literal("standard", "bundled", "unbound")),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  usage_model: Schema.optional(Schema.NullOr(Schema.Literal("standard", "bundled", "unbound"))),
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
-}))
-})),
-  name: Schema.optional(Schema.String),
-  production_branch: Schema.optional(Schema.String),
-  source: Schema.optional(Schema.Struct({
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
+})))
+}))),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  production_branch: Schema.optional(Schema.NullOr(Schema.String)),
+  source: Schema.optional(Schema.NullOr(Schema.Struct({
   config: Schema.Struct({
-  deployments_enabled: Schema.optional(Schema.Boolean),
-  owner: Schema.optional(Schema.String),
-  owner_id: Schema.optional(Schema.String),
-  path_excludes: Schema.optional(Schema.Array(Schema.String)),
-  path_includes: Schema.optional(Schema.Array(Schema.String)),
-  pr_comments_enabled: Schema.optional(Schema.Boolean),
-  preview_branch_excludes: Schema.optional(Schema.Array(Schema.String)),
-  preview_branch_includes: Schema.optional(Schema.Array(Schema.String)),
-  preview_deployment_setting: Schema.optional(Schema.Literal("all", "none", "custom")),
-  production_branch: Schema.optional(Schema.String),
-  production_deployments_enabled: Schema.optional(Schema.Boolean),
-  repo_id: Schema.optional(Schema.String),
-  repo_name: Schema.optional(Schema.String)
+  deployments_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  owner: Schema.optional(Schema.NullOr(Schema.String)),
+  owner_id: Schema.optional(Schema.NullOr(Schema.String)),
+  path_excludes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  path_includes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  pr_comments_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  preview_branch_excludes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  preview_branch_includes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  preview_deployment_setting: Schema.optional(Schema.NullOr(Schema.Literal("all", "none", "custom"))),
+  production_branch: Schema.optional(Schema.NullOr(Schema.String)),
+  production_deployments_enabled: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  repo_id: Schema.optional(Schema.NullOr(Schema.String)),
+  repo_name: Schema.optional(Schema.NullOr(Schema.String))
 }),
   type: Schema.Literal("github", "gitlab")
-}))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/accounts/{account_id}/pages/projects/{project_name}" }),
@@ -928,125 +928,125 @@ export interface UpdateProjectResponse {
 
 export const UpdateProjectResponse = Schema.Struct({
   result: Schema.Struct({
-  build_config: Schema.optional(Schema.Struct({
-  build_caching: Schema.optional(Schema.Boolean),
-  build_command: Schema.optional(Schema.String),
-  destination_dir: Schema.optional(Schema.String),
-  root_dir: Schema.optional(Schema.String),
-  web_analytics_tag: Schema.String,
-  web_analytics_token: Schema.String
-})),
+  build_config: Schema.optional(Schema.NullOr(Schema.Struct({
+  build_caching: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  build_command: Schema.optional(Schema.NullOr(Schema.String)),
+  destination_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  root_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_tag: Schema.NullOr(Schema.String),
+  web_analytics_token: Schema.NullOr(Schema.String)
+}))),
   canonical_deployment: Schema.Struct({}),
   created_on: Schema.Date,
   deployment_configs: Schema.Struct({
   preview: Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
+}) }))),
   always_use_latest_compatibility_date: Schema.Boolean,
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
   build_image_major_version: Schema.Number,
   compatibility_date: Schema.String,
   compatibility_flags: Schema.Array(Schema.String),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+}) }))),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   fail_open: Schema.Boolean,
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
   environment: Schema.String,
   service: Schema.String
-}) })),
+}) }))),
   usage_model: Schema.Literal("standard", "bundled", "unbound"),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
 }),
   production: Schema.Struct({
-  ai_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  ai_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   project_id: Schema.String
-}) })),
+}) }))),
   always_use_latest_compatibility_date: Schema.Boolean,
-  analytics_engine_datasets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  analytics_engine_datasets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   dataset: Schema.String
-}) })),
-  browsers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
+}) }))),
+  browsers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) }))),
   build_image_major_version: Schema.Number,
   compatibility_date: Schema.String,
   compatibility_flags: Schema.Array(Schema.String),
-  d1_databases: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  d1_databases: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  durable_object_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  durable_object_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+}) }))),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   fail_open: Schema.Boolean,
-  hyperdrive_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  hyperdrive_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   id: Schema.String
-}) })),
-  kv_namespaces: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}) }))),
+  kv_namespaces: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   namespace_id: Schema.String
-}) })),
-  limits: Schema.optional(Schema.Struct({
+}) }))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
   cpu_ms: Schema.Number
-})),
-  mtls_certificates: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  mtls_certificates: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   certificate_id: Schema.String
-}) })),
-  placement: Schema.optional(Schema.Struct({
+}) }))),
+  placement: Schema.optional(Schema.NullOr(Schema.Struct({
   mode: Schema.String
-})),
-  queue_producers: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+}))),
+  queue_producers: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   name: Schema.String
-}) })),
-  r2_buckets: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  jurisdiction: Schema.optional(Schema.String),
+}) }))),
+  r2_buckets: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  jurisdiction: Schema.optional(Schema.NullOr(Schema.String)),
   name: Schema.String
-}) })),
-  services: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
-  entrypoint: Schema.optional(Schema.String),
+}) }))),
+  services: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  entrypoint: Schema.optional(Schema.NullOr(Schema.String)),
   environment: Schema.String,
   service: Schema.String
-}) })),
+}) }))),
   usage_model: Schema.Literal("standard", "bundled", "unbound"),
-  vectorize_bindings: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Struct({
+  vectorize_bindings: Schema.optional(Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({
   index_name: Schema.String
-}) })),
-  wrangler_config_hash: Schema.optional(Schema.String)
+}) }))),
+  wrangler_config_hash: Schema.optional(Schema.NullOr(Schema.String))
 })
 }),
-  domains: Schema.optional(Schema.Array(Schema.String)),
+  domains: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
   framework: Schema.String,
   framework_version: Schema.String,
   id: Schema.String,
@@ -1055,7 +1055,7 @@ export const UpdateProjectResponse = Schema.Struct({
   preview_script_name: Schema.String,
   production_branch: Schema.String,
   production_script_name: Schema.String,
-  source: Schema.optional(Schema.Struct({
+  source: Schema.optional(Schema.NullOr(Schema.Struct({
   config: Schema.Struct({
   deployments_enabled: Schema.Boolean,
   owner: Schema.String,
@@ -1072,9 +1072,9 @@ export const UpdateProjectResponse = Schema.Struct({
   repo_name: Schema.String
 }),
   type: Schema.Literal("github", "gitlab")
-})),
-  subdomain: Schema.optional(Schema.String),
-  uses_functions: Schema.Boolean
+}))),
+  subdomain: Schema.optional(Schema.NullOr(Schema.String)),
+  uses_functions: Schema.NullOr(Schema.Boolean)
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1122,14 +1122,14 @@ export interface GetDeploymentsResponse {
 
 export const GetDeploymentsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  aliases: Schema.Array(Schema.String),
+  aliases: Schema.NullOr(Schema.Array(Schema.String)),
   build_config: Schema.Struct({
-  build_caching: Schema.optional(Schema.Boolean),
-  build_command: Schema.optional(Schema.String),
-  destination_dir: Schema.optional(Schema.String),
-  root_dir: Schema.optional(Schema.String),
-  web_analytics_tag: Schema.String,
-  web_analytics_token: Schema.String
+  build_caching: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  build_command: Schema.optional(Schema.NullOr(Schema.String)),
+  destination_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  root_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_tag: Schema.NullOr(Schema.String),
+  web_analytics_token: Schema.NullOr(Schema.String)
 }),
   created_on: Schema.Date,
   deployment_trigger: Schema.Struct({
@@ -1141,14 +1141,14 @@ export const GetDeploymentsResponse = Schema.Struct({
 }),
   type: Schema.Literal("github:push", "ad_hoc", "deploy_hook")
 }),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   environment: Schema.Literal("preview", "production"),
   id: Schema.String,
   is_skipped: Schema.Boolean,
   latest_stage: Schema.Struct({
-  ended_on: Schema.Date,
+  ended_on: Schema.NullOr(Schema.Date),
   name: Schema.Literal("queued", "initialize", "clone_repo", "build", "deploy"),
-  started_on: Schema.Date,
+  started_on: Schema.NullOr(Schema.Date),
   status: Schema.Literal("success", "idle", "active", "failure", "canceled")
 }),
   modified_on: Schema.Date,
@@ -1174,13 +1174,13 @@ export const GetDeploymentsResponse = Schema.Struct({
   type: Schema.Literal("github", "gitlab")
 }),
   stages: Schema.Array(Schema.Struct({
-  ended_on: Schema.Date,
+  ended_on: Schema.NullOr(Schema.Date),
   name: Schema.Literal("queued", "initialize", "clone_repo", "build", "deploy"),
-  started_on: Schema.Date,
+  started_on: Schema.NullOr(Schema.Date),
   status: Schema.Literal("success", "idle", "active", "failure", "canceled")
 })),
   url: Schema.String,
-  uses_functions: Schema.optional(Schema.Boolean)
+  uses_functions: Schema.optional(Schema.NullOr(Schema.Boolean))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1224,14 +1224,14 @@ export interface CreateDeploymentResponse {
 
 export const CreateDeploymentResponse = Schema.Struct({
   result: Schema.Struct({
-  aliases: Schema.Array(Schema.String),
+  aliases: Schema.NullOr(Schema.Array(Schema.String)),
   build_config: Schema.Struct({
-  build_caching: Schema.optional(Schema.Boolean),
-  build_command: Schema.optional(Schema.String),
-  destination_dir: Schema.optional(Schema.String),
-  root_dir: Schema.optional(Schema.String),
-  web_analytics_tag: Schema.String,
-  web_analytics_token: Schema.String
+  build_caching: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  build_command: Schema.optional(Schema.NullOr(Schema.String)),
+  destination_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  root_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_tag: Schema.NullOr(Schema.String),
+  web_analytics_token: Schema.NullOr(Schema.String)
 }),
   created_on: Schema.Date,
   deployment_trigger: Schema.Struct({
@@ -1243,14 +1243,14 @@ export const CreateDeploymentResponse = Schema.Struct({
 }),
   type: Schema.Literal("github:push", "ad_hoc", "deploy_hook")
 }),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   environment: Schema.Literal("preview", "production"),
   id: Schema.String,
   is_skipped: Schema.Boolean,
   latest_stage: Schema.Struct({
-  ended_on: Schema.Date,
+  ended_on: Schema.NullOr(Schema.Date),
   name: Schema.Literal("queued", "initialize", "clone_repo", "build", "deploy"),
-  started_on: Schema.Date,
+  started_on: Schema.NullOr(Schema.Date),
   status: Schema.Literal("success", "idle", "active", "failure", "canceled")
 }),
   modified_on: Schema.Date,
@@ -1276,13 +1276,13 @@ export const CreateDeploymentResponse = Schema.Struct({
   type: Schema.Literal("github", "gitlab")
 }),
   stages: Schema.Array(Schema.Struct({
-  ended_on: Schema.Date,
+  ended_on: Schema.NullOr(Schema.Date),
   name: Schema.Literal("queued", "initialize", "clone_repo", "build", "deploy"),
-  started_on: Schema.Date,
+  started_on: Schema.NullOr(Schema.Date),
   status: Schema.Literal("success", "idle", "active", "failure", "canceled")
 })),
   url: Schema.String,
-  uses_functions: Schema.optional(Schema.Boolean)
+  uses_functions: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1326,14 +1326,14 @@ export interface GetDeploymentInfoResponse {
 
 export const GetDeploymentInfoResponse = Schema.Struct({
   result: Schema.Struct({
-  aliases: Schema.Array(Schema.String),
+  aliases: Schema.NullOr(Schema.Array(Schema.String)),
   build_config: Schema.Struct({
-  build_caching: Schema.optional(Schema.Boolean),
-  build_command: Schema.optional(Schema.String),
-  destination_dir: Schema.optional(Schema.String),
-  root_dir: Schema.optional(Schema.String),
-  web_analytics_tag: Schema.String,
-  web_analytics_token: Schema.String
+  build_caching: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  build_command: Schema.optional(Schema.NullOr(Schema.String)),
+  destination_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  root_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_tag: Schema.NullOr(Schema.String),
+  web_analytics_token: Schema.NullOr(Schema.String)
 }),
   created_on: Schema.Date,
   deployment_trigger: Schema.Struct({
@@ -1345,14 +1345,14 @@ export const GetDeploymentInfoResponse = Schema.Struct({
 }),
   type: Schema.Literal("github:push", "ad_hoc", "deploy_hook")
 }),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   environment: Schema.Literal("preview", "production"),
   id: Schema.String,
   is_skipped: Schema.Boolean,
   latest_stage: Schema.Struct({
-  ended_on: Schema.Date,
+  ended_on: Schema.NullOr(Schema.Date),
   name: Schema.Literal("queued", "initialize", "clone_repo", "build", "deploy"),
-  started_on: Schema.Date,
+  started_on: Schema.NullOr(Schema.Date),
   status: Schema.Literal("success", "idle", "active", "failure", "canceled")
 }),
   modified_on: Schema.Date,
@@ -1378,13 +1378,13 @@ export const GetDeploymentInfoResponse = Schema.Struct({
   type: Schema.Literal("github", "gitlab")
 }),
   stages: Schema.Array(Schema.Struct({
-  ended_on: Schema.Date,
+  ended_on: Schema.NullOr(Schema.Date),
   name: Schema.Literal("queued", "initialize", "clone_repo", "build", "deploy"),
-  started_on: Schema.Date,
+  started_on: Schema.NullOr(Schema.Date),
   status: Schema.Literal("success", "idle", "active", "failure", "canceled")
 })),
   url: Schema.String,
-  uses_functions: Schema.optional(Schema.Boolean)
+  uses_functions: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1519,14 +1519,14 @@ export interface PagesDeploymentRetryDeploymentResponse {
 
 export const PagesDeploymentRetryDeploymentResponse = Schema.Struct({
   result: Schema.Struct({
-  aliases: Schema.Array(Schema.String),
+  aliases: Schema.NullOr(Schema.Array(Schema.String)),
   build_config: Schema.Struct({
-  build_caching: Schema.optional(Schema.Boolean),
-  build_command: Schema.optional(Schema.String),
-  destination_dir: Schema.optional(Schema.String),
-  root_dir: Schema.optional(Schema.String),
-  web_analytics_tag: Schema.String,
-  web_analytics_token: Schema.String
+  build_caching: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  build_command: Schema.optional(Schema.NullOr(Schema.String)),
+  destination_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  root_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_tag: Schema.NullOr(Schema.String),
+  web_analytics_token: Schema.NullOr(Schema.String)
 }),
   created_on: Schema.Date,
   deployment_trigger: Schema.Struct({
@@ -1538,14 +1538,14 @@ export const PagesDeploymentRetryDeploymentResponse = Schema.Struct({
 }),
   type: Schema.Literal("github:push", "ad_hoc", "deploy_hook")
 }),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   environment: Schema.Literal("preview", "production"),
   id: Schema.String,
   is_skipped: Schema.Boolean,
   latest_stage: Schema.Struct({
-  ended_on: Schema.Date,
+  ended_on: Schema.NullOr(Schema.Date),
   name: Schema.Literal("queued", "initialize", "clone_repo", "build", "deploy"),
-  started_on: Schema.Date,
+  started_on: Schema.NullOr(Schema.Date),
   status: Schema.Literal("success", "idle", "active", "failure", "canceled")
 }),
   modified_on: Schema.Date,
@@ -1571,13 +1571,13 @@ export const PagesDeploymentRetryDeploymentResponse = Schema.Struct({
   type: Schema.Literal("github", "gitlab")
 }),
   stages: Schema.Array(Schema.Struct({
-  ended_on: Schema.Date,
+  ended_on: Schema.NullOr(Schema.Date),
   name: Schema.Literal("queued", "initialize", "clone_repo", "build", "deploy"),
-  started_on: Schema.Date,
+  started_on: Schema.NullOr(Schema.Date),
   status: Schema.Literal("success", "idle", "active", "failure", "canceled")
 })),
   url: Schema.String,
-  uses_functions: Schema.optional(Schema.Boolean)
+  uses_functions: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1621,14 +1621,14 @@ export interface PagesDeploymentRollbackDeploymentResponse {
 
 export const PagesDeploymentRollbackDeploymentResponse = Schema.Struct({
   result: Schema.Struct({
-  aliases: Schema.Array(Schema.String),
+  aliases: Schema.NullOr(Schema.Array(Schema.String)),
   build_config: Schema.Struct({
-  build_caching: Schema.optional(Schema.Boolean),
-  build_command: Schema.optional(Schema.String),
-  destination_dir: Schema.optional(Schema.String),
-  root_dir: Schema.optional(Schema.String),
-  web_analytics_tag: Schema.String,
-  web_analytics_token: Schema.String
+  build_caching: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  build_command: Schema.optional(Schema.NullOr(Schema.String)),
+  destination_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  root_dir: Schema.optional(Schema.NullOr(Schema.String)),
+  web_analytics_tag: Schema.NullOr(Schema.String),
+  web_analytics_token: Schema.NullOr(Schema.String)
 }),
   created_on: Schema.Date,
   deployment_trigger: Schema.Struct({
@@ -1640,14 +1640,14 @@ export const PagesDeploymentRollbackDeploymentResponse = Schema.Struct({
 }),
   type: Schema.Literal("github:push", "ad_hoc", "deploy_hook")
 }),
-  env_vars: Schema.Record({ key: Schema.String, value: Schema.Struct({}) }),
+  env_vars: Schema.NullOr(Schema.Record({ key: Schema.String, value: Schema.Struct({}) })),
   environment: Schema.Literal("preview", "production"),
   id: Schema.String,
   is_skipped: Schema.Boolean,
   latest_stage: Schema.Struct({
-  ended_on: Schema.Date,
+  ended_on: Schema.NullOr(Schema.Date),
   name: Schema.Literal("queued", "initialize", "clone_repo", "build", "deploy"),
-  started_on: Schema.Date,
+  started_on: Schema.NullOr(Schema.Date),
   status: Schema.Literal("success", "idle", "active", "failure", "canceled")
 }),
   modified_on: Schema.Date,
@@ -1673,13 +1673,13 @@ export const PagesDeploymentRollbackDeploymentResponse = Schema.Struct({
   type: Schema.Literal("github", "gitlab")
 }),
   stages: Schema.Array(Schema.Struct({
-  ended_on: Schema.Date,
+  ended_on: Schema.NullOr(Schema.Date),
   name: Schema.Literal("queued", "initialize", "clone_repo", "build", "deploy"),
-  started_on: Schema.Date,
+  started_on: Schema.NullOr(Schema.Date),
   status: Schema.Literal("success", "idle", "active", "failure", "canceled")
 })),
   url: Schema.String,
-  uses_functions: Schema.optional(Schema.Boolean)
+  uses_functions: Schema.optional(Schema.NullOr(Schema.Boolean))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -1728,14 +1728,14 @@ export const GetDomainsResponse = Schema.Struct({
   name: Schema.String,
   status: Schema.Literal("initializing", "pending", "active", "deactivated", "blocked", "error"),
   validation_data: Schema.Struct({
-  error_message: Schema.optional(Schema.String),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
   method: Schema.Literal("http", "txt"),
   status: Schema.Literal("initializing", "pending", "active", "deactivated", "error"),
-  txt_name: Schema.optional(Schema.String),
-  txt_value: Schema.optional(Schema.String)
+  txt_name: Schema.optional(Schema.NullOr(Schema.String)),
+  txt_value: Schema.optional(Schema.NullOr(Schema.String))
 }),
   verification_data: Schema.Struct({
-  error_message: Schema.optional(Schema.String),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
   status: Schema.Literal("pending", "active", "deactivated", "blocked", "error")
 }),
   zone_tag: Schema.String
@@ -1791,14 +1791,14 @@ export const PagesDomainsAddDomainResponse = Schema.Struct({
   name: Schema.String,
   status: Schema.Literal("initializing", "pending", "active", "deactivated", "blocked", "error"),
   validation_data: Schema.Struct({
-  error_message: Schema.optional(Schema.String),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
   method: Schema.Literal("http", "txt"),
   status: Schema.Literal("initializing", "pending", "active", "deactivated", "error"),
-  txt_name: Schema.optional(Schema.String),
-  txt_value: Schema.optional(Schema.String)
+  txt_name: Schema.optional(Schema.NullOr(Schema.String)),
+  txt_value: Schema.optional(Schema.NullOr(Schema.String))
 }),
   verification_data: Schema.Struct({
-  error_message: Schema.optional(Schema.String),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
   status: Schema.Literal("pending", "active", "deactivated", "blocked", "error")
 }),
   zone_tag: Schema.String
@@ -1852,14 +1852,14 @@ export const GetDomainResponse = Schema.Struct({
   name: Schema.String,
   status: Schema.Literal("initializing", "pending", "active", "deactivated", "blocked", "error"),
   validation_data: Schema.Struct({
-  error_message: Schema.optional(Schema.String),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
   method: Schema.Literal("http", "txt"),
   status: Schema.Literal("initializing", "pending", "active", "deactivated", "error"),
-  txt_name: Schema.optional(Schema.String),
-  txt_value: Schema.optional(Schema.String)
+  txt_name: Schema.optional(Schema.NullOr(Schema.String)),
+  txt_value: Schema.optional(Schema.NullOr(Schema.String))
 }),
   verification_data: Schema.Struct({
-  error_message: Schema.optional(Schema.String),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
   status: Schema.Literal("pending", "active", "deactivated", "blocked", "error")
 }),
   zone_tag: Schema.String
@@ -1955,14 +1955,14 @@ export const PatchDomainResponse = Schema.Struct({
   name: Schema.String,
   status: Schema.Literal("initializing", "pending", "active", "deactivated", "blocked", "error"),
   validation_data: Schema.Struct({
-  error_message: Schema.optional(Schema.String),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
   method: Schema.Literal("http", "txt"),
   status: Schema.Literal("initializing", "pending", "active", "deactivated", "error"),
-  txt_name: Schema.optional(Schema.String),
-  txt_value: Schema.optional(Schema.String)
+  txt_name: Schema.optional(Schema.NullOr(Schema.String)),
+  txt_value: Schema.optional(Schema.NullOr(Schema.String))
 }),
   verification_data: Schema.Struct({
-  error_message: Schema.optional(Schema.String),
+  error_message: Schema.optional(Schema.NullOr(Schema.String)),
   status: Schema.Literal("pending", "active", "deactivated", "blocked", "error")
 }),
   zone_tag: Schema.String

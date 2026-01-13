@@ -50,15 +50,15 @@ export interface ListImagesResponse {
 
 export const ListImagesResponse = Schema.Struct({
   result: Schema.Struct({
-  images: Schema.optional(Schema.Array(Schema.Struct({
-  creator: Schema.optional(Schema.String),
-  filename: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  meta: Schema.optional(Schema.Struct({})),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  uploaded: Schema.optional(Schema.Date),
-  variants: Schema.optional(Schema.Array(Schema.Union(Schema.String, Schema.String, Schema.String)))
-})))
+  images: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  filename: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  uploaded: Schema.optional(Schema.NullOr(Schema.Date)),
+  variants: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.String, Schema.String, Schema.String))))
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -100,13 +100,13 @@ export interface CloudflareImagesUploadAnImageViaUrlResponse {
 
 export const CloudflareImagesUploadAnImageViaUrlResponse = Schema.Struct({
   result: Schema.Struct({
-  creator: Schema.optional(Schema.String),
-  filename: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  meta: Schema.optional(Schema.Struct({})),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  uploaded: Schema.optional(Schema.Date),
-  variants: Schema.optional(Schema.Array(Schema.Union(Schema.String, Schema.String, Schema.String)))
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  filename: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  uploaded: Schema.optional(Schema.NullOr(Schema.Date)),
+  variants: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.String, Schema.String, Schema.String))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -146,10 +146,10 @@ export interface ListSigningKeysResponse {
 
 export const ListSigningKeysResponse = Schema.Struct({
   result: Schema.Struct({
-  keys: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-})))
+  keys: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -191,10 +191,10 @@ export interface CloudflareImagesKeysAddSigningKeyResponse {
 
 export const CloudflareImagesKeysAddSigningKeyResponse = Schema.Struct({
   result: Schema.Struct({
-  keys: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-})))
+  keys: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -236,10 +236,10 @@ export interface DeleteSigningKeyResponse {
 
 export const DeleteSigningKeyResponse = Schema.Struct({
   result: Schema.Struct({
-  keys: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-})))
+  keys: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -279,10 +279,10 @@ export interface CloudflareImagesImagesUsageStatisticsResponse {
 
 export const CloudflareImagesImagesUsageStatisticsResponse = Schema.Struct({
   result: Schema.Struct({
-  count: Schema.optional(Schema.Struct({
-  allowed: Schema.optional(Schema.Number),
-  current: Schema.optional(Schema.Number)
-}))
+  count: Schema.optional(Schema.NullOr(Schema.Struct({
+  allowed: Schema.optional(Schema.NullOr(Schema.Number)),
+  current: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -322,18 +322,18 @@ export interface ListVariantsResponse {
 
 export const ListVariantsResponse = Schema.Struct({
   result: Schema.Struct({
-  variants: Schema.optional(Schema.Struct({
-  hero: Schema.optional(Schema.Struct({
+  variants: Schema.optional(Schema.NullOr(Schema.Struct({
+  hero: Schema.optional(Schema.NullOr(Schema.Struct({
   id: Schema.String,
-  neverRequireSignedURLs: Schema.optional(Schema.Boolean),
+  neverRequireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
   options: Schema.Struct({
   fit: Schema.Literal("scale-down", "contain", "cover", "crop", "pad"),
   height: Schema.Number,
   metadata: Schema.Literal("keep", "copyright", "none"),
   width: Schema.Number
 })
-}))
-}))
+})))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -365,7 +365,7 @@ export const CreateAVariantRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
   id: Schema.String,
-  neverRequireSignedURLs: Schema.optional(Schema.Boolean),
+  neverRequireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
   options: Schema.Struct({
   fit: Schema.Literal("scale-down", "contain", "cover", "crop", "pad"),
   height: Schema.Number,
@@ -384,16 +384,16 @@ export interface CreateAVariantResponse {
 
 export const CreateAVariantResponse = Schema.Struct({
   result: Schema.Struct({
-  variant: Schema.optional(Schema.Struct({
+  variant: Schema.optional(Schema.NullOr(Schema.Struct({
   id: Schema.String,
-  neverRequireSignedURLs: Schema.optional(Schema.Boolean),
+  neverRequireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
   options: Schema.Struct({
   fit: Schema.Literal("scale-down", "contain", "cover", "crop", "pad"),
   height: Schema.Number,
   metadata: Schema.Literal("keep", "copyright", "none"),
   width: Schema.Number
 })
-}))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -435,16 +435,16 @@ export interface CloudflareImagesVariantsVariantDetailsResponse {
 
 export const CloudflareImagesVariantsVariantDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  variant: Schema.optional(Schema.Struct({
+  variant: Schema.optional(Schema.NullOr(Schema.Struct({
   id: Schema.String,
-  neverRequireSignedURLs: Schema.optional(Schema.Boolean),
+  neverRequireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
   options: Schema.Struct({
   fit: Schema.Literal("scale-down", "contain", "cover", "crop", "pad"),
   height: Schema.Number,
   metadata: Schema.Literal("keep", "copyright", "none"),
   width: Schema.Number
 })
-}))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -517,7 +517,7 @@ export const UpdateAVariantRequest = Schema.Struct({
   variant_id: Schema.String.pipe(T.HttpPath("variant_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  neverRequireSignedURLs: Schema.optional(Schema.Boolean),
+  neverRequireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
   options: Schema.Struct({
   fit: Schema.Literal("scale-down", "contain", "cover", "crop", "pad"),
   height: Schema.Number,
@@ -536,16 +536,16 @@ export interface UpdateAVariantResponse {
 
 export const UpdateAVariantResponse = Schema.Struct({
   result: Schema.Struct({
-  variant: Schema.optional(Schema.Struct({
+  variant: Schema.optional(Schema.NullOr(Schema.Struct({
   id: Schema.String,
-  neverRequireSignedURLs: Schema.optional(Schema.Boolean),
+  neverRequireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
   options: Schema.Struct({
   fit: Schema.Literal("scale-down", "contain", "cover", "crop", "pad"),
   height: Schema.Number,
   metadata: Schema.Literal("keep", "copyright", "none"),
   width: Schema.Number
 })
-}))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -587,13 +587,13 @@ export interface CloudflareImagesImageDetailsResponse {
 
 export const CloudflareImagesImageDetailsResponse = Schema.Struct({
   result: Schema.Struct({
-  creator: Schema.optional(Schema.String),
-  filename: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  meta: Schema.optional(Schema.Struct({})),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  uploaded: Schema.optional(Schema.Date),
-  variants: Schema.optional(Schema.Array(Schema.Union(Schema.String, Schema.String, Schema.String)))
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  filename: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  uploaded: Schema.optional(Schema.NullOr(Schema.Date)),
+  variants: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.String, Schema.String, Schema.String))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -666,9 +666,9 @@ export const UpdateImageRequest = Schema.Struct({
   image_id: Schema.String.pipe(T.HttpPath("image_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-  creator: Schema.optional(Schema.String),
-  metadata: Schema.optional(Schema.Struct({})),
-  requireSignedURLs: Schema.optional(Schema.Boolean)
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  metadata: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/accounts/{account_id}/images/v1/{image_id}" }),
@@ -681,13 +681,13 @@ export interface UpdateImageResponse {
 
 export const UpdateImageResponse = Schema.Struct({
   result: Schema.Struct({
-  creator: Schema.optional(Schema.String),
-  filename: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  meta: Schema.optional(Schema.Struct({})),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  uploaded: Schema.optional(Schema.Date),
-  variants: Schema.optional(Schema.Array(Schema.Union(Schema.String, Schema.String, Schema.String)))
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  filename: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  uploaded: Schema.optional(Schema.NullOr(Schema.Date)),
+  variants: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.String, Schema.String, Schema.String))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -775,15 +775,15 @@ export interface ListImagesV2Response {
 
 export const ListImagesV2Response = Schema.Struct({
   result: Schema.Struct({
-  images: Schema.optional(Schema.Array(Schema.Struct({
-  creator: Schema.optional(Schema.String),
-  filename: Schema.optional(Schema.String),
-  id: Schema.optional(Schema.String),
-  meta: Schema.optional(Schema.Struct({})),
-  requireSignedURLs: Schema.optional(Schema.Boolean),
-  uploaded: Schema.optional(Schema.Date),
-  variants: Schema.optional(Schema.Array(Schema.Union(Schema.String, Schema.String, Schema.String)))
-})))
+  images: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  creator: Schema.optional(Schema.NullOr(Schema.String)),
+  filename: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  meta: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  requireSignedURLs: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  uploaded: Schema.optional(Schema.NullOr(Schema.Date)),
+  variants: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.String, Schema.String, Schema.String))))
+}))))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

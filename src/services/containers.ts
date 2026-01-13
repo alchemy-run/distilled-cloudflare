@@ -127,83 +127,83 @@ export interface ListcontainerapplicationsResponse {
 
 export const ListcontainerapplicationsResponse = Schema.Struct({
   result: Schema.Array(Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  account_id: Schema.optional(Schema.String),
-  scheduling_policy: Schema.optional(Schema.String),
-  instances: Schema.optional(Schema.Number),
-  max_instances: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.Number),
-  durable_object_namespace_id: Schema.optional(Schema.String),
-  constraints: Schema.optional(Schema.Struct({
-  tier: Schema.optional(Schema.Number)
-})),
-  configuration: Schema.optional(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  account_id: Schema.optional(Schema.NullOr(Schema.String)),
+  scheduling_policy: Schema.optional(Schema.NullOr(Schema.String)),
+  instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.String)),
+  version: Schema.optional(Schema.NullOr(Schema.Number)),
+  durable_object_namespace_id: Schema.optional(Schema.NullOr(Schema.String)),
+  constraints: Schema.optional(Schema.NullOr(Schema.Struct({
+  tier: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  configuration: Schema.optional(Schema.NullOr(Schema.Struct({
   image: Schema.String,
-  instance_type: Schema.optional(Schema.String),
-  vcpu: Schema.optional(Schema.Number),
-  memory: Schema.optional(Schema.String),
-  observability: Schema.optional(Schema.Struct({
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
-}))
-})),
-  ssh_public_key_ids: Schema.optional(Schema.Array(Schema.String)),
-  secrets: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("env")),
-  secret: Schema.optional(Schema.String)
-}))),
-  disk: Schema.optional(Schema.Struct({
-  size: Schema.optional(Schema.String)
-})),
-  environment_variables: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  labels: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  network: Schema.optional(Schema.Struct({
-  assign_ipv4: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  assign_ipv6: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  mode: Schema.optional(Schema.Literal("public", "private"))
-})),
-  command: Schema.optional(Schema.Array(Schema.String)),
-  entrypoint: Schema.optional(Schema.Array(Schema.String)),
-  dns: Schema.optional(Schema.Struct({
-  servers: Schema.optional(Schema.Array(Schema.String)),
-  searches: Schema.optional(Schema.Array(Schema.String))
-})),
-  ports: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-}))),
-  checks: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("http", "tcp")),
-  tls: Schema.optional(Schema.Boolean),
-  port: Schema.optional(Schema.String),
-  http: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.String),
-  body: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  headers: Schema.optional(Schema.Struct({}))
-})),
-  interval: Schema.optional(Schema.String),
-  timeout: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("health", "ready"))
+  instance_type: Schema.optional(Schema.NullOr(Schema.String)),
+  vcpu: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory: Schema.optional(Schema.NullOr(Schema.String)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 })))
-})),
-  durable_objects: Schema.optional(Schema.Struct({
-  namespace_id: Schema.optional(Schema.String)
-})),
-  health: Schema.optional(Schema.Struct({
-  instances: Schema.optional(Schema.Struct({}))
-}))
+}))),
+  ssh_public_key_ids: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  secrets: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("env"))),
+  secret: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  disk: Schema.optional(Schema.NullOr(Schema.Struct({
+  size: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  environment_variables: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  labels: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  network: Schema.optional(Schema.NullOr(Schema.Struct({
+  assign_ipv4: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  assign_ipv6: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("public", "private")))
+}))),
+  command: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  searches: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  ports: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+})))),
+  checks: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http", "tcp"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  port: Schema.optional(Schema.NullOr(Schema.String)),
+  http: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.String)),
+  body: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  headers: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.String)),
+  timeout: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("health", "ready")))
+}))))
+}))),
+  durable_objects: Schema.optional(Schema.NullOr(Schema.Struct({
+  namespace_id: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  health: Schema.optional(Schema.NullOr(Schema.Struct({
+  instances: Schema.optional(Schema.NullOr(Schema.Struct({})))
+})))
 })),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -236,76 +236,76 @@ export const CreatecontainerapplicationRequest = Schema.Struct({
   body: Schema.Struct({
   name: Schema.String,
   max_instances: Schema.Number,
-  instances: Schema.optional(Schema.Number),
-  scheduling_policy: Schema.optional(Schema.String),
+  instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  scheduling_policy: Schema.optional(Schema.NullOr(Schema.String)),
   configuration: Schema.Struct({
   image: Schema.String,
-  instance_type: Schema.optional(Schema.String),
-  vcpu: Schema.optional(Schema.Number),
-  memory: Schema.optional(Schema.String),
-  observability: Schema.optional(Schema.Struct({
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
-}))
-})),
-  ssh_public_key_ids: Schema.optional(Schema.Array(Schema.String)),
-  secrets: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("env")),
-  secret: Schema.optional(Schema.String)
-}))),
-  disk: Schema.optional(Schema.Struct({
-  size: Schema.optional(Schema.String)
-})),
-  environment_variables: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  labels: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  network: Schema.optional(Schema.Struct({
-  assign_ipv4: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  assign_ipv6: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  mode: Schema.optional(Schema.Literal("public", "private"))
-})),
-  command: Schema.optional(Schema.Array(Schema.String)),
-  entrypoint: Schema.optional(Schema.Array(Schema.String)),
-  dns: Schema.optional(Schema.Struct({
-  servers: Schema.optional(Schema.Array(Schema.String)),
-  searches: Schema.optional(Schema.Array(Schema.String))
-})),
-  ports: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-}))),
-  checks: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("http", "tcp")),
-  tls: Schema.optional(Schema.Boolean),
-  port: Schema.optional(Schema.String),
-  http: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.String),
-  body: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  headers: Schema.optional(Schema.Struct({}))
-})),
-  interval: Schema.optional(Schema.String),
-  timeout: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("health", "ready"))
+  instance_type: Schema.optional(Schema.NullOr(Schema.String)),
+  vcpu: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory: Schema.optional(Schema.NullOr(Schema.String)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 })))
+}))),
+  ssh_public_key_ids: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  secrets: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("env"))),
+  secret: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  disk: Schema.optional(Schema.NullOr(Schema.Struct({
+  size: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  environment_variables: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  labels: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  network: Schema.optional(Schema.NullOr(Schema.Struct({
+  assign_ipv4: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  assign_ipv6: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("public", "private")))
+}))),
+  command: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  searches: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  ports: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+})))),
+  checks: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http", "tcp"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  port: Schema.optional(Schema.NullOr(Schema.String)),
+  http: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.String)),
+  body: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  headers: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.String)),
+  timeout: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("health", "ready")))
+}))))
 }),
-  durable_objects: Schema.optional(Schema.Struct({
-  namespace_id: Schema.optional(Schema.String)
-})),
-  constraints: Schema.optional(Schema.Struct({
-  tier: Schema.optional(Schema.Number)
-})),
-  affinities: Schema.optional(Schema.Struct({
-  colocation: Schema.optional(Schema.Literal("datacenter"))
-}))
+  durable_objects: Schema.optional(Schema.NullOr(Schema.Struct({
+  namespace_id: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  constraints: Schema.optional(Schema.NullOr(Schema.Struct({
+  tier: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  affinities: Schema.optional(Schema.NullOr(Schema.Struct({
+  colocation: Schema.optional(Schema.NullOr(Schema.Literal("datacenter")))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "POST", path: "/accounts/{account_id}/containers/applications" }),
@@ -318,83 +318,83 @@ export interface CreatecontainerapplicationResponse {
 
 export const CreatecontainerapplicationResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  account_id: Schema.optional(Schema.String),
-  scheduling_policy: Schema.optional(Schema.String),
-  instances: Schema.optional(Schema.Number),
-  max_instances: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.Number),
-  durable_object_namespace_id: Schema.optional(Schema.String),
-  constraints: Schema.optional(Schema.Struct({
-  tier: Schema.optional(Schema.Number)
-})),
-  configuration: Schema.optional(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  account_id: Schema.optional(Schema.NullOr(Schema.String)),
+  scheduling_policy: Schema.optional(Schema.NullOr(Schema.String)),
+  instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.String)),
+  version: Schema.optional(Schema.NullOr(Schema.Number)),
+  durable_object_namespace_id: Schema.optional(Schema.NullOr(Schema.String)),
+  constraints: Schema.optional(Schema.NullOr(Schema.Struct({
+  tier: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  configuration: Schema.optional(Schema.NullOr(Schema.Struct({
   image: Schema.String,
-  instance_type: Schema.optional(Schema.String),
-  vcpu: Schema.optional(Schema.Number),
-  memory: Schema.optional(Schema.String),
-  observability: Schema.optional(Schema.Struct({
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
-}))
-})),
-  ssh_public_key_ids: Schema.optional(Schema.Array(Schema.String)),
-  secrets: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("env")),
-  secret: Schema.optional(Schema.String)
-}))),
-  disk: Schema.optional(Schema.Struct({
-  size: Schema.optional(Schema.String)
-})),
-  environment_variables: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  labels: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  network: Schema.optional(Schema.Struct({
-  assign_ipv4: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  assign_ipv6: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  mode: Schema.optional(Schema.Literal("public", "private"))
-})),
-  command: Schema.optional(Schema.Array(Schema.String)),
-  entrypoint: Schema.optional(Schema.Array(Schema.String)),
-  dns: Schema.optional(Schema.Struct({
-  servers: Schema.optional(Schema.Array(Schema.String)),
-  searches: Schema.optional(Schema.Array(Schema.String))
-})),
-  ports: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-}))),
-  checks: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("http", "tcp")),
-  tls: Schema.optional(Schema.Boolean),
-  port: Schema.optional(Schema.String),
-  http: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.String),
-  body: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  headers: Schema.optional(Schema.Struct({}))
-})),
-  interval: Schema.optional(Schema.String),
-  timeout: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("health", "ready"))
+  instance_type: Schema.optional(Schema.NullOr(Schema.String)),
+  vcpu: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory: Schema.optional(Schema.NullOr(Schema.String)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 })))
-})),
-  durable_objects: Schema.optional(Schema.Struct({
-  namespace_id: Schema.optional(Schema.String)
-})),
-  health: Schema.optional(Schema.Struct({
-  instances: Schema.optional(Schema.Struct({}))
-}))
+}))),
+  ssh_public_key_ids: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  secrets: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("env"))),
+  secret: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  disk: Schema.optional(Schema.NullOr(Schema.Struct({
+  size: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  environment_variables: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  labels: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  network: Schema.optional(Schema.NullOr(Schema.Struct({
+  assign_ipv4: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  assign_ipv6: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("public", "private")))
+}))),
+  command: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  searches: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  ports: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+})))),
+  checks: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http", "tcp"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  port: Schema.optional(Schema.NullOr(Schema.String)),
+  http: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.String)),
+  body: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  headers: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.String)),
+  timeout: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("health", "ready")))
+}))))
+}))),
+  durable_objects: Schema.optional(Schema.NullOr(Schema.Struct({
+  namespace_id: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  health: Schema.optional(Schema.NullOr(Schema.Struct({
+  instances: Schema.optional(Schema.NullOr(Schema.Struct({})))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -436,83 +436,83 @@ export interface GetcontainerapplicationResponse {
 
 export const GetcontainerapplicationResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  account_id: Schema.optional(Schema.String),
-  scheduling_policy: Schema.optional(Schema.String),
-  instances: Schema.optional(Schema.Number),
-  max_instances: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.Number),
-  durable_object_namespace_id: Schema.optional(Schema.String),
-  constraints: Schema.optional(Schema.Struct({
-  tier: Schema.optional(Schema.Number)
-})),
-  configuration: Schema.optional(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  account_id: Schema.optional(Schema.NullOr(Schema.String)),
+  scheduling_policy: Schema.optional(Schema.NullOr(Schema.String)),
+  instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.String)),
+  version: Schema.optional(Schema.NullOr(Schema.Number)),
+  durable_object_namespace_id: Schema.optional(Schema.NullOr(Schema.String)),
+  constraints: Schema.optional(Schema.NullOr(Schema.Struct({
+  tier: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  configuration: Schema.optional(Schema.NullOr(Schema.Struct({
   image: Schema.String,
-  instance_type: Schema.optional(Schema.String),
-  vcpu: Schema.optional(Schema.Number),
-  memory: Schema.optional(Schema.String),
-  observability: Schema.optional(Schema.Struct({
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
-}))
-})),
-  ssh_public_key_ids: Schema.optional(Schema.Array(Schema.String)),
-  secrets: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("env")),
-  secret: Schema.optional(Schema.String)
-}))),
-  disk: Schema.optional(Schema.Struct({
-  size: Schema.optional(Schema.String)
-})),
-  environment_variables: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  labels: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  network: Schema.optional(Schema.Struct({
-  assign_ipv4: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  assign_ipv6: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  mode: Schema.optional(Schema.Literal("public", "private"))
-})),
-  command: Schema.optional(Schema.Array(Schema.String)),
-  entrypoint: Schema.optional(Schema.Array(Schema.String)),
-  dns: Schema.optional(Schema.Struct({
-  servers: Schema.optional(Schema.Array(Schema.String)),
-  searches: Schema.optional(Schema.Array(Schema.String))
-})),
-  ports: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-}))),
-  checks: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("http", "tcp")),
-  tls: Schema.optional(Schema.Boolean),
-  port: Schema.optional(Schema.String),
-  http: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.String),
-  body: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  headers: Schema.optional(Schema.Struct({}))
-})),
-  interval: Schema.optional(Schema.String),
-  timeout: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("health", "ready"))
+  instance_type: Schema.optional(Schema.NullOr(Schema.String)),
+  vcpu: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory: Schema.optional(Schema.NullOr(Schema.String)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 })))
-})),
-  durable_objects: Schema.optional(Schema.Struct({
-  namespace_id: Schema.optional(Schema.String)
-})),
-  health: Schema.optional(Schema.Struct({
-  instances: Schema.optional(Schema.Struct({}))
-}))
+}))),
+  ssh_public_key_ids: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  secrets: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("env"))),
+  secret: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  disk: Schema.optional(Schema.NullOr(Schema.Struct({
+  size: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  environment_variables: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  labels: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  network: Schema.optional(Schema.NullOr(Schema.Struct({
+  assign_ipv4: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  assign_ipv6: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("public", "private")))
+}))),
+  command: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  searches: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  ports: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+})))),
+  checks: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http", "tcp"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  port: Schema.optional(Schema.NullOr(Schema.String)),
+  http: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.String)),
+  body: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  headers: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.String)),
+  timeout: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("health", "ready")))
+}))))
+}))),
+  durable_objects: Schema.optional(Schema.NullOr(Schema.Struct({
+  namespace_id: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  health: Schema.optional(Schema.NullOr(Schema.Struct({
+  instances: Schema.optional(Schema.NullOr(Schema.Struct({})))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -585,77 +585,77 @@ export const UpdatecontainerapplicationRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   application_id: Schema.String.pipe(T.HttpPath("application_id")),
   body: Schema.Struct({
-  instances: Schema.optional(Schema.Number),
-  max_instances: Schema.optional(Schema.Number),
-  scheduling_policy: Schema.optional(Schema.String),
-  configuration: Schema.optional(Schema.Struct({
+  instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  scheduling_policy: Schema.optional(Schema.NullOr(Schema.String)),
+  configuration: Schema.optional(Schema.NullOr(Schema.Struct({
   image: Schema.String,
-  instance_type: Schema.optional(Schema.String),
-  vcpu: Schema.optional(Schema.Number),
-  memory: Schema.optional(Schema.String),
-  observability: Schema.optional(Schema.Struct({
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
-}))
-})),
-  ssh_public_key_ids: Schema.optional(Schema.Array(Schema.String)),
-  secrets: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("env")),
-  secret: Schema.optional(Schema.String)
-}))),
-  disk: Schema.optional(Schema.Struct({
-  size: Schema.optional(Schema.String)
-})),
-  environment_variables: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  labels: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  network: Schema.optional(Schema.Struct({
-  assign_ipv4: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  assign_ipv6: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  mode: Schema.optional(Schema.Literal("public", "private"))
-})),
-  command: Schema.optional(Schema.Array(Schema.String)),
-  entrypoint: Schema.optional(Schema.Array(Schema.String)),
-  dns: Schema.optional(Schema.Struct({
-  servers: Schema.optional(Schema.Array(Schema.String)),
-  searches: Schema.optional(Schema.Array(Schema.String))
-})),
-  ports: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-}))),
-  checks: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("http", "tcp")),
-  tls: Schema.optional(Schema.Boolean),
-  port: Schema.optional(Schema.String),
-  http: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.String),
-  body: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  headers: Schema.optional(Schema.Struct({}))
-})),
-  interval: Schema.optional(Schema.String),
-  timeout: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("health", "ready"))
+  instance_type: Schema.optional(Schema.NullOr(Schema.String)),
+  vcpu: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory: Schema.optional(Schema.NullOr(Schema.String)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 })))
-})),
-  constraints: Schema.optional(Schema.Struct({
-  tier: Schema.optional(Schema.Number),
-  region: Schema.optional(Schema.String),
-  regions: Schema.optional(Schema.Array(Schema.String)),
-  cities: Schema.optional(Schema.Array(Schema.String))
-})),
-  affinities: Schema.optional(Schema.Struct({
-  colocation: Schema.optional(Schema.Literal("datacenter"))
-}))
+}))),
+  ssh_public_key_ids: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  secrets: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("env"))),
+  secret: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  disk: Schema.optional(Schema.NullOr(Schema.Struct({
+  size: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  environment_variables: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  labels: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  network: Schema.optional(Schema.NullOr(Schema.Struct({
+  assign_ipv4: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  assign_ipv6: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("public", "private")))
+}))),
+  command: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  searches: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  ports: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+})))),
+  checks: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http", "tcp"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  port: Schema.optional(Schema.NullOr(Schema.String)),
+  http: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.String)),
+  body: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  headers: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.String)),
+  timeout: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("health", "ready")))
+}))))
+}))),
+  constraints: Schema.optional(Schema.NullOr(Schema.Struct({
+  tier: Schema.optional(Schema.NullOr(Schema.Number)),
+  region: Schema.optional(Schema.NullOr(Schema.String)),
+  regions: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  cities: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  affinities: Schema.optional(Schema.NullOr(Schema.Struct({
+  colocation: Schema.optional(Schema.NullOr(Schema.Literal("datacenter")))
+})))
 }).pipe(T.HttpBody())
 }).pipe(
   T.Http({ method: "PATCH", path: "/accounts/{account_id}/containers/applications/{application_id}" }),
@@ -668,83 +668,83 @@ export interface UpdatecontainerapplicationResponse {
 
 export const UpdatecontainerapplicationResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  name: Schema.optional(Schema.String),
-  account_id: Schema.optional(Schema.String),
-  scheduling_policy: Schema.optional(Schema.String),
-  instances: Schema.optional(Schema.Number),
-  max_instances: Schema.optional(Schema.Number),
-  created_at: Schema.optional(Schema.String),
-  version: Schema.optional(Schema.Number),
-  durable_object_namespace_id: Schema.optional(Schema.String),
-  constraints: Schema.optional(Schema.Struct({
-  tier: Schema.optional(Schema.Number)
-})),
-  configuration: Schema.optional(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  account_id: Schema.optional(Schema.NullOr(Schema.String)),
+  scheduling_policy: Schema.optional(Schema.NullOr(Schema.String)),
+  instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_at: Schema.optional(Schema.NullOr(Schema.String)),
+  version: Schema.optional(Schema.NullOr(Schema.Number)),
+  durable_object_namespace_id: Schema.optional(Schema.NullOr(Schema.String)),
+  constraints: Schema.optional(Schema.NullOr(Schema.Struct({
+  tier: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  configuration: Schema.optional(Schema.NullOr(Schema.Struct({
   image: Schema.String,
-  instance_type: Schema.optional(Schema.String),
-  vcpu: Schema.optional(Schema.Number),
-  memory: Schema.optional(Schema.String),
-  observability: Schema.optional(Schema.Struct({
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
-}))
-})),
-  ssh_public_key_ids: Schema.optional(Schema.Array(Schema.String)),
-  secrets: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("env")),
-  secret: Schema.optional(Schema.String)
-}))),
-  disk: Schema.optional(Schema.Struct({
-  size: Schema.optional(Schema.String)
-})),
-  environment_variables: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  labels: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  network: Schema.optional(Schema.Struct({
-  assign_ipv4: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  assign_ipv6: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  mode: Schema.optional(Schema.Literal("public", "private"))
-})),
-  command: Schema.optional(Schema.Array(Schema.String)),
-  entrypoint: Schema.optional(Schema.Array(Schema.String)),
-  dns: Schema.optional(Schema.Struct({
-  servers: Schema.optional(Schema.Array(Schema.String)),
-  searches: Schema.optional(Schema.Array(Schema.String))
-})),
-  ports: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-}))),
-  checks: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("http", "tcp")),
-  tls: Schema.optional(Schema.Boolean),
-  port: Schema.optional(Schema.String),
-  http: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.String),
-  body: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  headers: Schema.optional(Schema.Struct({}))
-})),
-  interval: Schema.optional(Schema.String),
-  timeout: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("health", "ready"))
+  instance_type: Schema.optional(Schema.NullOr(Schema.String)),
+  vcpu: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory: Schema.optional(Schema.NullOr(Schema.String)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 })))
-})),
-  durable_objects: Schema.optional(Schema.Struct({
-  namespace_id: Schema.optional(Schema.String)
-})),
-  health: Schema.optional(Schema.Struct({
-  instances: Schema.optional(Schema.Struct({}))
-}))
+}))),
+  ssh_public_key_ids: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  secrets: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("env"))),
+  secret: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  disk: Schema.optional(Schema.NullOr(Schema.Struct({
+  size: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  environment_variables: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  labels: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  network: Schema.optional(Schema.NullOr(Schema.Struct({
+  assign_ipv4: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  assign_ipv6: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("public", "private")))
+}))),
+  command: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  searches: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  ports: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+})))),
+  checks: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http", "tcp"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  port: Schema.optional(Schema.NullOr(Schema.String)),
+  http: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.String)),
+  body: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  headers: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.String)),
+  timeout: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("health", "ready")))
+}))))
+}))),
+  durable_objects: Schema.optional(Schema.NullOr(Schema.Struct({
+  namespace_id: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  health: Schema.optional(Schema.NullOr(Schema.Struct({
+  instances: Schema.optional(Schema.NullOr(Schema.Struct({})))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -779,66 +779,66 @@ export const CreatecontainerapplicationrolloutRequest = Schema.Struct({
   body: Schema.Struct({
   description: Schema.String,
   strategy: Schema.Literal("rolling"),
-  kind: Schema.optional(Schema.Literal("full_auto")),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("full_auto"))),
   step_percentage: Schema.Number,
   target_configuration: Schema.Struct({
   image: Schema.String,
-  instance_type: Schema.optional(Schema.String),
-  vcpu: Schema.optional(Schema.Number),
-  memory: Schema.optional(Schema.String),
-  observability: Schema.optional(Schema.Struct({
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
-}))
-})),
-  ssh_public_key_ids: Schema.optional(Schema.Array(Schema.String)),
-  secrets: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("env")),
-  secret: Schema.optional(Schema.String)
-}))),
-  disk: Schema.optional(Schema.Struct({
-  size: Schema.optional(Schema.String)
-})),
-  environment_variables: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  labels: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  network: Schema.optional(Schema.Struct({
-  assign_ipv4: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  assign_ipv6: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  mode: Schema.optional(Schema.Literal("public", "private"))
-})),
-  command: Schema.optional(Schema.Array(Schema.String)),
-  entrypoint: Schema.optional(Schema.Array(Schema.String)),
-  dns: Schema.optional(Schema.Struct({
-  servers: Schema.optional(Schema.Array(Schema.String)),
-  searches: Schema.optional(Schema.Array(Schema.String))
-})),
-  ports: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-}))),
-  checks: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("http", "tcp")),
-  tls: Schema.optional(Schema.Boolean),
-  port: Schema.optional(Schema.String),
-  http: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.String),
-  body: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  headers: Schema.optional(Schema.Struct({}))
-})),
-  interval: Schema.optional(Schema.String),
-  timeout: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("health", "ready"))
+  instance_type: Schema.optional(Schema.NullOr(Schema.String)),
+  vcpu: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory: Schema.optional(Schema.NullOr(Schema.String)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
 })))
+}))),
+  ssh_public_key_ids: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  secrets: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("env"))),
+  secret: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  disk: Schema.optional(Schema.NullOr(Schema.Struct({
+  size: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  environment_variables: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  labels: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  network: Schema.optional(Schema.NullOr(Schema.Struct({
+  assign_ipv4: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  assign_ipv6: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("public", "private")))
+}))),
+  command: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  searches: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  ports: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+})))),
+  checks: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http", "tcp"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  port: Schema.optional(Schema.NullOr(Schema.String)),
+  http: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.String)),
+  body: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  headers: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.String)),
+  timeout: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("health", "ready")))
+}))))
 })
 }).pipe(T.HttpBody())
 }).pipe(
@@ -852,101 +852,101 @@ export interface CreatecontainerapplicationrolloutResponse {
 
 export const CreatecontainerapplicationrolloutResponse = Schema.Struct({
   result: Schema.Struct({
-  id: Schema.optional(Schema.String),
-  created_at: Schema.optional(Schema.String),
-  last_updated_at: Schema.optional(Schema.String),
-  description: Schema.optional(Schema.String),
-  status: Schema.optional(Schema.String),
-  kind: Schema.optional(Schema.String),
-  strategy: Schema.optional(Schema.String),
-  current_version: Schema.optional(Schema.Number),
-  target_version: Schema.optional(Schema.Number),
-  health: Schema.optional(Schema.Struct({
-  instances: Schema.optional(Schema.Struct({
-  healthy: Schema.optional(Schema.Number),
-  failed: Schema.optional(Schema.Number),
-  starting: Schema.optional(Schema.Number),
-  scheduling: Schema.optional(Schema.Number)
-}))
-})),
-  current_configuration: Schema.optional(Schema.Struct({
-  image: Schema.optional(Schema.String),
-  observability: Schema.optional(Schema.Struct({}))
-})),
-  target_configuration: Schema.optional(Schema.Struct({
-  image: Schema.String,
-  instance_type: Schema.optional(Schema.String),
-  vcpu: Schema.optional(Schema.Number),
-  memory: Schema.optional(Schema.String),
-  observability: Schema.optional(Schema.Struct({
-  logs: Schema.optional(Schema.Struct({
-  enabled: Schema.optional(Schema.Boolean)
-}))
-})),
-  ssh_public_key_ids: Schema.optional(Schema.Array(Schema.String)),
-  secrets: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("env")),
-  secret: Schema.optional(Schema.String)
-}))),
-  disk: Schema.optional(Schema.Struct({
-  size: Schema.optional(Schema.String)
-})),
-  environment_variables: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  labels: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  value: Schema.optional(Schema.String)
-}))),
-  network: Schema.optional(Schema.Struct({
-  assign_ipv4: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  assign_ipv6: Schema.optional(Schema.Literal("none", "predefined", "account")),
-  mode: Schema.optional(Schema.Literal("public", "private"))
-})),
-  command: Schema.optional(Schema.Array(Schema.String)),
-  entrypoint: Schema.optional(Schema.Array(Schema.String)),
-  dns: Schema.optional(Schema.Struct({
-  servers: Schema.optional(Schema.Array(Schema.String)),
-  searches: Schema.optional(Schema.Array(Schema.String))
-})),
-  ports: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  port: Schema.optional(Schema.Number)
-}))),
-  checks: Schema.optional(Schema.Array(Schema.Struct({
-  name: Schema.optional(Schema.String),
-  type: Schema.optional(Schema.Literal("http", "tcp")),
-  tls: Schema.optional(Schema.Boolean),
-  port: Schema.optional(Schema.String),
-  http: Schema.optional(Schema.Struct({
-  method: Schema.optional(Schema.String),
-  body: Schema.optional(Schema.String),
-  path: Schema.optional(Schema.String),
-  headers: Schema.optional(Schema.Struct({}))
-})),
-  interval: Schema.optional(Schema.String),
-  timeout: Schema.optional(Schema.String),
-  retries: Schema.optional(Schema.Number),
-  kind: Schema.optional(Schema.Literal("health", "ready"))
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_at: Schema.optional(Schema.NullOr(Schema.String)),
+  last_updated_at: Schema.optional(Schema.NullOr(Schema.String)),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  status: Schema.optional(Schema.NullOr(Schema.String)),
+  kind: Schema.optional(Schema.NullOr(Schema.String)),
+  strategy: Schema.optional(Schema.NullOr(Schema.String)),
+  current_version: Schema.optional(Schema.NullOr(Schema.Number)),
+  target_version: Schema.optional(Schema.NullOr(Schema.Number)),
+  health: Schema.optional(Schema.NullOr(Schema.Struct({
+  instances: Schema.optional(Schema.NullOr(Schema.Struct({
+  healthy: Schema.optional(Schema.NullOr(Schema.Number)),
+  failed: Schema.optional(Schema.NullOr(Schema.Number)),
+  starting: Schema.optional(Schema.NullOr(Schema.Number)),
+  scheduling: Schema.optional(Schema.NullOr(Schema.Number))
 })))
-})),
-  steps: Schema.optional(Schema.Array(Schema.Struct({
-  id: Schema.optional(Schema.Number),
-  status: Schema.optional(Schema.String),
-  step_size: Schema.optional(Schema.Struct({
-  percentage: Schema.optional(Schema.Number)
-})),
-  description: Schema.optional(Schema.String),
-  started_at: Schema.optional(Schema.String)
 }))),
-  progress: Schema.optional(Schema.Struct({
-  total_steps: Schema.optional(Schema.Number),
-  current_step: Schema.optional(Schema.Number),
-  updated_instances: Schema.optional(Schema.Number),
-  total_instances: Schema.optional(Schema.Number)
-}))
+  current_configuration: Schema.optional(Schema.NullOr(Schema.Struct({
+  image: Schema.optional(Schema.NullOr(Schema.String)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  target_configuration: Schema.optional(Schema.NullOr(Schema.Struct({
+  image: Schema.String,
+  instance_type: Schema.optional(Schema.NullOr(Schema.String)),
+  vcpu: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory: Schema.optional(Schema.NullOr(Schema.String)),
+  observability: Schema.optional(Schema.NullOr(Schema.Struct({
+  logs: Schema.optional(Schema.NullOr(Schema.Struct({
+  enabled: Schema.optional(Schema.NullOr(Schema.Boolean))
+})))
+}))),
+  ssh_public_key_ids: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  secrets: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("env"))),
+  secret: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  disk: Schema.optional(Schema.NullOr(Schema.Struct({
+  size: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  environment_variables: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  labels: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  value: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  network: Schema.optional(Schema.NullOr(Schema.Struct({
+  assign_ipv4: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  assign_ipv6: Schema.optional(Schema.NullOr(Schema.Literal("none", "predefined", "account"))),
+  mode: Schema.optional(Schema.NullOr(Schema.Literal("public", "private")))
+}))),
+  command: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  entrypoint: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  dns: Schema.optional(Schema.NullOr(Schema.Struct({
+  servers: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  searches: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}))),
+  ports: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  port: Schema.optional(Schema.NullOr(Schema.Number))
+})))),
+  checks: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http", "tcp"))),
+  tls: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  port: Schema.optional(Schema.NullOr(Schema.String)),
+  http: Schema.optional(Schema.NullOr(Schema.Struct({
+  method: Schema.optional(Schema.NullOr(Schema.String)),
+  body: Schema.optional(Schema.NullOr(Schema.String)),
+  path: Schema.optional(Schema.NullOr(Schema.String)),
+  headers: Schema.optional(Schema.NullOr(Schema.Struct({})))
+}))),
+  interval: Schema.optional(Schema.NullOr(Schema.String)),
+  timeout: Schema.optional(Schema.NullOr(Schema.String)),
+  retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  kind: Schema.optional(Schema.NullOr(Schema.Literal("health", "ready")))
+}))))
+}))),
+  steps: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  id: Schema.optional(Schema.NullOr(Schema.Number)),
+  status: Schema.optional(Schema.NullOr(Schema.String)),
+  step_size: Schema.optional(Schema.NullOr(Schema.Struct({
+  percentage: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  description: Schema.optional(Schema.NullOr(Schema.String)),
+  started_at: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  progress: Schema.optional(Schema.NullOr(Schema.Struct({
+  total_steps: Schema.optional(Schema.NullOr(Schema.Number)),
+  current_step: Schema.optional(Schema.NullOr(Schema.Number)),
+  updated_instances: Schema.optional(Schema.NullOr(Schema.Number)),
+  total_instances: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),
@@ -986,32 +986,32 @@ export interface GetcontaineridentityResponse {
 
 export const GetcontaineridentityResponse = Schema.Struct({
   result: Schema.Struct({
-  account_id: Schema.optional(Schema.String),
-  external_account_id: Schema.optional(Schema.String),
-  legacy_identity: Schema.optional(Schema.String),
-  capabilities: Schema.optional(Schema.Array(Schema.String)),
-  limits: Schema.optional(Schema.Struct({
-  account_id: Schema.optional(Schema.String),
-  vcpu_per_deployment: Schema.optional(Schema.Number),
-  memory_mib_per_deployment: Schema.optional(Schema.Number),
-  memory_per_deployment: Schema.optional(Schema.String),
-  disk_per_deployment: Schema.optional(Schema.String),
-  disk_mb_per_deployment: Schema.optional(Schema.Number),
-  total_vcpu: Schema.optional(Schema.Number),
-  total_memory_mib: Schema.optional(Schema.Number),
-  node_group: Schema.optional(Schema.String),
-  ipv4s: Schema.optional(Schema.Number),
-  network_modes: Schema.optional(Schema.Array(Schema.String)),
-  total_disk_mb: Schema.optional(Schema.Number),
-  total_memory: Schema.optional(Schema.String)
-})),
-  locations: Schema.optional(Schema.Array(Schema.Struct({}))),
-  defaults: Schema.optional(Schema.Struct({
-  vcpus: Schema.optional(Schema.Number),
-  memory_mib: Schema.optional(Schema.Number),
-  memory: Schema.optional(Schema.String),
-  disk_mb: Schema.optional(Schema.Number)
-}))
+  account_id: Schema.optional(Schema.NullOr(Schema.String)),
+  external_account_id: Schema.optional(Schema.NullOr(Schema.String)),
+  legacy_identity: Schema.optional(Schema.NullOr(Schema.String)),
+  capabilities: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  limits: Schema.optional(Schema.NullOr(Schema.Struct({
+  account_id: Schema.optional(Schema.NullOr(Schema.String)),
+  vcpu_per_deployment: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory_mib_per_deployment: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory_per_deployment: Schema.optional(Schema.NullOr(Schema.String)),
+  disk_per_deployment: Schema.optional(Schema.NullOr(Schema.String)),
+  disk_mb_per_deployment: Schema.optional(Schema.NullOr(Schema.Number)),
+  total_vcpu: Schema.optional(Schema.NullOr(Schema.Number)),
+  total_memory_mib: Schema.optional(Schema.NullOr(Schema.Number)),
+  node_group: Schema.optional(Schema.NullOr(Schema.String)),
+  ipv4s: Schema.optional(Schema.NullOr(Schema.Number)),
+  network_modes: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  total_disk_mb: Schema.optional(Schema.NullOr(Schema.Number)),
+  total_memory: Schema.optional(Schema.NullOr(Schema.String))
+}))),
+  locations: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({})))),
+  defaults: Schema.optional(Schema.NullOr(Schema.Struct({
+  vcpus: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory_mib: Schema.optional(Schema.NullOr(Schema.Number)),
+  memory: Schema.optional(Schema.NullOr(Schema.String)),
+  disk_mb: Schema.optional(Schema.NullOr(Schema.Number))
+})))
 }),
   result_info: Schema.optional(Schema.Struct({
     page: Schema.optional(Schema.Number),

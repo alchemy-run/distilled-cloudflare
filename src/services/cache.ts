@@ -546,17 +546,17 @@ export const ZoneCacheSettingsChangeVariantsSettingRequest = Schema.Struct({
   zone_id: Schema.String.pipe(T.HttpPath("zone_id")),
   body: Schema.Struct({
   value: Schema.Struct({
-  avif: Schema.optional(Schema.Array(Schema.String)),
-  bmp: Schema.optional(Schema.Array(Schema.String)),
-  gif: Schema.optional(Schema.Array(Schema.String)),
-  jp2: Schema.optional(Schema.Array(Schema.String)),
-  jpeg: Schema.optional(Schema.Array(Schema.String)),
-  jpg: Schema.optional(Schema.Array(Schema.String)),
-  jpg2: Schema.optional(Schema.Array(Schema.String)),
-  png: Schema.optional(Schema.Array(Schema.String)),
-  tif: Schema.optional(Schema.Array(Schema.String)),
-  tiff: Schema.optional(Schema.Array(Schema.String)),
-  webp: Schema.optional(Schema.Array(Schema.String))
+  avif: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  bmp: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  gif: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  jp2: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  jpeg: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  jpg: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  jpg2: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  png: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tif: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  tiff: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
+  webp: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
 })
 }).pipe(T.HttpBody())
 }).pipe(
