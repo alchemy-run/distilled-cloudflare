@@ -7,10 +7,8 @@
 
 import { describe, expect } from "vitest";
 import * as Effect from "effect/Effect";
-import * as Exit from "effect/Exit";
 import { test, getAccountId } from "../test.ts";
 import * as Queues from "../../src/services/queues.ts";
-import { QueueNotFound, QueueAlreadyExists, InvalidQueueName } from "../../src/errors/generated.ts";
 
 const accountId = () => getAccountId();
 
@@ -279,109 +277,93 @@ describe("Queues", () => {
 
   describe("Error Handling", () => {
     test("QueueNotFound error when listing consumers for non-existent queue", () =>
-      Effect.gen(function* () {
-        yield* Queues.listConsumers({
-          account_id: accountId(),
-          queue_id: "00000000-0000-0000-0000-000000000000",
-        }).pipe(
-          Effect.matchEffect({
-            onSuccess: () => Effect.die("Expected QueueNotFound error"),
-            onFailure: (error) =>
-              Effect.gen(function* () {
-                expect(error).toBeInstanceOf(QueueNotFound);
-                expect((error as QueueNotFound).code).toBe(11000);
-              }),
-          }),
-        );
-      }));
-
-    test("QueueNotFound error when deleting consumer from non-existent queue", () =>
-      Effect.gen(function* () {
-        yield* Queues.deleteConsumer({
-          account_id: accountId(),
-          queue_id: "00000000-0000-0000-0000-000000000000",
-          consumer_id: "00000000-0000-0000-0000-000000000000",
-        }).pipe(
-          Effect.matchEffect({
-            onSuccess: () => Effect.die("Expected QueueNotFound error"),
-            onFailure: (error) =>
-              Effect.gen(function* () {
-                expect(error).toBeInstanceOf(QueueNotFound);
-                expect((error as QueueNotFound).code).toBe(11000);
-              }),
-          }),
-        );
-      }));
-
-    test("QueueNotFound error when getting non-existent queue", () =>
-      Effect.gen(function* () {
-        yield* Queues.get_({
-          account_id: accountId(),
-          queue_id: "00000000-0000-0000-0000-000000000000",
-        }).pipe(
-          Effect.matchEffect({
-            onSuccess: () => Effect.die("Expected QueueNotFound error"),
-            onFailure: (error) =>
-              Effect.gen(function* () {
-                expect(error).toBeInstanceOf(QueueNotFound);
-                expect((error as QueueNotFound).code).toBe(11000);
-              }),
-          }),
-        );
-      }));
-
-    test("QueueAlreadyExists error when creating duplicate queue", () =>
-      withQueue("itty-cf-queues-duplicate", () =>
-        Effect.gen(function* () {
-          // Try to create the same queue again
-          yield* Queues.create({
-            account_id: accountId(),
-            body: { queue_name: "itty-cf-queues-duplicate" },
-          }).pipe(
-            Effect.matchEffect({
-              onSuccess: () => Effect.die("Expected QueueAlreadyExists error"),
-              onFailure: (error) =>
-                Effect.gen(function* () {
-                  expect(error).toBeInstanceOf(QueueAlreadyExists);
-                  expect((error as QueueAlreadyExists).code).toBe(11009);
-                }),
-            }),
-          );
+      Queues.listConsumers({
+        account_id: accountId(),
+        queue_id: "00000000-0000-0000-0000-000000000000",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("QueueNotFound");
+          if (error._tag === "QueueNotFound") {
+            // Error code 11000 is returned for UUID-formatted queue IDs
+            expect(error.code).toBe(11000);
+          }
         }),
       ));
 
-    test("InvalidQueueName error when creating queue with invalid name", () =>
-      Effect.gen(function* () {
-        yield* Queues.create({
+    test("QueueNotFound error when deleting consumer from non-existent queue", () =>
+      Queues.deleteConsumer({
+        account_id: accountId(),
+        queue_id: "00000000-0000-0000-0000-000000000000",
+        consumer_id: "00000000-0000-0000-0000-000000000000",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("QueueNotFound");
+          if (error._tag === "QueueNotFound") {
+            // Error code 11000 is returned for UUID-formatted queue IDs
+            expect(error.code).toBe(11000);
+          }
+        }),
+      ));
+
+    test("QueueNotFound error when getting non-existent queue", () =>
+      Queues.get_({
+        account_id: accountId(),
+        queue_id: "00000000-0000-0000-0000-000000000000",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("QueueNotFound");
+          if (error._tag === "QueueNotFound") {
+            // Error code 11000 is returned for UUID-formatted queue IDs
+            expect(error.code).toBe(11000);
+          }
+        }),
+      ));
+
+    test("QueueAlreadyExists error when creating duplicate queue", () =>
+      withQueue("itty-cf-queues-duplicate", () =>
+        Queues.create({
           account_id: accountId(),
-          body: { queue_name: "" },
+          body: { queue_name: "itty-cf-queues-duplicate" },
         }).pipe(
-          Effect.matchEffect({
-            onSuccess: () => Effect.die("Expected InvalidQueueName error"),
-            onFailure: (error) =>
-              Effect.gen(function* () {
-                expect(error).toBeInstanceOf(InvalidQueueName);
-                expect((error as InvalidQueueName).code).toBe(11003);
-              }),
+          Effect.flip,
+          Effect.map((error) => {
+            expect(error._tag).toBe("QueueAlreadyExists");
+            if (error._tag === "QueueAlreadyExists") {
+              expect(error.code).toBe(11009);
+            }
           }),
-        );
-      }));
+        ),
+      ));
+
+    test("InvalidQueueName error when creating queue with invalid name", () =>
+      Queues.create({
+        account_id: accountId(),
+        body: { queue_name: "" },
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("InvalidQueueName");
+          if (error._tag === "InvalidQueueName") {
+            expect(error.code).toBe(11003);
+          }
+        }),
+      ));
 
     test("InvalidQueueName error when creating queue with special characters", () =>
-      Effect.gen(function* () {
-        yield* Queues.create({
-          account_id: accountId(),
-          body: { queue_name: "invalid!queue@name" },
-        }).pipe(
-          Effect.matchEffect({
-            onSuccess: () => Effect.die("Expected InvalidQueueName error"),
-            onFailure: (error) =>
-              Effect.gen(function* () {
-                expect(error).toBeInstanceOf(InvalidQueueName);
-                expect((error as InvalidQueueName).code).toBe(11003);
-              }),
-          }),
-        );
-      }));
+      Queues.create({
+        account_id: accountId(),
+        body: { queue_name: "invalid!queue@name" },
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("InvalidQueueName");
+          if (error._tag === "InvalidQueueName") {
+            expect(error.code).toBe(11003);
+          }
+        }),
+      ));
   });
 });

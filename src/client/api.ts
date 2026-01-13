@@ -9,6 +9,7 @@ import { HttpClient, HttpClientRequest, HttpBody } from "@effect/platform";
 import * as Effect from "effect/Effect";
 import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
+import type * as AST from "effect/SchemaAST";
 import * as Stream from "effect/Stream";
 
 import { ApiToken } from "../auth.ts";
@@ -20,7 +21,28 @@ import {
 } from "../errors.ts";
 import * as T from "../traits.ts";
 import { buildRequest } from "./request-builder.ts";
-import { parseResponse, type ErrorCatalog } from "./response-parser.ts";
+import { parseResponse } from "./response-parser.ts";
+
+/**
+ * Extract the _tag literal value from a TaggedError schema AST.
+ * Works with both base classes and schemas annotated via .pipe().
+ */
+function extractTagFromAst(ast: AST.AST): string | undefined {
+  // Handle Transformation (result of .pipe() on TaggedError)
+  if (ast._tag === "Transformation") {
+    return extractTagFromAst(ast.from);
+  }
+
+  // Handle TypeLiteral - look for the _tag property
+  if (ast._tag === "TypeLiteral") {
+    const tagProp = ast.propertySignatures.find((p: { name: PropertyKey }) => p.name === "_tag");
+    if (tagProp && tagProp.type._tag === "Literal" && typeof tagProp.type.literal === "string") {
+      return tagProp.type.literal;
+    }
+  }
+
+  return undefined;
+}
 
 const CLOUDFLARE_API_BASE = "https://api.cloudflare.com/client/v4";
 
@@ -53,20 +75,17 @@ export const make = <I extends Schema.Schema.AnyNoContext, O extends Schema.Sche
 
   const op = initOperation();
 
-  // Build error schema map and catalog from the errors array
+  // Build error schema map from the errors array
+  // Each error class has traits (HttpErrorCode, HttpErrorStatus, HttpErrorMessage)
+  // that are used by the response parser for matching
   const errorSchemas = new Map<string, Schema.Schema.AnyNoContext>();
-  const catalog: ErrorCatalog = new Map();
 
   for (const errorSchema of op.errors) {
-    const ErrorClass = errorSchema as unknown as { name: string; code?: number };
-    const identifier = ErrorClass.name;
-
-    // Add to schema map (name -> schema)
-    errorSchemas.set(identifier, errorSchema);
-
-    // Add to catalog (code -> name) if the error has a static code property
-    if (typeof ErrorClass.code === "number") {
-      catalog.set(ErrorClass.code, { name: identifier, category: "error" });
+    // Extract the _tag literal from the schema AST to get the error name
+    // This works for both base classes and annotated schemas from .pipe()
+    const identifier = extractTagFromAst(errorSchema.ast);
+    if (identifier) {
+      errorSchemas.set(identifier, errorSchema);
     }
   }
 
@@ -191,7 +210,6 @@ export const make = <I extends Schema.Schema.AnyNoContext, O extends Schema.Sche
         },
         op.output,
         errorSchemas,
-        catalog,
       );
 
       return result as Output;

@@ -1,18 +1,81 @@
 {
+  "errors": {
+    "NamespaceNameRequired": { "code": 10019 },
+    "NamespaceNotFound": { "code": 10013, "status": 404 },
+    "ParseError": { "code": 6008 },
+    "ValidationError": { "code": 10021 }
+  },
   "operations": {
-    "listNamespaces": { "errors": [] },
-    "createANamespace": { "errors": ["NamespaceNameRequired", "ParseError", "ValidationError"] },
-    "getANamespace": { "errors": ["IncompleteBody"] },
-    "workersKvNamespaceRemoveANamespace": { "errors": ["IncompleteBody"] },
-    "workersKvNamespaceRenameANamespace": { "errors": ["IncompleteBody", "NamespaceNameRequired"] },
-    "listANamespaceSKeys": { "errors": ["IncompleteBody"] },
-    "workersKvNamespaceReadKeyValuePair": { "errors": ["IncompleteBody"] },
-    "workersKvNamespaceWriteKeyValuePairWithMetadata": { "errors": ["IncompleteBody", "ValidationError"] },
-    "deleteKeyValuePair": { "errors": ["IncompleteBody"] },
-    "workersKvNamespaceWriteMultipleKeyValuePairs": { "errors": ["IncompleteBody", "ValidationError"] },
-    "deleteMultipleKeyValuePairs": { "errors": ["IncompleteBody"] },
-    "deleteMultipleKeyValuePairsDeprecated": { "errors": ["IncompleteBody"] },
-    "getMultipleKeyValuePairs": { "errors": ["IncompleteBody"] },
-    "workersKvNamespaceReadTheMetadataForAKey": { "errors": ["IncompleteBody"] }
+    "listNamespaces": { "errors": {} },
+    "createANamespace": {
+      "errors": {
+        "NamespaceNameRequired": {},
+        "ParseError": {},
+        "ValidationError": {}
+      }
+    },
+    "getANamespace": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "workersKvNamespaceRemoveANamespace": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "workersKvNamespaceRenameANamespace": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "NamespaceNameRequired": {}
+      }
+    },
+    "listANamespaceSKeys": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "workersKvNamespaceReadKeyValuePair": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "workersKvNamespaceWriteKeyValuePairWithMetadata": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "deleteKeyValuePair": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "workersKvNamespaceWriteMultipleKeyValuePairs": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "deleteMultipleKeyValuePairs": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "deleteMultipleKeyValuePairsDeprecated": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "getMultipleKeyValuePairs": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "workersKvNamespaceReadTheMetadataForAKey": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    }
   }
 }

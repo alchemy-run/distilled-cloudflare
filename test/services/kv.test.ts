@@ -9,7 +9,6 @@ import { describe, expect } from "vitest";
 import * as Effect from "effect/Effect";
 import { test, getAccountId } from "../test.ts";
 import * as KV from "../../src/services/kv.ts";
-import { NamespaceNameRequired, IncompleteBody, ParseError } from "../../src/errors/generated.ts";
 
 const accountId = () => getAccountId();
 
@@ -351,64 +350,43 @@ describe("KV", () => {
 
   describe("Error Handling", () => {
     test("NamespaceNameRequired error when creating with invalid body", () =>
-      Effect.gen(function* () {
-        // Pass a body with wrong field (not title) to trigger 10019
-        const result = yield* KV.createANamespace({
-          account_id: accountId(),
-          // @ts-expect-error - intentionally using wrong field to trigger error
-          body: { wrongField: "test" },
-        }).pipe(Effect.exit);
-
-        expect(result._tag).toBe("Failure");
-        if (result._tag === "Failure") {
-          const error = result.cause;
-          expect(error._tag).toBe("Fail");
-          if (error._tag === "Fail") {
-            expect(error.error).toBeInstanceOf(NamespaceNameRequired);
-            expect((error.error as NamespaceNameRequired).code).toBe(10019);
+      KV.createANamespace({
+        account_id: accountId(),
+        // @ts-expect-error - intentionally using wrong field to trigger error
+        body: { wrongField: "test" },
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("NamespaceNameRequired");
+          if (error._tag === "NamespaceNameRequired") {
+            expect(error.code).toBe(10019);
           }
-        }
-      }));
+        }),
+      ));
 
-    test("IncompleteBody error when accessing non-existent namespace", () =>
-      Effect.gen(function* () {
-        // Use a fake namespace ID that doesn't exist
-        // Cloudflare returns 10013 (IncompleteBody) for this case
-        const fakeNamespaceId = "00000000000000000000000000000000";
-
-        const result = yield* KV.getANamespace({
-          account_id: accountId(),
-          namespace_id: fakeNamespaceId,
-        }).pipe(Effect.exit);
-
-        expect(result._tag).toBe("Failure");
-        if (result._tag === "Failure") {
-          const error = result.cause;
-          expect(error._tag).toBe("Fail");
-          if (error._tag === "Fail") {
-            expect(error.error).toBeInstanceOf(IncompleteBody);
-            expect((error.error as IncompleteBody).code).toBe(10013);
+    test("NamespaceNotFound error when accessing non-existent namespace", () =>
+      KV.getANamespace({
+        account_id: accountId(),
+        namespace_id: "00000000000000000000000000000000",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("NamespaceNotFound");
+          if (error._tag === "NamespaceNotFound") {
+            expect(error.code).toBe(10013);
           }
-        }
-      }));
+        }),
+      ));
 
-    test("IncompleteBody error when listing keys for non-existent namespace", () =>
-      Effect.gen(function* () {
-        const fakeNamespaceId = "00000000000000000000000000000000";
-
-        const result = yield* KV.listANamespaceSKeys({
-          account_id: accountId(),
-          namespace_id: fakeNamespaceId,
-        }).pipe(Effect.exit);
-
-        expect(result._tag).toBe("Failure");
-        if (result._tag === "Failure") {
-          const error = result.cause;
-          expect(error._tag).toBe("Fail");
-          if (error._tag === "Fail") {
-            expect(error.error).toBeInstanceOf(IncompleteBody);
-          }
-        }
-      }));
+    test("NamespaceNotFound error when listing keys for non-existent namespace", () =>
+      KV.listANamespaceSKeys({
+        account_id: accountId(),
+        namespace_id: "00000000000000000000000000000000",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("NamespaceNotFound");
+        }),
+      ));
   });
 });

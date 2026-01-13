@@ -1079,25 +1079,6 @@
     "path": "/components/schemas/workers_script-response-upload/allOf/1/required"
   },
 
-  // Workers: Fix delete response result type.
-  // 
-  // Problem: The spec claims result is always null for delete operations,
-  // but the API actually returns { id: string } with the deleted resource ID.
-  // 
-  // Fix: Replace the result property definition.
-  {
-    "op": "replace",
-    "path": "/components/schemas/workers_api-response-null-result/allOf/1/properties/result",
-    "value": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        }
-      }
-    }
-  },
-
   // R2: Add uppercase location enum values.
   // 
   // Problem: The API returns uppercase values (WNAM, EEUR, etc.) but the
@@ -1167,6 +1148,103 @@
         { "type": "null" },
         { "type": "object" }
       ]
+    }
+  },
+
+  // Workflows: Make is_deleted, terminator_running, triggered_on optional in createOrModifyWorkflow response.
+  //
+  // Problem: API returns only core fields (id, name, script_name, class_name, created_on, modified_on, version_id)
+  // but spec requires is_deleted, terminator_running, triggered_on which are not present.
+  // Discovered: Schema decode failed on createOrModifyWorkflow response.
+  {
+    "op": "replace",
+    "path": "/paths/~1accounts~1{account_id}~1workflows~1{workflow_name}/put/responses/200/content/application~1json/schema/properties/result/required",
+    "value": ["version_id", "name", "id", "created_on", "modified_on", "script_name", "class_name"]
+  },
+
+  // Workflows: Make triggered_on, instances optional in getWorkflowDetails response.
+  //
+  // Problem: API returns only core fields without triggered_on or instances aggregates.
+  // Discovered: Schema decode failed on getWorkflowDetails response.
+  {
+    "op": "replace",
+    "path": "/paths/~1accounts~1{account_id}~1workflows~1{workflow_name}/get/responses/200/content/application~1json/schema/properties/result/required",
+    "value": ["name", "id", "created_on", "modified_on", "script_name", "class_name"]
+  },
+
+  // Workflows: Make success optional in deleteWorkflow response.
+  //
+  // Problem: API returns {"status":"ok"} but spec requires {"success": boolean, "status": "ok"}.
+  // Discovered: Schema decode failed on deleteWorkflow response.
+  {
+    "op": "replace",
+    "path": "/paths/~1accounts~1{account_id}~1workflows~1{workflow_name}/delete/responses/200/content/application~1json/schema/properties/result/required",
+    "value": ["status"]
+  },
+
+
+  // Workers: Fix getContent response to handle multipart form data.
+  //
+  // Problem: API returns multipart/form-data with worker script content, but spec expects JSON.
+  // Discovered: Schema decode failed on getContent response (returns raw multipart).
+  {
+    "op": "replace",
+    "path": "/paths/~1accounts~1{account_id}~1workers~1scripts~1{script_name}~1content~1v2/get/responses/200/content",
+    "value": {
+      "multipart/form-data": {
+        "schema": {
+          "type": "string",
+          "format": "binary"
+        }
+      }
+    }
+  },
+
+  // Workers: Allow null result for getScriptSecret.
+  //
+  // Problem: API returns result: null when secret exists but value is hidden.
+  // Discovered: Schema decode failed on getScriptSecret response.
+  {
+    "op": "replace",
+    "path": "/paths/~1accounts~1{account_id}~1workers~1scripts~1{script_name}~1secrets~1{secret_name}/get/responses/200/content/application~1json/schema",
+    "value": {
+      "$ref": "#/components/schemas/workers_api-response-null-result"
+    }
+  },
+
+  // Workers: Allow null result for deleteScriptSecret.
+  //
+  // Problem: API returns result: null on successful deletion.
+  // Discovered: Schema decode failed on deleteScriptSecret1 response.
+  {
+    "op": "replace",
+    "path": "/paths/~1accounts~1{account_id}~1workers~1scripts~1{script_name}~1secrets~1{secret_name}/delete/responses/200/content/application~1json/schema",
+    "value": {
+      "$ref": "#/components/schemas/workers_api-response-null-result"
+    }
+  },
+
+  // Workers: Allow null result for createDispatchNamespace.
+  //
+  // Problem: API returns result: null on successful creation.
+  // Discovered: Schema decode failed on createDispatchNamespace response.
+  {
+    "op": "replace",
+    "path": "/paths/~1accounts~1{account_id}~1workers~1dispatch~1namespaces/post/responses/200/content/application~1json/schema",
+    "value": {
+      "$ref": "#/components/schemas/workers_api-response-null-result"
+    }
+  },
+
+  // Workers: Allow null result for deleteDispatchNamespace.
+  //
+  // Problem: API returns result: null on successful deletion.
+  // Discovered: Schema decode failed on deleteDispatchNamespace response.
+  {
+    "op": "replace",
+    "path": "/paths/~1accounts~1{account_id}~1workers~1dispatch~1namespaces~1{dispatch_namespace}/delete/responses/200/content/application~1json/schema",
+    "value": {
+      "$ref": "#/components/schemas/workers_api-response-null-result"
     }
   }
 

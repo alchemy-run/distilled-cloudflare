@@ -18,7 +18,7 @@ const accountId = () => getAccountId();
 
 // Worker script that exports a simple Workflow class
 const WORKFLOW_WORKER_SCRIPT = `
-import { WorkflowEntrypoint, WorkflowStep, WorkflowEvent } from "cloudflare:workers";
+import { WorkflowEntrypoint } from "cloudflare:workers";
 
 export class TestWorkflow extends WorkflowEntrypoint {
   async run(event, step) {

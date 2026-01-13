@@ -1,21 +1,102 @@
 {
+  "errors": {
+    "QueueNotFound": { "codes": [11000, 10004], "status": 404 },
+    "QueueAlreadyExists": { "code": 11009, "status": 409 },
+    "InvalidQueueName": { "code": 11003 },
+    "ValidationError": { "code": 10021 }
+  },
   "operations": {
-    "list": { "errors": [] },
-    "create": { "errors": ["InvalidQueueName", "ValidationError", "QueueAlreadyExists"] },
-    "get_": { "errors": ["QueueNotFound"] },
-    "update": { "errors": ["QueueNotFound", "InvalidQueueName", "ValidationError"] },
-    "delete_": { "errors": ["QueueNotFound"] },
-    "updatePartial": { "errors": ["QueueNotFound", "InvalidQueueName", "ValidationError"] },
-    "listConsumers": { "errors": ["QueueNotFound"] },
-    "createConsumer": { "errors": ["QueueNotFound", "ValidationError", "NoSuchKey"] },
-    "getConsumer": { "errors": ["QueueNotFound"] },
-    "updateConsumer": { "errors": ["QueueNotFound", "ValidationError"] },
-    "deleteConsumer": { "errors": ["QueueNotFound"] },
-    "queuesPushMessage": { "errors": ["QueueNotFound", "ValidationError"] },
-    "queuesAckMessages": { "errors": ["QueueNotFound", "ValidationError"] },
-    "queuesPushMessages": { "errors": ["QueueNotFound", "ValidationError"] },
-    "queuesPullMessages": { "errors": ["QueueNotFound"] },
-    "getpurgestatus": { "errors": ["QueueNotFound"] },
-    "queuesPurge": { "errors": ["QueueNotFound"] }
+    "list": { "errors": {} },
+    "create": {
+      "errors": {
+        "InvalidQueueName": {},
+        "ValidationError": {},
+        "QueueAlreadyExists": {}
+      }
+    },
+    "get_": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "update": {
+      "errors": {
+        "QueueNotFound": {},
+        "InvalidQueueName": {},
+        "ValidationError": {}
+      }
+    },
+    "delete_": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "updatePartial": {
+      "errors": {
+        "QueueNotFound": {},
+        "InvalidQueueName": {},
+        "ValidationError": {}
+      }
+    },
+    "listConsumers": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "createConsumer": {
+      "errors": {
+        "QueueNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "getConsumer": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "updateConsumer": {
+      "errors": {
+        "QueueNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "deleteConsumer": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "queuesPushMessage": {
+      "errors": {
+        "QueueNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "queuesAckMessages": {
+      "errors": {
+        "QueueNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "queuesPushMessages": {
+      "errors": {
+        "QueueNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "queuesPullMessages": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "getpurgestatus": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "queuesPurge": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    }
   }
 }

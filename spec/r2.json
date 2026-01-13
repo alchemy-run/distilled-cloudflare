@@ -1,20 +1,113 @@
 {
+  "errors": {
+    "NoSuchBucket": { "code": 10006, "status": 404 },
+    "InvalidBucketName": { "code": 10005 },
+    "BucketConflict": { "code": 10073, "status": 409 },
+    "BucketNotEmpty": { "code": 10008, "status": 409 },
+    "TooManyBuckets": { "code": 10009 },
+    "NoCorsConfiguration": { "code": 10059, "status": 404, "message": "CORS configuration does not exist" },
+    "ValidationError": { "code": 10021 }
+  },
   "operations": {
-    "listBuckets": { "errors": [] },
-    "createBucket": { "errors": ["InvalidBucketName", "BucketConflict", "TooManyBuckets"] },
-    "getBucket": { "errors": ["NoSuchBucket"] },
-    "deleteBucket": { "errors": ["NoSuchBucket", "BucketNotEmpty"] },
-    "getBucketCorsPolicy": { "errors": ["NoSuchBucket", "NoCorsConfiguration"] },
-    "putBucketCorsPolicy": { "errors": ["NoSuchBucket"] },
-    "deleteBucketCorsPolicy": { "errors": ["NoSuchBucket", "NoCorsConfiguration"] },
-    "getBucketUsage": { "errors": ["NoSuchBucket"] },
-    "listCustomDomains": { "errors": ["NoSuchBucket"] },
-    "addCustomDomain": { "errors": ["NoSuchBucket", "ValidationError"] },
-    "deleteCustomDomain": { "errors": ["NoSuchBucket"] },
-    "getSippy": { "errors": ["NoSuchBucket"] },
-    "updateSippy": { "errors": ["NoSuchBucket", "ValidationError"] },
-    "deleteSippy": { "errors": ["NoSuchBucket"] },
-    "getEventNotifications": { "errors": ["NoSuchBucket"] },
-    "updateEventNotifications": { "errors": ["NoSuchBucket", "ValidationError"] }
+    "listBuckets": { "errors": {} },
+    "createBucket": {
+      "errors": {
+        "InvalidBucketName": {},
+        "BucketConflict": {},
+        "TooManyBuckets": {}
+      }
+    },
+    "getBucket": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "deleteBucket": {
+      "errors": {
+        "NoSuchBucket": {},
+        "BucketNotEmpty": {}
+      }
+    },
+    "getBucketCorsPolicy": {
+      "errors": {
+        "NoSuchBucket": {},
+        "NoCorsConfiguration": {}
+      }
+    },
+    "putBucketCorsPolicy": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "deleteBucketCorsPolicy": {
+      "errors": {
+        "NoSuchBucket": {},
+        "NoCorsConfiguration": {}
+      }
+    },
+    "getBucketUsage": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "listCustomDomains": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "addCustomDomain": {
+      "errors": {
+        "NoSuchBucket": {},
+        "ValidationError": {}
+      }
+    },
+    "deleteCustomDomain": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "getSippy": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "updateSippy": {
+      "errors": {
+        "NoSuchBucket": {},
+        "ValidationError": {}
+      }
+    },
+    "deleteSippy": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "getEventNotifications": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "updateEventNotifications": {
+      "errors": {
+        "NoSuchBucket": {},
+        "ValidationError": {}
+      }
+    },
+    "getBucketLifecycleConfiguration": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "putBucketLifecycleConfiguration": {
+      "errors": {
+        "NoSuchBucket": {},
+        "ValidationError": {}
+      }
+    },
+    "deleteBucketLifecycleConfiguration": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    }
   }
 }

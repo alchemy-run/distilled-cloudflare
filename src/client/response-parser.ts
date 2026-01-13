@@ -1,13 +1,14 @@
 /**
  * Response parser for Cloudflare API.
  *
- * Parses HTTP responses and matches errors from the Cloudflare error format:
- * { success: boolean, errors: [{ code, message }], messages: [], result: T }
+ * Parses HTTP responses and matches errors using schema annotations.
+ * Cloudflare error format: { success: boolean, errors: [{ code, message }], messages: [], result: T }
  */
 
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { CloudflareError, CloudflareHttpError, UnknownCloudflareError } from "../errors.ts";
+import * as T from "../traits.ts";
 
 /**
  * Cloudflare API response envelope.
@@ -28,17 +29,141 @@ export interface CloudflareResponse<T> {
 }
 
 /**
- * Error catalog entry for mapping codes to error types.
+ * Result of finding a matching error schema.
  */
-export interface ErrorCatalogEntry {
-  name: string;
-  category: string;
+interface MatchedError {
+  schema: Schema.Schema.AnyNoContext;
+  tag: string;
 }
 
 /**
- * Error catalog for known error codes.
+ * Find matching error schema using annotations from the schema AST.
+ *
+ * Matches errors based on:
+ * 1. Error code (required) - T.HttpErrorCode or T.HttpErrorCodes annotation
+ * 2. HTTP status (optional) - T.HttpErrorStatus annotation
+ * 3. Message pattern (optional) - T.HttpErrorMessage annotation (substring match)
+ *
+ * More specific matches (with status and/or message) take priority.
  */
-export type ErrorCatalog = Map<number, ErrorCatalogEntry>;
+function findMatchingError(
+  errorSchemas: Map<string, Schema.Schema.AnyNoContext>,
+  code: number,
+  status: number,
+  message: string,
+): MatchedError | undefined {
+  let bestMatch: MatchedError | undefined;
+  let bestScore = 0;
+
+  for (const [name, schema] of errorSchemas) {
+    // Read annotations from schema AST
+    const ast = schema.ast;
+    const expectedCodes = T.getHttpErrorCodes(ast);
+    const expectedCode = T.getHttpErrorCode(ast);
+    const expectedStatus = T.getHttpErrorStatus(ast);
+    const expectedMessage = T.getHttpErrorMessage(ast);
+
+    // Build codes array from either annotation
+    const codes: number[] = expectedCodes ?? (expectedCode !== undefined ? [expectedCode] : []);
+
+    // Must match at least one code
+    if (codes.length === 0 || !codes.includes(code)) continue;
+
+    let score = 1; // Base score for code match
+
+    // If status specified, must match
+    if (expectedStatus !== undefined) {
+      if (expectedStatus !== status) continue;
+      score += 1; // Bonus for status match
+    }
+
+    // If message pattern specified, must match (substring)
+    if (expectedMessage !== undefined) {
+      if (!message.includes(expectedMessage)) continue;
+      score += 1; // Bonus for message match
+    }
+
+    // Keep best match (most specific)
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = { schema, tag: name };
+    }
+  }
+
+  return bestMatch;
+}
+
+/**
+ * Parse multipart form-data body into a FormData object.
+ *
+ * Multipart format:
+ * --boundary\r\n
+ * Content-Disposition: form-data; name="worker.js"; filename="worker.js"\r\n
+ * Content-Type: application/javascript+module\r\n
+ * \r\n
+ * <content>\r\n
+ * --boundary\r\n
+ * Content-Disposition: form-data; name="utils.js"; filename="utils.js"\r\n
+ * Content-Type: application/javascript+module\r\n
+ * \r\n
+ * <content>\r\n
+ * --boundary--\r\n
+ */
+function parseMultipartBody(body: Uint8Array, contentType: string): FormData {
+  const formData = new FormData();
+
+  // Extract boundary from content-type header
+  const boundaryMatch = contentType.match(/boundary=([^\s;]+)/);
+  if (!boundaryMatch) {
+    // If no boundary found, return raw body as single entry
+    formData.append("body", new Blob([body]));
+    return formData;
+  }
+
+  const boundary = boundaryMatch[1];
+  const bodyText = new TextDecoder().decode(body);
+  const rawParts = bodyText.split(`--${boundary}`);
+
+  for (const part of rawParts) {
+    if (part.trim() === "" || part.trim() === "--") continue;
+
+    // Find the double newline that separates headers from content
+    const headerEndIndex = part.indexOf("\r\n\r\n");
+    if (headerEndIndex === -1) continue;
+
+    // Parse headers
+    const headerSection = part.slice(0, headerEndIndex);
+    const headers = new Map<string, string>();
+    for (const line of headerSection.split("\r\n")) {
+      const colonIndex = line.indexOf(":");
+      if (colonIndex > 0) {
+        const key = line.slice(0, colonIndex).trim().toLowerCase();
+        const value = line.slice(colonIndex + 1).trim();
+        headers.set(key, value);
+      }
+    }
+
+    // Extract name and filename from Content-Disposition
+    const disposition = headers.get("content-disposition") ?? "";
+    const nameMatch = disposition.match(/name="([^"]+)"/);
+    const filenameMatch = disposition.match(/filename="([^"]+)"/);
+
+    // Extract the content (trim trailing \r\n before next boundary)
+    const content = part.slice(headerEndIndex + 4).replace(/\r\n$/, "");
+    const partContentType = headers.get("content-type") ?? "application/octet-stream";
+    const name = nameMatch?.[1] ?? "unknown";
+    const filename = filenameMatch?.[1];
+
+    // Create a File or Blob depending on whether we have a filename
+    if (filename) {
+      formData.append(name, new File([content], filename, { type: partContentType }));
+    } else {
+      formData.append(name, new Blob([content], { type: partContentType }));
+    }
+  }
+
+  return formData;
+}
 
 /**
  * Parse a Cloudflare API response.
@@ -46,7 +171,6 @@ export type ErrorCatalog = Map<number, ErrorCatalogEntry>;
  * @param response - The HTTP response
  * @param outputSchema - Schema to decode the result
  * @param errorSchemas - Map of error names to their schema classes
- * @param catalog - Error catalog for code -> name mapping
  */
 export const parseResponse = <O>(
   response: {
@@ -57,10 +181,9 @@ export const parseResponse = <O>(
   },
   outputSchema: Schema.Schema<O, unknown>,
   errorSchemas: Map<string, Schema.Schema.AnyNoContext>,
-  catalog: ErrorCatalog,
 ): Effect.Effect<O, CloudflareError | UnknownCloudflareError | CloudflareHttpError> =>
   Effect.gen(function* () {
-    // Read body as text
+    // Read body as bytes
     const reader = response.body.getReader();
     const chunks: Uint8Array[] = [];
     let done = false;
@@ -74,14 +197,23 @@ export const parseResponse = <O>(
       }
     }
 
-    const bodyText = new TextDecoder().decode(
-      chunks.reduce((acc, chunk) => {
-        const result = new Uint8Array(acc.length + chunk.length);
-        result.set(acc);
-        result.set(chunk, acc.length);
-        return result;
-      }, new Uint8Array()),
-    );
+    const bodyBytes = chunks.reduce((acc, chunk) => {
+      const result = new Uint8Array(acc.length + chunk.length);
+      result.set(acc);
+      result.set(chunk, acc.length);
+      return result;
+    }, new Uint8Array());
+
+    // Check if this is a multipart response (e.g., worker script content)
+    const contentType = response.headers["content-type"] ?? "";
+    const isMultipart = T.getHttpMultipartResponse(outputSchema.ast) === true;
+
+    if (isMultipart || contentType.includes("multipart/form-data")) {
+      // For multipart responses, return FormData
+      return parseMultipartBody(bodyBytes, contentType) as unknown as O;
+    }
+
+    const bodyText = new TextDecoder().decode(bodyBytes);
 
     // Parse JSON
     let json: CloudflareResponse<unknown>;
@@ -109,32 +241,17 @@ export const parseResponse = <O>(
       const errorCode = typeof error.code === "number" ? error.code : 0;
       const errorMessage = error.message ?? "Unknown error";
 
-      // Check catalog for known error
-      const catalogEntry = catalog.get(errorCode);
-      if (catalogEntry) {
-        const ErrorClass = errorSchemas.get(catalogEntry.name);
-        if (ErrorClass) {
-          // Instantiate the specific error class directly
-          // Error classes are TaggedError subclasses with (props) constructor
-          try {
-            const errorInstance = new (ErrorClass as unknown as new (props: {
-              code: number;
-              message: string;
-            }) => CloudflareError)({
-              code: errorCode,
-              message: errorMessage,
-            });
-            return yield* Effect.fail(errorInstance);
-          } catch {
-            // If instantiation fails, fall back to base error
-            return yield* Effect.fail(
-              new CloudflareError({ code: errorCode, message: errorMessage }),
-            );
-          }
-        }
+      // Find matching error using trait annotations
+      const matched = findMatchingError(errorSchemas, errorCode, response.status, errorMessage);
 
-        // Known error but no schema, use base CloudflareError
-        return yield* Effect.fail(new CloudflareError({ code: errorCode, message: errorMessage }));
+      if (matched) {
+        // Decode using the schema - this properly instantiates TaggedError classes
+        // Include the _tag field required by TaggedError schemas
+        const errorData = { _tag: matched.tag, code: errorCode, message: errorMessage };
+        const decodeResult = yield* Schema.decodeUnknown(matched.schema)(errorData).pipe(
+          Effect.mapError(() => new CloudflareError({ code: errorCode, message: errorMessage })),
+        );
+        return yield* Effect.fail(decodeResult as CloudflareError);
       }
 
       // Unknown error - record for discovery
@@ -175,21 +292,3 @@ export const parseResponse = <O>(
 
     return result;
   });
-
-/**
- * Create an empty error catalog.
- */
-export const emptyErrorCatalog = (): ErrorCatalog => new Map();
-
-/**
- * Load error catalog from a JSON object.
- */
-export const loadErrorCatalog = (
-  data: Record<string, { name: string; category: string }>,
-): ErrorCatalog => {
-  const catalog = new Map<number, ErrorCatalogEntry>();
-  for (const [code, entry] of Object.entries(data)) {
-    catalog.set(Number(code), entry);
-  }
-  return catalog;
-};

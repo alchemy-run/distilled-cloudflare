@@ -279,3 +279,53 @@ export const isStreamingType = (ast: AST.AST): boolean => {
   }
   return false;
 };
+
+// =============================================================================
+// Error Matching Traits
+// =============================================================================
+
+/** Error code trait - matches against Cloudflare error code in response */
+export const httpErrorCodeSymbol = Symbol.for("distilled-cloudflare/http-error-code");
+export const HttpErrorCode = (code: number) => makeAnnotation(httpErrorCodeSymbol, code);
+
+/** Error codes trait - matches against multiple Cloudflare error codes */
+export const httpErrorCodesSymbol = Symbol.for("distilled-cloudflare/http-error-codes");
+export const HttpErrorCodes = (codes: number[]) => makeAnnotation(httpErrorCodesSymbol, codes);
+
+/** Error HTTP status trait - matches against HTTP status code */
+export const httpErrorStatusSymbol = Symbol.for("distilled-cloudflare/http-error-status");
+export const HttpErrorStatus = (status: number) => makeAnnotation(httpErrorStatusSymbol, status);
+
+/** Error message pattern trait - matches if message contains this substring */
+export const httpErrorMessageSymbol = Symbol.for("distilled-cloudflare/http-error-message");
+export const HttpErrorMessage = (pattern: string) =>
+  makeAnnotation(httpErrorMessageSymbol, pattern);
+
+// =============================================================================
+// Error Trait Helpers
+// =============================================================================
+
+export const getHttpErrorCode = (ast: AST.AST): number | undefined =>
+  getAnnotationUnwrap<number>(ast, httpErrorCodeSymbol);
+
+export const getHttpErrorCodes = (ast: AST.AST): number[] | undefined =>
+  getAnnotationUnwrap<number[]>(ast, httpErrorCodesSymbol);
+
+export const getHttpErrorStatus = (ast: AST.AST): number | undefined =>
+  getAnnotationUnwrap<number>(ast, httpErrorStatusSymbol);
+
+export const getHttpErrorMessage = (ast: AST.AST): string | undefined =>
+  getAnnotationUnwrap<string>(ast, httpErrorMessageSymbol);
+
+// =============================================================================
+// Response Type Traits
+// =============================================================================
+
+/** Multipart response trait - marks operations that return multipart/form-data */
+export const httpMultipartResponseSymbol = Symbol.for(
+  "distilled-cloudflare/http-multipart-response",
+);
+export const HttpMultipartResponse = () => makeAnnotation(httpMultipartResponseSymbol, true);
+
+export const getHttpMultipartResponse = (ast: AST.AST): boolean | undefined =>
+  getAnnotationUnwrap<boolean>(ast, httpMultipartResponseSymbol);

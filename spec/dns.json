@@ -1,13 +1,64 @@
 {
+  "errors": {
+    "InvalidZone": { "code": 1003, "status": 404 },
+    "RecordNotFound": { "code": 81044, "status": 404 },
+    "ValidationError": { "code": 10021 },
+    "InvalidRequest": { "code": 6003 }
+  },
   "operations": {
-    "listDnsRecords": { "errors": ["InvalidZone"] },
-    "createDnsRecord": { "errors": ["InvalidZone", "ValidationError", "InvalidRequest"] },
-    "getDnsRecord": { "errors": ["InvalidZone", "RecordNotFound"] },
-    "updateDnsRecord": { "errors": ["InvalidZone", "RecordNotFound", "ValidationError"] },
-    "deleteDnsRecord": { "errors": ["InvalidZone", "RecordNotFound"] },
-    "patchDnsRecord": { "errors": ["InvalidZone", "RecordNotFound", "ValidationError"] },
-    "exportDnsRecords": { "errors": ["InvalidZone"] },
-    "importDnsRecords": { "errors": ["InvalidZone", "ValidationError"] },
-    "scanDnsRecords": { "errors": ["InvalidZone"] }
+    "listDnsRecords": {
+      "errors": {
+        "InvalidZone": {}
+      }
+    },
+    "createDnsRecord": {
+      "errors": {
+        "InvalidZone": {},
+        "ValidationError": {},
+        "InvalidRequest": {}
+      }
+    },
+    "getDnsRecord": {
+      "errors": {
+        "InvalidZone": {},
+        "RecordNotFound": {}
+      }
+    },
+    "updateDnsRecord": {
+      "errors": {
+        "InvalidZone": {},
+        "RecordNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "deleteDnsRecord": {
+      "errors": {
+        "InvalidZone": {},
+        "RecordNotFound": {}
+      }
+    },
+    "patchDnsRecord": {
+      "errors": {
+        "InvalidZone": {},
+        "RecordNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "exportDnsRecords": {
+      "errors": {
+        "InvalidZone": {}
+      }
+    },
+    "importDnsRecords": {
+      "errors": {
+        "InvalidZone": {},
+        "ValidationError": {}
+      }
+    },
+    "scanDnsRecords": {
+      "errors": {
+        "InvalidZone": {}
+      }
+    }
   }
 }

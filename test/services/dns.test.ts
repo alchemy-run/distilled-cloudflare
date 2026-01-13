@@ -13,7 +13,6 @@ import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";
 import { test, getZoneId } from "../test.ts";
 import * as DNS from "../../src/services/dns.ts";
-import { InvalidZone, RecordNotFound } from "../../src/errors/generated.ts";
 
 const zoneId = () => {
   const id = getZoneId();
@@ -225,20 +224,14 @@ describe.skipIf(!hasZone())("DNS", () => {
 
   describe("Error Handling", () => {
     test("InvalidZone error with invalid zone ID", () =>
-      Effect.gen(function* () {
-        const result = yield* DNS.listDnsRecords({
-          zone_id: "invalid-zone-id-12345",
-        }).pipe(Effect.exit);
-
-        expect(Exit.isFailure(result)).toBe(true);
-        if (Exit.isFailure(result)) {
-          const error = result.cause;
-          if ("_tag" in error && error._tag === "Fail") {
-            const failure = error as { error: unknown };
-            expect(failure.error).toBeInstanceOf(InvalidZone);
-          }
-        }
-      }));
+      DNS.listDnsRecords({
+        zone_id: "invalid-zone-id-12345",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("InvalidZone");
+        }),
+      ));
 
     test("RecordNotFound error when getting non-existent record", () =>
       Effect.gen(function* () {
@@ -252,21 +245,15 @@ describe.skipIf(!hasZone())("DNS", () => {
       }));
 
     test("RecordNotFound error when deleting non-existent record", () =>
-      Effect.gen(function* () {
-        const result = yield* DNS.deleteDnsRecord({
-          zone_id: zoneId(),
-          dns_record_id: "00000000000000000000000000000000",
-        }).pipe(Effect.exit);
-
-        expect(Exit.isFailure(result)).toBe(true);
-        if (Exit.isFailure(result)) {
-          const error = result.cause;
-          if ("_tag" in error && error._tag === "Fail") {
-            const failure = error as { error: unknown };
-            expect(failure.error).toBeInstanceOf(RecordNotFound);
-          }
-        }
-      }));
+      DNS.deleteDnsRecord({
+        zone_id: zoneId(),
+        dns_record_id: "00000000000000000000000000000000",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("RecordNotFound");
+        }),
+      ));
 
     test("ValidationError when creating record with invalid content", () =>
       Effect.gen(function* () {

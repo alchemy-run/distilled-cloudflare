@@ -9,11 +9,6 @@ import { describe, expect } from "vitest";
 import * as Effect from "effect/Effect";
 import { test, getAccountId } from "../test.ts";
 import * as R2 from "../../src/services/r2.ts";
-import {
-  NoSuchBucket,
-  InvalidBucketName,
-  NoCorsConfiguration,
-} from "../../src/errors/generated.ts";
 
 const accountId = () => getAccountId();
 
@@ -254,13 +249,12 @@ describe("R2", () => {
         account_id: accountId(),
         bucket_name: "itty-cf-nonexistent-bucket-xyz-123",
       }).pipe(
-        Effect.matchEffect({
-          onSuccess: () => Effect.die("Expected NoSuchBucket error"),
-          onFailure: (error) =>
-            Effect.gen(function* () {
-              expect(error).toBeInstanceOf(NoSuchBucket);
-              expect((error as NoSuchBucket).code).toBe(10006);
-            }),
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("NoSuchBucket");
+          if (error._tag === "NoSuchBucket") {
+            expect(error.code).toBe(10006);
+          }
         }),
       ));
 
@@ -269,13 +263,12 @@ describe("R2", () => {
         account_id: accountId(),
         body: { name: "INVALID_UPPERCASE_NAME!" },
       }).pipe(
-        Effect.matchEffect({
-          onSuccess: () => Effect.die("Expected InvalidBucketName error"),
-          onFailure: (error) =>
-            Effect.gen(function* () {
-              expect(error).toBeInstanceOf(InvalidBucketName);
-              expect((error as InvalidBucketName).code).toBe(10005);
-            }),
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("InvalidBucketName");
+          if (error._tag === "InvalidBucketName") {
+            expect(error.code).toBe(10005);
+          }
         }),
       ));
 
@@ -284,13 +277,12 @@ describe("R2", () => {
         account_id: accountId(),
         bucket_name: "itty-cf-nonexistent-delete-xyz",
       }).pipe(
-        Effect.matchEffect({
-          onSuccess: () => Effect.die("Expected NoSuchBucket error"),
-          onFailure: (error) =>
-            Effect.gen(function* () {
-              expect(error).toBeInstanceOf(NoSuchBucket);
-              expect((error as NoSuchBucket).code).toBe(10006);
-            }),
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("NoSuchBucket");
+          if (error._tag === "NoSuchBucket") {
+            expect(error.code).toBe(10006);
+          }
         }),
       ));
 
@@ -299,13 +291,12 @@ describe("R2", () => {
         account_id: accountId(),
         bucket_name: "itty-cf-nonexistent-domains-xyz",
       }).pipe(
-        Effect.matchEffect({
-          onSuccess: () => Effect.die("Expected NoSuchBucket error"),
-          onFailure: (error) =>
-            Effect.gen(function* () {
-              expect(error).toBeInstanceOf(NoSuchBucket);
-              expect((error as NoSuchBucket).code).toBe(10006);
-            }),
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("NoSuchBucket");
+          if (error._tag === "NoSuchBucket") {
+            expect(error.code).toBe(10006);
+          }
         }),
       ));
 
@@ -315,13 +306,12 @@ describe("R2", () => {
           account_id: accountId(),
           bucket_name: bucketName,
         }).pipe(
-          Effect.matchEffect({
-            onSuccess: () => Effect.die("Expected NoCorsConfiguration error"),
-            onFailure: (error) =>
-              Effect.gen(function* () {
-                expect(error).toBeInstanceOf(NoCorsConfiguration);
-                expect((error as NoCorsConfiguration).code).toBe(10059);
-              }),
+          Effect.flip,
+          Effect.map((error) => {
+            expect(error._tag).toBe("NoCorsConfiguration");
+            if (error._tag === "NoCorsConfiguration") {
+              expect(error.code).toBe(10059);
+            }
           }),
         ),
       ));

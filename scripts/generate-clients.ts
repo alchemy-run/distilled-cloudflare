@@ -701,9 +701,64 @@ function generateSchemaCode(
   }
 }
 
-interface ServiceSpec {
-  operations: Record<string, { errors?: string[]; aliases?: Array<{ from: number; to: string }> }>;
+/**
+ * Error matcher - defines how to match an API error response to an error class.
+ * Used per-operation to configure matching criteria.
+ */
+interface ErrorMatcher {
+  /** Single error code to match */
+  code?: number;
+  /** Multiple error codes that all map to this error */
+  codes?: number[];
+  /** HTTP status code to match */
+  status?: number;
+  /** Substring pattern to match in error message */
+  message?: string;
 }
+
+/**
+ * Service-level error definition with optional default matcher.
+ * If a matcher is provided, it applies to all operations that include this error
+ * unless overridden at the operation level.
+ */
+type ErrorDefinition = ErrorMatcher;
+
+interface ServiceSpec {
+  /** Declares error classes with optional default matchers */
+  errors?: Record<string, ErrorDefinition>;
+  /** Per-operation configuration - can override service-level matchers */
+  operations: Record<
+    string,
+    {
+      /** Object mapping error name to matcher (empty {} uses service default) */
+      errors?: Record<string, ErrorMatcher>;
+      aliases?: Array<{ from: number; to: string }>;
+    }
+  >;
+}
+
+// Common errors that apply to all services (auth, rate limiting)
+// These are just declared here - matching is done per-operation
+const COMMON_ERRORS: Record<string, ErrorDefinition> = {
+  RateLimited: {},
+  TooManyRequests: {},
+  AuthenticationError: {},
+  InvalidToken: {},
+  MissingToken: {},
+  TokenExpired: {},
+  Unauthorized: {},
+};
+
+// Common error matchers - reusable across operations
+const COMMON_ERROR_MATCHERS: Record<string, ErrorMatcher> = {
+  RateLimited: { code: 971 },
+  TooManyRequests: { code: 6100 },
+  AuthenticationError: { code: 10000 },
+  InvalidToken: { code: 9103 },
+  MissingToken: { code: 9106 },
+  TokenExpired: { code: 9109 },
+  Unauthorized: { code: 9000 },
+};
 
 /**
  * Load spec file for a service.
@@ -713,8 +768,54 @@ async function loadServiceSpec(serviceName: string): Promise<ServiceSpec> {
     const content = await Bun.file(`spec/${serviceName}.json`).text();
     return JSON.parse(content) as ServiceSpec;
   } catch {
-    return { operations: {} };
+    return { errors: {}, operations: {} };
   }
+}
+
+/**
+ * Generate an error class.
+ * Error classes are simple tagged errors with code and message fields.
+ * Matching is configured per-operation using annotations at the API.make call site.
+ */
+function generateErrorClass(name: string, _def: ErrorDefinition): string[] {
+  const lines: string[] = [];
+
+  lines.push(`export class ${name} extends Schema.TaggedError<${name}>()("${name}", {`);
+  lines.push(`  code: Schema.Number,`);
+  lines.push(`  message: Schema.String,`);
+  lines.push(`}) {`);
+  lines.push(`  static readonly _tag = "${name}";`);
+  lines.push(`}`);
+
+  return lines;
+}
+
+/**
+ * Generate annotation chain for an error matcher.
+ * Returns a string like ".pipe(T.HttpErrorCodes([7003, 7000]), T.HttpErrorStatus(404))"
+ */
+function generateErrorAnnotations(matcher: ErrorMatcher): string {
+  const annotations: string[] = [];
+
+  if (matcher.codes && matcher.codes.length > 0) {
+    annotations.push(`T.HttpErrorCodes([${matcher.codes.join(", ")}])`);
+  } else if (matcher.code !== undefined) {
+    annotations.push(`T.HttpErrorCode(${matcher.code})`);
+  }
+
+  if (matcher.status !== undefined) {
+    annotations.push(`T.HttpErrorStatus(${matcher.status})`);
+  }
+
+  if (matcher.message !== undefined) {
+    annotations.push(`T.HttpErrorMessage(${JSON.stringify(matcher.message)})`);
+  }
+
+  if (annotations.length === 0) {
+    return "";
+  }
+
+  return `.pipe(${annotations.join(", ")})`;
 }
 
 /**
@@ -808,9 +909,18 @@ function generateServiceFile(
   for (const op of operations) {
     const funcName = OpenAPI.operationIdToFunctionName(op.operationId);
     const safeFuncName = RESERVED_WORDS.has(funcName) ? `${funcName}_` : funcName;
-    const errors = serviceSpec.operations[safeFuncName]?.errors ?? [];
-    for (const error of errors) {
-      allErrorNames.add(error);
+    const errors = serviceSpec.operations[safeFuncName]?.errors ?? {};
+    for (const errorName of Object.keys(errors)) {
+      allErrorNames.add(errorName);
+    }
+  }
+
+  // Build combined error definitions (common + service-specific)
+  const serviceErrors = serviceSpec.errors ?? {};
+  const allErrorDefs: Record<string, ErrorDefinition> = { ...COMMON_ERRORS };
+  for (const errorName of allErrorNames) {
+    if (serviceErrors[errorName]) {
+      allErrorDefs[errorName] = serviceErrors[errorName];
     }
   }
 
@@ -834,27 +944,23 @@ function generateServiceFile(
     "  CloudflareNetworkError,",
     "  CloudflareHttpError,",
     '} from "../errors.ts";',
+    "",
   ];
 
-  // Common errors that can occur on any operation
-  const COMMON_ERRORS = [
-    "RateLimited",
-    "TooManyRequests",
-    "AuthenticationError",
-    "InvalidToken",
-    "MissingToken",
-    "TokenExpired",
-    "Unauthorized",
-  ];
+  // Generate error classes inline
+  lines.push("// =============================================================================");
+  lines.push("// Errors");
+  lines.push("// =============================================================================");
+  lines.push("");
 
-  // Import common errors and specific errors used by this service
-  const allImportedErrors = new Set([...COMMON_ERRORS, ...allErrorNames]);
-  const sortedErrorImports = [...allImportedErrors].sort();
-  lines.push(`import {`);
-  for (const error of sortedErrorImports) {
-    lines.push(`  ${error},`);
+  // Sort error names for consistent output
+  const sortedErrorNames = Object.keys(allErrorDefs).sort();
+  for (const errorName of sortedErrorNames) {
+    const errorDef = allErrorDefs[errorName]!;
+    const errorLines = generateErrorClass(errorName, errorDef);
+    lines.push(...errorLines);
+    lines.push("");
   }
-  lines.push(`} from "../errors/generated.ts";`);
 
   lines.push("");
 
@@ -1029,11 +1135,17 @@ function generateServiceFile(
       const response200 = operation.responses["200"];
       let resultSchema = "Schema.NullOr(Schema.Unknown)";
       let resultTsType = "unknown | null";
+      let isMultipartResponse = false;
 
       if (response200 && !OpenAPI.isJsonReference(response200)) {
         const r = response200 as OpenAPI.ResponseObject;
         const jsonContent = r.content?.["application/json"];
-        if (jsonContent?.schema) {
+        const multipartContent = r.content?.["multipart/form-data"];
+
+        if (multipartContent) {
+          // This operation returns multipart/form-data (e.g., worker script content)
+          isMultipartResponse = true;
+        } else if (jsonContent?.schema) {
           // Extract the 'result' property from the Cloudflare response envelope
           // This recursively merges allOf schemas and finds the result property
           const extractedResult = extractResultSchema(jsonContent.schema, allSchemas);
@@ -1054,46 +1166,94 @@ function generateServiceFile(
         }
       }
 
-      // Response interface
-      lines.push(`export interface ${responseClassName} {`);
-      lines.push(`  result: ${resultTsType};`);
-      lines.push(
-        `  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };`,
-      );
-      lines.push(`}`);
-      lines.push("");
+      if (isMultipartResponse) {
+        // Generate multipart response type - returns FormData
+        lines.push(`export type ${responseClassName} = FormData;`);
+        lines.push("");
 
-      // Response schema
-      lines.push(`export const ${responseClassName} = Schema.Struct({`);
-      lines.push(`  result: ${resultSchema},`);
-      lines.push(`  result_info: Schema.optional(Schema.Struct({`);
-      lines.push(`    page: Schema.optional(Schema.Number),`);
-      lines.push(`    per_page: Schema.optional(Schema.Number),`);
-      lines.push(`    count: Schema.optional(Schema.Number),`);
-      lines.push(`    total_count: Schema.optional(Schema.Number),`);
-      lines.push(`    cursor: Schema.optional(Schema.String),`);
-      lines.push(`  })),`);
-      lines.push(
-        `}).annotations({ identifier: "${responseClassName}" }) as unknown as Schema.Schema<${responseClassName}>;`,
-      );
-      lines.push("");
+        // Response schema with multipart annotation
+        lines.push(`export const ${responseClassName} = Schema.instanceOf(FormData).pipe(`);
+        lines.push(`  T.HttpMultipartResponse(),`);
+        lines.push(
+          `).annotations({ identifier: "${responseClassName}" }) as unknown as Schema.Schema<${responseClassName}>;`,
+        );
+        lines.push("");
+      } else {
+        // Response interface
+        lines.push(`export interface ${responseClassName} {`);
+        lines.push(`  result: ${resultTsType};`);
+        lines.push(
+          `  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };`,
+        );
+        lines.push(`}`);
+        lines.push("");
+
+        // Response schema
+        lines.push(`export const ${responseClassName} = Schema.Struct({`);
+        lines.push(`  result: ${resultSchema},`);
+        lines.push(`  result_info: Schema.optional(Schema.Struct({`);
+        lines.push(`    page: Schema.optional(Schema.Number),`);
+        lines.push(`    per_page: Schema.optional(Schema.Number),`);
+        lines.push(`    count: Schema.optional(Schema.Number),`);
+        lines.push(`    total_count: Schema.optional(Schema.Number),`);
+        lines.push(`    cursor: Schema.optional(Schema.String),`);
+        lines.push(`  })),`);
+        lines.push(
+          `}).annotations({ identifier: "${responseClassName}" }) as unknown as Schema.Schema<${responseClassName}>;`,
+        );
+        lines.push("");
+      }
     }
 
-    // Get errors for this operation
-    const operationErrors = serviceSpec.operations[safeFuncName]?.errors ?? [];
+    // Get error matchers for this operation
+    const operationErrorMatchers = serviceSpec.operations[safeFuncName]?.errors ?? {};
+    const serviceErrorDefaults = serviceSpec.errors ?? {};
 
-    // Build error union type
-    // Combine common errors with operation-specific errors
-    const allOperationErrors = [...new Set([...COMMON_ERRORS, ...operationErrors])];
+    // Build combined error matchers:
+    // 1. Start with common error matchers
+    // 2. For each operation error, use operation matcher or fall back to service default
+    const allErrorMatchers: Record<string, ErrorMatcher> = { ...COMMON_ERROR_MATCHERS };
+    for (const [errorName, operationMatcher] of Object.entries(operationErrorMatchers)) {
+      // If operation matcher is empty, use service-level default
+      const hasOperationMatcher =
+        operationMatcher.code !== undefined ||
+        operationMatcher.codes !== undefined ||
+        operationMatcher.status !== undefined ||
+        operationMatcher.message !== undefined;
+
+      if (hasOperationMatcher) {
+        allErrorMatchers[errorName] = operationMatcher;
+      } else {
+        // Fall back to service-level default
+        const serviceDefault = serviceErrorDefaults[errorName];
+        if (serviceDefault) {
+          allErrorMatchers[errorName] = serviceDefault;
+        } else {
+          // No matcher - error will still be in union but won't match anything
+          allErrorMatchers[errorName] = {};
+        }
+      }
+    }
+
+    // Get the set of all error names for the type union
+    const allErrorNames = Object.keys(allErrorMatchers);
 
     const errorTypes = [
-      ...allOperationErrors,
+      ...allErrorNames,
       "CloudflareError",
       "UnknownCloudflareError",
       "CloudflareNetworkError",
       "CloudflareHttpError",
     ];
     const errorUnion = errorTypes.join(" | ");
+
+    // Generate error entries with annotations
+    const errorEntries: string[] = [];
+    for (const errorName of allErrorNames) {
+      const matcher = allErrorMatchers[errorName]!;
+      const annotations = generateErrorAnnotations(matcher);
+      errorEntries.push(`${errorName}${annotations}`);
+    }
 
     // Generate typed API function
     lines.push(`export const ${safeFuncName}: (`);
@@ -1105,7 +1265,7 @@ function generateServiceFile(
     lines.push(`> = API.make(() => ({`);
     lines.push(`  input: ${requestClassName},`);
     lines.push(`  output: ${responseClassName},`);
-    lines.push(`  errors: [${allOperationErrors.join(", ")}],`);
+    lines.push(`  errors: [${errorEntries.join(", ")}],`);
     lines.push(`}));`);
     lines.push("");
   }
