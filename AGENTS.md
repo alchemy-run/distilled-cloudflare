@@ -610,20 +610,12 @@ grep "^export const" src/services/{service}.ts | head -100
 
 Check which APIs already have tests:
 ```bash
-grep -E "(test|it)\(" test/services/{service}.test.ts
+grep "describe(" test/services/{service}.test.ts
 ```
 
-### Step 3: Prioritize missing APIs
+### Step 3: Plan test cases for each API
 
-Group by complexity:
-1. **Priority 1 - Core CRUD**: Basic create/read/update/delete operations
-2. **Priority 2 - Nested Resources**: Operations on child resources (e.g., secrets in workers)
-3. **Priority 3 - Advanced Features**: Complex operations (assets, versions, deployments)
-4. **Priority 4 - Specialized**: Operations requiring special setup (telemetry, domains)
-
-### Step 4: Document test cases for each API
-
-For each API, create a test plan:
+For each API, document:
 
 ```markdown
 ### API: createDeployment
@@ -641,22 +633,49 @@ For each API, create a test plan:
 - Body requires `strategy` and `versions` but spec incorrectly marks response fields as required
 ```
 
+### Step 4: Organize tests by API operation
+
+**Each API operation gets its own `describe` block** containing both happy path and error tests:
+
+```typescript
+describe("createDeployment", () => {
+  test("happy path - creates deployment", () =>
+    withWorker("itty-cf-workers-deployment", (scriptName) =>
+      Effect.gen(function* () {
+        // ... happy path test
+      }),
+    ));
+
+  test("error - WorkerNotFound for non-existent worker", () =>
+    Workers.createDeployment({
+      // ... trigger error condition
+    }).pipe(
+      Effect.flip,
+      Effect.map((error) => {
+        expect(error._tag).toBe("WorkerNotFound");
+      }),
+    ));
+});
+```
+
 ### Step 5: Implement iteratively
 
-For each priority group:
+For each API:
 
-1. **Add tests** (happy path + error paths)
-2. **Check LSP errors** (`ReadLints` tool)
-3. **Fix type issues**:
+1. **Add describe block** for the API operation
+2. **Add happy path test** first
+3. **Add error tests** for each error case
+4. **Check LSP errors** (`ReadLints` tool)
+5. **Fix type issues**:
    - Wrong test args → Fix test
    - Spec bug → Patch `openapi.patch.jsonc`
    - Generator bug → Fix `generate-clients.ts`
-4. **Regenerate**: `bun generate --service {service}`
-5. **Run tests**: `bun vitest run ./test/services/{service}.test.ts -t "test name"`
-6. **Handle failures**:
+6. **Regenerate**: `bun generate --service {service}`
+7. **Run tests**: `bun vitest run ./test/services/{service}.test.ts -t "apiName"`
+8. **Handle failures**:
    - `UnknownCloudflareError` → Add to `spec/{service}.json`
    - `Schema decode failed` → Patch `openapi.patch.jsonc`
-7. **Verify all tests pass** before moving to next group
+9. **Verify tests pass** before moving to next API
 
 ### Step 6: Final verification
 

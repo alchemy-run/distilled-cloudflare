@@ -23,13 +23,10 @@ import {
 // Errors
 // =============================================================================
 
-export class AuthenticationError extends Schema.TaggedError<AuthenticationError>()(
-  "AuthenticationError",
-  {
-    code: Schema.Number,
-    message: Schema.String,
-  },
-).pipe(C.withAuthError) {
+export class AuthenticationError extends Schema.TaggedError<AuthenticationError>()("AuthenticationError", {
+  code: Schema.Number,
+  message: Schema.String,
+}).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
@@ -75,6 +72,7 @@ export class Unauthorized extends Schema.TaggedError<Unauthorized>()("Unauthoriz
   static readonly _tag = "Unauthorized";
 }
 
+
 export interface ListCertificatesRequest {
   zone_id: string;
   page?: number;
@@ -88,181 +86,96 @@ export const ListCertificatesRequest = Schema.Struct({
   page: Schema.optional(Schema.Number).pipe(T.HttpQuery("page")),
   per_page: Schema.optional(Schema.Number).pipe(T.HttpQuery("per_page")),
   limit: Schema.optional(Schema.Number).pipe(T.HttpQuery("limit")),
-  offset: Schema.optional(Schema.Number).pipe(T.HttpQuery("offset")),
-})
-  .pipe(T.Http({ method: "GET", path: "/certificates" }))
-  .annotations({
-    identifier: "ListCertificatesRequest",
-  }) as unknown as Schema.Schema<ListCertificatesRequest>;
+  offset: Schema.optional(Schema.Number).pipe(T.HttpQuery("offset"))
+}).pipe(
+  T.Http({ method: "GET", path: "/certificates" }),
+).annotations({ identifier: "ListCertificatesRequest" }) as unknown as Schema.Schema<ListCertificatesRequest>;
 
 export interface ListCertificatesResponse {
-  result: {
-    certificate?: string;
-    csr: string;
-    expires_on?: string;
-    hostnames: string[];
-    id?: string;
-    request_type: "origin-rsa" | "origin-ecc" | "keyless-certificate";
-    requested_validity: 7 | 30 | 90 | 365 | 730 | 1095 | 5475;
-  }[];
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result: ({ certificate?: string; csr: string; expires_on?: string; hostnames: string[]; id?: string; request_type: "origin-rsa" | "origin-ecc" | "keyless-certificate"; requested_validity: 7 | 30 | 90 | 365 | 730 | 1095 | 5475 })[];
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListCertificatesResponse = Schema.Struct({
-  result: Schema.Array(
-    Schema.Struct({
-      certificate: Schema.optional(Schema.NullOr(Schema.String)),
-      csr: Schema.String,
-      expires_on: Schema.optional(Schema.NullOr(Schema.String)),
-      hostnames: Schema.Array(Schema.String),
-      id: Schema.optional(Schema.NullOr(Schema.String)),
-      request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
-      requested_validity: Schema.Literal(7, 30, 90, 365, 730, 1095, 5475),
-    }),
-  ),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "ListCertificatesResponse",
-}) as unknown as Schema.Schema<ListCertificatesResponse>;
+  result: Schema.Array(Schema.Struct({
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
+  csr: Schema.String,
+  expires_on: Schema.optional(Schema.NullOr(Schema.String)),
+  hostnames: Schema.Array(Schema.String),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
+  requested_validity: Schema.Literal(7, 30, 90, 365, 730, 1095, 5475)
+})),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "ListCertificatesResponse" }) as unknown as Schema.Schema<ListCertificatesResponse>;
 
 export const listCertificates: (
-  input: ListCertificatesRequest,
+  input: ListCertificatesRequest
 ) => Effect.Effect<
   ListCertificatesResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: ListCertificatesRequest,
   output: ListCertificatesResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000))],
 }));
 
 export interface CreateCertificateRequest {
-  body: {
-    csr: string;
-    hostnames: string[];
-    request_type: "origin-rsa" | "origin-ecc" | "keyless-certificate";
-    requested_validity?: 7 | 30 | 90 | 365 | 730 | 1095 | 5475;
-  };
+  body: { csr: string; hostnames: string[]; request_type: "origin-rsa" | "origin-ecc" | "keyless-certificate"; requested_validity?: 7 | 30 | 90 | 365 | 730 | 1095 | 5475 };
 }
 
 export const CreateCertificateRequest = Schema.Struct({
   body: Schema.Struct({
-    csr: Schema.String,
-    hostnames: Schema.Array(Schema.String),
-    request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
-    requested_validity: Schema.optional(
-      Schema.NullOr(Schema.Literal(7, 30, 90, 365, 730, 1095, 5475)),
-    ),
-  }).pipe(T.HttpBody()),
-})
-  .pipe(T.Http({ method: "POST", path: "/certificates" }))
-  .annotations({
-    identifier: "CreateCertificateRequest",
-  }) as unknown as Schema.Schema<CreateCertificateRequest>;
+  csr: Schema.String,
+  hostnames: Schema.Array(Schema.String),
+  request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
+  requested_validity: Schema.optional(Schema.NullOr(Schema.Literal(7, 30, 90, 365, 730, 1095, 5475)))
+}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "POST", path: "/certificates" }),
+).annotations({ identifier: "CreateCertificateRequest" }) as unknown as Schema.Schema<CreateCertificateRequest>;
 
 export interface CreateCertificateResponse {
-  result: {
-    certificate?: string;
-    csr: string;
-    expires_on?: string;
-    hostnames: string[];
-    id?: string;
-    request_type: "origin-rsa" | "origin-ecc" | "keyless-certificate";
-    requested_validity: 7 | 30 | 90 | 365 | 730 | 1095 | 5475;
-  };
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result: { certificate?: string; csr: string; expires_on?: string; hostnames: string[]; id?: string; request_type: "origin-rsa" | "origin-ecc" | "keyless-certificate"; requested_validity: 7 | 30 | 90 | 365 | 730 | 1095 | 5475 };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-    certificate: Schema.optional(Schema.NullOr(Schema.String)),
-    csr: Schema.String,
-    expires_on: Schema.optional(Schema.NullOr(Schema.String)),
-    hostnames: Schema.Array(Schema.String),
-    id: Schema.optional(Schema.NullOr(Schema.String)),
-    request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
-    requested_validity: Schema.Literal(7, 30, 90, 365, 730, 1095, 5475),
-  }),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "CreateCertificateResponse",
-}) as unknown as Schema.Schema<CreateCertificateResponse>;
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
+  csr: Schema.String,
+  expires_on: Schema.optional(Schema.NullOr(Schema.String)),
+  hostnames: Schema.Array(Schema.String),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
+  requested_validity: Schema.Literal(7, 30, 90, 365, 730, 1095, 5475)
+}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "CreateCertificateResponse" }) as unknown as Schema.Schema<CreateCertificateResponse>;
 
 export const createCertificate: (
-  input: CreateCertificateRequest,
+  input: CreateCertificateRequest
 ) => Effect.Effect<
   CreateCertificateResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: CreateCertificateRequest,
   output: CreateCertificateResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000))],
 }));
 
 export interface GetCertificateRequest {
@@ -270,83 +183,45 @@ export interface GetCertificateRequest {
 }
 
 export const GetCertificateRequest = Schema.Struct({
-  certificate_id: Schema.String.pipe(T.HttpPath("certificate_id")),
-})
-  .pipe(T.Http({ method: "GET", path: "/certificates/{certificate_id}" }))
-  .annotations({
-    identifier: "GetCertificateRequest",
-  }) as unknown as Schema.Schema<GetCertificateRequest>;
+  certificate_id: Schema.String.pipe(T.HttpPath("certificate_id"))
+}).pipe(
+  T.Http({ method: "GET", path: "/certificates/{certificate_id}" }),
+).annotations({ identifier: "GetCertificateRequest" }) as unknown as Schema.Schema<GetCertificateRequest>;
 
 export interface GetCertificateResponse {
-  result: {
-    certificate?: string;
-    csr: string;
-    expires_on?: string;
-    hostnames: string[];
-    id?: string;
-    request_type: "origin-rsa" | "origin-ecc" | "keyless-certificate";
-    requested_validity: 7 | 30 | 90 | 365 | 730 | 1095 | 5475;
-  };
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result: { certificate?: string; csr: string; expires_on?: string; hostnames: string[]; id?: string; request_type: "origin-rsa" | "origin-ecc" | "keyless-certificate"; requested_validity: 7 | 30 | 90 | 365 | 730 | 1095 | 5475 };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetCertificateResponse = Schema.Struct({
   result: Schema.Struct({
-    certificate: Schema.optional(Schema.NullOr(Schema.String)),
-    csr: Schema.String,
-    expires_on: Schema.optional(Schema.NullOr(Schema.String)),
-    hostnames: Schema.Array(Schema.String),
-    id: Schema.optional(Schema.NullOr(Schema.String)),
-    request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
-    requested_validity: Schema.Literal(7, 30, 90, 365, 730, 1095, 5475),
-  }),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "GetCertificateResponse",
-}) as unknown as Schema.Schema<GetCertificateResponse>;
+  certificate: Schema.optional(Schema.NullOr(Schema.String)),
+  csr: Schema.String,
+  expires_on: Schema.optional(Schema.NullOr(Schema.String)),
+  hostnames: Schema.Array(Schema.String),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  request_type: Schema.Literal("origin-rsa", "origin-ecc", "keyless-certificate"),
+  requested_validity: Schema.Literal(7, 30, 90, 365, 730, 1095, 5475)
+}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "GetCertificateResponse" }) as unknown as Schema.Schema<GetCertificateResponse>;
 
 export const getCertificate: (
-  input: GetCertificateRequest,
+  input: GetCertificateRequest
 ) => Effect.Effect<
   GetCertificateResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetCertificateRequest,
   output: GetCertificateResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000))],
 }));
 
 export interface OriginCaRevokeCertificateRequest {
@@ -354,65 +229,35 @@ export interface OriginCaRevokeCertificateRequest {
 }
 
 export const OriginCaRevokeCertificateRequest = Schema.Struct({
-  certificate_id: Schema.String.pipe(T.HttpPath("certificate_id")),
-})
-  .pipe(T.Http({ method: "DELETE", path: "/certificates/{certificate_id}" }))
-  .annotations({
-    identifier: "OriginCaRevokeCertificateRequest",
-  }) as unknown as Schema.Schema<OriginCaRevokeCertificateRequest>;
+  certificate_id: Schema.String.pipe(T.HttpPath("certificate_id"))
+}).pipe(
+  T.Http({ method: "DELETE", path: "/certificates/{certificate_id}" }),
+).annotations({ identifier: "OriginCaRevokeCertificateRequest" }) as unknown as Schema.Schema<OriginCaRevokeCertificateRequest>;
 
 export interface OriginCaRevokeCertificateResponse {
   result: unknown;
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const OriginCaRevokeCertificateResponse = Schema.Struct({
   result: Schema.Unknown,
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "OriginCaRevokeCertificateResponse",
-}) as unknown as Schema.Schema<OriginCaRevokeCertificateResponse>;
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "OriginCaRevokeCertificateResponse" }) as unknown as Schema.Schema<OriginCaRevokeCertificateResponse>;
 
 export const originCaRevokeCertificate: (
-  input: OriginCaRevokeCertificateRequest,
+  input: OriginCaRevokeCertificateRequest
 ) => Effect.Effect<
   OriginCaRevokeCertificateResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: OriginCaRevokeCertificateRequest,
   output: OriginCaRevokeCertificateResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000))],
 }));

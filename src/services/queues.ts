@@ -23,13 +23,10 @@ import {
 // Errors
 // =============================================================================
 
-export class AuthenticationError extends Schema.TaggedError<AuthenticationError>()(
-  "AuthenticationError",
-  {
-    code: Schema.Number,
-    message: Schema.String,
-  },
-).pipe(C.withAuthError) {
+export class AuthenticationError extends Schema.TaggedError<AuthenticationError>()("AuthenticationError", {
+  code: Schema.Number,
+  message: Schema.String,
+}).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
@@ -54,13 +51,10 @@ export class MissingToken extends Schema.TaggedError<MissingToken>()("MissingTok
   static readonly _tag = "MissingToken";
 }
 
-export class QueueAlreadyExists extends Schema.TaggedError<QueueAlreadyExists>()(
-  "QueueAlreadyExists",
-  {
-    code: Schema.Number,
-    message: Schema.String,
-  },
-).pipe(C.withConflictError) {
+export class QueueAlreadyExists extends Schema.TaggedError<QueueAlreadyExists>()("QueueAlreadyExists", {
+  code: Schema.Number,
+  message: Schema.String,
+}).pipe(C.withConflictError) {
   static readonly _tag = "QueueAlreadyExists";
 }
 
@@ -106,190 +100,88 @@ export class ValidationError extends Schema.TaggedError<ValidationError>()("Vali
   static readonly _tag = "ValidationError";
 }
 
+
 export interface ListRequest {
   account_id: string;
 }
 
 export const ListRequest = Schema.Struct({
-  account_id: Schema.String.pipe(T.HttpPath("account_id")),
-})
-  .pipe(T.Http({ method: "GET", path: "/accounts/{account_id}/queues" }))
-  .annotations({ identifier: "ListRequest" }) as unknown as Schema.Schema<ListRequest>;
+  account_id: Schema.String.pipe(T.HttpPath("account_id"))
+}).pipe(
+  T.Http({ method: "GET", path: "/accounts/{account_id}/queues" }),
+).annotations({ identifier: "ListRequest" }) as unknown as Schema.Schema<ListRequest>;
 
 export interface ListResponse {
-  result: {
-    consumers?: (
-      | {
-          consumer_id?: string;
-          created_on?: string;
-          queue_id?: string;
-          script?: Record<string, unknown>;
-          script_name?: Record<string, unknown>;
-          settings?: {
-            batch_size?: number;
-            max_concurrency?: number;
-            max_retries?: number;
-            max_wait_time_ms?: number;
-            retry_delay?: number;
-          };
-          type?: "worker";
-        }
-      | {
-          consumer_id?: string;
-          created_on?: string;
-          queue_id?: string;
-          settings?: {
-            batch_size?: number;
-            max_retries?: number;
-            retry_delay?: number;
-            visibility_timeout_ms?: number;
-          };
-          type?: "http_pull";
-        }
-    )[];
-    consumers_total_count?: number;
-    created_on?: string;
-    modified_on?: string;
-    producers?: (
-      | { script?: string; type?: "worker" }
-      | { bucket_name?: string; type?: "r2_bucket" }
-    )[];
-    producers_total_count?: number;
-    queue_id?: string;
-    queue_name?: string;
-    settings?: {
-      delivery_delay?: number;
-      delivery_paused?: boolean;
-      message_retention_period?: number;
-    };
-  }[];
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result: ({ consumers?: ({ consumer_id?: string; created_on?: string; queue_id?: string; script?: Record<string, unknown>; script_name?: Record<string, unknown>; settings?: { batch_size?: number; max_concurrency?: number; max_retries?: number; max_wait_time_ms?: number; retry_delay?: number }; type?: "worker" } | { consumer_id?: string; created_on?: string; queue_id?: string; settings?: { batch_size?: number; max_retries?: number; retry_delay?: number; visibility_timeout_ms?: number }; type?: "http_pull" })[]; consumers_total_count?: number; created_on?: string; modified_on?: string; producers?: ({ script?: string; type?: "worker" } | { bucket_name?: string; type?: "r2_bucket" })[]; producers_total_count?: number; queue_id?: string; queue_name?: string; settings?: { delivery_delay?: number; delivery_paused?: boolean; message_retention_period?: number } })[];
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListResponse = Schema.Struct({
-  result: Schema.Array(
-    Schema.Struct({
-      consumers: Schema.optional(
-        Schema.NullOr(
-          Schema.Array(
-            Schema.Union(
-              Schema.Struct({
-                consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-                created_on: Schema.optional(Schema.NullOr(Schema.String)),
-                queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-                script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-                script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-                settings: Schema.optional(
-                  Schema.NullOr(
-                    Schema.Struct({
-                      batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-                      max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
-                      max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-                      max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-                      retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-                    }),
-                  ),
-                ),
-                type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-              }),
-              Schema.Struct({
-                consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-                created_on: Schema.optional(Schema.NullOr(Schema.String)),
-                queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-                settings: Schema.optional(
-                  Schema.NullOr(
-                    Schema.Struct({
-                      batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-                      max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-                      retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-                      visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-                    }),
-                  ),
-                ),
-                type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
-              }),
-            ),
-          ),
-        ),
-      ),
-      consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
-      created_on: Schema.optional(Schema.NullOr(Schema.String)),
-      modified_on: Schema.optional(Schema.NullOr(Schema.String)),
-      producers: Schema.optional(
-        Schema.NullOr(
-          Schema.Array(
-            Schema.Union(
-              Schema.Struct({
-                script: Schema.optional(Schema.NullOr(Schema.String)),
-                type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-              }),
-              Schema.Struct({
-                bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
-                type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket"))),
-              }),
-            ),
-          ),
-        ),
-      ),
-      producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
-      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-      queue_name: Schema.optional(Schema.NullOr(Schema.String)),
-      settings: Schema.optional(
-        Schema.NullOr(
-          Schema.Struct({
-            delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-            delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
-            message_retention_period: Schema.optional(Schema.NullOr(Schema.Number)),
-          }),
-        ),
-      ),
-    }),
-  ),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
+  result: Schema.Array(Schema.Struct({
+  consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull")))
+}))))),
+  consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  script: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket")))
+}))))),
+  producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_name: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  message_retention_period: Schema.optional(Schema.NullOr(Schema.Number))
+})))
+})),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
 }).annotations({ identifier: "ListResponse" }) as unknown as Schema.Schema<ListResponse>;
 
 export const list: (
-  input: ListRequest,
+  input: ListRequest
 ) => Effect.Effect<
   ListResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: ListRequest,
   output: ListResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000))],
 }));
 
 export interface CreateRequest {
@@ -300,190 +192,83 @@ export interface CreateRequest {
 export const CreateRequest = Schema.Struct({
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-    queue_name: Schema.String,
-  }).pipe(T.HttpBody()),
-})
-  .pipe(T.Http({ method: "POST", path: "/accounts/{account_id}/queues" }))
-  .annotations({ identifier: "CreateRequest" }) as unknown as Schema.Schema<CreateRequest>;
+  queue_name: Schema.String
+}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "POST", path: "/accounts/{account_id}/queues" }),
+).annotations({ identifier: "CreateRequest" }) as unknown as Schema.Schema<CreateRequest>;
 
 export interface CreateResponse {
-  result: {
-    consumers?: (
-      | {
-          consumer_id?: string;
-          created_on?: string;
-          queue_id?: string;
-          script?: Record<string, unknown>;
-          script_name?: Record<string, unknown>;
-          settings?: {
-            batch_size?: number;
-            max_concurrency?: number;
-            max_retries?: number;
-            max_wait_time_ms?: number;
-            retry_delay?: number;
-          };
-          type?: "worker";
-        }
-      | {
-          consumer_id?: string;
-          created_on?: string;
-          queue_id?: string;
-          settings?: {
-            batch_size?: number;
-            max_retries?: number;
-            retry_delay?: number;
-            visibility_timeout_ms?: number;
-          };
-          type?: "http_pull";
-        }
-    )[];
-    consumers_total_count?: number;
-    created_on?: string;
-    modified_on?: string;
-    producers?: (
-      | { script?: string; type?: "worker" }
-      | { bucket_name?: string; type?: "r2_bucket" }
-    )[];
-    producers_total_count?: number;
-    queue_id?: string;
-    queue_name?: string;
-    settings?: {
-      delivery_delay?: number;
-      delivery_paused?: boolean;
-      message_retention_period?: number;
-    };
-  };
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result: { consumers?: ({ consumer_id?: string; created_on?: string; queue_id?: string; script?: Record<string, unknown>; script_name?: Record<string, unknown>; settings?: { batch_size?: number; max_concurrency?: number; max_retries?: number; max_wait_time_ms?: number; retry_delay?: number }; type?: "worker" } | { consumer_id?: string; created_on?: string; queue_id?: string; settings?: { batch_size?: number; max_retries?: number; retry_delay?: number; visibility_timeout_ms?: number }; type?: "http_pull" })[]; consumers_total_count?: number; created_on?: string; modified_on?: string; producers?: ({ script?: string; type?: "worker" } | { bucket_name?: string; type?: "r2_bucket" })[]; producers_total_count?: number; queue_id?: string; queue_name?: string; settings?: { delivery_delay?: number; delivery_paused?: boolean; message_retention_period?: number } };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateResponse = Schema.Struct({
   result: Schema.Struct({
-    consumers: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Union(
-            Schema.Struct({
-              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-              created_on: Schema.optional(Schema.NullOr(Schema.String)),
-              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-              script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-              script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-              settings: Schema.optional(
-                Schema.NullOr(
-                  Schema.Struct({
-                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-                  }),
-                ),
-              ),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-            }),
-            Schema.Struct({
-              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-              created_on: Schema.optional(Schema.NullOr(Schema.String)),
-              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-              settings: Schema.optional(
-                Schema.NullOr(
-                  Schema.Struct({
-                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-                    visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-                  }),
-                ),
-              ),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
-            }),
-          ),
-        ),
-      ),
-    ),
-    consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
-    created_on: Schema.optional(Schema.NullOr(Schema.String)),
-    modified_on: Schema.optional(Schema.NullOr(Schema.String)),
-    producers: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Union(
-            Schema.Struct({
-              script: Schema.optional(Schema.NullOr(Schema.String)),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-            }),
-            Schema.Struct({
-              bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket"))),
-            }),
-          ),
-        ),
-      ),
-    ),
-    producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
-    queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-    queue_name: Schema.optional(Schema.NullOr(Schema.String)),
-    settings: Schema.optional(
-      Schema.NullOr(
-        Schema.Struct({
-          delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-          delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
-          message_retention_period: Schema.optional(Schema.NullOr(Schema.Number)),
-        }),
-      ),
-    ),
-  }),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
+  consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull")))
+}))))),
+  consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  script: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket")))
+}))))),
+  producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_name: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  message_retention_period: Schema.optional(Schema.NullOr(Schema.Number))
+})))
+}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
 }).annotations({ identifier: "CreateResponse" }) as unknown as Schema.Schema<CreateResponse>;
 
 export const create: (
-  input: CreateRequest,
+  input: CreateRequest
 ) => Effect.Effect<
   CreateResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | InvalidQueueName
-  | ValidationError
-  | QueueAlreadyExists
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | InvalidQueueName | ValidationError | QueueAlreadyExists | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: CreateRequest,
   output: CreateResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    InvalidQueueName.pipe(T.HttpErrorCode(11003)),
-    ValidationError.pipe(T.HttpErrorCode(10021)),
-    QueueAlreadyExists.pipe(T.HttpErrorCode(11009), T.HttpErrorStatus(409)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), InvalidQueueName.pipe(T.HttpErrorCode(11003)), ValidationError.pipe(T.HttpErrorCode(10021)), QueueAlreadyExists.pipe(T.HttpErrorCode(11009), T.HttpErrorStatus(409))],
 }));
 
 export interface Get_Request {
@@ -493,379 +278,169 @@ export interface Get_Request {
 
 export const Get_Request = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
-  account_id: Schema.String.pipe(T.HttpPath("account_id")),
-})
-  .pipe(T.Http({ method: "GET", path: "/accounts/{account_id}/queues/{queue_id}" }))
-  .annotations({ identifier: "Get_Request" }) as unknown as Schema.Schema<Get_Request>;
+  account_id: Schema.String.pipe(T.HttpPath("account_id"))
+}).pipe(
+  T.Http({ method: "GET", path: "/accounts/{account_id}/queues/{queue_id}" }),
+).annotations({ identifier: "Get_Request" }) as unknown as Schema.Schema<Get_Request>;
 
 export interface Get_Response {
-  result: {
-    consumers?: (
-      | {
-          consumer_id?: string;
-          created_on?: string;
-          queue_id?: string;
-          script?: Record<string, unknown>;
-          script_name?: Record<string, unknown>;
-          settings?: {
-            batch_size?: number;
-            max_concurrency?: number;
-            max_retries?: number;
-            max_wait_time_ms?: number;
-            retry_delay?: number;
-          };
-          type?: "worker";
-        }
-      | {
-          consumer_id?: string;
-          created_on?: string;
-          queue_id?: string;
-          settings?: {
-            batch_size?: number;
-            max_retries?: number;
-            retry_delay?: number;
-            visibility_timeout_ms?: number;
-          };
-          type?: "http_pull";
-        }
-    )[];
-    consumers_total_count?: number;
-    created_on?: string;
-    modified_on?: string;
-    producers?: (
-      | { script?: string; type?: "worker" }
-      | { bucket_name?: string; type?: "r2_bucket" }
-    )[];
-    producers_total_count?: number;
-    queue_id?: string;
-    queue_name?: string;
-    settings?: {
-      delivery_delay?: number;
-      delivery_paused?: boolean;
-      message_retention_period?: number;
-    };
-  };
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result: { consumers?: ({ consumer_id?: string; created_on?: string; queue_id?: string; script?: Record<string, unknown>; script_name?: Record<string, unknown>; settings?: { batch_size?: number; max_concurrency?: number; max_retries?: number; max_wait_time_ms?: number; retry_delay?: number }; type?: "worker" } | { consumer_id?: string; created_on?: string; queue_id?: string; settings?: { batch_size?: number; max_retries?: number; retry_delay?: number; visibility_timeout_ms?: number }; type?: "http_pull" })[]; consumers_total_count?: number; created_on?: string; modified_on?: string; producers?: ({ script?: string; type?: "worker" } | { bucket_name?: string; type?: "r2_bucket" })[]; producers_total_count?: number; queue_id?: string; queue_name?: string; settings?: { delivery_delay?: number; delivery_paused?: boolean; message_retention_period?: number } };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const Get_Response = Schema.Struct({
   result: Schema.Struct({
-    consumers: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Union(
-            Schema.Struct({
-              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-              created_on: Schema.optional(Schema.NullOr(Schema.String)),
-              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-              script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-              script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-              settings: Schema.optional(
-                Schema.NullOr(
-                  Schema.Struct({
-                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-                  }),
-                ),
-              ),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-            }),
-            Schema.Struct({
-              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-              created_on: Schema.optional(Schema.NullOr(Schema.String)),
-              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-              settings: Schema.optional(
-                Schema.NullOr(
-                  Schema.Struct({
-                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-                    visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-                  }),
-                ),
-              ),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
-            }),
-          ),
-        ),
-      ),
-    ),
-    consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
-    created_on: Schema.optional(Schema.NullOr(Schema.String)),
-    modified_on: Schema.optional(Schema.NullOr(Schema.String)),
-    producers: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Union(
-            Schema.Struct({
-              script: Schema.optional(Schema.NullOr(Schema.String)),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-            }),
-            Schema.Struct({
-              bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket"))),
-            }),
-          ),
-        ),
-      ),
-    ),
-    producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
-    queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-    queue_name: Schema.optional(Schema.NullOr(Schema.String)),
-    settings: Schema.optional(
-      Schema.NullOr(
-        Schema.Struct({
-          delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-          delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
-          message_retention_period: Schema.optional(Schema.NullOr(Schema.Number)),
-        }),
-      ),
-    ),
-  }),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
+  consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull")))
+}))))),
+  consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  script: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket")))
+}))))),
+  producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_name: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  message_retention_period: Schema.optional(Schema.NullOr(Schema.Number))
+})))
+}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
 }).annotations({ identifier: "Get_Response" }) as unknown as Schema.Schema<Get_Response>;
 
 export const get_: (
-  input: Get_Request,
+  input: Get_Request
 ) => Effect.Effect<
   Get_Response,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: Get_Request,
   output: Get_Response,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404))],
 }));
 
 export interface UpdateRequest {
   queue_id: string;
   account_id: string;
-  body: {
-    consumers?: (
-      | {
-          consumer_id?: string;
-          created_on?: string;
-          queue_id?: string;
-          script?: Record<string, unknown>;
-          script_name?: Record<string, unknown>;
-          settings?: {
-            batch_size?: number;
-            max_concurrency?: number;
-            max_retries?: number;
-            max_wait_time_ms?: number;
-            retry_delay?: number;
-          };
-          type?: "worker";
-        }
-      | {
-          consumer_id?: string;
-          created_on?: string;
-          queue_id?: string;
-          settings?: {
-            batch_size?: number;
-            max_retries?: number;
-            retry_delay?: number;
-            visibility_timeout_ms?: number;
-          };
-          type?: "http_pull";
-        }
-    )[];
-    consumers_total_count?: number;
-    created_on?: string;
-    modified_on?: string;
-    producers?: (
-      | { script?: string; type?: "worker" }
-      | { bucket_name?: string; type?: "r2_bucket" }
-    )[];
-    producers_total_count?: number;
-    queue_id?: string;
-    queue_name?: string;
-    settings?: {
-      delivery_delay?: number;
-      delivery_paused?: boolean;
-      message_retention_period?: number;
-    };
-  };
+  body: { consumers?: ({ consumer_id?: string; created_on?: string; queue_id?: string; script?: Record<string, unknown>; script_name?: Record<string, unknown>; settings?: { batch_size?: number; max_concurrency?: number; max_retries?: number; max_wait_time_ms?: number; retry_delay?: number }; type?: "worker" } | { consumer_id?: string; created_on?: string; queue_id?: string; settings?: { batch_size?: number; max_retries?: number; retry_delay?: number; visibility_timeout_ms?: number }; type?: "http_pull" })[]; consumers_total_count?: number; created_on?: string; modified_on?: string; producers?: ({ script?: string; type?: "worker" } | { bucket_name?: string; type?: "r2_bucket" })[]; producers_total_count?: number; queue_id?: string; queue_name?: string; settings?: { delivery_delay?: number; delivery_paused?: boolean; message_retention_period?: number } };
 }
 
 export const UpdateRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-    consumers: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Union(
-            Schema.Struct({
-              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-              created_on: Schema.optional(Schema.NullOr(Schema.String)),
-              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-              script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-              script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-              settings: Schema.optional(
-                Schema.NullOr(
-                  Schema.Struct({
-                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-                  }),
-                ),
-              ),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-            }),
-            Schema.Struct({
-              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-              created_on: Schema.optional(Schema.NullOr(Schema.String)),
-              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-              settings: Schema.optional(
-                Schema.NullOr(
-                  Schema.Struct({
-                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-                    visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-                  }),
-                ),
-              ),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
-            }),
-          ),
-        ),
-      ),
-    ),
-    consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
-    created_on: Schema.optional(Schema.NullOr(Schema.String)),
-    modified_on: Schema.optional(Schema.NullOr(Schema.String)),
-    producers: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Union(
-            Schema.Struct({
-              script: Schema.optional(Schema.NullOr(Schema.String)),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-            }),
-            Schema.Struct({
-              bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket"))),
-            }),
-          ),
-        ),
-      ),
-    ),
-    producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
-    queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-    queue_name: Schema.optional(Schema.NullOr(Schema.String)),
-    settings: Schema.optional(
-      Schema.NullOr(
-        Schema.Struct({
-          delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-          delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
-          message_retention_period: Schema.optional(Schema.NullOr(Schema.Number)),
-        }),
-      ),
-    ),
-  }).pipe(T.HttpBody()),
-})
-  .pipe(T.Http({ method: "PUT", path: "/accounts/{account_id}/queues/{queue_id}" }))
-  .annotations({ identifier: "UpdateRequest" }) as unknown as Schema.Schema<UpdateRequest>;
+  consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull")))
+}))))),
+  consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  script: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket")))
+}))))),
+  producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_name: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  message_retention_period: Schema.optional(Schema.NullOr(Schema.Number))
+})))
+}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "PUT", path: "/accounts/{account_id}/queues/{queue_id}" }),
+).annotations({ identifier: "UpdateRequest" }) as unknown as Schema.Schema<UpdateRequest>;
 
 export interface UpdateResponse {
   result: Record<string, unknown>;
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const UpdateResponse = Schema.Struct({
   result: Schema.Struct({}),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
 }).annotations({ identifier: "UpdateResponse" }) as unknown as Schema.Schema<UpdateResponse>;
 
 export const update: (
-  input: UpdateRequest,
+  input: UpdateRequest
 ) => Effect.Effect<
   UpdateResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | InvalidQueueName
-  | ValidationError
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | InvalidQueueName | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: UpdateRequest,
   output: UpdateResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-    InvalidQueueName.pipe(T.HttpErrorCode(11003)),
-    ValidationError.pipe(T.HttpErrorCode(10021)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)), InvalidQueueName.pipe(T.HttpErrorCode(11003)), ValidationError.pipe(T.HttpErrorCode(10021))],
 }));
 
 export interface Delete_Request {
@@ -875,263 +450,124 @@ export interface Delete_Request {
 
 export const Delete_Request = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
-  account_id: Schema.String.pipe(T.HttpPath("account_id")),
-})
-  .pipe(T.Http({ method: "DELETE", path: "/accounts/{account_id}/queues/{queue_id}" }))
-  .annotations({ identifier: "Delete_Request" }) as unknown as Schema.Schema<Delete_Request>;
+  account_id: Schema.String.pipe(T.HttpPath("account_id"))
+}).pipe(
+  T.Http({ method: "DELETE", path: "/accounts/{account_id}/queues/{queue_id}" }),
+).annotations({ identifier: "Delete_Request" }) as unknown as Schema.Schema<Delete_Request>;
 
 export interface Delete_Response {
   result: unknown | null;
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const Delete_Response = Schema.Struct({
   result: Schema.NullOr(Schema.Unknown),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
 }).annotations({ identifier: "Delete_Response" }) as unknown as Schema.Schema<Delete_Response>;
 
 export const delete_: (
-  input: Delete_Request,
+  input: Delete_Request
 ) => Effect.Effect<
   Delete_Response,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: Delete_Request,
   output: Delete_Response,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404))],
 }));
 
 export interface UpdatePartialRequest {
   queue_id: string;
   account_id: string;
-  body: {
-    consumers?: (
-      | {
-          consumer_id?: string;
-          created_on?: string;
-          queue_id?: string;
-          script?: Record<string, unknown>;
-          script_name?: Record<string, unknown>;
-          settings?: {
-            batch_size?: number;
-            max_concurrency?: number;
-            max_retries?: number;
-            max_wait_time_ms?: number;
-            retry_delay?: number;
-          };
-          type?: "worker";
-        }
-      | {
-          consumer_id?: string;
-          created_on?: string;
-          queue_id?: string;
-          settings?: {
-            batch_size?: number;
-            max_retries?: number;
-            retry_delay?: number;
-            visibility_timeout_ms?: number;
-          };
-          type?: "http_pull";
-        }
-    )[];
-    consumers_total_count?: number;
-    created_on?: string;
-    modified_on?: string;
-    producers?: (
-      | { script?: string; type?: "worker" }
-      | { bucket_name?: string; type?: "r2_bucket" }
-    )[];
-    producers_total_count?: number;
-    queue_id?: string;
-    queue_name?: string;
-    settings?: {
-      delivery_delay?: number;
-      delivery_paused?: boolean;
-      message_retention_period?: number;
-    };
-  };
+  body: { consumers?: ({ consumer_id?: string; created_on?: string; queue_id?: string; script?: Record<string, unknown>; script_name?: Record<string, unknown>; settings?: { batch_size?: number; max_concurrency?: number; max_retries?: number; max_wait_time_ms?: number; retry_delay?: number }; type?: "worker" } | { consumer_id?: string; created_on?: string; queue_id?: string; settings?: { batch_size?: number; max_retries?: number; retry_delay?: number; visibility_timeout_ms?: number }; type?: "http_pull" })[]; consumers_total_count?: number; created_on?: string; modified_on?: string; producers?: ({ script?: string; type?: "worker" } | { bucket_name?: string; type?: "r2_bucket" })[]; producers_total_count?: number; queue_id?: string; queue_name?: string; settings?: { delivery_delay?: number; delivery_paused?: boolean; message_retention_period?: number } };
 }
 
 export const UpdatePartialRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-    consumers: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Union(
-            Schema.Struct({
-              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-              created_on: Schema.optional(Schema.NullOr(Schema.String)),
-              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-              script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-              script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-              settings: Schema.optional(
-                Schema.NullOr(
-                  Schema.Struct({
-                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-                  }),
-                ),
-              ),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-            }),
-            Schema.Struct({
-              consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-              created_on: Schema.optional(Schema.NullOr(Schema.String)),
-              queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-              settings: Schema.optional(
-                Schema.NullOr(
-                  Schema.Struct({
-                    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-                    max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-                    retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-                    visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-                  }),
-                ),
-              ),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
-            }),
-          ),
-        ),
-      ),
-    ),
-    consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
-    created_on: Schema.optional(Schema.NullOr(Schema.String)),
-    modified_on: Schema.optional(Schema.NullOr(Schema.String)),
-    producers: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Union(
-            Schema.Struct({
-              script: Schema.optional(Schema.NullOr(Schema.String)),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-            }),
-            Schema.Struct({
-              bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
-              type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket"))),
-            }),
-          ),
-        ),
-      ),
-    ),
-    producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
-    queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-    queue_name: Schema.optional(Schema.NullOr(Schema.String)),
-    settings: Schema.optional(
-      Schema.NullOr(
-        Schema.Struct({
-          delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-          delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
-          message_retention_period: Schema.optional(Schema.NullOr(Schema.Number)),
-        }),
-      ),
-    ),
-  }).pipe(T.HttpBody()),
-})
-  .pipe(T.Http({ method: "PATCH", path: "/accounts/{account_id}/queues/{queue_id}" }))
-  .annotations({
-    identifier: "UpdatePartialRequest",
-  }) as unknown as Schema.Schema<UpdatePartialRequest>;
+  consumers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull")))
+}))))),
+  consumers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  modified_on: Schema.optional(Schema.NullOr(Schema.String)),
+  producers: Schema.optional(Schema.NullOr(Schema.Array(Schema.Union(Schema.Struct({
+  script: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  bucket_name: Schema.optional(Schema.NullOr(Schema.String)),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("r2_bucket")))
+}))))),
+  producers_total_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_name: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  delivery_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  delivery_paused: Schema.optional(Schema.NullOr(Schema.Boolean)),
+  message_retention_period: Schema.optional(Schema.NullOr(Schema.Number))
+})))
+}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "PATCH", path: "/accounts/{account_id}/queues/{queue_id}" }),
+).annotations({ identifier: "UpdatePartialRequest" }) as unknown as Schema.Schema<UpdatePartialRequest>;
 
 export interface UpdatePartialResponse {
   result: Record<string, unknown>;
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const UpdatePartialResponse = Schema.Struct({
   result: Schema.Struct({}),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "UpdatePartialResponse",
-}) as unknown as Schema.Schema<UpdatePartialResponse>;
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "UpdatePartialResponse" }) as unknown as Schema.Schema<UpdatePartialResponse>;
 
 export const updatePartial: (
-  input: UpdatePartialRequest,
+  input: UpdatePartialRequest
 ) => Effect.Effect<
   UpdatePartialResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | InvalidQueueName
-  | ValidationError
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | InvalidQueueName | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: UpdatePartialRequest,
   output: UpdatePartialResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-    InvalidQueueName.pipe(T.HttpErrorCode(11003)),
-    ValidationError.pipe(T.HttpErrorCode(10021)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)), InvalidQueueName.pipe(T.HttpErrorCode(11003)), ValidationError.pipe(T.HttpErrorCode(10021))],
 }));
 
 export interface ListConsumersRequest {
@@ -1141,135 +577,62 @@ export interface ListConsumersRequest {
 
 export const ListConsumersRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
-  account_id: Schema.String.pipe(T.HttpPath("account_id")),
-})
-  .pipe(T.Http({ method: "GET", path: "/accounts/{account_id}/queues/{queue_id}/consumers" }))
-  .annotations({
-    identifier: "ListConsumersRequest",
-  }) as unknown as Schema.Schema<ListConsumersRequest>;
+  account_id: Schema.String.pipe(T.HttpPath("account_id"))
+}).pipe(
+  T.Http({ method: "GET", path: "/accounts/{account_id}/queues/{queue_id}/consumers" }),
+).annotations({ identifier: "ListConsumersRequest" }) as unknown as Schema.Schema<ListConsumersRequest>;
 
 export interface ListConsumersResponse {
-  result: (
-    | {
-        consumer_id?: string;
-        created_on?: string;
-        queue_id?: string;
-        script?: Record<string, unknown>;
-        script_name?: Record<string, unknown>;
-        settings?: {
-          batch_size?: number;
-          max_concurrency?: number;
-          max_retries?: number;
-          max_wait_time_ms?: number;
-          retry_delay?: number;
-        };
-        type?: "worker";
-      }
-    | {
-        consumer_id?: string;
-        created_on?: string;
-        queue_id?: string;
-        settings?: {
-          batch_size?: number;
-          max_retries?: number;
-          retry_delay?: number;
-          visibility_timeout_ms?: number;
-        };
-        type?: "http_pull";
-      }
-  )[];
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result: ({ consumer_id?: string; created_on?: string; queue_id?: string; script?: Record<string, unknown>; script_name?: Record<string, unknown>; settings?: { batch_size?: number; max_concurrency?: number; max_retries?: number; max_wait_time_ms?: number; retry_delay?: number }; type?: "worker" } | { consumer_id?: string; created_on?: string; queue_id?: string; settings?: { batch_size?: number; max_retries?: number; retry_delay?: number; visibility_timeout_ms?: number }; type?: "http_pull" })[];
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const ListConsumersResponse = Schema.Struct({
-  result: Schema.Array(
-    Schema.Union(
-      Schema.Struct({
-        consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-        created_on: Schema.optional(Schema.NullOr(Schema.String)),
-        queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-        script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-        script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-        settings: Schema.optional(
-          Schema.NullOr(
-            Schema.Struct({
-              batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-              max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
-              max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-              max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-              retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-            }),
-          ),
-        ),
-        type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-      }),
-      Schema.Struct({
-        consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-        created_on: Schema.optional(Schema.NullOr(Schema.String)),
-        queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-        settings: Schema.optional(
-          Schema.NullOr(
-            Schema.Struct({
-              batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-              max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-              retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-              visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-            }),
-          ),
-        ),
-        type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
-      }),
-    ),
-  ),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "ListConsumersResponse",
-}) as unknown as Schema.Schema<ListConsumersResponse>;
+  result: Schema.Array(Schema.Union(Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull")))
+}))),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "ListConsumersResponse" }) as unknown as Schema.Schema<ListConsumersResponse>;
 
 export const listConsumers: (
-  input: ListConsumersRequest,
+  input: ListConsumersRequest
 ) => Effect.Effect<
   ListConsumersResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: ListConsumersRequest,
   output: ListConsumersResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404))],
 }));
 
 export interface CreateConsumerRequest {
@@ -1281,134 +644,62 @@ export interface CreateConsumerRequest {
 export const CreateConsumerRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
-  body: Schema.Struct({}).pipe(T.HttpBody()),
-})
-  .pipe(T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/consumers" }))
-  .annotations({
-    identifier: "CreateConsumerRequest",
-  }) as unknown as Schema.Schema<CreateConsumerRequest>;
+  body: Schema.Struct({}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/consumers" }),
+).annotations({ identifier: "CreateConsumerRequest" }) as unknown as Schema.Schema<CreateConsumerRequest>;
 
 export interface CreateConsumerResponse {
-  result:
-    | {
-        consumer_id?: string;
-        created_on?: string;
-        queue_id?: string;
-        script?: Record<string, unknown>;
-        script_name?: Record<string, unknown>;
-        settings?: {
-          batch_size?: number;
-          max_concurrency?: number;
-          max_retries?: number;
-          max_wait_time_ms?: number;
-          retry_delay?: number;
-        };
-        type?: "worker";
-      }
-    | {
-        consumer_id?: string;
-        created_on?: string;
-        queue_id?: string;
-        settings?: {
-          batch_size?: number;
-          max_retries?: number;
-          retry_delay?: number;
-          visibility_timeout_ms?: number;
-        };
-        type?: "http_pull";
-      };
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result: { consumer_id?: string; created_on?: string; queue_id?: string; script?: Record<string, unknown>; script_name?: Record<string, unknown>; settings?: { batch_size?: number; max_concurrency?: number; max_retries?: number; max_wait_time_ms?: number; retry_delay?: number }; type?: "worker" } | { consumer_id?: string; created_on?: string; queue_id?: string; settings?: { batch_size?: number; max_retries?: number; retry_delay?: number; visibility_timeout_ms?: number }; type?: "http_pull" };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const CreateConsumerResponse = Schema.Struct({
-  result: Schema.Union(
-    Schema.Struct({
-      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-      created_on: Schema.optional(Schema.NullOr(Schema.String)),
-      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-      script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-      script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-      settings: Schema.optional(
-        Schema.NullOr(
-          Schema.Struct({
-            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-          }),
-        ),
-      ),
-      type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-    }),
-    Schema.Struct({
-      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-      created_on: Schema.optional(Schema.NullOr(Schema.String)),
-      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-      settings: Schema.optional(
-        Schema.NullOr(
-          Schema.Struct({
-            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-            visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-          }),
-        ),
-      ),
-      type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
-    }),
-  ),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "CreateConsumerResponse",
-}) as unknown as Schema.Schema<CreateConsumerResponse>;
+  result: Schema.Union(Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull")))
+})),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "CreateConsumerResponse" }) as unknown as Schema.Schema<CreateConsumerResponse>;
 
 export const createConsumer: (
-  input: CreateConsumerRequest,
+  input: CreateConsumerRequest
 ) => Effect.Effect<
   CreateConsumerResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | ValidationError
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: CreateConsumerRequest,
   output: CreateConsumerResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-    ValidationError.pipe(T.HttpErrorCode(10021)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)), ValidationError.pipe(T.HttpErrorCode(10021))],
 }));
 
 export interface GetConsumerRequest {
@@ -1420,137 +711,62 @@ export interface GetConsumerRequest {
 export const GetConsumerRequest = Schema.Struct({
   consumer_id: Schema.String.pipe(T.HttpPath("consumer_id")),
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
-  account_id: Schema.String.pipe(T.HttpPath("account_id")),
-})
-  .pipe(
-    T.Http({
-      method: "GET",
-      path: "/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}",
-    }),
-  )
-  .annotations({
-    identifier: "GetConsumerRequest",
-  }) as unknown as Schema.Schema<GetConsumerRequest>;
+  account_id: Schema.String.pipe(T.HttpPath("account_id"))
+}).pipe(
+  T.Http({ method: "GET", path: "/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}" }),
+).annotations({ identifier: "GetConsumerRequest" }) as unknown as Schema.Schema<GetConsumerRequest>;
 
 export interface GetConsumerResponse {
-  result:
-    | {
-        consumer_id?: string;
-        created_on?: string;
-        queue_id?: string;
-        script?: Record<string, unknown>;
-        script_name?: Record<string, unknown>;
-        settings?: {
-          batch_size?: number;
-          max_concurrency?: number;
-          max_retries?: number;
-          max_wait_time_ms?: number;
-          retry_delay?: number;
-        };
-        type?: "worker";
-      }
-    | {
-        consumer_id?: string;
-        created_on?: string;
-        queue_id?: string;
-        settings?: {
-          batch_size?: number;
-          max_retries?: number;
-          retry_delay?: number;
-          visibility_timeout_ms?: number;
-        };
-        type?: "http_pull";
-      };
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result: { consumer_id?: string; created_on?: string; queue_id?: string; script?: Record<string, unknown>; script_name?: Record<string, unknown>; settings?: { batch_size?: number; max_concurrency?: number; max_retries?: number; max_wait_time_ms?: number; retry_delay?: number }; type?: "worker" } | { consumer_id?: string; created_on?: string; queue_id?: string; settings?: { batch_size?: number; max_retries?: number; retry_delay?: number; visibility_timeout_ms?: number }; type?: "http_pull" };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetConsumerResponse = Schema.Struct({
-  result: Schema.Union(
-    Schema.Struct({
-      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-      created_on: Schema.optional(Schema.NullOr(Schema.String)),
-      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-      script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-      script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-      settings: Schema.optional(
-        Schema.NullOr(
-          Schema.Struct({
-            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-          }),
-        ),
-      ),
-      type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-    }),
-    Schema.Struct({
-      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-      created_on: Schema.optional(Schema.NullOr(Schema.String)),
-      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-      settings: Schema.optional(
-        Schema.NullOr(
-          Schema.Struct({
-            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-            visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-          }),
-        ),
-      ),
-      type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
-    }),
-  ),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "GetConsumerResponse",
-}) as unknown as Schema.Schema<GetConsumerResponse>;
+  result: Schema.Union(Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull")))
+})),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "GetConsumerResponse" }) as unknown as Schema.Schema<GetConsumerResponse>;
 
 export const getConsumer: (
-  input: GetConsumerRequest,
+  input: GetConsumerRequest
 ) => Effect.Effect<
   GetConsumerResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetConsumerRequest,
   output: GetConsumerResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404))],
 }));
 
 export interface UpdateConsumerRequest {
@@ -1564,139 +780,62 @@ export const UpdateConsumerRequest = Schema.Struct({
   consumer_id: Schema.String.pipe(T.HttpPath("consumer_id")),
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
-  body: Schema.Struct({}).pipe(T.HttpBody()),
-})
-  .pipe(
-    T.Http({
-      method: "PUT",
-      path: "/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}",
-    }),
-  )
-  .annotations({
-    identifier: "UpdateConsumerRequest",
-  }) as unknown as Schema.Schema<UpdateConsumerRequest>;
+  body: Schema.Struct({}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "PUT", path: "/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}" }),
+).annotations({ identifier: "UpdateConsumerRequest" }) as unknown as Schema.Schema<UpdateConsumerRequest>;
 
 export interface UpdateConsumerResponse {
-  result:
-    | {
-        consumer_id?: string;
-        created_on?: string;
-        queue_id?: string;
-        script?: Record<string, unknown>;
-        script_name?: Record<string, unknown>;
-        settings?: {
-          batch_size?: number;
-          max_concurrency?: number;
-          max_retries?: number;
-          max_wait_time_ms?: number;
-          retry_delay?: number;
-        };
-        type?: "worker";
-      }
-    | {
-        consumer_id?: string;
-        created_on?: string;
-        queue_id?: string;
-        settings?: {
-          batch_size?: number;
-          max_retries?: number;
-          retry_delay?: number;
-          visibility_timeout_ms?: number;
-        };
-        type?: "http_pull";
-      };
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result: { consumer_id?: string; created_on?: string; queue_id?: string; script?: Record<string, unknown>; script_name?: Record<string, unknown>; settings?: { batch_size?: number; max_concurrency?: number; max_retries?: number; max_wait_time_ms?: number; retry_delay?: number }; type?: "worker" } | { consumer_id?: string; created_on?: string; queue_id?: string; settings?: { batch_size?: number; max_retries?: number; retry_delay?: number; visibility_timeout_ms?: number }; type?: "http_pull" };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const UpdateConsumerResponse = Schema.Struct({
-  result: Schema.Union(
-    Schema.Struct({
-      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-      created_on: Schema.optional(Schema.NullOr(Schema.String)),
-      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-      script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-      script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-      settings: Schema.optional(
-        Schema.NullOr(
-          Schema.Struct({
-            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-          }),
-        ),
-      ),
-      type: Schema.optional(Schema.NullOr(Schema.Literal("worker"))),
-    }),
-    Schema.Struct({
-      consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
-      created_on: Schema.optional(Schema.NullOr(Schema.String)),
-      queue_id: Schema.optional(Schema.NullOr(Schema.String)),
-      settings: Schema.optional(
-        Schema.NullOr(
-          Schema.Struct({
-            batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-            max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
-            retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
-            visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-          }),
-        ),
-      ),
-      type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull"))),
-    }),
-  ),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "UpdateConsumerResponse",
-}) as unknown as Schema.Schema<UpdateConsumerResponse>;
+  result: Schema.Union(Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  script: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  script_name: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_concurrency: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_wait_time_ms: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("worker")))
+}), Schema.Struct({
+  consumer_id: Schema.optional(Schema.NullOr(Schema.String)),
+  created_on: Schema.optional(Schema.NullOr(Schema.String)),
+  queue_id: Schema.optional(Schema.NullOr(Schema.String)),
+  settings: Schema.optional(Schema.NullOr(Schema.Struct({
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  max_retries: Schema.optional(Schema.NullOr(Schema.Number)),
+  retry_delay: Schema.optional(Schema.NullOr(Schema.Number)),
+  visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))),
+  type: Schema.optional(Schema.NullOr(Schema.Literal("http_pull")))
+})),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "UpdateConsumerResponse" }) as unknown as Schema.Schema<UpdateConsumerResponse>;
 
 export const updateConsumer: (
-  input: UpdateConsumerRequest,
+  input: UpdateConsumerRequest
 ) => Effect.Effect<
   UpdateConsumerResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | ValidationError
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: UpdateConsumerRequest,
   output: UpdateConsumerResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-    ValidationError.pipe(T.HttpErrorCode(10021)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)), ValidationError.pipe(T.HttpErrorCode(10021))],
 }));
 
 export interface DeleteConsumerRequest {
@@ -1708,74 +847,37 @@ export interface DeleteConsumerRequest {
 export const DeleteConsumerRequest = Schema.Struct({
   consumer_id: Schema.String.pipe(T.HttpPath("consumer_id")),
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
-  account_id: Schema.String.pipe(T.HttpPath("account_id")),
-})
-  .pipe(
-    T.Http({
-      method: "DELETE",
-      path: "/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}",
-    }),
-  )
-  .annotations({
-    identifier: "DeleteConsumerRequest",
-  }) as unknown as Schema.Schema<DeleteConsumerRequest>;
+  account_id: Schema.String.pipe(T.HttpPath("account_id"))
+}).pipe(
+  T.Http({ method: "DELETE", path: "/accounts/{account_id}/queues/{queue_id}/consumers/{consumer_id}" }),
+).annotations({ identifier: "DeleteConsumerRequest" }) as unknown as Schema.Schema<DeleteConsumerRequest>;
 
 export interface DeleteConsumerResponse {
   result: unknown | null;
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const DeleteConsumerResponse = Schema.Struct({
   result: Schema.NullOr(Schema.Unknown),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "DeleteConsumerResponse",
-}) as unknown as Schema.Schema<DeleteConsumerResponse>;
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "DeleteConsumerResponse" }) as unknown as Schema.Schema<DeleteConsumerResponse>;
 
 export const deleteConsumer: (
-  input: DeleteConsumerRequest,
+  input: DeleteConsumerRequest
 ) => Effect.Effect<
   DeleteConsumerResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: DeleteConsumerRequest,
   output: DeleteConsumerResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404))],
 }));
 
 export interface QueuesPushMessageRequest {
@@ -1788,175 +890,92 @@ export const QueuesPushMessageRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-    delay_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
-  }).pipe(T.HttpBody()),
-})
-  .pipe(T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages" }))
-  .annotations({
-    identifier: "QueuesPushMessageRequest",
-  }) as unknown as Schema.Schema<QueuesPushMessageRequest>;
+  delay_seconds: Schema.optional(Schema.NullOr(Schema.Number))
+}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages" }),
+).annotations({ identifier: "QueuesPushMessageRequest" }) as unknown as Schema.Schema<QueuesPushMessageRequest>;
 
 export interface QueuesPushMessageResponse {
   result: unknown | null;
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const QueuesPushMessageResponse = Schema.Struct({
   result: Schema.NullOr(Schema.Unknown),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "QueuesPushMessageResponse",
-}) as unknown as Schema.Schema<QueuesPushMessageResponse>;
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "QueuesPushMessageResponse" }) as unknown as Schema.Schema<QueuesPushMessageResponse>;
 
 export const queuesPushMessage: (
-  input: QueuesPushMessageRequest,
+  input: QueuesPushMessageRequest
 ) => Effect.Effect<
   QueuesPushMessageResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | ValidationError
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPushMessageRequest,
   output: QueuesPushMessageResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-    ValidationError.pipe(T.HttpErrorCode(10021)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)), ValidationError.pipe(T.HttpErrorCode(10021))],
 }));
 
 export interface QueuesAckMessagesRequest {
   queue_id: string;
   account_id: string;
-  body: {
-    acks?: { lease_id?: string }[];
-    retries?: { delay_seconds?: number; lease_id?: string }[];
-  };
+  body: { acks?: { lease_id?: string }[]; retries?: { delay_seconds?: number; lease_id?: string }[] };
 }
 
 export const QueuesAckMessagesRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-    acks: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Struct({
-            lease_id: Schema.optional(Schema.NullOr(Schema.String)),
-          }),
-        ),
-      ),
-    ),
-    retries: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Struct({
-            delay_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
-            lease_id: Schema.optional(Schema.NullOr(Schema.String)),
-          }),
-        ),
-      ),
-    ),
-  }).pipe(T.HttpBody()),
-})
-  .pipe(T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages/ack" }))
-  .annotations({
-    identifier: "QueuesAckMessagesRequest",
-  }) as unknown as Schema.Schema<QueuesAckMessagesRequest>;
+  acks: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  lease_id: Schema.optional(Schema.NullOr(Schema.String))
+})))),
+  retries: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  delay_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  lease_id: Schema.optional(Schema.NullOr(Schema.String))
+}))))
+}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages/ack" }),
+).annotations({ identifier: "QueuesAckMessagesRequest" }) as unknown as Schema.Schema<QueuesAckMessagesRequest>;
 
 export interface QueuesAckMessagesResponse {
   result: { ackCount?: number; retryCount?: number; warnings?: string[] };
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const QueuesAckMessagesResponse = Schema.Struct({
   result: Schema.Struct({
-    ackCount: Schema.optional(Schema.NullOr(Schema.Number)),
-    retryCount: Schema.optional(Schema.NullOr(Schema.Number)),
-    warnings: Schema.optional(Schema.NullOr(Schema.Array(Schema.String))),
-  }),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "QueuesAckMessagesResponse",
-}) as unknown as Schema.Schema<QueuesAckMessagesResponse>;
+  ackCount: Schema.optional(Schema.NullOr(Schema.Number)),
+  retryCount: Schema.optional(Schema.NullOr(Schema.Number)),
+  warnings: Schema.optional(Schema.NullOr(Schema.Array(Schema.String)))
+}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "QueuesAckMessagesResponse" }) as unknown as Schema.Schema<QueuesAckMessagesResponse>;
 
 export const queuesAckMessages: (
-  input: QueuesAckMessagesRequest,
+  input: QueuesAckMessagesRequest
 ) => Effect.Effect<
   QueuesAckMessagesResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | ValidationError
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesAckMessagesRequest,
   output: QueuesAckMessagesResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-    ValidationError.pipe(T.HttpErrorCode(10021)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)), ValidationError.pipe(T.HttpErrorCode(10021))],
 }));
 
 export interface QueuesPushMessagesRequest {
@@ -1969,81 +988,41 @@ export const QueuesPushMessagesRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-    delay_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
-    messages: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Struct({
-            delay_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
-          }),
-        ),
-      ),
-    ),
-  }).pipe(T.HttpBody()),
-})
-  .pipe(T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages/batch" }))
-  .annotations({
-    identifier: "QueuesPushMessagesRequest",
-  }) as unknown as Schema.Schema<QueuesPushMessagesRequest>;
+  delay_seconds: Schema.optional(Schema.NullOr(Schema.Number)),
+  messages: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  delay_seconds: Schema.optional(Schema.NullOr(Schema.Number))
+}))))
+}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages/batch" }),
+).annotations({ identifier: "QueuesPushMessagesRequest" }) as unknown as Schema.Schema<QueuesPushMessagesRequest>;
 
 export interface QueuesPushMessagesResponse {
   result: unknown | null;
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const QueuesPushMessagesResponse = Schema.Struct({
   result: Schema.NullOr(Schema.Unknown),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "QueuesPushMessagesResponse",
-}) as unknown as Schema.Schema<QueuesPushMessagesResponse>;
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "QueuesPushMessagesResponse" }) as unknown as Schema.Schema<QueuesPushMessagesResponse>;
 
 export const queuesPushMessages: (
-  input: QueuesPushMessagesRequest,
+  input: QueuesPushMessagesRequest
 ) => Effect.Effect<
   QueuesPushMessagesResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | ValidationError
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | ValidationError | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPushMessagesRequest,
   output: QueuesPushMessagesResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-    ValidationError.pipe(T.HttpErrorCode(10021)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)), ValidationError.pipe(T.HttpErrorCode(10021))],
 }));
 
 export interface QueuesPullMessagesRequest {
@@ -2056,97 +1035,49 @@ export const QueuesPullMessagesRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-    batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
-    visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-  }).pipe(T.HttpBody()),
-})
-  .pipe(T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages/pull" }))
-  .annotations({
-    identifier: "QueuesPullMessagesRequest",
-  }) as unknown as Schema.Schema<QueuesPullMessagesRequest>;
+  batch_size: Schema.optional(Schema.NullOr(Schema.Number)),
+  visibility_timeout_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/messages/pull" }),
+).annotations({ identifier: "QueuesPullMessagesRequest" }) as unknown as Schema.Schema<QueuesPullMessagesRequest>;
 
 export interface QueuesPullMessagesResponse {
-  result: {
-    message_backlog_count?: number;
-    messages?: {
-      attempts?: number;
-      body?: string;
-      id?: string;
-      lease_id?: string;
-      metadata?: Record<string, unknown>;
-      timestamp_ms?: number;
-    }[];
-  };
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result: { message_backlog_count?: number; messages?: { attempts?: number; body?: string; id?: string; lease_id?: string; metadata?: Record<string, unknown>; timestamp_ms?: number }[] };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const QueuesPullMessagesResponse = Schema.Struct({
   result: Schema.Struct({
-    message_backlog_count: Schema.optional(Schema.NullOr(Schema.Number)),
-    messages: Schema.optional(
-      Schema.NullOr(
-        Schema.Array(
-          Schema.Struct({
-            attempts: Schema.optional(Schema.NullOr(Schema.Number)),
-            body: Schema.optional(Schema.NullOr(Schema.String)),
-            id: Schema.optional(Schema.NullOr(Schema.String)),
-            lease_id: Schema.optional(Schema.NullOr(Schema.String)),
-            metadata: Schema.optional(Schema.NullOr(Schema.Struct({}))),
-            timestamp_ms: Schema.optional(Schema.NullOr(Schema.Number)),
-          }),
-        ),
-      ),
-    ),
-  }),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "QueuesPullMessagesResponse",
-}) as unknown as Schema.Schema<QueuesPullMessagesResponse>;
+  message_backlog_count: Schema.optional(Schema.NullOr(Schema.Number)),
+  messages: Schema.optional(Schema.NullOr(Schema.Array(Schema.Struct({
+  attempts: Schema.optional(Schema.NullOr(Schema.Number)),
+  body: Schema.optional(Schema.NullOr(Schema.String)),
+  id: Schema.optional(Schema.NullOr(Schema.String)),
+  lease_id: Schema.optional(Schema.NullOr(Schema.String)),
+  metadata: Schema.optional(Schema.NullOr(Schema.Struct({}))),
+  timestamp_ms: Schema.optional(Schema.NullOr(Schema.Number))
+}))))
+}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "QueuesPullMessagesResponse" }) as unknown as Schema.Schema<QueuesPullMessagesResponse>;
 
 export const queuesPullMessages: (
-  input: QueuesPullMessagesRequest,
+  input: QueuesPullMessagesRequest
 ) => Effect.Effect<
   QueuesPullMessagesResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPullMessagesRequest,
   output: QueuesPullMessagesResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404))],
 }));
 
 export interface Get_1Request {
@@ -2156,66 +1087,40 @@ export interface Get_1Request {
 
 export const Get_1Request = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
-  account_id: Schema.String.pipe(T.HttpPath("account_id")),
-})
-  .pipe(T.Http({ method: "GET", path: "/accounts/{account_id}/queues/{queue_id}/purge" }))
-  .annotations({ identifier: "Get_1Request" }) as unknown as Schema.Schema<Get_1Request>;
+  account_id: Schema.String.pipe(T.HttpPath("account_id"))
+}).pipe(
+  T.Http({ method: "GET", path: "/accounts/{account_id}/queues/{queue_id}/purge" }),
+).annotations({ identifier: "Get_1Request" }) as unknown as Schema.Schema<Get_1Request>;
 
 export interface Get_1Response {
   result: { completed?: string; started_at?: string };
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const Get_1Response = Schema.Struct({
   result: Schema.Struct({
-    completed: Schema.optional(Schema.NullOr(Schema.String)),
-    started_at: Schema.optional(Schema.NullOr(Schema.String)),
-  }),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
+  completed: Schema.optional(Schema.NullOr(Schema.String)),
+  started_at: Schema.optional(Schema.NullOr(Schema.String))
+}),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
 }).annotations({ identifier: "Get_1Response" }) as unknown as Schema.Schema<Get_1Response>;
 
 export const get_1: (
-  input: Get_1Request,
+  input: Get_1Request
 ) => Effect.Effect<
   Get_1Response,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: Get_1Request,
   output: Get_1Response,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000))],
 }));
 
 export interface QueuesPurgeRequest {
@@ -2228,68 +1133,36 @@ export const QueuesPurgeRequest = Schema.Struct({
   queue_id: Schema.String.pipe(T.HttpPath("queue_id")),
   account_id: Schema.String.pipe(T.HttpPath("account_id")),
   body: Schema.Struct({
-    delete_messages_permanently: Schema.optional(Schema.NullOr(Schema.Boolean)),
-  }).pipe(T.HttpBody()),
-})
-  .pipe(T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/purge" }))
-  .annotations({
-    identifier: "QueuesPurgeRequest",
-  }) as unknown as Schema.Schema<QueuesPurgeRequest>;
+  delete_messages_permanently: Schema.optional(Schema.NullOr(Schema.Boolean))
+}).pipe(T.HttpBody())
+}).pipe(
+  T.Http({ method: "POST", path: "/accounts/{account_id}/queues/{queue_id}/purge" }),
+).annotations({ identifier: "QueuesPurgeRequest" }) as unknown as Schema.Schema<QueuesPurgeRequest>;
 
 export interface QueuesPurgeResponse {
   result: Record<string, unknown>;
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const QueuesPurgeResponse = Schema.Struct({
   result: Schema.Struct({}),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
-}).annotations({
-  identifier: "QueuesPurgeResponse",
-}) as unknown as Schema.Schema<QueuesPurgeResponse>;
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
+}).annotations({ identifier: "QueuesPurgeResponse" }) as unknown as Schema.Schema<QueuesPurgeResponse>;
 
 export const queuesPurge: (
-  input: QueuesPurgeRequest,
+  input: QueuesPurgeRequest
 ) => Effect.Effect<
   QueuesPurgeResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | QueueNotFound
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | QueueNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: QueuesPurgeRequest,
   output: QueuesPurgeResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-    QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), QueueNotFound.pipe(T.HttpErrorCodes([11000, 10004]), T.HttpErrorStatus(404))],
 }));

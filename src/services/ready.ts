@@ -23,13 +23,10 @@ import {
 // Errors
 // =============================================================================
 
-export class AuthenticationError extends Schema.TaggedError<AuthenticationError>()(
-  "AuthenticationError",
-  {
-    code: Schema.Number,
-    message: Schema.String,
-  },
-).pipe(C.withAuthError) {
+export class AuthenticationError extends Schema.TaggedError<AuthenticationError>()("AuthenticationError", {
+  code: Schema.Number,
+  message: Schema.String,
+}).pipe(C.withAuthError) {
   static readonly _tag = "AuthenticationError";
 }
 
@@ -75,62 +72,40 @@ export class Unauthorized extends Schema.TaggedError<Unauthorized>()("Unauthoriz
   static readonly _tag = "Unauthorized";
 }
 
-export interface GetReadyRequest {}
 
-export const GetReadyRequest = Schema.Struct({})
-  .pipe(T.Http({ method: "GET", path: "/ready" }))
-  .annotations({ identifier: "GetReadyRequest" }) as unknown as Schema.Schema<GetReadyRequest>;
+export interface GetReadyRequest {
+}
+
+export const GetReadyRequest = Schema.Struct({
+
+}).pipe(
+  T.Http({ method: "GET", path: "/ready" }),
+).annotations({ identifier: "GetReadyRequest" }) as unknown as Schema.Schema<GetReadyRequest>;
 
 export interface GetReadyResponse {
   result: unknown | null;
-  result_info?: {
-    page?: number;
-    per_page?: number;
-    count?: number;
-    total_count?: number;
-    cursor?: string;
-  };
+  result_info?: { page?: number; per_page?: number; count?: number; total_count?: number; cursor?: string };
 }
 
 export const GetReadyResponse = Schema.Struct({
   result: Schema.NullOr(Schema.Unknown),
-  result_info: Schema.optional(
-    Schema.Struct({
-      page: Schema.optional(Schema.Number),
-      per_page: Schema.optional(Schema.Number),
-      count: Schema.optional(Schema.Number),
-      total_count: Schema.optional(Schema.Number),
-      cursor: Schema.optional(Schema.String),
-    }),
-  ),
+  result_info: Schema.optional(Schema.Struct({
+    page: Schema.optional(Schema.Number),
+    per_page: Schema.optional(Schema.Number),
+    count: Schema.optional(Schema.Number),
+    total_count: Schema.optional(Schema.Number),
+    cursor: Schema.optional(Schema.String),
+  })),
 }).annotations({ identifier: "GetReadyResponse" }) as unknown as Schema.Schema<GetReadyResponse>;
 
 export const getReady: (
-  input: GetReadyRequest,
+  input: GetReadyRequest
 ) => Effect.Effect<
   GetReadyResponse,
-  | RateLimited
-  | TooManyRequests
-  | AuthenticationError
-  | InvalidToken
-  | MissingToken
-  | TokenExpired
-  | Unauthorized
-  | CloudflareError
-  | UnknownCloudflareError
-  | CloudflareNetworkError
-  | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetReadyRequest,
   output: GetReadyResponse,
-  errors: [
-    RateLimited.pipe(T.HttpErrorCode(971)),
-    TooManyRequests.pipe(T.HttpErrorCode(6100)),
-    AuthenticationError.pipe(T.HttpErrorCode(10000)),
-    InvalidToken.pipe(T.HttpErrorCode(9103)),
-    MissingToken.pipe(T.HttpErrorCode(9106)),
-    TokenExpired.pipe(T.HttpErrorCode(9109)),
-    Unauthorized.pipe(T.HttpErrorCode(9000)),
-  ],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000))],
 }));

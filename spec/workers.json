@@ -18,7 +18,7 @@
     "Unauthorized": { "code": 9000, "categories": ["AuthError"] }
   },
   "operations": {
-    "listScripts": { "errors": {} },
+    "listScripts": { "errors": { "NamespaceNotFound": {} } },
     "workerScriptUploadWorkerModule": {
       "errors": {
         "InvalidWorkerName": {},
@@ -66,11 +66,13 @@
     },
     "getScriptSettings": {
       "errors": {
+        "NamespaceNotFound": {},
         "WorkerNotFound": {}
       }
     },
     "patchScriptSettings": {
       "errors": {
+        "NamespaceNotFound": {},
         "WorkerNotFound": {},
         "ValidationError": {},
         "BindingNotFound": {},
@@ -120,12 +122,14 @@
     },
     "putScriptTags": {
       "errors": {
+        "NamespaceNotFound": {},
         "WorkerNotFound": {},
         "ValidationError": {}
       }
     },
     "deleteScriptTag": {
       "errors": {
+        "NamespaceNotFound": {},
         "WorkerNotFound": {}
       }
     },
@@ -226,6 +230,88 @@
     },
     "deleteWorker1": {
       "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "patchNamespace": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "putNamespace": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "namespaceWorkerScriptUploadWorkerModule": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "InvalidWorkerName": {},
+        "NoEventHandlers": {},
+        "ValidationError": {}
+      }
+    },
+    "namespaceWorkerScriptWorkerDetails": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteWorker": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "WorkerNotFound": {}
+      }
+    },
+    "putScriptTag": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteScriptSecret": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "WorkerNotFound": {}
+      }
+    },
+    "putScriptContent": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "InvalidWorkerName": {},
+        "NoEventHandlers": {},
+        "ValidationError": {}
+      }
+    },
+    "getAccountsAccountIdWorkersScriptsScriptNameTails": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteScripts": {
+      "errors": {
+        "WorkerNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "listworkerversions": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "getworkerversion": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "createAssetsUploadSession1": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "createAssetsUploadSession": {
+      "errors": {
+        "NamespaceNotFound": {},
         "WorkerNotFound": {}
       }
     }
