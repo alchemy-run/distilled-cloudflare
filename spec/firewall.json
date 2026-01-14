@@ -1,0 +1,116 @@
+{
+  "errors": {},
+  "operations": {
+    "createAUserAgentBlockingRule": {
+      "errors": {}
+    },
+    "createAWafOverride": {
+      "errors": {}
+    },
+    "createAZoneLockdownRule": {
+      "errors": {}
+    },
+    "createAnIpAccessRule": {
+      "errors": {}
+    },
+    "createFirewallRules": {
+      "errors": {}
+    },
+    "deleteAFirewallRule": {
+      "errors": {}
+    },
+    "deleteAUserAgentBlockingRule": {
+      "errors": {}
+    },
+    "deleteAWafOverride": {
+      "errors": {}
+    },
+    "deleteAZoneLockdownRule": {
+      "errors": {}
+    },
+    "deleteAnIpAccessRule": {
+      "errors": {}
+    },
+    "deleteFirewallRules": {
+      "errors": {}
+    },
+    "getAFirewallRule": {
+      "errors": {}
+    },
+    "getAUserAgentBlockingRule": {
+      "errors": {}
+    },
+    "getAWafOverride": {
+      "errors": {}
+    },
+    "getAWafPackage": {
+      "errors": {}
+    },
+    "getAWafRule": {
+      "errors": {}
+    },
+    "getAWafRuleGroup": {
+      "errors": {}
+    },
+    "getAZoneLockdownRule": {
+      "errors": {}
+    },
+    "listFirewallRules": {
+      "errors": {}
+    },
+    "listIpAccessRules": {
+      "errors": {}
+    },
+    "listUserAgentBlockingRules": {
+      "errors": {}
+    },
+    "listWafOverrides": {
+      "errors": {}
+    },
+    "listWafPackages": {
+      "errors": {}
+    },
+    "listWafRuleGroups": {
+      "errors": {}
+    },
+    "listWafRules": {
+      "errors": {}
+    },
+    "listZoneLockdownRules": {
+      "errors": {}
+    },
+    "updateAFirewallRule": {
+      "errors": {}
+    },
+    "updateAUserAgentBlockingRule": {
+      "errors": {}
+    },
+    "updateAWafPackage": {
+      "errors": {}
+    },
+    "updateAWafRule": {
+      "errors": {}
+    },
+    "updateAWafRuleGroup": {
+      "errors": {}
+    },
+    "updateAZoneLockdownRule": {
+      "errors": {}
+    },
+    "updateAnIpAccessRule": {
+      "errors": {}
+    },
+    "updateFirewallRules": {
+      "errors": {}
+    },
+    "updatePriorityOfAFirewallRule": {
+      "errors": {}
+    },
+    "updatePriorityOfFirewallRules": {
+      "errors": {}
+    },
+    "updateWafOverride": {
+      "errors": {}
+    }
+  }
+}

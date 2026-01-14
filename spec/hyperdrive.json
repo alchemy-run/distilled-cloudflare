@@ -1,0 +1,23 @@
+{
+  "errors": {},
+  "operations": {
+    "createHyperdrive": {
+      "errors": {}
+    },
+    "deleteHyperdrive": {
+      "errors": {}
+    },
+    "getHyperdrive": {
+      "errors": {}
+    },
+    "listHyperdrive": {
+      "errors": {}
+    },
+    "patchHyperdrive": {
+      "errors": {}
+    },
+    "updateHyperdrive": {
+      "errors": {}
+    }
+  }
+}

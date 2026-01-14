@@ -1,19 +1,76 @@
 {
   "errors": {
-    "NamespaceNameRequired": { "code": 10019, "categories": ["BadRequestError"] },
-    "NamespaceNotFound": { "code": 10013, "status": 404, "categories": ["NotFoundError"] },
-    "ParseError": { "code": 6008, "categories": ["BadRequestError"] },
-    "ValidationError": { "code": 10021, "categories": ["BadRequestError"] },
-    "RateLimited": { "code": 971, "categories": ["ThrottlingError", "RetryableError"] },
-    "TooManyRequests": { "code": 6100, "categories": ["ThrottlingError", "RetryableError"] },
-    "AuthenticationError": { "code": 10000, "categories": ["AuthError"] },
-    "InvalidToken": { "code": 9103, "categories": ["AuthError"] },
-    "MissingToken": { "code": 9106, "categories": ["AuthError"] },
-    "TokenExpired": { "code": 9109, "categories": ["AuthError"] },
-    "Unauthorized": { "code": 9000, "categories": ["AuthError"] }
+    "NamespaceNameRequired": {
+      "code": 10019,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "NamespaceNotFound": {
+      "code": 10013,
+      "status": 404,
+      "categories": [
+        "NotFoundError"
+      ]
+    },
+    "ParseError": {
+      "code": 6008,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "ValidationError": {
+      "code": 10021,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "RateLimited": {
+      "code": 971,
+      "categories": [
+        "ThrottlingError",
+        "RetryableError"
+      ]
+    },
+    "TooManyRequests": {
+      "code": 6100,
+      "categories": [
+        "ThrottlingError",
+        "RetryableError"
+      ]
+    },
+    "AuthenticationError": {
+      "code": 10000,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "InvalidToken": {
+      "code": 9103,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "MissingToken": {
+      "code": 9106,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "TokenExpired": {
+      "code": 9109,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "Unauthorized": {
+      "code": 9000,
+      "categories": [
+        "AuthError"
+      ]
+    }
   },
   "operations": {
-    "listNamespaces": { "errors": {} },
     "createANamespace": {
       "errors": {
         "NamespaceNameRequired": {},
@@ -21,7 +78,45 @@
         "ValidationError": {}
       }
     },
+    "deleteKeyValuePair": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "deleteMultipleKeyValuePairs": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "deleteMultipleKeyValuePairsDeprecated": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
     "getANamespace": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "getMultipleKeyValuePairs": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "listANamespaceSKeys": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "listNamespaces": {
+      "errors": {}
+    },
+    "workersKvNamespaceReadKeyValuePair": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "workersKvNamespaceReadTheMetadataForAKey": {
       "errors": {
         "NamespaceNotFound": {}
       }
@@ -37,51 +132,16 @@
         "NamespaceNameRequired": {}
       }
     },
-    "listANamespaceSKeys": {
-      "errors": {
-        "NamespaceNotFound": {}
-      }
-    },
-    "workersKvNamespaceReadKeyValuePair": {
-      "errors": {
-        "NamespaceNotFound": {}
-      }
-    },
     "workersKvNamespaceWriteKeyValuePairWithMetadata": {
       "errors": {
         "NamespaceNotFound": {},
         "ValidationError": {}
       }
     },
-    "deleteKeyValuePair": {
-      "errors": {
-        "NamespaceNotFound": {}
-      }
-    },
     "workersKvNamespaceWriteMultipleKeyValuePairs": {
       "errors": {
         "NamespaceNotFound": {},
         "ValidationError": {}
-      }
-    },
-    "deleteMultipleKeyValuePairs": {
-      "errors": {
-        "NamespaceNotFound": {}
-      }
-    },
-    "deleteMultipleKeyValuePairsDeprecated": {
-      "errors": {
-        "NamespaceNotFound": {}
-      }
-    },
-    "getMultipleKeyValuePairs": {
-      "errors": {
-        "NamespaceNotFound": {}
-      }
-    },
-    "workersKvNamespaceReadTheMetadataForAKey": {
-      "errors": {
-        "NamespaceNotFound": {}
       }
     }
   }

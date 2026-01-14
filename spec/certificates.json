@@ -1,0 +1,17 @@
+{
+  "errors": {},
+  "operations": {
+    "createCertificate": {
+      "errors": {}
+    },
+    "getCertificate": {
+      "errors": {}
+    },
+    "listCertificates": {
+      "errors": {}
+    },
+    "originCaRevokeCertificate": {
+      "errors": {}
+    }
+  }
+}

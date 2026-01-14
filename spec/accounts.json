@@ -1,0 +1,3893 @@
+{
+  "errors": {},
+  "operations": {
+    "accountApiTokensRollToken": {
+      "errors": {}
+    },
+    "accountApiTokensTokenDetails": {
+      "errors": {}
+    },
+    "accountApiTokensVerifyToken": {
+      "errors": {}
+    },
+    "accountBillingProfileDeprecatedBillingProfileDetails": {
+      "errors": {}
+    },
+    "accountCreation": {
+      "errors": {}
+    },
+    "accountDeletion": {
+      "errors": {}
+    },
+    "accountLevelCustomNameserversAddAccountCustomNameserver": {
+      "errors": {}
+    },
+    "accountLoadBalancerMonitorGroupsMonitorGroupDetails": {
+      "errors": {}
+    },
+    "accountLoadBalancerMonitorsMonitorDetails": {
+      "errors": {}
+    },
+    "accountLoadBalancerMonitorsPreviewMonitor": {
+      "errors": {}
+    },
+    "accountLoadBalancerMonitorsPreviewResult": {
+      "errors": {}
+    },
+    "accountLoadBalancerPoolsPoolDetails": {
+      "errors": {}
+    },
+    "accountLoadBalancerPoolsPoolHealthDetails": {
+      "errors": {}
+    },
+    "accountLoadBalancerPoolsPreviewPool": {
+      "errors": {}
+    },
+    "accountLoadBalancerSearchSearchResources": {
+      "errors": {}
+    },
+    "accountMembersAddMember": {
+      "errors": {}
+    },
+    "accountMembersMemberDetails": {
+      "errors": {}
+    },
+    "accountMembersRemoveMember": {
+      "errors": {}
+    },
+    "accountPermissionGroupDetails": {
+      "errors": {}
+    },
+    "accountRequestTracerRequestTrace": {
+      "errors": {}
+    },
+    "accountResourceGroupDetails": {
+      "errors": {}
+    },
+    "accountRolesRoleDetails": {
+      "errors": {}
+    },
+    "accountUserGroupDetails": {
+      "errors": {}
+    },
+    "accountsAccountDetails": {
+      "errors": {}
+    },
+    "accountsBatchmoveaccounts": {
+      "errors": {}
+    },
+    "accountsGetaccountprofile": {
+      "errors": {}
+    },
+    "accountsListaccountorganizations": {
+      "errors": {}
+    },
+    "accountsModifyaccountprofile": {
+      "errors": {}
+    },
+    "accountsMoveaccounts": {
+      "errors": {}
+    },
+    "accountsTurnstileWidgetRotateSecret": {
+      "errors": {}
+    },
+    "addParticipant": {
+      "errors": {}
+    },
+    "addwebhook": {
+      "errors": {}
+    },
+    "aiSearchFetchInstances": {
+      "errors": {}
+    },
+    "aiSearchFetchTokens": {
+      "errors": {}
+    },
+    "aiSearchStats": {
+      "errors": {}
+    },
+    "aigConfigFetchDataset": {
+      "errors": {}
+    },
+    "aigConfigFetchEvaluations": {
+      "errors": {}
+    },
+    "aigConfigFetchGateway": {
+      "errors": {}
+    },
+    "archiveSecurityCenterInsight": {
+      "errors": {}
+    },
+    "archiveSecurityCenterInsightDeprecated": {
+      "errors": {}
+    },
+    "autoragConfigAiSearch": {
+      "errors": {}
+    },
+    "autoragConfigFiles": {
+      "errors": {}
+    },
+    "autoragConfigSearch": {
+      "errors": {}
+    },
+    "autoragConfigSync": {
+      "errors": {}
+    },
+    "beginSsoConnectorVerification": {
+      "errors": {}
+    },
+    "bulkcreateprefixes": {
+      "errors": {}
+    },
+    "callsAppsRetrieveAppDetails": {
+      "errors": {}
+    },
+    "callsRetrieveTurnKeyDetails": {
+      "errors": {}
+    },
+    "cancelbuildbyuuid": {
+      "errors": {}
+    },
+    "catalogSyncsRead": {
+      "errors": {}
+    },
+    "catalogSyncsRefresh": {
+      "errors": {}
+    },
+    "cloudflareTunnelCleanUpCloudflareTunnelConnections": {
+      "errors": {}
+    },
+    "cloudforceOnePriorityNew": {
+      "errors": {}
+    },
+    "cloudforceOnePriorityQuota": {
+      "errors": {}
+    },
+    "cloudforceOneRequestAssetNew": {
+      "errors": {}
+    },
+    "cloudforceOneRequestConstants": {
+      "errors": {}
+    },
+    "cloudforceOneRequestMessageNew": {
+      "errors": {}
+    },
+    "cloudforceOneRequestNew": {
+      "errors": {}
+    },
+    "cloudforceOneRequestQuota": {
+      "errors": {}
+    },
+    "cloudforceOneRequestTypes": {
+      "errors": {}
+    },
+    "create": {
+      "errors": {}
+    },
+    "create1": {
+      "errors": {}
+    },
+    "create10": {
+      "errors": {}
+    },
+    "create11": {
+      "errors": {}
+    },
+    "create12": {
+      "errors": {}
+    },
+    "create13": {
+      "errors": {}
+    },
+    "create14": {
+      "errors": {}
+    },
+    "create15": {
+      "errors": {}
+    },
+    "create16": {
+      "errors": {}
+    },
+    "create17": {
+      "errors": {}
+    },
+    "create18": {
+      "errors": {}
+    },
+    "create19": {
+      "errors": {}
+    },
+    "create2": {
+      "errors": {}
+    },
+    "create3": {
+      "errors": {}
+    },
+    "create4": {
+      "errors": {}
+    },
+    "create5": {
+      "errors": {}
+    },
+    "create6": {
+      "errors": {}
+    },
+    "create7": {
+      "errors": {}
+    },
+    "create8": {
+      "errors": {}
+    },
+    "create9": {
+      "errors": {}
+    },
+    "createACloudflareTunnel": {
+      "errors": {}
+    },
+    "createADestinationAddress": {
+      "errors": {}
+    },
+    "createANewApp": {
+      "errors": {}
+    },
+    "createANotificationPolicy": {
+      "errors": {}
+    },
+    "createATunnelRoute": {
+      "errors": {}
+    },
+    "createATunnelRouteWithCidr": {
+      "errors": {}
+    },
+    "createAVirtualNetwork": {
+      "errors": {}
+    },
+    "createAWarpConnectorTunnel": {
+      "errors": {}
+    },
+    "createAWebhook": {
+      "errors": {}
+    },
+    "createAccountConfiguration": {
+      "errors": {}
+    },
+    "createAccountMapping": {
+      "errors": {}
+    },
+    "createAcl": {
+      "errors": {}
+    },
+    "createAcl1": {
+      "errors": {}
+    },
+    "createAddressMap": {
+      "errors": {}
+    },
+    "createAllowPolicy": {
+      "errors": {}
+    },
+    "createAnIpAccessRule": {
+      "errors": {}
+    },
+    "createApp": {
+      "errors": {}
+    },
+    "createBgpPrefix": {
+      "errors": {}
+    },
+    "createBlockedSender": {
+      "errors": {}
+    },
+    "createCni": {
+      "errors": {}
+    },
+    "createCustomProfiles": {
+      "errors": {}
+    },
+    "createDataset": {
+      "errors": {}
+    },
+    "createDeviceDexTest": {
+      "errors": {}
+    },
+    "createDeviceManagedNetwork": {
+      "errors": {}
+    },
+    "createDevicePostureIntegration": {
+      "errors": {}
+    },
+    "createDevicePostureRule": {
+      "errors": {}
+    },
+    "createDeviceSettingsPolicy": {
+      "errors": {}
+    },
+    "createDisplayName": {
+      "errors": {}
+    },
+    "createDnsFirewallCluster": {
+      "errors": {}
+    },
+    "createEntry": {
+      "errors": {}
+    },
+    "createEvaluations": {
+      "errors": {}
+    },
+    "createFinetune": {
+      "errors": {}
+    },
+    "createGateway": {
+      "errors": {}
+    },
+    "createGreTunnels": {
+      "errors": {}
+    },
+    "createIndicatorFeeds": {
+      "errors": {}
+    },
+    "createInstances": {
+      "errors": {}
+    },
+    "createIntegrationEntry": {
+      "errors": {}
+    },
+    "createInterconnect": {
+      "errors": {}
+    },
+    "createInternalDnsViews": {
+      "errors": {}
+    },
+    "createIpsecTunnels": {
+      "errors": {}
+    },
+    "createJob": {
+      "errors": {}
+    },
+    "createJob1": {
+      "errors": {}
+    },
+    "createLan": {
+      "errors": {}
+    },
+    "createMeeting": {
+      "errors": {}
+    },
+    "createMetadataIndex": {
+      "errors": {}
+    },
+    "createMiscategorization": {
+      "errors": {}
+    },
+    "createMonitor": {
+      "errors": {}
+    },
+    "createMonitorGroup": {
+      "errors": {}
+    },
+    "createNetflowConfig": {
+      "errors": {}
+    },
+    "createPacfile": {
+      "errors": {}
+    },
+    "createPcapRequest": {
+      "errors": {}
+    },
+    "createPeer": {
+      "errors": {}
+    },
+    "createPool": {
+      "errors": {}
+    },
+    "createPredefinedEntry": {
+      "errors": {}
+    },
+    "createPredefinedProfile": {
+      "errors": {}
+    },
+    "createPredefinedProfileConfig": {
+      "errors": {}
+    },
+    "createPrefixDelegation": {
+      "errors": {}
+    },
+    "createProviders": {
+      "errors": {}
+    },
+    "createProxyEndpoint": {
+      "errors": {}
+    },
+    "createRoutes": {
+      "errors": {}
+    },
+    "createRule": {
+      "errors": {}
+    },
+    "createRule1": {
+      "errors": {}
+    },
+    "createRules": {
+      "errors": {}
+    },
+    "createScan": {
+      "errors": {}
+    },
+    "createScanBulkV2": {
+      "errors": {}
+    },
+    "createScanV2": {
+      "errors": {}
+    },
+    "createServiceBinding": {
+      "errors": {}
+    },
+    "createSilences": {
+      "errors": {}
+    },
+    "createSite": {
+      "errors": {}
+    },
+    "createSite1": {
+      "errors": {}
+    },
+    "createSubscription": {
+      "errors": {}
+    },
+    "createToken": {
+      "errors": {}
+    },
+    "createTokens": {
+      "errors": {}
+    },
+    "createTrustedDomain": {
+      "errors": {}
+    },
+    "createTsig": {
+      "errors": {}
+    },
+    "createVectorizeIndex": {
+      "errors": {}
+    },
+    "createVectorizeIndex1": {
+      "errors": {}
+    },
+    "createVersion": {
+      "errors": {}
+    },
+    "createWan": {
+      "errors": {}
+    },
+    "createZeroTrustAccount": {
+      "errors": {}
+    },
+    "createZeroTrustCertificate": {
+      "errors": {}
+    },
+    "createZeroTrustGatewayLocation": {
+      "errors": {}
+    },
+    "createZeroTrustGatewayRule": {
+      "errors": {}
+    },
+    "createaccountruleset": {
+      "errors": {}
+    },
+    "createaccountrulesetrule": {
+      "errors": {}
+    },
+    "createallowlistedprefix": {
+      "errors": {}
+    },
+    "createbuildtoken": {
+      "errors": {}
+    },
+    "creatednsprotectionrule": {
+      "errors": {}
+    },
+    "createmanualbuild": {
+      "errors": {}
+    },
+    "createpoll": {
+      "errors": {}
+    },
+    "createprefix": {
+      "errors": {}
+    },
+    "createsynprotectionfilter": {
+      "errors": {}
+    },
+    "createsynprotectionrule": {
+      "errors": {}
+    },
+    "createtcpflowprotectionfilter": {
+      "errors": {}
+    },
+    "createtcpflowprotectionrule": {
+      "errors": {}
+    },
+    "createtrigger": {
+      "errors": {}
+    },
+    "customIndicatorFeedsAddPermission": {
+      "errors": {}
+    },
+    "customIndicatorFeedsDownloadIndicatorFeedData": {
+      "errors": {}
+    },
+    "customIndicatorFeedsRemovePermission": {
+      "errors": {}
+    },
+    "customIndicatorFeedsViewPermissions": {
+      "errors": {}
+    },
+    "deleteACloudflareTunnel": {
+      "errors": {}
+    },
+    "deleteANotificationPolicy": {
+      "errors": {}
+    },
+    "deleteATunnelRoute": {
+      "errors": {}
+    },
+    "deleteATunnelRouteWithCidr": {
+      "errors": {}
+    },
+    "deleteAWarpConnectorTunnel": {
+      "errors": {}
+    },
+    "deleteAWebhook": {
+      "errors": {}
+    },
+    "deleteAccountConfiguration": {
+      "errors": {}
+    },
+    "deleteAccountCustomNameserver": {
+      "errors": {}
+    },
+    "deleteAccountsAccountIdBrandProtectionBrands": {
+      "errors": {}
+    },
+    "deleteAccountsAccountIdBrandProtectionBrandsPatterns": {
+      "errors": {}
+    },
+    "deleteAccountsAccountIdBrandProtectionLogosLogoId": {
+      "errors": {}
+    },
+    "deleteAccountsAccountIdBrandProtectionQueries": {
+      "errors": {}
+    },
+    "deleteAccountsAccountIdLogpushJobsJobId": {
+      "errors": {}
+    },
+    "deleteAccountsAccountIdLogpushValidateDestination": {
+      "errors": {}
+    },
+    "deleteAccountsAccountIdLogpushValidateDestinationExists": {
+      "errors": {}
+    },
+    "deleteAccountsAccountIdLogsControlCmbConfig": {
+      "errors": {}
+    },
+    "deleteAcl": {
+      "errors": {}
+    },
+    "deleteAcl1": {
+      "errors": {}
+    },
+    "deleteAddressMap": {
+      "errors": {}
+    },
+    "deleteAllowPolicy": {
+      "errors": {}
+    },
+    "deleteAnIpAccessRule": {
+      "errors": {}
+    },
+    "deleteApp": {
+      "errors": {}
+    },
+    "deleteApp1": {
+      "errors": {}
+    },
+    "deleteAppConfig": {
+      "errors": {}
+    },
+    "deleteAsn": {
+      "errors": {}
+    },
+    "deleteBatch": {
+      "errors": {}
+    },
+    "deleteBgpPrefix": {
+      "errors": {}
+    },
+    "deleteBlockedSender": {
+      "errors": {}
+    },
+    "deleteBucketsForFullPacketCaptures": {
+      "errors": {}
+    },
+    "deleteBulk": {
+      "errors": {}
+    },
+    "deleteById": {
+      "errors": {}
+    },
+    "deleteById1": {
+      "errors": {}
+    },
+    "deleteCategorydelete": {
+      "errors": {}
+    },
+    "deleteCni": {
+      "errors": {}
+    },
+    "deleteConfig": {
+      "errors": {}
+    },
+    "deleteCustomProfile": {
+      "errors": {}
+    },
+    "deleteDataset": {
+      "errors": {}
+    },
+    "deleteDatasetdelete": {
+      "errors": {}
+    },
+    "deleteDeletescans": {
+      "errors": {}
+    },
+    "deleteDestinationAddress": {
+      "errors": {}
+    },
+    "deleteDevice": {
+      "errors": {}
+    },
+    "deleteDeviceDexTest": {
+      "errors": {}
+    },
+    "deleteDeviceManagedNetwork": {
+      "errors": {}
+    },
+    "deleteDevicePostureIntegration": {
+      "errors": {}
+    },
+    "deleteDevicePostureRule": {
+      "errors": {}
+    },
+    "deleteDeviceSettingsForZeroTrustAccount": {
+      "errors": {}
+    },
+    "deleteDeviceSettingsPolicy": {
+      "errors": {}
+    },
+    "deleteDisplayName": {
+      "errors": {}
+    },
+    "deleteDnsFirewallCluster": {
+      "errors": {}
+    },
+    "deleteDomain": {
+      "errors": {}
+    },
+    "deleteDomains": {
+      "errors": {}
+    },
+    "deleteEntry": {
+      "errors": {}
+    },
+    "deleteEvaluations": {
+      "errors": {}
+    },
+    "deleteEventdelete": {
+      "errors": {}
+    },
+    "deleteEventdeletedo": {
+      "errors": {}
+    },
+    "deleteEventreferencedelete": {
+      "errors": {}
+    },
+    "deleteEventtagdelete": {
+      "errors": {}
+    },
+    "deleteGateway": {
+      "errors": {}
+    },
+    "deleteGatewayDynamicRoute": {
+      "errors": {}
+    },
+    "deleteGatewayLogs": {
+      "errors": {}
+    },
+    "deleteGreTunnel": {
+      "errors": {}
+    },
+    "deleteIndicatordelete": {
+      "errors": {}
+    },
+    "deleteInstances": {
+      "errors": {}
+    },
+    "deleteIntegrationEntry": {
+      "errors": {}
+    },
+    "deleteInterconnect": {
+      "errors": {}
+    },
+    "deleteInternalDnsView": {
+      "errors": {}
+    },
+    "deleteIpsecTunnel": {
+      "errors": {}
+    },
+    "deleteLan": {
+      "errors": {}
+    },
+    "deleteMTlsCertificate": {
+      "errors": {}
+    },
+    "deleteManyRoutes": {
+      "errors": {}
+    },
+    "deleteMeetingParticipant": {
+      "errors": {}
+    },
+    "deleteMetadataIndex": {
+      "errors": {}
+    },
+    "deleteMonitor": {
+      "errors": {}
+    },
+    "deleteMonitorGroup": {
+      "errors": {}
+    },
+    "deleteNetflowConfig": {
+      "errors": {}
+    },
+    "deletePagerDutyServices": {
+      "errors": {}
+    },
+    "deletePeer": {
+      "errors": {}
+    },
+    "deletePool": {
+      "errors": {}
+    },
+    "deletePredefinedEntry": {
+      "errors": {}
+    },
+    "deletePredefinedProfile": {
+      "errors": {}
+    },
+    "deletePrefix": {
+      "errors": {}
+    },
+    "deletePrefixDelegation": {
+      "errors": {}
+    },
+    "deletePresetsPresetId": {
+      "errors": {}
+    },
+    "deleteProviders": {
+      "errors": {}
+    },
+    "deleteProxyEndpoint": {
+      "errors": {}
+    },
+    "deleteRegistration": {
+      "errors": {}
+    },
+    "deleteRegistrations": {
+      "errors": {}
+    },
+    "deleteRoute": {
+      "errors": {}
+    },
+    "deleteRule": {
+      "errors": {}
+    },
+    "deleteRule1": {
+      "errors": {}
+    },
+    "deleteRule2": {
+      "errors": {}
+    },
+    "deleteServiceBinding": {
+      "errors": {}
+    },
+    "deleteSilences": {
+      "errors": {}
+    },
+    "deleteSite": {
+      "errors": {}
+    },
+    "deleteSite1": {
+      "errors": {}
+    },
+    "deleteSsoConnector": {
+      "errors": {}
+    },
+    "deleteSubscription": {
+      "errors": {}
+    },
+    "deleteTagcategorydelete": {
+      "errors": {}
+    },
+    "deleteTagdelete": {
+      "errors": {}
+    },
+    "deleteToken": {
+      "errors": {}
+    },
+    "deleteTokens": {
+      "errors": {}
+    },
+    "deleteTrustedDomain": {
+      "errors": {}
+    },
+    "deleteTsig": {
+      "errors": {}
+    },
+    "deleteTurnKey": {
+      "errors": {}
+    },
+    "deleteVectorizeIndex": {
+      "errors": {}
+    },
+    "deleteVectorizeIndex1": {
+      "errors": {}
+    },
+    "deleteVectorsById": {
+      "errors": {}
+    },
+    "deleteVectorsById1": {
+      "errors": {}
+    },
+    "deleteWan": {
+      "errors": {}
+    },
+    "deleteZeroTrustCertificate": {
+      "errors": {}
+    },
+    "deleteZeroTrustGatewayLocation": {
+      "errors": {}
+    },
+    "deleteZeroTrustGatewayRule": {
+      "errors": {}
+    },
+    "delete_": {
+      "errors": {}
+    },
+    "delete_1": {
+      "errors": {}
+    },
+    "delete_10": {
+      "errors": {}
+    },
+    "delete_11": {
+      "errors": {}
+    },
+    "delete_12": {
+      "errors": {}
+    },
+    "delete_13": {
+      "errors": {}
+    },
+    "delete_14": {
+      "errors": {}
+    },
+    "delete_15": {
+      "errors": {}
+    },
+    "delete_16": {
+      "errors": {}
+    },
+    "delete_17": {
+      "errors": {}
+    },
+    "delete_18": {
+      "errors": {}
+    },
+    "delete_19": {
+      "errors": {}
+    },
+    "delete_2": {
+      "errors": {}
+    },
+    "delete_20": {
+      "errors": {}
+    },
+    "delete_21": {
+      "errors": {}
+    },
+    "delete_22": {
+      "errors": {}
+    },
+    "delete_23": {
+      "errors": {}
+    },
+    "delete_3": {
+      "errors": {}
+    },
+    "delete_4": {
+      "errors": {}
+    },
+    "delete_5": {
+      "errors": {}
+    },
+    "delete_6": {
+      "errors": {}
+    },
+    "delete_7": {
+      "errors": {}
+    },
+    "delete_8": {
+      "errors": {}
+    },
+    "delete_9": {
+      "errors": {}
+    },
+    "deleteaccountruleset": {
+      "errors": {}
+    },
+    "deleteaccountrulesetrule": {
+      "errors": {}
+    },
+    "deleteaccountrulesetversion": {
+      "errors": {}
+    },
+    "deleteallowlistprefix": {
+      "errors": {}
+    },
+    "deleteallowlistprefixesforaccount": {
+      "errors": {}
+    },
+    "deletebuildtoken": {
+      "errors": {}
+    },
+    "deletednsprotectionrule": {
+      "errors": {}
+    },
+    "deletednsprotectionrulesforaccount": {
+      "errors": {}
+    },
+    "deleteenvironmentvariable": {
+      "errors": {}
+    },
+    "deleteprefix": {
+      "errors": {}
+    },
+    "deleteprefixesforaccount": {
+      "errors": {}
+    },
+    "deleterepoconnection": {
+      "errors": {}
+    },
+    "deletesynprotectionfilter": {
+      "errors": {}
+    },
+    "deletesynprotectionfiltersforaccount": {
+      "errors": {}
+    },
+    "deletesynprotectionrule": {
+      "errors": {}
+    },
+    "deletesynprotectionrulesforaccount": {
+      "errors": {}
+    },
+    "deletetcpflowprotectionfilter": {
+      "errors": {}
+    },
+    "deletetcpflowprotectionfiltersforaccount": {
+      "errors": {}
+    },
+    "deletetcpflowprotectionrule": {
+      "errors": {}
+    },
+    "deletetcpflowprotectionrulesforaccount": {
+      "errors": {}
+    },
+    "deletetrigger": {
+      "errors": {}
+    },
+    "deletev4accountsbyaccountIdpipelinesbypipelineNameDeprecated": {
+      "errors": {}
+    },
+    "deletev4accountsbyaccountIdpipelinesv1pipelinesbypipelineId": {
+      "errors": {}
+    },
+    "deletev4accountsbyaccountIdpipelinesv1sinksbysinkId": {
+      "errors": {}
+    },
+    "deletev4accountsbyaccountIdpipelinesv1streamsbystreamId": {
+      "errors": {}
+    },
+    "deletewebhook": {
+      "errors": {}
+    },
+    "deviceDexTestDetails": {
+      "errors": {}
+    },
+    "deviceManagedNetworksDeviceManagedNetworkDetails": {
+      "errors": {}
+    },
+    "devicePostureIntegrationsDevicePostureIntegrationDetails": {
+      "errors": {}
+    },
+    "devicePostureRulesDevicePostureRulesDetails": {
+      "errors": {}
+    },
+    "devicesDeviceDetails": {
+      "errors": {}
+    },
+    "devicesLiveStatus": {
+      "errors": {}
+    },
+    "devicesResilienceRetrieveGlobalWarpOverride": {
+      "errors": {}
+    },
+    "devicesResilienceSetGlobalWarpOverride": {
+      "errors": {}
+    },
+    "devicesRevokeDevices": {
+      "errors": {}
+    },
+    "devicesUnrevokeDevices": {
+      "errors": {}
+    },
+    "dexEndpointsHttpTestDetails": {
+      "errors": {}
+    },
+    "dexEndpointsHttpTestPercentiles": {
+      "errors": {}
+    },
+    "dexEndpointsTestsUniqueDevices": {
+      "errors": {}
+    },
+    "dexEndpointsTracerouteTestDetails": {
+      "errors": {}
+    },
+    "dexEndpointsTracerouteTestNetworkPath": {
+      "errors": {}
+    },
+    "dexEndpointsTracerouteTestPercentiles": {
+      "errors": {}
+    },
+    "dexEndpointsTracerouteTestResultNetworkPath": {
+      "errors": {}
+    },
+    "dexFleetStatusDevices": {
+      "errors": {}
+    },
+    "dexFleetStatusLive": {
+      "errors": {}
+    },
+    "dexFleetStatusOverTime": {
+      "errors": {}
+    },
+    "diagnosticsTraceroute": {
+      "errors": {}
+    },
+    "dlpDatasetsDefineColumns": {
+      "errors": {}
+    },
+    "dlpDatasetsRead": {
+      "errors": {}
+    },
+    "dlpDatasetsReadAll": {
+      "errors": {}
+    },
+    "dlpDatasetsUploadDatasetColumn": {
+      "errors": {}
+    },
+    "dlpDatasetsUploadVersion": {
+      "errors": {}
+    },
+    "dlpDocumentFingerprintsRead": {
+      "errors": {}
+    },
+    "dlpDocumentFingerprintsReadAll": {
+      "errors": {}
+    },
+    "dlpDocumentFingerprintsUpload": {
+      "errors": {}
+    },
+    "dlpPatternValidate": {
+      "errors": {}
+    },
+    "dnsFirewallAnalyticsByTime": {
+      "errors": {}
+    },
+    "dnsFirewallAnalyticsTable": {
+      "errors": {}
+    },
+    "dnsFirewallDnsFirewallClusterDetails": {
+      "errors": {}
+    },
+    "dnsFirewallShowDnsFirewallClusterReverseDns": {
+      "errors": {}
+    },
+    "editParticipant": {
+      "errors": {}
+    },
+    "editwebhook": {
+      "errors": {}
+    },
+    "emailSecurityBatchAllowPolicies": {
+      "errors": {}
+    },
+    "emailSecurityBatchBlockedSenders": {
+      "errors": {}
+    },
+    "emailSecurityBatchSendingDomainRestrictions": {
+      "errors": {}
+    },
+    "emailSecurityBatchTrustedDomains": {
+      "errors": {}
+    },
+    "emailSecurityInvestigate": {
+      "errors": {}
+    },
+    "emailSecuritySubmissions": {
+      "errors": {}
+    },
+    "fetchAllLivestreams": {
+      "errors": {}
+    },
+    "getACloudflareTunnel": {
+      "errors": {}
+    },
+    "getACloudflareTunnelManagementToken": {
+      "errors": {}
+    },
+    "getACloudflareTunnelToken": {
+      "errors": {}
+    },
+    "getACustomPage": {
+      "errors": {}
+    },
+    "getADestinationAddress": {
+      "errors": {}
+    },
+    "getANotificationPolicy": {
+      "errors": {}
+    },
+    "getAWarpConnectorTunnel": {
+      "errors": {}
+    },
+    "getAWarpConnectorTunnelToken": {
+      "errors": {}
+    },
+    "getAWebhook": {
+      "errors": {}
+    },
+    "getAccountAuditLogs": {
+      "errors": {}
+    },
+    "getAccountAuditLogs1": {
+      "errors": {}
+    },
+    "getAccountMapping": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionAlerts": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionBrands": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionBrandsPatterns": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionDomainInfo": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionLogoMatches": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionLogoMatchesDownload": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionLogos": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionLogosLogoId": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionMatches": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionMatchesDownload": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionQueries": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionRecentSubmissions": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionSubmissionInfo": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionTotalQueries": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionTrackedDomains": {
+      "errors": {}
+    },
+    "getAccountsAccountIdBrandProtectionUrlInfo": {
+      "errors": {}
+    },
+    "getAccountsAccountIdLogpushDatasetsDatasetIdFields": {
+      "errors": {}
+    },
+    "getAccountsAccountIdLogpushDatasetsDatasetIdJobs": {
+      "errors": {}
+    },
+    "getAccountsAccountIdLogpushJobs": {
+      "errors": {}
+    },
+    "getAccountsAccountIdLogpushJobsJobId": {
+      "errors": {}
+    },
+    "getAccountsAccountIdLogsControlCmbConfig": {
+      "errors": {}
+    },
+    "getActiveRecording": {
+      "errors": {}
+    },
+    "getAdvertisementStatus": {
+      "errors": {}
+    },
+    "getAlertTypes": {
+      "errors": {}
+    },
+    "getAllMeetings": {
+      "errors": {}
+    },
+    "getAllRecordings": {
+      "errors": {}
+    },
+    "getAllSsoConnectors": {
+      "errors": {}
+    },
+    "getAllowPolicy": {
+      "errors": {}
+    },
+    "getAnIpAccessRule": {
+      "errors": {}
+    },
+    "getApps": {
+      "errors": {}
+    },
+    "getAsnOverview": {
+      "errors": {}
+    },
+    "getAsnSubnets": {
+      "errors": {}
+    },
+    "getAttackerlist": {
+      "errors": {}
+    },
+    "getAuditSshSettings": {
+      "errors": {}
+    },
+    "getBindbgetbinary": {
+      "errors": {}
+    },
+    "getBlockedSender": {
+      "errors": {}
+    },
+    "getBulkOperationStatus": {
+      "errors": {}
+    },
+    "getById": {
+      "errors": {}
+    },
+    "getById1": {
+      "errors": {}
+    },
+    "getById2": {
+      "errors": {}
+    },
+    "getById3": {
+      "errors": {}
+    },
+    "getByReferenceId": {
+      "errors": {}
+    },
+    "getCategorylist": {
+      "errors": {}
+    },
+    "getCategorylistcomplete": {
+      "errors": {}
+    },
+    "getCategoryread": {
+      "errors": {}
+    },
+    "getCloudflareTunnelConnector": {
+      "errors": {}
+    },
+    "getCni": {
+      "errors": {}
+    },
+    "getCommands": {
+      "errors": {}
+    },
+    "getCommandsCommandIdDownloadsFilename": {
+      "errors": {}
+    },
+    "getCommandsEligibleDevices": {
+      "errors": {}
+    },
+    "getCommandsQuota": {
+      "errors": {}
+    },
+    "getConfigfetch": {
+      "errors": {}
+    },
+    "getConfiguration": {
+      "errors": {}
+    },
+    "getConnectivitySettings": {
+      "errors": {}
+    },
+    "getCountryread": {
+      "errors": {}
+    },
+    "getCustomProfile": {
+      "errors": {}
+    },
+    "getDatasetlist": {
+      "errors": {}
+    },
+    "getDatasetread": {
+      "errors": {}
+    },
+    "getDayReport": {
+      "errors": {}
+    },
+    "getDefaultDeviceSettingsPolicy": {
+      "errors": {}
+    },
+    "getDeliveryMechanismEligibility": {
+      "errors": {}
+    },
+    "getDevice": {
+      "errors": {}
+    },
+    "getDeviceDexTest": {
+      "errors": {}
+    },
+    "getDeviceSettingsForZeroTrustAccount": {
+      "errors": {}
+    },
+    "getDeviceSettingsPolicyById": {
+      "errors": {}
+    },
+    "getDisplayName": {
+      "errors": {}
+    },
+    "getDlpEntry": {
+      "errors": {}
+    },
+    "getDlpProfile": {
+      "errors": {}
+    },
+    "getDomain": {
+      "errors": {}
+    },
+    "getDomain1": {
+      "errors": {}
+    },
+    "getDomainDetails": {
+      "errors": {}
+    },
+    "getDomainHistory": {
+      "errors": {}
+    },
+    "getEventNotificationConfig": {
+      "errors": {}
+    },
+    "getEventNotificationConfigs": {
+      "errors": {}
+    },
+    "getEventaggregate": {
+      "errors": {}
+    },
+    "getEventlistget": {
+      "errors": {}
+    },
+    "getEventrawread": {
+      "errors": {}
+    },
+    "getEventrawreadds": {
+      "errors": {}
+    },
+    "getEventread": {
+      "errors": {}
+    },
+    "getEventreaddeprecated": {
+      "errors": {}
+    },
+    "getEventrelationships": {
+      "errors": {}
+    },
+    "getForUser": {
+      "errors": {}
+    },
+    "getFullReport": {
+      "errors": {}
+    },
+    "getGatewayDynamicRoute": {
+      "errors": {}
+    },
+    "getGatewayDynamicRouteVersion": {
+      "errors": {}
+    },
+    "getGatewayLogDetail": {
+      "errors": {}
+    },
+    "getGatewayLogRequest": {
+      "errors": {}
+    },
+    "getGatewayLogResponse": {
+      "errors": {}
+    },
+    "getGatewayUrl": {
+      "errors": {}
+    },
+    "getGetopenports": {
+      "errors": {}
+    },
+    "getIndicatorFeedData": {
+      "errors": {}
+    },
+    "getIndicatorFeedMetadata": {
+      "errors": {}
+    },
+    "getIndicatorFeeds": {
+      "errors": {}
+    },
+    "getIndicatorlist": {
+      "errors": {}
+    },
+    "getIndicatorlistlegacy": {
+      "errors": {}
+    },
+    "getIndicatorread": {
+      "errors": {}
+    },
+    "getIndicatortagslist": {
+      "errors": {}
+    },
+    "getIndicatortypeslist": {
+      "errors": {}
+    },
+    "getInterconnect": {
+      "errors": {}
+    },
+    "getInterconnectLoa": {
+      "errors": {}
+    },
+    "getInterconnectStatus": {
+      "errors": {}
+    },
+    "getInternalDnsView": {
+      "errors": {}
+    },
+    "getIpLists": {
+      "errors": {}
+    },
+    "getIpOverview": {
+      "errors": {}
+    },
+    "getItem": {
+      "errors": {}
+    },
+    "getJob": {
+      "errors": {}
+    },
+    "getJob1": {
+      "errors": {}
+    },
+    "getJob2": {
+      "errors": {}
+    },
+    "getJobLogs": {
+      "errors": {}
+    },
+    "getJobProgress": {
+      "errors": {}
+    },
+    "getLegacyindicatortypeslist": {
+      "errors": {}
+    },
+    "getLists": {
+      "errors": {}
+    },
+    "getLivestreamAnalyticsComplete": {
+      "errors": {}
+    },
+    "getLoggingSettingsForTheZeroTrustAccount": {
+      "errors": {}
+    },
+    "getMTlsCertificate": {
+      "errors": {}
+    },
+    "getMeeting": {
+      "errors": {}
+    },
+    "getMeetingParticipant": {
+      "errors": {}
+    },
+    "getMeetingParticipants": {
+      "errors": {}
+    },
+    "getMessage": {
+      "errors": {}
+    },
+    "getMessageDetections": {
+      "errors": {}
+    },
+    "getMessagePreview": {
+      "errors": {}
+    },
+    "getMessageRaw": {
+      "errors": {}
+    },
+    "getMessageTrace": {
+      "errors": {}
+    },
+    "getModelSchema": {
+      "errors": {}
+    },
+    "getMultipleDomainDetails": {
+      "errors": {}
+    },
+    "getOneRecording": {
+      "errors": {}
+    },
+    "getOrgAnalytics": {
+      "errors": {}
+    },
+    "getPassiveDnsByIp": {
+      "errors": {}
+    },
+    "getPcapRequest": {
+      "errors": {}
+    },
+    "getPhishguardReports": {
+      "errors": {}
+    },
+    "getPredefinedProfile": {
+      "errors": {}
+    },
+    "getPredefinedProfileConfig": {
+      "errors": {}
+    },
+    "getPresets": {
+      "errors": {}
+    },
+    "getPresetsPresetId": {
+      "errors": {}
+    },
+    "getRegion": {
+      "errors": {}
+    },
+    "getRegistration": {
+      "errors": {}
+    },
+    "getRegistrationOverrideCodes": {
+      "errors": {}
+    },
+    "getResponseText": {
+      "errors": {}
+    },
+    "getResponseV2": {
+      "errors": {}
+    },
+    "getRule": {
+      "errors": {}
+    },
+    "getRule1": {
+      "errors": {}
+    },
+    "getScan": {
+      "errors": {}
+    },
+    "getScanDomV2": {
+      "errors": {}
+    },
+    "getScanHar": {
+      "errors": {}
+    },
+    "getScanHarV2": {
+      "errors": {}
+    },
+    "getScanScreenshot": {
+      "errors": {}
+    },
+    "getScanScreenshotV2": {
+      "errors": {}
+    },
+    "getScanV2": {
+      "errors": {}
+    },
+    "getSecurityCenterInsightCountsByClass": {
+      "errors": {}
+    },
+    "getSecurityCenterInsightCountsBySeverity": {
+      "errors": {}
+    },
+    "getSecurityCenterInsightCountsByType": {
+      "errors": {}
+    },
+    "getSecurityCenterInsights": {
+      "errors": {}
+    },
+    "getSecurityCenterIssueCountsByClass": {
+      "errors": {}
+    },
+    "getSecurityCenterIssueCountsBySeverity": {
+      "errors": {}
+    },
+    "getSecurityCenterIssueCountsByType": {
+      "errors": {}
+    },
+    "getSecurityCenterIssueTypes": {
+      "errors": {}
+    },
+    "getSecurityCenterIssues": {
+      "errors": {}
+    },
+    "getServiceBinding": {
+      "errors": {}
+    },
+    "getSettings": {
+      "errors": {}
+    },
+    "getSilence": {
+      "errors": {}
+    },
+    "getSinkholes": {
+      "errors": {}
+    },
+    "getSite": {
+      "errors": {}
+    },
+    "getSlot": {
+      "errors": {}
+    },
+    "getSsoConnector": {
+      "errors": {}
+    },
+    "getTagcategorylist": {
+      "errors": {}
+    },
+    "getTagindicatorslist": {
+      "errors": {}
+    },
+    "getTaglist": {
+      "errors": {}
+    },
+    "getTargetindustrylist": {
+      "errors": {}
+    },
+    "getTargetindustrylistbydataset": {
+      "errors": {}
+    },
+    "getTargetindustrylistcomplete": {
+      "errors": {}
+    },
+    "getToMarkdownSupported": {
+      "errors": {}
+    },
+    "getTrustedDomain": {
+      "errors": {}
+    },
+    "getTunnelRoute": {
+      "errors": {}
+    },
+    "getTunnelRouteByIp": {
+      "errors": {}
+    },
+    "getUsage": {
+      "errors": {}
+    },
+    "getV2ActiveLivestreamSessionDetails": {
+      "errors": {}
+    },
+    "getV2LivestreamSessionLivestreamId": {
+      "errors": {}
+    },
+    "getV2LivestreamsLivestreamSessionId": {
+      "errors": {}
+    },
+    "getV2LivestreamsessionSessionMeetingidActiveLivestream": {
+      "errors": {}
+    },
+    "getV2MeetingsMeetingidActiveLivestream": {
+      "errors": {}
+    },
+    "getVectorizeIndex": {
+      "errors": {}
+    },
+    "getVectorizeIndex1": {
+      "errors": {}
+    },
+    "getVectorsById": {
+      "errors": {}
+    },
+    "getVectorsById1": {
+      "errors": {}
+    },
+    "getWhoisRecord": {
+      "errors": {}
+    },
+    "getZeroTrustAccountConfiguration": {
+      "errors": {}
+    },
+    "getZeroTrustAccountInformation": {
+      "errors": {}
+    },
+    "getZeroTrustCertificateConfiguration": {
+      "errors": {}
+    },
+    "get_": {
+      "errors": {}
+    },
+    "get_1": {
+      "errors": {}
+    },
+    "get_10": {
+      "errors": {}
+    },
+    "get_11": {
+      "errors": {}
+    },
+    "get_12": {
+      "errors": {}
+    },
+    "get_13": {
+      "errors": {}
+    },
+    "get_14": {
+      "errors": {}
+    },
+    "get_15": {
+      "errors": {}
+    },
+    "get_16": {
+      "errors": {}
+    },
+    "get_2": {
+      "errors": {}
+    },
+    "get_3": {
+      "errors": {}
+    },
+    "get_4": {
+      "errors": {}
+    },
+    "get_5": {
+      "errors": {}
+    },
+    "get_6": {
+      "errors": {}
+    },
+    "get_7": {
+      "errors": {}
+    },
+    "get_8": {
+      "errors": {}
+    },
+    "get_9": {
+      "errors": {}
+    },
+    "getabusereport": {
+      "errors": {}
+    },
+    "getaccountentrypointruleset": {
+      "errors": {}
+    },
+    "getaccountentrypointrulesetversion": {
+      "errors": {}
+    },
+    "getaccountlimits": {
+      "errors": {}
+    },
+    "getaccountruleset": {
+      "errors": {}
+    },
+    "getaccountrulesetversion": {
+      "errors": {}
+    },
+    "getactivesession": {
+      "errors": {}
+    },
+    "getallowlistprefix": {
+      "errors": {}
+    },
+    "getallwebhooks": {
+      "errors": {}
+    },
+    "getbuildbyuuid": {
+      "errors": {}
+    },
+    "getbuildlogs": {
+      "errors": {}
+    },
+    "getbuildsbyversionids": {
+      "errors": {}
+    },
+    "getdnsprotectionrule": {
+      "errors": {}
+    },
+    "getlatestbuildsbyscripts": {
+      "errors": {}
+    },
+    "getparticipantdatafrompeerid": {
+      "errors": {}
+    },
+    "getparticipantdetails": {
+      "errors": {}
+    },
+    "getprefix": {
+      "errors": {}
+    },
+    "getprotectionstatus": {
+      "errors": {}
+    },
+    "getsessionchat": {
+      "errors": {}
+    },
+    "getsessiondetails": {
+      "errors": {}
+    },
+    "getsessionparticipants": {
+      "errors": {}
+    },
+    "getsessions": {
+      "errors": {}
+    },
+    "getsessionsummary": {
+      "errors": {}
+    },
+    "getsessiontranscript": {
+      "errors": {}
+    },
+    "getsynprotectionfilter": {
+      "errors": {}
+    },
+    "getsynprotectionrule": {
+      "errors": {}
+    },
+    "gettcpflowprotectionfilter": {
+      "errors": {}
+    },
+    "gettcpflowprotectionrule": {
+      "errors": {}
+    },
+    "getv4accountsbyaccountIdpipelinesDeprecated": {
+      "errors": {}
+    },
+    "getv4accountsbyaccountIdpipelinesbypipelineNameDeprecated": {
+      "errors": {}
+    },
+    "getv4accountsbyaccountIdpipelinesv1pipelines": {
+      "errors": {}
+    },
+    "getv4accountsbyaccountIdpipelinesv1pipelinesbypipelineId": {
+      "errors": {}
+    },
+    "getv4accountsbyaccountIdpipelinesv1sinks": {
+      "errors": {}
+    },
+    "getv4accountsbyaccountIdpipelinesv1sinksbysinkId": {
+      "errors": {}
+    },
+    "getv4accountsbyaccountIdpipelinesv1streams": {
+      "errors": {}
+    },
+    "getv4accountsbyaccountIdpipelinesv1streamsbystreamId": {
+      "errors": {}
+    },
+    "getwebhook": {
+      "errors": {}
+    },
+    "getworkerconfigautofill": {
+      "errors": {}
+    },
+    "initNewSsoConnector": {
+      "errors": {}
+    },
+    "ipAddressManagementAddressMapsAddAZoneMembershipToAnAddressMap": {
+      "errors": {}
+    },
+    "ipAddressManagementAddressMapsAddAnAccountMembershipToAnAddressMap": {
+      "errors": {}
+    },
+    "ipAddressManagementAddressMapsAddAnIpToAnAddressMap": {
+      "errors": {}
+    },
+    "ipAddressManagementAddressMapsAddressMapDetails": {
+      "errors": {}
+    },
+    "ipAddressManagementAddressMapsRemoveAZoneMembershipFromAnAddressMap": {
+      "errors": {}
+    },
+    "ipAddressManagementAddressMapsRemoveAnAccountMembershipFromAnAddressMap": {
+      "errors": {}
+    },
+    "ipAddressManagementAddressMapsRemoveAnIpFromAnAddressMap": {
+      "errors": {}
+    },
+    "ipAddressManagementPrefixesAddPrefix": {
+      "errors": {}
+    },
+    "ipAddressManagementPrefixesDownloadLoaDocument": {
+      "errors": {}
+    },
+    "ipAddressManagementPrefixesFetchBgpPrefix": {
+      "errors": {}
+    },
+    "ipAddressManagementPrefixesPrefixDetails": {
+      "errors": {}
+    },
+    "ipAddressManagementPrefixesUploadLoaDocument": {
+      "errors": {}
+    },
+    "ipAddressManagementPrefixesValidatePrefix": {
+      "errors": {}
+    },
+    "kickallparticipants": {
+      "errors": {}
+    },
+    "kickpartcipants": {
+      "errors": {}
+    },
+    "list": {
+      "errors": {}
+    },
+    "list1": {
+      "errors": {}
+    },
+    "list10": {
+      "errors": {}
+    },
+    "list11": {
+      "errors": {}
+    },
+    "list12": {
+      "errors": {}
+    },
+    "list13": {
+      "errors": {}
+    },
+    "list14": {
+      "errors": {}
+    },
+    "list15": {
+      "errors": {}
+    },
+    "list16": {
+      "errors": {}
+    },
+    "list17": {
+      "errors": {}
+    },
+    "list18": {
+      "errors": {}
+    },
+    "list19": {
+      "errors": {}
+    },
+    "list2": {
+      "errors": {}
+    },
+    "list20": {
+      "errors": {}
+    },
+    "list21": {
+      "errors": {}
+    },
+    "list22": {
+      "errors": {}
+    },
+    "list23": {
+      "errors": {}
+    },
+    "list24": {
+      "errors": {}
+    },
+    "list25": {
+      "errors": {}
+    },
+    "list26": {
+      "errors": {}
+    },
+    "list27": {
+      "errors": {}
+    },
+    "list28": {
+      "errors": {}
+    },
+    "list29": {
+      "errors": {}
+    },
+    "list3": {
+      "errors": {}
+    },
+    "list30": {
+      "errors": {}
+    },
+    "list31": {
+      "errors": {}
+    },
+    "list32": {
+      "errors": {}
+    },
+    "list33": {
+      "errors": {}
+    },
+    "list34": {
+      "errors": {}
+    },
+    "list35": {
+      "errors": {}
+    },
+    "list36": {
+      "errors": {}
+    },
+    "list37": {
+      "errors": {}
+    },
+    "list38": {
+      "errors": {}
+    },
+    "list39": {
+      "errors": {}
+    },
+    "list4": {
+      "errors": {}
+    },
+    "list40": {
+      "errors": {}
+    },
+    "list41": {
+      "errors": {}
+    },
+    "list42": {
+      "errors": {}
+    },
+    "list43": {
+      "errors": {}
+    },
+    "list44": {
+      "errors": {}
+    },
+    "list45": {
+      "errors": {}
+    },
+    "list46": {
+      "errors": {}
+    },
+    "list5": {
+      "errors": {}
+    },
+    "list6": {
+      "errors": {}
+    },
+    "list7": {
+      "errors": {}
+    },
+    "list8": {
+      "errors": {}
+    },
+    "list9": {
+      "errors": {}
+    },
+    "listAcLs": {
+      "errors": {}
+    },
+    "listAccountConfiguration": {
+      "errors": {}
+    },
+    "listAccountCustomNameservers": {
+      "errors": {}
+    },
+    "listAccounts": {
+      "errors": {}
+    },
+    "listAcls": {
+      "errors": {}
+    },
+    "listAddressMaps": {
+      "errors": {}
+    },
+    "listAdminOverrideCodeForDevice": {
+      "errors": {}
+    },
+    "listAllCustomProfiles": {
+      "errors": {}
+    },
+    "listAllEntries": {
+      "errors": {}
+    },
+    "listAllProfiles": {
+      "errors": {}
+    },
+    "listAllRules": {
+      "errors": {}
+    },
+    "listAllTunnels": {
+      "errors": {}
+    },
+    "listAllowPolicies": {
+      "errors": {}
+    },
+    "listAppConfigs": {
+      "errors": {}
+    },
+    "listApplicationAndApplicationTypeMappings": {
+      "errors": {}
+    },
+    "listApps": {
+      "errors": {}
+    },
+    "listAsn": {
+      "errors": {}
+    },
+    "listBgpPrefixes": {
+      "errors": {}
+    },
+    "listBlockedSenders": {
+      "errors": {}
+    },
+    "listCategories": {
+      "errors": {}
+    },
+    "listCloudflareTunnelConnections": {
+      "errors": {}
+    },
+    "listCloudflareTunnels": {
+      "errors": {}
+    },
+    "listCnis": {
+      "errors": {}
+    },
+    "listColos": {
+      "errors": {}
+    },
+    "listCustomPages": {
+      "errors": {}
+    },
+    "listDataset": {
+      "errors": {}
+    },
+    "listDestinationAddresses": {
+      "errors": {}
+    },
+    "listDetails": {
+      "errors": {}
+    },
+    "listDeviceManagedNetworks": {
+      "errors": {}
+    },
+    "listDevicePostureIntegrations": {
+      "errors": {}
+    },
+    "listDevicePostureRules": {
+      "errors": {}
+    },
+    "listDeviceSettingsPolicies": {
+      "errors": {}
+    },
+    "listDevices": {
+      "errors": {}
+    },
+    "listDevices1": {
+      "errors": {}
+    },
+    "listDisplayNames": {
+      "errors": {}
+    },
+    "listDnsFirewallClusters": {
+      "errors": {}
+    },
+    "listDnsSettings": {
+      "errors": {}
+    },
+    "listDomains": {
+      "errors": {}
+    },
+    "listDomains1": {
+      "errors": {}
+    },
+    "listEvaluations": {
+      "errors": {}
+    },
+    "listEvaluators": {
+      "errors": {}
+    },
+    "listFinetunes": {
+      "errors": {}
+    },
+    "listForADeviceSettingsPolicy": {
+      "errors": {}
+    },
+    "listForADeviceSettingsPolicy1": {
+      "errors": {}
+    },
+    "listForADeviceSettingsPolicy2": {
+      "errors": {}
+    },
+    "listForADeviceSettingsPolicy3": {
+      "errors": {}
+    },
+    "listForADeviceSettingsPolicy4": {
+      "errors": {}
+    },
+    "listForADeviceSettingsPolicy5": {
+      "errors": {}
+    },
+    "listGateway": {
+      "errors": {}
+    },
+    "listGatewayDynamicRouteDeployments": {
+      "errors": {}
+    },
+    "listGatewayDynamicRouteVersions": {
+      "errors": {}
+    },
+    "listGatewayDynamicRoutes": {
+      "errors": {}
+    },
+    "listGatewayLogs": {
+      "errors": {}
+    },
+    "listGreTunnelDetails": {
+      "errors": {}
+    },
+    "listGreTunnels": {
+      "errors": {}
+    },
+    "listHistory": {
+      "errors": {}
+    },
+    "listInstances": {
+      "errors": {}
+    },
+    "listInterconnectDetails": {
+      "errors": {}
+    },
+    "listInterconnects": {
+      "errors": {}
+    },
+    "listInterconnects1": {
+      "errors": {}
+    },
+    "listInternalDnsViews": {
+      "errors": {}
+    },
+    "listIpAccessRules": {
+      "errors": {}
+    },
+    "listIpsecTunnelDetails": {
+      "errors": {}
+    },
+    "listIpsecTunnels": {
+      "errors": {}
+    },
+    "listItem": {
+      "errors": {}
+    },
+    "listItems": {
+      "errors": {}
+    },
+    "listItems1": {
+      "errors": {}
+    },
+    "listItems2": {
+      "errors": {}
+    },
+    "listItems3": {
+      "errors": {}
+    },
+    "listItems4": {
+      "errors": {}
+    },
+    "listItems5": {
+      "errors": {}
+    },
+    "listJobLogs": {
+      "errors": {}
+    },
+    "listJobLogs1": {
+      "errors": {}
+    },
+    "listJobs": {
+      "errors": {}
+    },
+    "listJobs1": {
+      "errors": {}
+    },
+    "listJobs2": {
+      "errors": {}
+    },
+    "listLans": {
+      "errors": {}
+    },
+    "listLeases": {
+      "errors": {}
+    },
+    "listMTlsCertificateAssociations": {
+      "errors": {}
+    },
+    "listMTlsCertificates": {
+      "errors": {}
+    },
+    "listMembers": {
+      "errors": {}
+    },
+    "listMetadataIndexes": {
+      "errors": {}
+    },
+    "listMonitorGroupReferences": {
+      "errors": {}
+    },
+    "listMonitorGroups": {
+      "errors": {}
+    },
+    "listMonitorReferences": {
+      "errors": {}
+    },
+    "listMonitors": {
+      "errors": {}
+    },
+    "listNotificationPolicies": {
+      "errors": {}
+    },
+    "listPacketCaptureRequests": {
+      "errors": {}
+    },
+    "listPagerDutyServices": {
+      "errors": {}
+    },
+    "listPcaPsBucketOwnership": {
+      "errors": {}
+    },
+    "listPeers": {
+      "errors": {}
+    },
+    "listPermissionGroups": {
+      "errors": {}
+    },
+    "listPoolReferences": {
+      "errors": {}
+    },
+    "listPools": {
+      "errors": {}
+    },
+    "listPrefixDelegations": {
+      "errors": {}
+    },
+    "listPrefixes": {
+      "errors": {}
+    },
+    "listProviders": {
+      "errors": {}
+    },
+    "listProxyEndpoints": {
+      "errors": {}
+    },
+    "listPublicFinetunes": {
+      "errors": {}
+    },
+    "listRegions": {
+      "errors": {}
+    },
+    "listRegions1": {
+      "errors": {}
+    },
+    "listRegistrations": {
+      "errors": {}
+    },
+    "listRoles": {
+      "errors": {}
+    },
+    "listRoutes": {
+      "errors": {}
+    },
+    "listRules": {
+      "errors": {}
+    },
+    "listRules1": {
+      "errors": {}
+    },
+    "listRulesAndAccountConfiguration": {
+      "errors": {}
+    },
+    "listServiceBindings": {
+      "errors": {}
+    },
+    "listServices": {
+      "errors": {}
+    },
+    "listSilences": {
+      "errors": {}
+    },
+    "listSites": {
+      "errors": {}
+    },
+    "listSites1": {
+      "errors": {}
+    },
+    "listSlots": {
+      "errors": {}
+    },
+    "listSubscriptions": {
+      "errors": {}
+    },
+    "listTestsOverview": {
+      "errors": {}
+    },
+    "listTokens": {
+      "errors": {}
+    },
+    "listTokens1": {
+      "errors": {}
+    },
+    "listTrustedDomains": {
+      "errors": {}
+    },
+    "listTsiGs": {
+      "errors": {}
+    },
+    "listTunnelRoutes": {
+      "errors": {}
+    },
+    "listVectorizeIndexes": {
+      "errors": {}
+    },
+    "listVectorizeIndexes1": {
+      "errors": {}
+    },
+    "listVectors": {
+      "errors": {}
+    },
+    "listVirtualNetworks": {
+      "errors": {}
+    },
+    "listWaitingRoomsAccount": {
+      "errors": {}
+    },
+    "listWans": {
+      "errors": {}
+    },
+    "listWarpChangeEvents": {
+      "errors": {}
+    },
+    "listWarpConnectorTunnels": {
+      "errors": {}
+    },
+    "listWebhooks": {
+      "errors": {}
+    },
+    "listZeroTrustCertificates": {
+      "errors": {}
+    },
+    "listZeroTrustGatewayLocations": {
+      "errors": {}
+    },
+    "listZeroTrustGatewayRules": {
+      "errors": {}
+    },
+    "listZeroTrustGatewayRulesTenant": {
+      "errors": {}
+    },
+    "listZeroTrustLists": {
+      "errors": {}
+    },
+    "listabusereports": {
+      "errors": {}
+    },
+    "listaccountentrypointrulesetversions": {
+      "errors": {}
+    },
+    "listaccountrulesets": {
+      "errors": {}
+    },
+    "listaccountrulesetversionrulesbytag": {
+      "errors": {}
+    },
+    "listaccountrulesetversions": {
+      "errors": {}
+    },
+    "listallowlistprefixesforaccount": {
+      "errors": {}
+    },
+    "listbuildsbyscript": {
+      "errors": {}
+    },
+    "listbuildtokens": {
+      "errors": {}
+    },
+    "listdnsprotectionrulesforaccount": {
+      "errors": {}
+    },
+    "listenvironmentvariables": {
+      "errors": {}
+    },
+    "listmitigations": {
+      "errors": {}
+    },
+    "listprefixesforaccount": {
+      "errors": {}
+    },
+    "listsynprotectionfiltersforaccount": {
+      "errors": {}
+    },
+    "listsynprotectionrulesforaccount": {
+      "errors": {}
+    },
+    "listtcpflowprotectionfiltersforaccount": {
+      "errors": {}
+    },
+    "listtcpflowprotectionrulesforaccount": {
+      "errors": {}
+    },
+    "listtriggersbyscript": {
+      "errors": {}
+    },
+    "livestreamSessionDetails": {
+      "errors": {}
+    },
+    "mTlsCertificateManagementUploadMTlsCertificate": {
+      "errors": {}
+    },
+    "magicAccountAppsAddApp": {
+      "errors": {}
+    },
+    "magicIpsecTunnelsGeneratePreSharedKeyPskForIpsecTunnels": {
+      "errors": {}
+    },
+    "magicNetworkMonitoringVpcFlowsGenerateAuthenticationToken": {
+      "errors": {}
+    },
+    "magicPcapCollectionAddBucketsForFullPacketCaptures": {
+      "errors": {}
+    },
+    "magicPcapCollectionDownloadSimplePcap": {
+      "errors": {}
+    },
+    "magicPcapCollectionStopFullPcap": {
+      "errors": {}
+    },
+    "magicPcapCollectionValidateBucketsForFullPacketCaptures": {
+      "errors": {}
+    },
+    "magicSiteAclsAclDetails": {
+      "errors": {}
+    },
+    "magicSiteAppConfigsAddAppConfig": {
+      "errors": {}
+    },
+    "magicSiteLansLanDetails": {
+      "errors": {}
+    },
+    "magicSiteNetflowConfigDetails": {
+      "errors": {}
+    },
+    "magicSiteWansWanDetails": {
+      "errors": {}
+    },
+    "magicSitesSiteDetails": {
+      "errors": {}
+    },
+    "magicStaticRoutesRouteDetails": {
+      "errors": {}
+    },
+    "mconnConnectorFetch": {
+      "errors": {}
+    },
+    "mconnConnectorReplace": {
+      "errors": {}
+    },
+    "mconnConnectorTelemetryEventsListlatest": {
+      "errors": {}
+    },
+    "mconnConnectorTelemetrySnapshotsListlatest": {
+      "errors": {}
+    },
+    "muteallparticipants": {
+      "errors": {}
+    },
+    "muteparticipants": {
+      "errors": {}
+    },
+    "notificationDestinationsWithPagerDutyConnectPagerDuty": {
+      "errors": {}
+    },
+    "notificationDestinationsWithPagerDutyConnectPagerDutyToken": {
+      "errors": {}
+    },
+    "onrampsApply": {
+      "errors": {}
+    },
+    "onrampsExport": {
+      "errors": {}
+    },
+    "onrampsMwanAddrSpaceRead": {
+      "errors": {}
+    },
+    "onrampsPlan": {
+      "errors": {}
+    },
+    "onrampsRead": {
+      "errors": {}
+    },
+    "patch": {
+      "errors": {}
+    },
+    "patch1": {
+      "errors": {}
+    },
+    "patch2": {
+      "errors": {}
+    },
+    "patch3": {
+      "errors": {}
+    },
+    "patch4": {
+      "errors": {}
+    },
+    "patchAccountsAccountIdBrandProtectionAlerts": {
+      "errors": {}
+    },
+    "patchAccountsAccountIdBrandProtectionAlertsClear": {
+      "errors": {}
+    },
+    "patchAccountsAccountIdBrandProtectionAlertsRefute": {
+      "errors": {}
+    },
+    "patchAccountsAccountIdBrandProtectionAlertsVerify": {
+      "errors": {}
+    },
+    "patchAccountsAccountIdBrandProtectionClear": {
+      "errors": {}
+    },
+    "patchAccountsAccountIdBrandProtectionQueries": {
+      "errors": {}
+    },
+    "patchAccountsAccountIdBrandProtectionRefute": {
+      "errors": {}
+    },
+    "patchAccountsAccountIdBrandProtectionVerify": {
+      "errors": {}
+    },
+    "patchAcl": {
+      "errors": {}
+    },
+    "patchApp": {
+      "errors": {}
+    },
+    "patchAppConfig": {
+      "errors": {}
+    },
+    "patchById": {
+      "errors": {}
+    },
+    "patchCategoryupdate": {
+      "errors": {}
+    },
+    "patchConnectivitySettings": {
+      "errors": {}
+    },
+    "patchDatasetupdate": {
+      "errors": {}
+    },
+    "patchDeviceSettingsForTheZeroTrustAccount": {
+      "errors": {}
+    },
+    "patchEventrawupdate": {
+      "errors": {}
+    },
+    "patchEventupdate": {
+      "errors": {}
+    },
+    "patchGatewayLog": {
+      "errors": {}
+    },
+    "patchIndicatorupdate": {
+      "errors": {}
+    },
+    "patchLan": {
+      "errors": {}
+    },
+    "patchMonitor": {
+      "errors": {}
+    },
+    "patchMonitorGroup": {
+      "errors": {}
+    },
+    "patchNetflowConfig": {
+      "errors": {}
+    },
+    "patchPool": {
+      "errors": {}
+    },
+    "patchPools": {
+      "errors": {}
+    },
+    "patchPresetsPresetId": {
+      "errors": {}
+    },
+    "patchSite": {
+      "errors": {}
+    },
+    "patchTagcategoryupdate": {
+      "errors": {}
+    },
+    "patchTagupdate": {
+      "errors": {}
+    },
+    "patchWan": {
+      "errors": {}
+    },
+    "patchZeroTrustAccountConfiguration": {
+      "errors": {}
+    },
+    "patchv4accountsbyaccountIdpipelinesv1streamsbystreamId": {
+      "errors": {}
+    },
+    "pauseResumeStopRecording": {
+      "errors": {}
+    },
+    "payPerCrawlcrawlercreatestripeconfig": {
+      "errors": {}
+    },
+    "payPerCrawlcrawlerdeletestripeconfig": {
+      "errors": {}
+    },
+    "payPerCrawlcrawlergetstripeconfig": {
+      "errors": {}
+    },
+    "payPerCrawlpublishercreatestripeconfig": {
+      "errors": {}
+    },
+    "payPerCrawlpublisherdeletestripeconfig": {
+      "errors": {}
+    },
+    "payPerCrawlpublishergetstripeconfig": {
+      "errors": {}
+    },
+    "payPerCrawlqueryzonescanbeenabled": {
+      "errors": {}
+    },
+    "payPerCrawlsetzonescanbeenabled": {
+      "errors": {}
+    },
+    "post": {
+      "errors": {}
+    },
+    "post1": {
+      "errors": {}
+    },
+    "post2": {
+      "errors": {}
+    },
+    "post3": {
+      "errors": {}
+    },
+    "postAccountsAccountIdBrandProtectionBrands": {
+      "errors": {}
+    },
+    "postAccountsAccountIdBrandProtectionBrandsPatterns": {
+      "errors": {}
+    },
+    "postAccountsAccountIdBrandProtectionLogos": {
+      "errors": {}
+    },
+    "postAccountsAccountIdBrandProtectionQueries": {
+      "errors": {}
+    },
+    "postAccountsAccountIdBrandProtectionQueriesBulk": {
+      "errors": {}
+    },
+    "postAccountsAccountIdBrandProtectionScanLogo": {
+      "errors": {}
+    },
+    "postAccountsAccountIdBrandProtectionScanPage": {
+      "errors": {}
+    },
+    "postAccountsAccountIdBrandProtectionSearch": {
+      "errors": {}
+    },
+    "postAccountsAccountIdBrandProtectionSubmit": {
+      "errors": {}
+    },
+    "postAccountsAccountIdLogpushJobs": {
+      "errors": {}
+    },
+    "postAccountsAccountIdLogpushOwnership": {
+      "errors": {}
+    },
+    "postAccountsAccountIdLogpushOwnershipValidate": {
+      "errors": {}
+    },
+    "postAccountsAccountIdLogpushValidateOrigin": {
+      "errors": {}
+    },
+    "postAccountsAccountIdLogsControlCmbConfig": {
+      "errors": {}
+    },
+    "postAccountsAccountIdRealtimeKitAppIdLivestreams": {
+      "errors": {}
+    },
+    "postBindbpost": {
+      "errors": {}
+    },
+    "postBulkMessageMove": {
+      "errors": {}
+    },
+    "postCategorycreate": {
+      "errors": {}
+    },
+    "postCategoryupdate": {
+      "errors": {}
+    },
+    "postCommands": {
+      "errors": {}
+    },
+    "postConfigcreate": {
+      "errors": {}
+    },
+    "postConfigupdate": {
+      "errors": {}
+    },
+    "postContent": {
+      "errors": {}
+    },
+    "postCreateeventrelationship": {
+      "errors": {}
+    },
+    "postDatasetcreate": {
+      "errors": {}
+    },
+    "postDatasetpopulate": {
+      "errors": {}
+    },
+    "postDatasetupdate": {
+      "errors": {}
+    },
+    "postDoseventcreatebulkwithrelationships": {
+      "errors": {}
+    },
+    "postEventcreate": {
+      "errors": {}
+    },
+    "postEventcreatebulk": {
+      "errors": {}
+    },
+    "postEventdorevert": {
+      "errors": {}
+    },
+    "postEventgraphql": {
+      "errors": {}
+    },
+    "postEventmovetonewds": {
+      "errors": {}
+    },
+    "postEventrawupdate": {
+      "errors": {}
+    },
+    "postEventreferencecreate": {
+      "errors": {}
+    },
+    "postEventtagcreate": {
+      "errors": {}
+    },
+    "postEventupdate": {
+      "errors": {}
+    },
+    "postGatewayDynamicRoute": {
+      "errors": {}
+    },
+    "postGatewayDynamicRouteDeployment": {
+      "errors": {}
+    },
+    "postGatewayDynamicRouteVersion": {
+      "errors": {}
+    },
+    "postIndicatorcreate": {
+      "errors": {}
+    },
+    "postIndicatorcreatebulk": {
+      "errors": {}
+    },
+    "postIndicatortypecreate": {
+      "errors": {}
+    },
+    "postJson": {
+      "errors": {}
+    },
+    "postLinks": {
+      "errors": {}
+    },
+    "postMarkdown": {
+      "errors": {}
+    },
+    "postMessageMove": {
+      "errors": {}
+    },
+    "postPdf": {
+      "errors": {}
+    },
+    "postPresets": {
+      "errors": {}
+    },
+    "postPreview": {
+      "errors": {}
+    },
+    "postReclassify": {
+      "errors": {}
+    },
+    "postRelease": {
+      "errors": {}
+    },
+    "postRunCfAi4bharatIndictrans2EnIndic1b": {
+      "errors": {}
+    },
+    "postRunCfAisingaporeGemmaSeaLionV427bIt": {
+      "errors": {}
+    },
+    "postRunCfBaaiBgeBaseEnV15": {
+      "errors": {}
+    },
+    "postRunCfBaaiBgeLargeEnV15": {
+      "errors": {}
+    },
+    "postRunCfBaaiBgeM3": {
+      "errors": {}
+    },
+    "postRunCfBaaiBgeRerankerBase": {
+      "errors": {}
+    },
+    "postRunCfBaaiBgeSmallEnV15": {
+      "errors": {}
+    },
+    "postRunCfBaaiOmniBgeBaseEnV15": {
+      "errors": {}
+    },
+    "postRunCfBaaiOmniBgeLargeEnV15": {
+      "errors": {}
+    },
+    "postRunCfBaaiOmniBgeM3": {
+      "errors": {}
+    },
+    "postRunCfBaaiOmniBgeSmallEnV15": {
+      "errors": {}
+    },
+    "postRunCfBaaiRayBgeLargeEnV15": {
+      "errors": {}
+    },
+    "postRunCfBlackForestLabsFlux1Schnell": {
+      "errors": {}
+    },
+    "postRunCfBlackForestLabsFlux2Dev": {
+      "errors": {}
+    },
+    "postRunCfBytedanceStableDiffusionXlLightning": {
+      "errors": {}
+    },
+    "postRunCfDeepgramAura1": {
+      "errors": {}
+    },
+    "postRunCfDeepgramAura2En": {
+      "errors": {}
+    },
+    "postRunCfDeepgramAura2Es": {
+      "errors": {}
+    },
+    "postRunCfDeepgramFlux": {
+      "errors": {}
+    },
+    "postRunCfDeepgramNova3": {
+      "errors": {}
+    },
+    "postRunCfDeepseekAiDeepseekMath7bInstruct": {
+      "errors": {}
+    },
+    "postRunCfDeepseekAiDeepseekR1DistillQwen32b": {
+      "errors": {}
+    },
+    "postRunCfDefogSqlcoder7b2": {
+      "errors": {}
+    },
+    "postRunCfFacebookBartLargeCnn": {
+      "errors": {}
+    },
+    "postRunCfFacebookOmniBartLargeCnn": {
+      "errors": {}
+    },
+    "postRunCfFacebookOmniDetrResnet50": {
+      "errors": {}
+    },
+    "postRunCfFblgitUnaCybertron7bV2Bf16": {
+      "errors": {}
+    },
+    "postRunCfGoogleEmbeddinggemma300m": {
+      "errors": {}
+    },
+    "postRunCfGoogleGemma2bItLora": {
+      "errors": {}
+    },
+    "postRunCfGoogleGemma312bIt": {
+      "errors": {}
+    },
+    "postRunCfGoogleGemma7bItLora": {
+      "errors": {}
+    },
+    "postRunCfGoogleOmniEmbeddinggemma300m": {
+      "errors": {}
+    },
+    "postRunCfHuggingfaceDistilbertSst2Int8": {
+      "errors": {}
+    },
+    "postRunCfHuggingfaceOmniDistilbertSst2Int8": {
+      "errors": {}
+    },
+    "postRunCfIbmGraniteGranite40HMicro": {
+      "errors": {}
+    },
+    "postRunCfLeonardoLucidOrigin": {
+      "errors": {}
+    },
+    "postRunCfLeonardoPhoenix10": {
+      "errors": {}
+    },
+    "postRunCfLykonDreamshaper8Lcm": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama27bChatFp16": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama27bChatInt8": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama3170bInstructFp8Fast": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama318bInstructAwq": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama318bInstructFp8": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama318bInstructFp8Fast": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama3211bVisionInstruct": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama321bInstruct": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama323bInstruct": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama3370bInstructFp8Fast": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama38bInstruct": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama38bInstructAwq": {
+      "errors": {}
+    },
+    "postRunCfMetaLlama4Scout17b16eInstruct": {
+      "errors": {}
+    },
+    "postRunCfMetaLlamaGuard38b": {
+      "errors": {}
+    },
+    "postRunCfMetaLlamaLlama27bChatHfLora": {
+      "errors": {}
+    },
+    "postRunCfMetaM2m10012b": {
+      "errors": {}
+    },
+    "postRunCfMicrosoftPhi2": {
+      "errors": {}
+    },
+    "postRunCfMicrosoftResnet50": {
+      "errors": {}
+    },
+    "postRunCfMistralMistral7bInstructV01": {
+      "errors": {}
+    },
+    "postRunCfMistralMistral7bInstructV02Lora": {
+      "errors": {}
+    },
+    "postRunCfMistralaiMistralSmall3124bInstruct": {
+      "errors": {}
+    },
+    "postRunCfMyshellAiMelotts": {
+      "errors": {}
+    },
+    "postRunCfOpenaiGptOss120b": {
+      "errors": {}
+    },
+    "postRunCfOpenaiGptOss20b": {
+      "errors": {}
+    },
+    "postRunCfOpenaiWhisper": {
+      "errors": {}
+    },
+    "postRunCfOpenaiWhisperLargeV3Turbo": {
+      "errors": {}
+    },
+    "postRunCfOpenaiWhisperTinyEn": {
+      "errors": {}
+    },
+    "postRunCfOpenchatOpenchat350106": {
+      "errors": {}
+    },
+    "postRunCfPfnetPlamoEmbedding1b": {
+      "errors": {}
+    },
+    "postRunCfQwenQwen1505bChat": {
+      "errors": {}
+    },
+    "postRunCfQwenQwen1514bChatAwq": {
+      "errors": {}
+    },
+    "postRunCfQwenQwen1518bChat": {
+      "errors": {}
+    },
+    "postRunCfQwenQwen157bChatAwq": {
+      "errors": {}
+    },
+    "postRunCfQwenQwen25Coder32bInstruct": {
+      "errors": {}
+    },
+    "postRunCfQwenQwen330bA3bFp8": {
+      "errors": {}
+    },
+    "postRunCfQwenQwen3Embedding06b": {
+      "errors": {}
+    },
+    "postRunCfQwenQwq32b": {
+      "errors": {}
+    },
+    "postRunCfRunwaymlStableDiffusionV15Img2img": {
+      "errors": {}
+    },
+    "postRunCfRunwaymlStableDiffusionV15Inpainting": {
+      "errors": {}
+    },
+    "postRunCfStabilityaiStableDiffusionXlBase10": {
+      "errors": {}
+    },
+    "postRunCfTheblokeDiscolmGerman7bV1Awq": {
+      "errors": {}
+    },
+    "postRunCfTiiuaeFalcon7bInstruct": {
+      "errors": {}
+    },
+    "postRunCfTinyllamaTinyllama11bChatV10": {
+      "errors": {}
+    },
+    "postRunHfGoogleGemma7bIt": {
+      "errors": {}
+    },
+    "postRunHfMistralMistral7bInstructV02": {
+      "errors": {}
+    },
+    "postRunHfNexusflowStarlingLm7bBeta": {
+      "errors": {}
+    },
+    "postRunHfNousresearchHermes2ProMistral7b": {
+      "errors": {}
+    },
+    "postRunHfTheblokeDeepseekCoder67bBaseAwq": {
+      "errors": {}
+    },
+    "postRunHfTheblokeDeepseekCoder67bInstructAwq": {
+      "errors": {}
+    },
+    "postRunHfTheblokeLlama213bChatAwq": {
+      "errors": {}
+    },
+    "postRunHfTheblokeLlamaguard7bAwq": {
+      "errors": {}
+    },
+    "postRunHfTheblokeMistral7bInstructV01Awq": {
+      "errors": {}
+    },
+    "postRunHfTheblokeNeuralChat7bV31Awq": {
+      "errors": {}
+    },
+    "postRunHfTheblokeOpenhermes25Mistral7bAwq": {
+      "errors": {}
+    },
+    "postRunHfTheblokeZephyr7bBetaAwq": {
+      "errors": {}
+    },
+    "postRunModel": {
+      "errors": {}
+    },
+    "postScrape": {
+      "errors": {}
+    },
+    "postScreenshot": {
+      "errors": {}
+    },
+    "postSessionsSessionIdSummary": {
+      "errors": {}
+    },
+    "postSnapshot": {
+      "errors": {}
+    },
+    "postTagcategorycreate": {
+      "errors": {}
+    },
+    "postTagcreate": {
+      "errors": {}
+    },
+    "postToMarkdown": {
+      "errors": {}
+    },
+    "postWebsocketRunCfDeepgramAura": {
+      "errors": {}
+    },
+    "postWebsocketRunCfDeepgramAura1": {
+      "errors": {}
+    },
+    "postWebsocketRunCfDeepgramAura1Internal": {
+      "errors": {}
+    },
+    "postWebsocketRunCfDeepgramAura2": {
+      "errors": {}
+    },
+    "postWebsocketRunCfDeepgramAura2En": {
+      "errors": {}
+    },
+    "postWebsocketRunCfDeepgramAura2Es": {
+      "errors": {}
+    },
+    "postWebsocketRunCfDeepgramFlux": {
+      "errors": {}
+    },
+    "postWebsocketRunCfDeepgramNova3": {
+      "errors": {}
+    },
+    "postWebsocketRunCfDeepgramNova3Internal": {
+      "errors": {}
+    },
+    "postWebsocketRunCfPipecatAiSmartTurnV2": {
+      "errors": {}
+    },
+    "postWebsocketRunCfPipecatAiSmartTurnV3": {
+      "errors": {}
+    },
+    "postWebsocketRunCfSvenTestPipeHttp": {
+      "errors": {}
+    },
+    "postv4accountsbyaccountIdpipelinesDeprecated": {
+      "errors": {}
+    },
+    "postv4accountsbyaccountIdpipelinesv1pipelines": {
+      "errors": {}
+    },
+    "postv4accountsbyaccountIdpipelinesv1sinks": {
+      "errors": {}
+    },
+    "postv4accountsbyaccountIdpipelinesv1streams": {
+      "errors": {}
+    },
+    "postv4accountsbyaccountIdpipelinesv1validateSql": {
+      "errors": {}
+    },
+    "providersDiscover": {
+      "errors": {}
+    },
+    "providersDiscoverAll": {
+      "errors": {}
+    },
+    "providersInitialSetup": {
+      "errors": {}
+    },
+    "providersRead": {
+      "errors": {}
+    },
+    "purgebuildcache": {
+      "errors": {}
+    },
+    "put": {
+      "errors": {}
+    },
+    "put1": {
+      "errors": {}
+    },
+    "put2": {
+      "errors": {}
+    },
+    "put3": {
+      "errors": {}
+    },
+    "putAccountsAccountIdLogpushJobsJobId": {
+      "errors": {}
+    },
+    "putBatch": {
+      "errors": {}
+    },
+    "putConfiguration": {
+      "errors": {}
+    },
+    "putEventNotificationConfig": {
+      "errors": {}
+    },
+    "putv4accountsbyaccountIdpipelinesbypipelineNameDeprecated": {
+      "errors": {}
+    },
+    "regenerateToken": {
+      "errors": {}
+    },
+    "replaceMeeting": {
+      "errors": {}
+    },
+    "replacewebhook": {
+      "errors": {}
+    },
+    "requestreview": {
+      "errors": {}
+    },
+    "resourcesCatalogExport": {
+      "errors": {}
+    },
+    "resourcesCatalogPolicyPreview": {
+      "errors": {}
+    },
+    "resourcesCatalogRead": {
+      "errors": {}
+    },
+    "revokeDevice": {
+      "errors": {}
+    },
+    "revokeRegistrations": {
+      "errors": {}
+    },
+    "secondaryDnsAclAclDetails": {
+      "errors": {}
+    },
+    "secondaryDnsPeerPeerDetails": {
+      "errors": {}
+    },
+    "secondaryDnsTsigTsigDetails": {
+      "errors": {}
+    },
+    "secretsStoreDuplicateById": {
+      "errors": {}
+    },
+    "secretsStoreQuota": {
+      "errors": {}
+    },
+    "slurperAbortAllJobs": {
+      "errors": {}
+    },
+    "slurperAbortJob": {
+      "errors": {}
+    },
+    "slurperCheckSourceConnectivity": {
+      "errors": {}
+    },
+    "slurperCheckTargetConnectivity": {
+      "errors": {}
+    },
+    "slurperPauseJob": {
+      "errors": {}
+    },
+    "slurperResumeJob": {
+      "errors": {}
+    },
+    "startLivestreaming": {
+      "errors": {}
+    },
+    "startRecording": {
+      "errors": {}
+    },
+    "starttrackrecordingforameeting": {
+      "errors": {}
+    },
+    "stopLivestreaming": {
+      "errors": {}
+    },
+    "submitabusereport": {
+      "errors": {}
+    },
+    "unrevokeRegistrations": {
+      "errors": {}
+    },
+    "update": {
+      "errors": {}
+    },
+    "update1": {
+      "errors": {}
+    },
+    "update10": {
+      "errors": {}
+    },
+    "update11": {
+      "errors": {}
+    },
+    "update12": {
+      "errors": {}
+    },
+    "update13": {
+      "errors": {}
+    },
+    "update14": {
+      "errors": {}
+    },
+    "update15": {
+      "errors": {}
+    },
+    "update16": {
+      "errors": {}
+    },
+    "update17": {
+      "errors": {}
+    },
+    "update18": {
+      "errors": {}
+    },
+    "update19": {
+      "errors": {}
+    },
+    "update2": {
+      "errors": {}
+    },
+    "update20": {
+      "errors": {}
+    },
+    "update21": {
+      "errors": {}
+    },
+    "update22": {
+      "errors": {}
+    },
+    "update3": {
+      "errors": {}
+    },
+    "update4": {
+      "errors": {}
+    },
+    "update5": {
+      "errors": {}
+    },
+    "update6": {
+      "errors": {}
+    },
+    "update7": {
+      "errors": {}
+    },
+    "update8": {
+      "errors": {}
+    },
+    "update9": {
+      "errors": {}
+    },
+    "updateACloudflareTunnel": {
+      "errors": {}
+    },
+    "updateACustomPage": {
+      "errors": {}
+    },
+    "updateANotificationPolicy": {
+      "errors": {}
+    },
+    "updateATunnelRoute": {
+      "errors": {}
+    },
+    "updateATunnelRouteWithCidr": {
+      "errors": {}
+    },
+    "updateAWarpConnectorTunnel": {
+      "errors": {}
+    },
+    "updateAWebhook": {
+      "errors": {}
+    },
+    "updateAccount": {
+      "errors": {}
+    },
+    "updateAccountConfigurationFields": {
+      "errors": {}
+    },
+    "updateAcl": {
+      "errors": {}
+    },
+    "updateAcl1": {
+      "errors": {}
+    },
+    "updateAddressMap": {
+      "errors": {}
+    },
+    "updateAdvertisementForRule": {
+      "errors": {}
+    },
+    "updateAllowPolicy": {
+      "errors": {}
+    },
+    "updateAnEntireAccountConfiguration": {
+      "errors": {}
+    },
+    "updateAnIpAccessRule": {
+      "errors": {}
+    },
+    "updateApp": {
+      "errors": {}
+    },
+    "updateAppConfig": {
+      "errors": {}
+    },
+    "updateAppDetails": {
+      "errors": {}
+    },
+    "updateAuditSshSettings": {
+      "errors": {}
+    },
+    "updateBgpPrefix": {
+      "errors": {}
+    },
+    "updateBlockedSender": {
+      "errors": {}
+    },
+    "updateCloudflareSource": {
+      "errors": {}
+    },
+    "updateCni": {
+      "errors": {}
+    },
+    "updateCustomEntry": {
+      "errors": {}
+    },
+    "updateCustomProfile": {
+      "errors": {}
+    },
+    "updateDataset": {
+      "errors": {}
+    },
+    "updateDefaultDeviceSettingsPolicy": {
+      "errors": {}
+    },
+    "updateDeviceDexTest": {
+      "errors": {}
+    },
+    "updateDeviceManagedNetwork": {
+      "errors": {}
+    },
+    "updateDevicePostureIntegration": {
+      "errors": {}
+    },
+    "updateDevicePostureRule": {
+      "errors": {}
+    },
+    "updateDeviceSettingsForTheZeroTrustAccount": {
+      "errors": {}
+    },
+    "updateDeviceSettingsPolicy": {
+      "errors": {}
+    },
+    "updateDisplayName": {
+      "errors": {}
+    },
+    "updateDnsFirewallCluster": {
+      "errors": {}
+    },
+    "updateDnsFirewallClusterReverseDns": {
+      "errors": {}
+    },
+    "updateDnsSettings": {
+      "errors": {}
+    },
+    "updateDomain": {
+      "errors": {}
+    },
+    "updateDomain1": {
+      "errors": {}
+    },
+    "updateEntry": {
+      "errors": {}
+    },
+    "updateGateway": {
+      "errors": {}
+    },
+    "updateGatewayDynamicRoute": {
+      "errors": {}
+    },
+    "updateGreTunnel": {
+      "errors": {}
+    },
+    "updateIndicatorFeedData": {
+      "errors": {}
+    },
+    "updateIndicatorFeedMetadata": {
+      "errors": {}
+    },
+    "updateInstances": {
+      "errors": {}
+    },
+    "updateIntegrationEntry": {
+      "errors": {}
+    },
+    "updateInterconnect": {
+      "errors": {}
+    },
+    "updateInternalDnsView": {
+      "errors": {}
+    },
+    "updateIpsecTunnel": {
+      "errors": {}
+    },
+    "updateLan": {
+      "errors": {}
+    },
+    "updateLoggingSettingsForTheZeroTrustAccount": {
+      "errors": {}
+    },
+    "updateManyRoutes": {
+      "errors": {}
+    },
+    "updateMeeting": {
+      "errors": {}
+    },
+    "updateMember": {
+      "errors": {}
+    },
+    "updateMonitor": {
+      "errors": {}
+    },
+    "updateMonitorGroup": {
+      "errors": {}
+    },
+    "updateMultipleGreTunnels": {
+      "errors": {}
+    },
+    "updateMultipleInterconnects": {
+      "errors": {}
+    },
+    "updateMultipleIpsecTunnels": {
+      "errors": {}
+    },
+    "updateNetflowConfig": {
+      "errors": {}
+    },
+    "updatePeer": {
+      "errors": {}
+    },
+    "updatePool": {
+      "errors": {}
+    },
+    "updatePredefinedEntry": {
+      "errors": {}
+    },
+    "updatePredefinedProfile": {
+      "errors": {}
+    },
+    "updatePredefinedProfileConfig": {
+      "errors": {}
+    },
+    "updatePrefixDescription": {
+      "errors": {}
+    },
+    "updatePrefixDynamicAdvertisementStatus": {
+      "errors": {}
+    },
+    "updateProviders": {
+      "errors": {}
+    },
+    "updateProxyEndpoint": {
+      "errors": {}
+    },
+    "updateRoute": {
+      "errors": {}
+    },
+    "updateRule": {
+      "errors": {}
+    },
+    "updateRule1": {
+      "errors": {}
+    },
+    "updateRule2": {
+      "errors": {}
+    },
+    "updateRulePriorities": {
+      "errors": {}
+    },
+    "updateRules": {
+      "errors": {}
+    },
+    "updateSettings": {
+      "errors": {}
+    },
+    "updateSilences": {
+      "errors": {}
+    },
+    "updateSite": {
+      "errors": {}
+    },
+    "updateSite1": {
+      "errors": {}
+    },
+    "updateSsoConnectorState": {
+      "errors": {}
+    },
+    "updateSubscription": {
+      "errors": {}
+    },
+    "updateToken": {
+      "errors": {}
+    },
+    "updateTokens": {
+      "errors": {}
+    },
+    "updateTrustedDomain": {
+      "errors": {}
+    },
+    "updateTsig": {
+      "errors": {}
+    },
+    "updateTurnKey": {
+      "errors": {}
+    },
+    "updateVectorizeIndex": {
+      "errors": {}
+    },
+    "updateWan": {
+      "errors": {}
+    },
+    "updateZeroTrustAccountConfiguration": {
+      "errors": {}
+    },
+    "updateZeroTrustGatewayLocation": {
+      "errors": {}
+    },
+    "updateZeroTrustGatewayRule": {
+      "errors": {}
+    },
+    "updateaccountentrypointruleset": {
+      "errors": {}
+    },
+    "updateaccountruleset": {
+      "errors": {}
+    },
+    "updateaccountrulesetrule": {
+      "errors": {}
+    },
+    "updateallowlistprefix": {
+      "errors": {}
+    },
+    "updatednsprotectionrule": {
+      "errors": {}
+    },
+    "updateprefix": {
+      "errors": {}
+    },
+    "updateprotectionstatus": {
+      "errors": {}
+    },
+    "updatesynprotectionfilter": {
+      "errors": {}
+    },
+    "updatesynprotectionrule": {
+      "errors": {}
+    },
+    "updatetcpflowprotectionfilter": {
+      "errors": {}
+    },
+    "updatetcpflowprotectionrule": {
+      "errors": {}
+    },
+    "updatetrigger": {
+      "errors": {}
+    },
+    "upsertenvironmentvariables": {
+      "errors": {}
+    },
+    "upsertrepoconnection": {
+      "errors": {}
+    },
+    "urlscannerSearchScans": {
+      "errors": {}
+    },
+    "urlscannerSearchScansV2": {
+      "errors": {}
+    },
+    "vectorizeDeprecatedInsertVector": {
+      "errors": {}
+    },
+    "vectorizeDeprecatedQueryVector": {
+      "errors": {}
+    },
+    "vectorizeDeprecatedUpsertVector": {
+      "errors": {}
+    },
+    "vectorizeIndexInfo": {
+      "errors": {}
+    },
+    "vectorizeInsertVector": {
+      "errors": {}
+    },
+    "vectorizeQueryVector": {
+      "errors": {}
+    },
+    "vectorizeUpsertVector": {
+      "errors": {}
+    },
+    "webAnalyticsModifyRules": {
+      "errors": {}
+    },
+    "workersAiSearchAuthor": {
+      "errors": {}
+    },
+    "workersAiSearchModel": {
+      "errors": {}
+    },
+    "workersAiSearchTask": {
+      "errors": {}
+    },
+    "workersAiUploadFinetuneAsset": {
+      "errors": {}
+    },
+    "zeroTrustCertificatesActivateZeroTrustCertificate": {
+      "errors": {}
+    },
+    "zeroTrustCertificatesDeactivateZeroTrustCertificate": {
+      "errors": {}
+    },
+    "zeroTrustCertificatesZeroTrustCertificateDetails": {
+      "errors": {}
+    },
+    "zeroTrustGatewayLocationsZeroTrustGatewayLocationDetails": {
+      "errors": {}
+    },
+    "zeroTrustGatewayProxyEndpointsProxyEndpointDetails": {
+      "errors": {}
+    },
+    "zeroTrustGatewayRulesResetExpirationZeroTrustGatewayRule": {
+      "errors": {}
+    },
+    "zeroTrustGatewayRulesZeroTrustGatewayRuleDetails": {
+      "errors": {}
+    },
+    "zeroTrustRotateSshAccountSeed": {
+      "errors": {}
+    }
+  }
+}

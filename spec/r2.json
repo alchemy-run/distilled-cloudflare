@@ -1,22 +1,104 @@
 {
   "errors": {
-    "NoSuchBucket": { "code": 10006, "status": 404, "categories": ["NotFoundError"] },
-    "InvalidBucketName": { "code": 10005, "categories": ["BadRequestError"] },
-    "BucketConflict": { "code": 10073, "status": 409, "categories": ["ConflictError"] },
-    "BucketNotEmpty": { "code": 10008, "status": 409, "categories": ["ConflictError"] },
-    "TooManyBuckets": { "code": 10009, "categories": ["QuotaError"] },
-    "NoCorsConfiguration": { "code": 10059, "status": 404, "message": "CORS configuration does not exist", "categories": ["NotFoundError"] },
-    "ValidationError": { "code": 10021, "categories": ["BadRequestError"] },
-    "RateLimited": { "code": 971, "categories": ["ThrottlingError", "RetryableError"] },
-    "TooManyRequests": { "code": 6100, "categories": ["ThrottlingError", "RetryableError"] },
-    "AuthenticationError": { "code": 10000, "categories": ["AuthError"] },
-    "InvalidToken": { "code": 9103, "categories": ["AuthError"] },
-    "MissingToken": { "code": 9106, "categories": ["AuthError"] },
-    "TokenExpired": { "code": 9109, "categories": ["AuthError"] },
-    "Unauthorized": { "code": 9000, "categories": ["AuthError"] }
+    "NoSuchBucket": {
+      "code": 10006,
+      "status": 404,
+      "categories": [
+        "NotFoundError"
+      ]
+    },
+    "InvalidBucketName": {
+      "code": 10005,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "BucketConflict": {
+      "code": 10073,
+      "status": 409,
+      "categories": [
+        "ConflictError"
+      ]
+    },
+    "BucketNotEmpty": {
+      "code": 10008,
+      "status": 409,
+      "categories": [
+        "ConflictError"
+      ]
+    },
+    "TooManyBuckets": {
+      "code": 10009,
+      "categories": [
+        "QuotaError"
+      ]
+    },
+    "NoCorsConfiguration": {
+      "code": 10059,
+      "status": 404,
+      "message": "CORS configuration does not exist",
+      "categories": [
+        "NotFoundError"
+      ]
+    },
+    "ValidationError": {
+      "code": 10021,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "RateLimited": {
+      "code": 971,
+      "categories": [
+        "ThrottlingError",
+        "RetryableError"
+      ]
+    },
+    "TooManyRequests": {
+      "code": 6100,
+      "categories": [
+        "ThrottlingError",
+        "RetryableError"
+      ]
+    },
+    "AuthenticationError": {
+      "code": 10000,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "InvalidToken": {
+      "code": 9103,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "MissingToken": {
+      "code": 9106,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "TokenExpired": {
+      "code": 9109,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "Unauthorized": {
+      "code": 9000,
+      "categories": [
+        "AuthError"
+      ]
+    }
   },
   "operations": {
-    "listBuckets": { "errors": {} },
+    "addCustomDomain": {
+      "errors": {
+        "NoSuchBucket": {},
+        "ValidationError": {}
+      }
+    },
     "createBucket": {
       "errors": {
         "InvalidBucketName": {},
@@ -24,26 +106,13 @@
         "TooManyBuckets": {}
       }
     },
-    "getBucket": {
-      "errors": {
-        "NoSuchBucket": {}
-      }
+    "createTempAccessCredentials": {
+      "errors": {}
     },
     "deleteBucket": {
       "errors": {
         "NoSuchBucket": {},
         "BucketNotEmpty": {}
-      }
-    },
-    "getBucketCorsPolicy": {
-      "errors": {
-        "NoSuchBucket": {},
-        "NoCorsConfiguration": {}
-      }
-    },
-    "putBucketCorsPolicy": {
-      "errors": {
-        "NoSuchBucket": {}
       }
     },
     "deleteBucketCorsPolicy": {
@@ -52,36 +121,17 @@
         "NoCorsConfiguration": {}
       }
     },
-    "getBucketUsage": {
+    "deleteBucketLifecycleConfiguration": {
       "errors": {
         "NoSuchBucket": {}
       }
     },
-    "listCustomDomains": {
-      "errors": {
-        "NoSuchBucket": {}
-      }
-    },
-    "addCustomDomain": {
-      "errors": {
-        "NoSuchBucket": {},
-        "ValidationError": {}
-      }
+    "deleteBucketSippyConfig": {
+      "errors": {}
     },
     "deleteCustomDomain": {
       "errors": {
         "NoSuchBucket": {}
-      }
-    },
-    "getSippy": {
-      "errors": {
-        "NoSuchBucket": {}
-      }
-    },
-    "updateSippy": {
-      "errors": {
-        "NoSuchBucket": {},
-        "ValidationError": {}
       }
     },
     "deleteSippy": {
@@ -89,18 +139,88 @@
         "NoSuchBucket": {}
       }
     },
+    "disableCatalog": {
+      "errors": {}
+    },
+    "enableCatalog": {
+      "errors": {}
+    },
+    "getAccountLevelMetrics": {
+      "errors": {}
+    },
+    "getBucket": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "getBucketCorsPolicy": {
+      "errors": {
+        "NoSuchBucket": {},
+        "NoCorsConfiguration": {}
+      }
+    },
+    "getBucketLifecycleConfiguration": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "getBucketLockConfiguration": {
+      "errors": {}
+    },
+    "getBucketPublicPolicy": {
+      "errors": {}
+    },
+    "getBucketSippyConfig": {
+      "errors": {}
+    },
+    "getBucketUsage": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "getCatalogDetails": {
+      "errors": {}
+    },
+    "getCustomDomainSettings": {
+      "errors": {}
+    },
     "getEventNotifications": {
       "errors": {
         "NoSuchBucket": {}
       }
     },
-    "updateEventNotifications": {
+    "getMaintenanceConfig": {
+      "errors": {}
+    },
+    "getSippy": {
       "errors": {
-        "NoSuchBucket": {},
-        "ValidationError": {}
+        "NoSuchBucket": {}
       }
     },
-    "getBucketLifecycleConfiguration": {
+    "getTableMaintenanceConfig": {
+      "errors": {}
+    },
+    "listBuckets": {
+      "errors": {}
+    },
+    "listCatalogs": {
+      "errors": {}
+    },
+    "listCustomDomains": {
+      "errors": {
+        "NoSuchBucket": {}
+      }
+    },
+    "listNamespaces": {
+      "errors": {}
+    },
+    "listTables": {
+      "errors": {}
+    },
+    "patchBucket": {
+      "errors": {}
+    },
+    "putBucketCorsPolicy": {
       "errors": {
         "NoSuchBucket": {}
       }
@@ -111,10 +231,41 @@
         "ValidationError": {}
       }
     },
-    "deleteBucketLifecycleConfiguration": {
+    "putBucketLockConfiguration": {
+      "errors": {}
+    },
+    "putBucketPublicPolicy": {
+      "errors": {}
+    },
+    "putBucketSippyConfig": {
+      "errors": {}
+    },
+    "r2AddCustomDomain": {
+      "errors": {}
+    },
+    "r2EditCustomDomainSettings": {
+      "errors": {}
+    },
+    "storeCredentials": {
+      "errors": {}
+    },
+    "updateEventNotifications": {
       "errors": {
-        "NoSuchBucket": {}
+        "NoSuchBucket": {},
+        "ValidationError": {}
       }
+    },
+    "updateMaintenanceConfig": {
+      "errors": {}
+    },
+    "updateSippy": {
+      "errors": {
+        "NoSuchBucket": {},
+        "ValidationError": {}
+      }
+    },
+    "updateTableMaintenanceConfig": {
+      "errors": {}
     }
   }
 }

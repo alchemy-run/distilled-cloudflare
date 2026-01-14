@@ -1,0 +1,788 @@
+{
+  "errors": {},
+  "operations": {
+    "getAiBotsSummary": {
+      "errors": {}
+    },
+    "getAiBotsSummaryByUserAgent": {
+      "errors": {}
+    },
+    "getAiBotsTimeseries": {
+      "errors": {}
+    },
+    "getAiBotsTimeseriesGroup": {
+      "errors": {}
+    },
+    "getAiBotsTimeseriesGroupByUserAgent": {
+      "errors": {}
+    },
+    "getAiInferenceSummary": {
+      "errors": {}
+    },
+    "getAiInferenceSummaryByModel": {
+      "errors": {}
+    },
+    "getAiInferenceSummaryByTask": {
+      "errors": {}
+    },
+    "getAiInferenceTimeseriesGroup": {
+      "errors": {}
+    },
+    "getAiInferenceTimeseriesGroupByModel": {
+      "errors": {}
+    },
+    "getAiInferenceTimeseriesGroupByTask": {
+      "errors": {}
+    },
+    "getAnnotations": {
+      "errors": {}
+    },
+    "getAnnotationsOutages": {
+      "errors": {}
+    },
+    "getAnnotationsOutagesTop": {
+      "errors": {}
+    },
+    "getAsnsAsSet": {
+      "errors": {}
+    },
+    "getAsnsRel": {
+      "errors": {}
+    },
+    "getAttacksLayer3Summary": {
+      "errors": {}
+    },
+    "getAttacksLayer3SummaryByBitrate": {
+      "errors": {}
+    },
+    "getAttacksLayer3SummaryByDuration": {
+      "errors": {}
+    },
+    "getAttacksLayer3SummaryByIndustry": {
+      "errors": {}
+    },
+    "getAttacksLayer3SummaryByIpVersion": {
+      "errors": {}
+    },
+    "getAttacksLayer3SummaryByProtocol": {
+      "errors": {}
+    },
+    "getAttacksLayer3SummaryByVector": {
+      "errors": {}
+    },
+    "getAttacksLayer3SummaryByVertical": {
+      "errors": {}
+    },
+    "getAttacksLayer3TimeseriesByBytes": {
+      "errors": {}
+    },
+    "getAttacksLayer3TimeseriesGroup": {
+      "errors": {}
+    },
+    "getAttacksLayer3TimeseriesGroupByBitrate": {
+      "errors": {}
+    },
+    "getAttacksLayer3TimeseriesGroupByDuration": {
+      "errors": {}
+    },
+    "getAttacksLayer3TimeseriesGroupByIndustry": {
+      "errors": {}
+    },
+    "getAttacksLayer3TimeseriesGroupByIpVersion": {
+      "errors": {}
+    },
+    "getAttacksLayer3TimeseriesGroupByProtocol": {
+      "errors": {}
+    },
+    "getAttacksLayer3TimeseriesGroupByVector": {
+      "errors": {}
+    },
+    "getAttacksLayer3TimeseriesGroupByVertical": {
+      "errors": {}
+    },
+    "getAttacksLayer3TopAttacks": {
+      "errors": {}
+    },
+    "getAttacksLayer3TopIndustries": {
+      "errors": {}
+    },
+    "getAttacksLayer3TopOriginLocations": {
+      "errors": {}
+    },
+    "getAttacksLayer3TopTargetLocations": {
+      "errors": {}
+    },
+    "getAttacksLayer3TopVerticals": {
+      "errors": {}
+    },
+    "getAttacksLayer7Summary": {
+      "errors": {}
+    },
+    "getAttacksLayer7SummaryByHttpMethod": {
+      "errors": {}
+    },
+    "getAttacksLayer7SummaryByHttpVersion": {
+      "errors": {}
+    },
+    "getAttacksLayer7SummaryByIndustry": {
+      "errors": {}
+    },
+    "getAttacksLayer7SummaryByIpVersion": {
+      "errors": {}
+    },
+    "getAttacksLayer7SummaryByManagedRules": {
+      "errors": {}
+    },
+    "getAttacksLayer7SummaryByMitigationProduct": {
+      "errors": {}
+    },
+    "getAttacksLayer7SummaryByVertical": {
+      "errors": {}
+    },
+    "getAttacksLayer7Timeseries": {
+      "errors": {}
+    },
+    "getAttacksLayer7TimeseriesGroup": {
+      "errors": {}
+    },
+    "getAttacksLayer7TimeseriesGroupByHttpMethod": {
+      "errors": {}
+    },
+    "getAttacksLayer7TimeseriesGroupByHttpVersion": {
+      "errors": {}
+    },
+    "getAttacksLayer7TimeseriesGroupByIndustry": {
+      "errors": {}
+    },
+    "getAttacksLayer7TimeseriesGroupByIpVersion": {
+      "errors": {}
+    },
+    "getAttacksLayer7TimeseriesGroupByManagedRules": {
+      "errors": {}
+    },
+    "getAttacksLayer7TimeseriesGroupByMitigationProduct": {
+      "errors": {}
+    },
+    "getAttacksLayer7TimeseriesGroupByVertical": {
+      "errors": {}
+    },
+    "getAttacksLayer7TopAttacks": {
+      "errors": {}
+    },
+    "getAttacksLayer7TopIndustries": {
+      "errors": {}
+    },
+    "getAttacksLayer7TopOriginAs": {
+      "errors": {}
+    },
+    "getAttacksLayer7TopOriginLocation": {
+      "errors": {}
+    },
+    "getAttacksLayer7TopTargetLocation": {
+      "errors": {}
+    },
+    "getAttacksLayer7TopVerticals": {
+      "errors": {}
+    },
+    "getBgpHijacksEvents": {
+      "errors": {}
+    },
+    "getBgpIpsTimeseries": {
+      "errors": {}
+    },
+    "getBgpPfx2as": {
+      "errors": {}
+    },
+    "getBgpPfx2asMoas": {
+      "errors": {}
+    },
+    "getBgpRouteLeakEvents": {
+      "errors": {}
+    },
+    "getBgpRoutesAsns": {
+      "errors": {}
+    },
+    "getBgpRoutesRealtime": {
+      "errors": {}
+    },
+    "getBgpRoutesStats": {
+      "errors": {}
+    },
+    "getBgpTimeseries": {
+      "errors": {}
+    },
+    "getBgpTopAses": {
+      "errors": {}
+    },
+    "getBgpTopAsnsByPrefixes": {
+      "errors": {}
+    },
+    "getBgpTopPrefixes": {
+      "errors": {}
+    },
+    "getBotDetails": {
+      "errors": {}
+    },
+    "getBots": {
+      "errors": {}
+    },
+    "getBotsSummary": {
+      "errors": {}
+    },
+    "getBotsTimeseries": {
+      "errors": {}
+    },
+    "getBotsTimeseriesGroup": {
+      "errors": {}
+    },
+    "getCertificateAuthorities": {
+      "errors": {}
+    },
+    "getCertificateAuthorityDetails": {
+      "errors": {}
+    },
+    "getCertificateLogDetails": {
+      "errors": {}
+    },
+    "getCertificateLogs": {
+      "errors": {}
+    },
+    "getCrawlersSummary": {
+      "errors": {}
+    },
+    "getCrawlersTimeseriesGroup": {
+      "errors": {}
+    },
+    "getCtSummary": {
+      "errors": {}
+    },
+    "getCtTimeseries": {
+      "errors": {}
+    },
+    "getCtTimeseriesGroup": {
+      "errors": {}
+    },
+    "getDnsAs112Summary": {
+      "errors": {}
+    },
+    "getDnsAs112Timeseries": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesByDnssec": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesByEdns": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesByIpVersion": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesByProtocol": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesByQueryType": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesByResponseCodes": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesGroup": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesGroupByDnssec": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesGroupByEdns": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesGroupByIpVersion": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesGroupByProtocol": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesGroupByQueryType": {
+      "errors": {}
+    },
+    "getDnsAs112TimeseriesGroupByResponseCodes": {
+      "errors": {}
+    },
+    "getDnsAs112TopLocations": {
+      "errors": {}
+    },
+    "getDnsAs112TopLocationsByDnssec": {
+      "errors": {}
+    },
+    "getDnsAs112TopLocationsByEdns": {
+      "errors": {}
+    },
+    "getDnsAs112TopLocationsByIpVersion": {
+      "errors": {}
+    },
+    "getDnsSummary": {
+      "errors": {}
+    },
+    "getDnsSummaryByCacheHitStatus": {
+      "errors": {}
+    },
+    "getDnsSummaryByDnssec": {
+      "errors": {}
+    },
+    "getDnsSummaryByDnssecAwareness": {
+      "errors": {}
+    },
+    "getDnsSummaryByDnssecE2eVersion": {
+      "errors": {}
+    },
+    "getDnsSummaryByIpVersion": {
+      "errors": {}
+    },
+    "getDnsSummaryByMatchingAnswerStatus": {
+      "errors": {}
+    },
+    "getDnsSummaryByProtocol": {
+      "errors": {}
+    },
+    "getDnsSummaryByQueryType": {
+      "errors": {}
+    },
+    "getDnsSummaryByResponseCode": {
+      "errors": {}
+    },
+    "getDnsSummaryByResponseTtl": {
+      "errors": {}
+    },
+    "getDnsTimeseries": {
+      "errors": {}
+    },
+    "getDnsTimeseriesGroup": {
+      "errors": {}
+    },
+    "getDnsTimeseriesGroupByCacheHitStatus": {
+      "errors": {}
+    },
+    "getDnsTimeseriesGroupByDnssec": {
+      "errors": {}
+    },
+    "getDnsTimeseriesGroupByDnssecAwareness": {
+      "errors": {}
+    },
+    "getDnsTimeseriesGroupByDnssecE2eVersion": {
+      "errors": {}
+    },
+    "getDnsTimeseriesGroupByIpVersion": {
+      "errors": {}
+    },
+    "getDnsTimeseriesGroupByMatchingAnswerStatus": {
+      "errors": {}
+    },
+    "getDnsTimeseriesGroupByProtocol": {
+      "errors": {}
+    },
+    "getDnsTimeseriesGroupByQueryType": {
+      "errors": {}
+    },
+    "getDnsTimeseriesGroupByResponseCode": {
+      "errors": {}
+    },
+    "getDnsTimeseriesGroupByResponseTtl": {
+      "errors": {}
+    },
+    "getDnsTopAses": {
+      "errors": {}
+    },
+    "getDnsTopLocations": {
+      "errors": {}
+    },
+    "getEmailRoutingSummary": {
+      "errors": {}
+    },
+    "getEmailRoutingSummaryByArc": {
+      "errors": {}
+    },
+    "getEmailRoutingSummaryByDkim": {
+      "errors": {}
+    },
+    "getEmailRoutingSummaryByDmarc": {
+      "errors": {}
+    },
+    "getEmailRoutingSummaryByEncrypted": {
+      "errors": {}
+    },
+    "getEmailRoutingSummaryByIpVersion": {
+      "errors": {}
+    },
+    "getEmailRoutingSummaryBySpf": {
+      "errors": {}
+    },
+    "getEmailRoutingTimeseriesGroup": {
+      "errors": {}
+    },
+    "getEmailRoutingTimeseriesGroupByArc": {
+      "errors": {}
+    },
+    "getEmailRoutingTimeseriesGroupByDkim": {
+      "errors": {}
+    },
+    "getEmailRoutingTimeseriesGroupByDmarc": {
+      "errors": {}
+    },
+    "getEmailRoutingTimeseriesGroupByEncrypted": {
+      "errors": {}
+    },
+    "getEmailRoutingTimeseriesGroupByIpVersion": {
+      "errors": {}
+    },
+    "getEmailRoutingTimeseriesGroupBySpf": {
+      "errors": {}
+    },
+    "getEmailSecuritySummary": {
+      "errors": {}
+    },
+    "getEmailSecuritySummaryByArc": {
+      "errors": {}
+    },
+    "getEmailSecuritySummaryByDkim": {
+      "errors": {}
+    },
+    "getEmailSecuritySummaryByDmarc": {
+      "errors": {}
+    },
+    "getEmailSecuritySummaryByMalicious": {
+      "errors": {}
+    },
+    "getEmailSecuritySummaryBySpam": {
+      "errors": {}
+    },
+    "getEmailSecuritySummaryBySpf": {
+      "errors": {}
+    },
+    "getEmailSecuritySummaryBySpoof": {
+      "errors": {}
+    },
+    "getEmailSecuritySummaryByThreatCategory": {
+      "errors": {}
+    },
+    "getEmailSecuritySummaryByTlsVersion": {
+      "errors": {}
+    },
+    "getEmailSecurityTimeseriesGroup": {
+      "errors": {}
+    },
+    "getEmailSecurityTimeseriesGroupByArc": {
+      "errors": {}
+    },
+    "getEmailSecurityTimeseriesGroupByDkim": {
+      "errors": {}
+    },
+    "getEmailSecurityTimeseriesGroupByDmarc": {
+      "errors": {}
+    },
+    "getEmailSecurityTimeseriesGroupByMalicious": {
+      "errors": {}
+    },
+    "getEmailSecurityTimeseriesGroupBySpam": {
+      "errors": {}
+    },
+    "getEmailSecurityTimeseriesGroupBySpf": {
+      "errors": {}
+    },
+    "getEmailSecurityTimeseriesGroupBySpoof": {
+      "errors": {}
+    },
+    "getEmailSecurityTimeseriesGroupByThreatCategory": {
+      "errors": {}
+    },
+    "getEmailSecurityTimeseriesGroupByTlsVersion": {
+      "errors": {}
+    },
+    "getEmailSecurityTopTldsByMalicious": {
+      "errors": {}
+    },
+    "getEmailSecurityTopTldsByMessages": {
+      "errors": {}
+    },
+    "getEmailSecurityTopTldsBySpam": {
+      "errors": {}
+    },
+    "getEmailSecurityTopTldsBySpoof": {
+      "errors": {}
+    },
+    "getEntitiesAsnById": {
+      "errors": {}
+    },
+    "getEntitiesAsnByIp": {
+      "errors": {}
+    },
+    "getEntitiesIp": {
+      "errors": {}
+    },
+    "getEntitiesLocationByAlpha2": {
+      "errors": {}
+    },
+    "getEntitiesLocations": {
+      "errors": {}
+    },
+    "getGeolocationDetails": {
+      "errors": {}
+    },
+    "getGeolocations": {
+      "errors": {}
+    },
+    "getHttpSummary": {
+      "errors": {}
+    },
+    "getHttpSummaryByBotClass": {
+      "errors": {}
+    },
+    "getHttpSummaryByDeviceType": {
+      "errors": {}
+    },
+    "getHttpSummaryByHttpProtocol": {
+      "errors": {}
+    },
+    "getHttpSummaryByHttpVersion": {
+      "errors": {}
+    },
+    "getHttpSummaryByIpVersion": {
+      "errors": {}
+    },
+    "getHttpSummaryByOperatingSystem": {
+      "errors": {}
+    },
+    "getHttpSummaryByTlsVersion": {
+      "errors": {}
+    },
+    "getHttpTimeseries": {
+      "errors": {}
+    },
+    "getHttpTimeseriesGroup": {
+      "errors": {}
+    },
+    "getHttpTimeseriesGroupByBotClass": {
+      "errors": {}
+    },
+    "getHttpTimeseriesGroupByBrowserFamilies": {
+      "errors": {}
+    },
+    "getHttpTimeseriesGroupByBrowsers": {
+      "errors": {}
+    },
+    "getHttpTimeseriesGroupByDeviceType": {
+      "errors": {}
+    },
+    "getHttpTimeseriesGroupByHttpProtocol": {
+      "errors": {}
+    },
+    "getHttpTimeseriesGroupByHttpVersion": {
+      "errors": {}
+    },
+    "getHttpTimeseriesGroupByIpVersion": {
+      "errors": {}
+    },
+    "getHttpTimeseriesGroupByOperatingSystem": {
+      "errors": {}
+    },
+    "getHttpTimeseriesGroupByTlsVersion": {
+      "errors": {}
+    },
+    "getHttpTopAsesByBotClass": {
+      "errors": {}
+    },
+    "getHttpTopAsesByBrowserFamily": {
+      "errors": {}
+    },
+    "getHttpTopAsesByDeviceType": {
+      "errors": {}
+    },
+    "getHttpTopAsesByHttpProtocol": {
+      "errors": {}
+    },
+    "getHttpTopAsesByHttpRequests": {
+      "errors": {}
+    },
+    "getHttpTopAsesByHttpVersion": {
+      "errors": {}
+    },
+    "getHttpTopAsesByIpVersion": {
+      "errors": {}
+    },
+    "getHttpTopAsesByOperatingSystem": {
+      "errors": {}
+    },
+    "getHttpTopAsesByTlsVersion": {
+      "errors": {}
+    },
+    "getHttpTopBrowserFamilies": {
+      "errors": {}
+    },
+    "getHttpTopBrowsers": {
+      "errors": {}
+    },
+    "getHttpTopLocationsByBotClass": {
+      "errors": {}
+    },
+    "getHttpTopLocationsByBrowserFamily": {
+      "errors": {}
+    },
+    "getHttpTopLocationsByDeviceType": {
+      "errors": {}
+    },
+    "getHttpTopLocationsByHttpProtocol": {
+      "errors": {}
+    },
+    "getHttpTopLocationsByHttpRequests": {
+      "errors": {}
+    },
+    "getHttpTopLocationsByHttpVersion": {
+      "errors": {}
+    },
+    "getHttpTopLocationsByIpVersion": {
+      "errors": {}
+    },
+    "getHttpTopLocationsByOperatingSystem": {
+      "errors": {}
+    },
+    "getHttpTopLocationsByTlsVersion": {
+      "errors": {}
+    },
+    "getLeakedCredentialChecksSummary": {
+      "errors": {}
+    },
+    "getLeakedCredentialChecksSummaryByBotClass": {
+      "errors": {}
+    },
+    "getLeakedCredentialChecksSummaryByCompromised": {
+      "errors": {}
+    },
+    "getLeakedCredentialChecksTimeseriesGroup": {
+      "errors": {}
+    },
+    "getLeakedCredentialChecksTimeseriesGroupByBotClass": {
+      "errors": {}
+    },
+    "getLeakedCredentialChecksTimeseriesGroupByCompromised": {
+      "errors": {}
+    },
+    "getNetflowsSummary": {
+      "errors": {}
+    },
+    "getNetflowsSummaryDeprecated": {
+      "errors": {}
+    },
+    "getNetflowsTimeseries": {
+      "errors": {}
+    },
+    "getNetflowsTimeseriesGroup": {
+      "errors": {}
+    },
+    "getNetflowsTopAses": {
+      "errors": {}
+    },
+    "getNetflowsTopLocations": {
+      "errors": {}
+    },
+    "getOriginDetails": {
+      "errors": {}
+    },
+    "getOrigins": {
+      "errors": {}
+    },
+    "getOriginsSummary": {
+      "errors": {}
+    },
+    "getOriginsTimeseries": {
+      "errors": {}
+    },
+    "getOriginsTimeseriesGroup": {
+      "errors": {}
+    },
+    "getQualityIndexSummary": {
+      "errors": {}
+    },
+    "getQualityIndexTimeseriesGroup": {
+      "errors": {}
+    },
+    "getQualitySpeedHistogram": {
+      "errors": {}
+    },
+    "getQualitySpeedSummary": {
+      "errors": {}
+    },
+    "getQualitySpeedTopAses": {
+      "errors": {}
+    },
+    "getQualitySpeedTopLocations": {
+      "errors": {}
+    },
+    "getRankingDomainDetails": {
+      "errors": {}
+    },
+    "getRankingDomainTimeseries": {
+      "errors": {}
+    },
+    "getRankingInternetServicesCategories": {
+      "errors": {}
+    },
+    "getRankingInternetServicesTimeseries": {
+      "errors": {}
+    },
+    "getRankingTopDomains": {
+      "errors": {}
+    },
+    "getRankingTopInternetServices": {
+      "errors": {}
+    },
+    "getReportsDatasetDownload": {
+      "errors": {}
+    },
+    "getReportsDatasets": {
+      "errors": {}
+    },
+    "getRobotsTxtTopDomainCategoriesByFilesParsed": {
+      "errors": {}
+    },
+    "getRobotsTxtTopUserAgentsByDirective": {
+      "errors": {}
+    },
+    "getSearchGlobal": {
+      "errors": {}
+    },
+    "getTcpResetsTimeoutsSummary": {
+      "errors": {}
+    },
+    "getTcpResetsTimeoutsTimeseriesGroup": {
+      "errors": {}
+    },
+    "getTldDetails": {
+      "errors": {}
+    },
+    "getTlds": {
+      "errors": {}
+    },
+    "getTrafficAnomalies": {
+      "errors": {}
+    },
+    "getTrafficAnomaliesTop": {
+      "errors": {}
+    },
+    "getVerifiedBotsTopByHttpRequests": {
+      "errors": {}
+    },
+    "getVerifiedBotsTopCategoriesByHttpRequests": {
+      "errors": {}
+    },
+    "list": {
+      "errors": {}
+    },
+    "postQuantum": {
+      "errors": {}
+    },
+    "postQuantum1": {
+      "errors": {}
+    },
+    "postReportsDatasetDownloadUrl": {
+      "errors": {}
+    }
+  }
+}

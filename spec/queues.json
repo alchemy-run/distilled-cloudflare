@@ -1,19 +1,80 @@
 {
   "errors": {
-    "QueueNotFound": { "codes": [11000, 10004], "status": 404, "categories": ["NotFoundError"] },
-    "QueueAlreadyExists": { "code": 11009, "status": 409, "categories": ["ConflictError"] },
-    "InvalidQueueName": { "code": 11003, "categories": ["BadRequestError"] },
-    "ValidationError": { "code": 10021, "categories": ["BadRequestError"] },
-    "RateLimited": { "code": 971, "categories": ["ThrottlingError", "RetryableError"] },
-    "TooManyRequests": { "code": 6100, "categories": ["ThrottlingError", "RetryableError"] },
-    "AuthenticationError": { "code": 10000, "categories": ["AuthError"] },
-    "InvalidToken": { "code": 9103, "categories": ["AuthError"] },
-    "MissingToken": { "code": 9106, "categories": ["AuthError"] },
-    "TokenExpired": { "code": 9109, "categories": ["AuthError"] },
-    "Unauthorized": { "code": 9000, "categories": ["AuthError"] }
+    "QueueNotFound": {
+      "codes": [
+        11000,
+        10004
+      ],
+      "status": 404,
+      "categories": [
+        "NotFoundError"
+      ]
+    },
+    "QueueAlreadyExists": {
+      "code": 11009,
+      "status": 409,
+      "categories": [
+        "ConflictError"
+      ]
+    },
+    "InvalidQueueName": {
+      "code": 11003,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "ValidationError": {
+      "code": 10021,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "RateLimited": {
+      "code": 971,
+      "categories": [
+        "ThrottlingError",
+        "RetryableError"
+      ]
+    },
+    "TooManyRequests": {
+      "code": 6100,
+      "categories": [
+        "ThrottlingError",
+        "RetryableError"
+      ]
+    },
+    "AuthenticationError": {
+      "code": 10000,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "InvalidToken": {
+      "code": 9103,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "MissingToken": {
+      "code": 9106,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "TokenExpired": {
+      "code": 9109,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "Unauthorized": {
+      "code": 9000,
+      "categories": [
+        "AuthError"
+      ]
+    }
   },
   "operations": {
-    "list": { "errors": {} },
     "create": {
       "errors": {
         "InvalidQueueName": {},
@@ -21,47 +82,7 @@
         "QueueAlreadyExists": {}
       }
     },
-    "get_": {
-      "errors": {
-        "QueueNotFound": {}
-      }
-    },
-    "update": {
-      "errors": {
-        "QueueNotFound": {},
-        "InvalidQueueName": {},
-        "ValidationError": {}
-      }
-    },
-    "delete_": {
-      "errors": {
-        "QueueNotFound": {}
-      }
-    },
-    "updatePartial": {
-      "errors": {
-        "QueueNotFound": {},
-        "InvalidQueueName": {},
-        "ValidationError": {}
-      }
-    },
-    "listConsumers": {
-      "errors": {
-        "QueueNotFound": {}
-      }
-    },
     "createConsumer": {
-      "errors": {
-        "QueueNotFound": {},
-        "ValidationError": {}
-      }
-    },
-    "getConsumer": {
-      "errors": {
-        "QueueNotFound": {}
-      }
-    },
-    "updateConsumer": {
       "errors": {
         "QueueNotFound": {},
         "ValidationError": {}
@@ -72,13 +93,54 @@
         "QueueNotFound": {}
       }
     },
-    "queuesPushMessage": {
+    "delete_": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "getConsumer": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "get_": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "get_1": {
+      "errors": {}
+    },
+    "getpurgestatus": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "list": {
+      "errors": {}
+    },
+    "listConsumers": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "queuesAckMessages": {
       "errors": {
         "QueueNotFound": {},
         "ValidationError": {}
       }
     },
-    "queuesAckMessages": {
+    "queuesPullMessages": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "queuesPurge": {
+      "errors": {
+        "QueueNotFound": {}
+      }
+    },
+    "queuesPushMessage": {
       "errors": {
         "QueueNotFound": {},
         "ValidationError": {}
@@ -90,19 +152,24 @@
         "ValidationError": {}
       }
     },
-    "queuesPullMessages": {
+    "update": {
       "errors": {
-        "QueueNotFound": {}
+        "QueueNotFound": {},
+        "InvalidQueueName": {},
+        "ValidationError": {}
       }
     },
-    "getpurgestatus": {
+    "updateConsumer": {
       "errors": {
-        "QueueNotFound": {}
+        "QueueNotFound": {},
+        "ValidationError": {}
       }
     },
-    "queuesPurge": {
+    "updatePartial": {
       "errors": {
-        "QueueNotFound": {}
+        "QueueNotFound": {},
+        "InvalidQueueName": {},
+        "ValidationError": {}
       }
     }
   }

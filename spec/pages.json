@@ -1,0 +1,59 @@
+{
+  "errors": {},
+  "operations": {
+    "createDeployment": {
+      "errors": {}
+    },
+    "createProject": {
+      "errors": {}
+    },
+    "deleteDeployment": {
+      "errors": {}
+    },
+    "deleteDomain": {
+      "errors": {}
+    },
+    "deleteProject": {
+      "errors": {}
+    },
+    "getDeploymentInfo": {
+      "errors": {}
+    },
+    "getDeploymentLogs": {
+      "errors": {}
+    },
+    "getDeployments": {
+      "errors": {}
+    },
+    "getDomain": {
+      "errors": {}
+    },
+    "getDomains": {
+      "errors": {}
+    },
+    "getProject": {
+      "errors": {}
+    },
+    "getProjects": {
+      "errors": {}
+    },
+    "pagesDeploymentRetryDeployment": {
+      "errors": {}
+    },
+    "pagesDeploymentRollbackDeployment": {
+      "errors": {}
+    },
+    "pagesDomainsAddDomain": {
+      "errors": {}
+    },
+    "pagesPurgeBuildCache": {
+      "errors": {}
+    },
+    "patchDomain": {
+      "errors": {}
+    },
+    "updateProject": {
+      "errors": {}
+    }
+  }
+}

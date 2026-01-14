@@ -11,7 +11,7 @@ import { describe, expect } from "vitest";
 import * as Effect from "effect/Effect";
 import * as Duration from "effect/Duration";
 import { test, getAccountId } from "../test.ts";
-import * as Workers from "../../src/services/workers.ts";
+import * as Workers from "~/services/workers.ts";
 
 const accountId = () => getAccountId();
 
@@ -87,10 +87,7 @@ const cleanupNamespace = (name: string) =>
   }).pipe(Effect.ignore);
 
 // Helper to create a namespace, run test, then cleanup
-const withNamespace = <A, E, R>(
-  name: string,
-  fn: (nsName: string) => Effect.Effect<A, E, R>,
-) =>
+const withNamespace = <A, E, R>(name: string, fn: (nsName: string) => Effect.Effect<A, E, R>) =>
   cleanupNamespace(name).pipe(
     Effect.andThen(
       Workers.create({
@@ -131,10 +128,7 @@ const withNamespaceWorker = <A, E, R>(
         account_id: accountId(),
         dispatch_namespace: nsName,
         script_name: scriptName,
-      }).pipe(
-        Effect.ignore,
-        Effect.andThen(cleanupNamespace(nsName)),
-      ),
+      }).pipe(Effect.ignore, Effect.andThen(cleanupNamespace(nsName))),
     ),
   );
 
@@ -1068,18 +1062,21 @@ export default {
 
   describe("createAssetsUploadSession (namespace)", () => {
     test("happy path - creates assets upload session in namespace", () =>
-      withNamespaceWorker("itty-cf-workers-ns-assets", "itty-cf-ns-assets-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          const session = yield* Workers.createAssetsUploadSession({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-            body: {
-              manifest: {},
-            },
-          });
-          expect(session.result).toBeDefined();
-        }),
+      withNamespaceWorker(
+        "itty-cf-workers-ns-assets",
+        "itty-cf-ns-assets-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            const session = yield* Workers.createAssetsUploadSession({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+              body: {
+                manifest: {},
+              },
+            });
+            expect(session.result).toBeDefined();
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1394,15 +1391,18 @@ export default {
 
   describe("namespaceWorkerScriptWorkerDetails", () => {
     test("happy path - gets worker details in namespace", () =>
-      withNamespaceWorker("itty-cf-workers-ns-details", "itty-cf-ns-details-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          const details = yield* Workers.namespaceWorkerScriptWorkerDetails({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-          });
-          expect(details.result).toBeDefined();
-        }),
+      withNamespaceWorker(
+        "itty-cf-workers-ns-details",
+        "itty-cf-ns-details-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            const details = yield* Workers.namespaceWorkerScriptWorkerDetails({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+            });
+            expect(details.result).toBeDefined();
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1454,15 +1454,18 @@ export default {
 
   describe("getScriptBindings", () => {
     test("happy path - gets script bindings in namespace", () =>
-      withNamespaceWorker("itty-cf-workers-ns-bindings", "itty-cf-ns-bindings-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          const bindings = yield* Workers.getScriptBindings({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-          });
-          expect(bindings.result).toBeDefined();
-        }),
+      withNamespaceWorker(
+        "itty-cf-workers-ns-bindings",
+        "itty-cf-ns-bindings-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            const bindings = yield* Workers.getScriptBindings({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+            });
+            expect(bindings.result).toBeDefined();
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1483,15 +1486,18 @@ export default {
 
   describe("getScriptContent (in namespace)", () => {
     test("happy path - gets script content", () =>
-      withNamespaceWorker("itty-cf-workers-ns-content", "itty-cf-ns-content-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          const content = yield* Workers.getScriptContent({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-          });
-          expect(content).toBeInstanceOf(FormData);
-        }),
+      withNamespaceWorker(
+        "itty-cf-workers-ns-content",
+        "itty-cf-ns-content-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            const content = yield* Workers.getScriptContent({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+            });
+            expect(content).toBeInstanceOf(FormData);
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1509,16 +1515,19 @@ export default {
 
   describe("listScriptSecrets (in namespace)", () => {
     test("happy path - lists secrets in namespace worker", () =>
-      withNamespaceWorker("itty-cf-workers-ns-secrets", "itty-cf-ns-secret-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          const secrets = yield* Workers.listScriptSecrets({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-          });
-          expect(secrets.result).toBeDefined();
-          expect(Array.isArray(secrets.result)).toBe(true);
-        }),
+      withNamespaceWorker(
+        "itty-cf-workers-ns-secrets",
+        "itty-cf-ns-secret-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            const secrets = yield* Workers.listScriptSecrets({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+            });
+            expect(secrets.result).toBeDefined();
+            expect(Array.isArray(secrets.result)).toBe(true);
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1536,24 +1545,27 @@ export default {
 
   describe("putScriptSecrets (in namespace)", () => {
     test("happy path - puts secret to namespace worker", () =>
-      withNamespaceWorker("itty-cf-workers-ns-put-secrets", "itty-cf-ns-put-secrets-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          const response = yield* Workers.putScriptSecrets({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-            body: { name: "TEST_SECRET", text: "secret-value", type: "secret_text" },
-          });
-          expect(response.result).toBeDefined();
+      withNamespaceWorker(
+        "itty-cf-workers-ns-put-secrets",
+        "itty-cf-ns-put-secrets-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            const response = yield* Workers.putScriptSecrets({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+              body: { name: "TEST_SECRET", text: "secret-value", type: "secret_text" },
+            });
+            expect(response.result).toBeDefined();
 
-          // Verify secret appears in list
-          const secrets = yield* Workers.listScriptSecrets({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-          });
-          expect(secrets.result.some((s) => s.name === "TEST_SECRET")).toBe(true);
-        }),
+            // Verify secret appears in list
+            const secrets = yield* Workers.listScriptSecrets({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+            });
+            expect(secrets.result.some((s) => s.name === "TEST_SECRET")).toBe(true);
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1572,27 +1584,30 @@ export default {
 
   describe("getScriptSecrets (in namespace)", () => {
     test("happy path - gets secret metadata from namespace worker", () =>
-      withNamespaceWorker("itty-cf-workers-ns-get-secrets", "itty-cf-ns-get-secrets-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          const secretName = "GET_SECRET_TEST";
+      withNamespaceWorker(
+        "itty-cf-workers-ns-get-secrets",
+        "itty-cf-ns-get-secrets-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            const secretName = "GET_SECRET_TEST";
 
-          // First put a secret
-          yield* Workers.putScriptSecrets({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-            body: { name: secretName, text: "secret-value", type: "secret_text" },
-          });
+            // First put a secret
+            yield* Workers.putScriptSecrets({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+              body: { name: secretName, text: "secret-value", type: "secret_text" },
+            });
 
-          // Then get it
-          const response = yield* Workers.getScriptSecrets({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-            secret_name: secretName,
-          });
-          expect(response.result).toBeDefined();
-        }),
+            // Then get it
+            const response = yield* Workers.getScriptSecrets({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+              secret_name: secretName,
+            });
+            expect(response.result).toBeDefined();
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1611,15 +1626,18 @@ export default {
 
   describe("getScriptSettings (in namespace)", () => {
     test("happy path - gets script settings", () =>
-      withNamespaceWorker("itty-cf-workers-ns-settings", "itty-cf-ns-settings-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          const settings = yield* Workers.getScriptSettings({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-          });
-          expect(settings.result).toBeDefined();
-        }),
+      withNamespaceWorker(
+        "itty-cf-workers-ns-settings",
+        "itty-cf-ns-settings-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            const settings = yield* Workers.getScriptSettings({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+            });
+            expect(settings.result).toBeDefined();
+          }),
       ));
 
     // Note: getScriptSettings returns undocumented error codes for namespace context
@@ -1638,27 +1656,30 @@ export default {
 
   describe("patchScriptSettings (in namespace)", () => {
     test("happy path - patches script settings", () =>
-      withNamespaceWorker("itty-cf-workers-ns-patch", "itty-cf-ns-patch-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          const settingsFormData = new FormData();
-          settingsFormData.append(
-            "settings",
-            new Blob([JSON.stringify({ logpush: false })], { type: "application/json" }),
-          );
-          yield* Workers.patchScriptSettings({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-            body: settingsFormData,
-          });
+      withNamespaceWorker(
+        "itty-cf-workers-ns-patch",
+        "itty-cf-ns-patch-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            const settingsFormData = new FormData();
+            settingsFormData.append(
+              "settings",
+              new Blob([JSON.stringify({ logpush: false })], { type: "application/json" }),
+            );
+            yield* Workers.patchScriptSettings({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+              body: settingsFormData,
+            });
 
-          const updatedSettings = yield* Workers.getScriptSettings({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-          });
-          expect(updatedSettings.result).toBeDefined();
-        }),
+            const updatedSettings = yield* Workers.getScriptSettings({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+            });
+            expect(updatedSettings.result).toBeDefined();
+          }),
       ));
 
     // Note: patchScriptSettings returns undocumented error codes for namespace context
@@ -1684,15 +1705,18 @@ export default {
 
   describe("getScriptTags", () => {
     test("happy path - gets script tags in namespace", () =>
-      withNamespaceWorker("itty-cf-workers-ns-tags", "itty-cf-ns-tags-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          const tags = yield* Workers.getScriptTags({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-          });
-          expect(tags.result).toBeDefined();
-        }),
+      withNamespaceWorker(
+        "itty-cf-workers-ns-tags",
+        "itty-cf-ns-tags-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            const tags = yield* Workers.getScriptTags({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+            });
+            expect(tags.result).toBeDefined();
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1713,22 +1737,25 @@ export default {
 
   describe("putScriptTags", () => {
     test("happy path - puts script tags", () =>
-      withNamespaceWorker("itty-cf-workers-ns-put-tags", "itty-cf-ns-put-tags-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          yield* Workers.putScriptTags({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-            body: ["env:test", "ns:dispatch"],
-          });
+      withNamespaceWorker(
+        "itty-cf-workers-ns-put-tags",
+        "itty-cf-ns-put-tags-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            yield* Workers.putScriptTags({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+              body: ["env:test", "ns:dispatch"],
+            });
 
-          const updatedTags = yield* Workers.getScriptTags({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-          });
-          expect(updatedTags.result).toBeDefined();
-        }),
+            const updatedTags = yield* Workers.getScriptTags({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+            });
+            expect(updatedTags.result).toBeDefined();
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1747,22 +1774,25 @@ export default {
 
   describe("putScriptTag", () => {
     test("happy path - puts single script tag", () =>
-      withNamespaceWorker("itty-cf-workers-ns-put-tag", "itty-cf-ns-put-tag-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          yield* Workers.putScriptTag({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-            tag: "env:production",
-          });
+      withNamespaceWorker(
+        "itty-cf-workers-ns-put-tag",
+        "itty-cf-ns-put-tag-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            yield* Workers.putScriptTag({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+              tag: "env:production",
+            });
 
-          const tags = yield* Workers.getScriptTags({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-          });
-          expect(tags.result).toBeDefined();
-        }),
+            const tags = yield* Workers.getScriptTags({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+            });
+            expect(tags.result).toBeDefined();
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1781,22 +1811,25 @@ export default {
 
   describe("deleteScriptTag", () => {
     test("happy path - deletes script tag", () =>
-      withNamespaceWorker("itty-cf-workers-ns-del-tag", "itty-cf-ns-del-tag-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          yield* Workers.putScriptTags({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-            body: ["env:test", "to-delete"],
-          });
+      withNamespaceWorker(
+        "itty-cf-workers-ns-del-tag",
+        "itty-cf-ns-del-tag-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            yield* Workers.putScriptTags({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+              body: ["env:test", "to-delete"],
+            });
 
-          yield* Workers.deleteScriptTag({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-            tag: "to-delete",
-          });
-        }),
+            yield* Workers.deleteScriptTag({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+              tag: "to-delete",
+            });
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1815,15 +1848,18 @@ export default {
 
   describe("deleteScriptSecret (in namespace)", () => {
     test("happy path - delete handles non-existent secret gracefully", () =>
-      withNamespaceWorker("itty-cf-workers-ns-del-secret", "itty-cf-ns-del-secret-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          yield* Workers.deleteScriptSecret({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-            secret_name: "NONEXISTENT_SECRET",
-          }).pipe(Effect.ignore);
-        }),
+      withNamespaceWorker(
+        "itty-cf-workers-ns-del-secret",
+        "itty-cf-ns-del-secret-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            yield* Workers.deleteScriptSecret({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+              secret_name: "NONEXISTENT_SECRET",
+            }).pipe(Effect.ignore);
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1842,22 +1878,25 @@ export default {
 
   describe("putScriptContent (in namespace)", () => {
     test("happy path - puts script content", () =>
-      withNamespaceWorker("itty-cf-workers-ns-put-content", "itty-cf-ns-put-content-worker", (nsName, scriptName) =>
-        Effect.gen(function* () {
-          const updatedScript = `
+      withNamespaceWorker(
+        "itty-cf-workers-ns-put-content",
+        "itty-cf-ns-put-content-worker",
+        (nsName, scriptName) =>
+          Effect.gen(function* () {
+            const updatedScript = `
 export default {
   async fetch(request, env, ctx) {
     return new Response("Updated namespace worker!");
   }
 };
 `;
-          yield* Workers.putScriptContent({
-            account_id: accountId(),
-            dispatch_namespace: nsName,
-            script_name: scriptName,
-            body: createWorkerFormData(updatedScript),
-          });
-        }),
+            yield* Workers.putScriptContent({
+              account_id: accountId(),
+              dispatch_namespace: nsName,
+              script_name: scriptName,
+              body: createWorkerFormData(updatedScript),
+            });
+          }),
       ));
 
     test("error - NamespaceNotFound for non-existent namespace", () =>
@@ -1970,9 +2009,7 @@ export default {
           }),
         ),
         Effect.flatMap((namespaces) => {
-          const ns = namespaces.result?.find(
-            (n) => n.script === name && n.class === "Counter",
-          );
+          const ns = namespaces.result?.find((n) => n.script === name && n.class === "Counter");
           if (!ns?.id) {
             return Effect.die(new Error(`No DO namespace found for worker ${name}`));
           }

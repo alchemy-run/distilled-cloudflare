@@ -6,5 +6,6 @@
     "paths": {
       "~/*": ["./src/*"]
     }
-  }
+  },
+  "references": [{ "path": "./tsconfig.lib.json" }]
 }

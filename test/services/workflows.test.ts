@@ -11,8 +11,8 @@
 import { describe, expect } from "vitest";
 import * as Effect from "effect/Effect";
 import { test, getAccountId } from "../test.ts";
-import * as Workflows from "../../src/services/workflows.ts";
-import * as Workers from "../../src/services/workers.ts";
+import * as Workflows from "~/services/workflows.ts";
+import * as Workers from "~/services/workers.ts";
 
 const accountId = () => getAccountId();
 

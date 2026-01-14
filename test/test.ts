@@ -6,8 +6,8 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Logger from "effect/Logger";
 import * as Scope from "effect/Scope";
-import * as Auth from "../src/auth.ts";
-import * as Retry from "../src/retry.ts";
+import * as Auth from "~/auth.ts";
+import * as Retry from "~/retry.ts";
 
 type Provided = Scope.Scope | HttpClient.HttpClient | Auth.ApiToken | Retry.Retry;
 

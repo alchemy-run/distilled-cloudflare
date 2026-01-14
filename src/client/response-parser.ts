@@ -116,7 +116,7 @@ function parseMultipartBody(body: Uint8Array, contentType: string): FormData {
   const boundaryMatch = contentType.match(/boundary=([^\s;]+)/);
   if (!boundaryMatch) {
     // If no boundary found, return raw body as single entry
-    formData.append("body", new Blob([body]));
+    formData.append("body", new Blob([new Uint8Array(body)]));
     return formData;
   }
 

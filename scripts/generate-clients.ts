@@ -825,6 +825,43 @@ async function loadServiceSpec(serviceName: string): Promise<ServiceSpec> {
 }
 
 /**
+ * Update spec file for a service, adding empty operation entries for any operations that don't exist.
+ * Does NOT trample existing content - only adds missing operations.
+ */
+async function updateServiceSpec(
+  serviceName: string,
+  operationNames: string[],
+): Promise<{ added: string[] }> {
+  // Load existing spec
+  const existingSpec = await loadServiceSpec(serviceName);
+
+  // Track what we add
+  const added: string[] = [];
+
+  // Add missing operations
+  for (const opName of operationNames) {
+    if (!(opName in existingSpec.operations)) {
+      existingSpec.operations[opName] = { errors: {} };
+      added.push(opName);
+    }
+  }
+
+  // Sort operations alphabetically for consistent output
+  const sortedOperations: Record<string, (typeof existingSpec.operations)[string]> = {};
+  const sortedKeys = Object.keys(existingSpec.operations).sort();
+  for (const key of sortedKeys) {
+    sortedOperations[key] = existingSpec.operations[key];
+  }
+  existingSpec.operations = sortedOperations;
+
+  // Write back the spec file
+  const content = JSON.stringify(existingSpec, null, 2) + "\n";
+  await Bun.write(`spec/${serviceName}.json`, content);
+
+  return { added };
+}
+
+/**
  * Infer categories from error name and status code patterns.
  * This supplements explicit categories from spec files.
  */
@@ -1537,6 +1574,33 @@ const generateCommand = Command.make(
       // Generate service files
       for (const [serviceName, ops] of serviceOps) {
         yield* Console.log(`\n📝 Generating ${serviceName}.ts (${ops.length} operations)...`);
+
+        // Collect all function names for this service (before loading spec so we can update it)
+        const operationNames: string[] = [];
+        const seenFunctionNames = new Set<string>();
+        for (const op of ops) {
+          let funcName = OpenAPI.operationIdToFunctionName(op.operationId);
+          let safeFuncName = RESERVED_WORDS.has(funcName) ? `${funcName}_` : funcName;
+
+          // Handle duplicates the same way as generateServiceFile
+          let uniqueSuffix = 1;
+          let uniqueFuncName = safeFuncName;
+          while (seenFunctionNames.has(uniqueFuncName)) {
+            uniqueFuncName = `${safeFuncName}${uniqueSuffix}`;
+            uniqueSuffix++;
+          }
+          safeFuncName = uniqueFuncName;
+          seenFunctionNames.add(safeFuncName);
+          operationNames.push(safeFuncName);
+        }
+
+        // Update spec file with any missing operations
+        const { added } = yield* Effect.tryPromise(() =>
+          updateServiceSpec(serviceName, operationNames),
+        );
+        if (added.length > 0) {
+          yield* Console.log(`   Added ${added.length} new operations to spec/${serviceName}.json`);
+        }
 
         // Load service spec for errors
         const serviceSpec = yield* Effect.tryPromise(() => loadServiceSpec(serviceName));

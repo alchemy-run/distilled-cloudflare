@@ -1,0 +1,41 @@
+{
+  "errors": {},
+  "operations": {
+    "cloudflareD1ExportDatabase": {
+      "errors": {}
+    },
+    "cloudflareD1ImportDatabase": {
+      "errors": {}
+    },
+    "cloudflareD1QueryDatabase": {
+      "errors": {}
+    },
+    "cloudflareD1RawDatabaseQuery": {
+      "errors": {}
+    },
+    "cloudflareD1TimeTravelRestore": {
+      "errors": {}
+    },
+    "createDatabase": {
+      "errors": {}
+    },
+    "deleteDatabase": {
+      "errors": {}
+    },
+    "getBookmark": {
+      "errors": {}
+    },
+    "getDatabase": {
+      "errors": {}
+    },
+    "listDatabases": {
+      "errors": {}
+    },
+    "updateDatabase": {
+      "errors": {}
+    },
+    "updatePartialDatabase": {
+      "errors": {}
+    }
+  }
+}

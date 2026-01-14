@@ -1,0 +1,32 @@
+{
+  "errors": {},
+  "operations": {
+    "createcontainerapplication": {
+      "errors": {}
+    },
+    "createcontainerapplicationrollout": {
+      "errors": {}
+    },
+    "deletecontainerapplication": {
+      "errors": {}
+    },
+    "generateimageregistrycredentials": {
+      "errors": {}
+    },
+    "getcontainerapplication": {
+      "errors": {}
+    },
+    "getcontaineridentity": {
+      "errors": {}
+    },
+    "listcontainerapplications": {
+      "errors": {}
+    },
+    "publiclistapplications": {
+      "errors": {}
+    },
+    "updatecontainerapplication": {
+      "errors": {}
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "errors": {},
+  "operations": {
+    "create": {
+      "errors": {}
+    },
+    "delete_": {
+      "errors": {}
+    },
+    "delete_1": {
+      "errors": {}
+    },
+    "list": {
+      "errors": {}
+    },
+    "list1": {
+      "errors": {}
+    },
+    "membersBatchcreate": {
+      "errors": {}
+    },
+    "membersRetrieve": {
+      "errors": {}
+    },
+    "organizationListorganizations": {
+      "errors": {}
+    },
+    "organizationsCreateuserorganization": {
+      "errors": {}
+    },
+    "organizationsGetaccounts": {
+      "errors": {}
+    },
+    "organizationsGetprofile": {
+      "errors": {}
+    },
+    "organizationsModify": {
+      "errors": {}
+    },
+    "organizationsModifyprofile": {
+      "errors": {}
+    },
+    "organizationsRetrieve": {
+      "errors": {}
+    }
+  }
+}

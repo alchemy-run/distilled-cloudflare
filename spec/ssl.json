@@ -1,0 +1,41 @@
+{
+  "errors": {},
+  "operations": {
+    "analyzeCertificateAnalyzeCertificate": {
+      "errors": {}
+    },
+    "certificatePacksOrderAdvancedCertificateManagerCertificatePack": {
+      "errors": {}
+    },
+    "certificatePacksRestartValidationForAdvancedCertificateManagerCertificatePack": {
+      "errors": {}
+    },
+    "deleteAdvancedCertificateManagerCertificatePack": {
+      "errors": {}
+    },
+    "getCertificatePack": {
+      "errors": {}
+    },
+    "getCertificatePackQuotas": {
+      "errors": {}
+    },
+    "listCertificatePacks": {
+      "errors": {}
+    },
+    "sslTlsModeRecommendationSslTlsRecommendation": {
+      "errors": {}
+    },
+    "sslVerificationEditSslCertificatePackValidationMethod": {
+      "errors": {}
+    },
+    "sslVerificationSslVerificationDetails": {
+      "errors": {}
+    },
+    "universalSslSettingsForAZoneEditUniversalSslSettings": {
+      "errors": {}
+    },
+    "universalSslSettingsForAZoneUniversalSslSettingsDetails": {
+      "errors": {}
+    }
+  }
+}

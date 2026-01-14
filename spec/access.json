@@ -1,0 +1,302 @@
+{
+  "errors": {},
+  "operations": {
+    "accessApplicationsAddAnApplication": {
+      "errors": {}
+    },
+    "accessApplicationsRevokeServiceTokens": {
+      "errors": {}
+    },
+    "accessApplicationsTestAccessPolicies": {
+      "errors": {}
+    },
+    "accessGatewayCaAddAnSshCa": {
+      "errors": {}
+    },
+    "accessIdentityProvidersAddAnAccessIdentityProvider": {
+      "errors": {}
+    },
+    "accessKeyConfigurationRotateAccessKeys": {
+      "errors": {}
+    },
+    "accessMtlsAuthenticationAddAnMtlsCertificate": {
+      "errors": {}
+    },
+    "accessPoliciesConvertReusable": {
+      "errors": {}
+    },
+    "accessPolicyTests": {
+      "errors": {}
+    },
+    "accessServiceTokensRefreshAServiceToken": {
+      "errors": {}
+    },
+    "accessServiceTokensRotateAServiceToken": {
+      "errors": {}
+    },
+    "createABookmarkApplication": {
+      "errors": {}
+    },
+    "createACustomPage": {
+      "errors": {}
+    },
+    "createAServiceToken": {
+      "errors": {}
+    },
+    "createAShortLivedCertificateCa": {
+      "errors": {}
+    },
+    "createAnAccessGroup": {
+      "errors": {}
+    },
+    "createAnAccessPolicy": {
+      "errors": {}
+    },
+    "createAnAccessReusablePolicy": {
+      "errors": {}
+    },
+    "createPortals": {
+      "errors": {}
+    },
+    "createServers": {
+      "errors": {}
+    },
+    "createTag": {
+      "errors": {}
+    },
+    "createYourZeroTrustOrganization": {
+      "errors": {}
+    },
+    "deleteABookmarkApplication": {
+      "errors": {}
+    },
+    "deleteACustomPage": {
+      "errors": {}
+    },
+    "deleteAServiceToken": {
+      "errors": {}
+    },
+    "deleteAShortLivedCertificateCa": {
+      "errors": {}
+    },
+    "deleteATag": {
+      "errors": {}
+    },
+    "deleteAnAccessApplication": {
+      "errors": {}
+    },
+    "deleteAnAccessGroup": {
+      "errors": {}
+    },
+    "deleteAnAccessIdentityProvider": {
+      "errors": {}
+    },
+    "deleteAnAccessPolicy": {
+      "errors": {}
+    },
+    "deleteAnAccessReusablePolicy": {
+      "errors": {}
+    },
+    "deleteAnMtlsCertificate": {
+      "errors": {}
+    },
+    "deleteAnSshCa": {
+      "errors": {}
+    },
+    "deletePortals": {
+      "errors": {}
+    },
+    "deleteServers": {
+      "errors": {}
+    },
+    "getABookmarkApplication": {
+      "errors": {}
+    },
+    "getACustomPage": {
+      "errors": {}
+    },
+    "getAServiceToken": {
+      "errors": {}
+    },
+    "getAShortLivedCertificateCa": {
+      "errors": {}
+    },
+    "getATag": {
+      "errors": {}
+    },
+    "getAUserPage": {
+      "errors": {}
+    },
+    "getAccessAuthenticationLogs": {
+      "errors": {}
+    },
+    "getActiveSession": {
+      "errors": {}
+    },
+    "getActiveSessions": {
+      "errors": {}
+    },
+    "getAnAccessApplication": {
+      "errors": {}
+    },
+    "getAnAccessGroup": {
+      "errors": {}
+    },
+    "getAnAccessIdentityProvider": {
+      "errors": {}
+    },
+    "getAnAccessPolicy": {
+      "errors": {}
+    },
+    "getAnAccessReusablePolicy": {
+      "errors": {}
+    },
+    "getAnMtlsCertificate": {
+      "errors": {}
+    },
+    "getFailedLogins": {
+      "errors": {}
+    },
+    "getLastSeenIdentity": {
+      "errors": {}
+    },
+    "getTheAccessKeyConfiguration": {
+      "errors": {}
+    },
+    "getUsers": {
+      "errors": {}
+    },
+    "getYourZeroTrustOrganization": {
+      "errors": {}
+    },
+    "getYourZeroTrustOrganizationDohSettings": {
+      "errors": {}
+    },
+    "listAccessAppPolicies": {
+      "errors": {}
+    },
+    "listAccessApplications": {
+      "errors": {}
+    },
+    "listAccessGroups": {
+      "errors": {}
+    },
+    "listAccessIdentityProviders": {
+      "errors": {}
+    },
+    "listAccessReusablePolicies": {
+      "errors": {}
+    },
+    "listBookmarkApplications": {
+      "errors": {}
+    },
+    "listCustomPages": {
+      "errors": {}
+    },
+    "listMtlsCertificates": {
+      "errors": {}
+    },
+    "listMtlsCertificatesHostnameSettings": {
+      "errors": {}
+    },
+    "listPortals": {
+      "errors": {}
+    },
+    "listScimGroupResources": {
+      "errors": {}
+    },
+    "listScimUserResources": {
+      "errors": {}
+    },
+    "listServers": {
+      "errors": {}
+    },
+    "listServiceTokens": {
+      "errors": {}
+    },
+    "listShortLivedCertificateCAs": {
+      "errors": {}
+    },
+    "listSshCa": {
+      "errors": {}
+    },
+    "listTags": {
+      "errors": {}
+    },
+    "mcpPortalsApiFetchGateways": {
+      "errors": {}
+    },
+    "mcpPortalsApiFetchServers": {
+      "errors": {}
+    },
+    "mcpPortalsApiSyncServer": {
+      "errors": {}
+    },
+    "update": {
+      "errors": {}
+    },
+    "updateABookmarkApplication": {
+      "errors": {}
+    },
+    "updateACustomPage": {
+      "errors": {}
+    },
+    "updateAServiceToken": {
+      "errors": {}
+    },
+    "updateATag": {
+      "errors": {}
+    },
+    "updateAUserSeat": {
+      "errors": {}
+    },
+    "updateAccessApplicationSettings": {
+      "errors": {}
+    },
+    "updateAccessApplicationSettings1": {
+      "errors": {}
+    },
+    "updateAnAccessApplication": {
+      "errors": {}
+    },
+    "updateAnAccessGroup": {
+      "errors": {}
+    },
+    "updateAnAccessIdentityProvider": {
+      "errors": {}
+    },
+    "updateAnAccessPolicy": {
+      "errors": {}
+    },
+    "updateAnAccessReusablePolicy": {
+      "errors": {}
+    },
+    "updateAnMtlsCertificate": {
+      "errors": {}
+    },
+    "updateAnMtlsCertificateSettings": {
+      "errors": {}
+    },
+    "updateLogs": {
+      "errors": {}
+    },
+    "updatePortals": {
+      "errors": {}
+    },
+    "updateServers": {
+      "errors": {}
+    },
+    "updateTheAccessKeyConfiguration": {
+      "errors": {}
+    },
+    "updateYourZeroTrustOrganization": {
+      "errors": {}
+    },
+    "updateYourZeroTrustOrganizationDohSettings": {
+      "errors": {}
+    },
+    "zeroTrustOrganizationRevokeAllAccessTokensForAUser": {
+      "errors": {}
+    }
+  }
+}

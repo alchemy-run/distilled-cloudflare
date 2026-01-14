@@ -1,0 +1,47 @@
+{
+  "errors": {},
+  "operations": {
+    "deleteSmartTieredCacheSetting": {
+      "errors": {}
+    },
+    "deleteVariantsSetting": {
+      "errors": {}
+    },
+    "getCacheReserveClear": {
+      "errors": {}
+    },
+    "getCacheReserveSetting": {
+      "errors": {}
+    },
+    "getRegionalTieredCacheSetting": {
+      "errors": {}
+    },
+    "getSmartTieredCacheSetting": {
+      "errors": {}
+    },
+    "getVariantsSetting": {
+      "errors": {}
+    },
+    "patchSmartTieredCacheSetting": {
+      "errors": {}
+    },
+    "postQuantumEncryptionSetting": {
+      "errors": {}
+    },
+    "postQuantumEncryptionSetting1": {
+      "errors": {}
+    },
+    "zoneCacheSettingsChangeCacheReserveSetting": {
+      "errors": {}
+    },
+    "zoneCacheSettingsChangeRegionalTieredCacheSetting": {
+      "errors": {}
+    },
+    "zoneCacheSettingsChangeVariantsSetting": {
+      "errors": {}
+    },
+    "zoneCacheSettingsStartCacheReserveClear": {
+      "errors": {}
+    }
+  }
+}

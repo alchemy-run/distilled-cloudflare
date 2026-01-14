@@ -1,0 +1,140 @@
+{
+  "errors": {},
+  "operations": {
+    "addAudioTrack": {
+      "errors": {}
+    },
+    "createALiveInput": {
+      "errors": {}
+    },
+    "createANewOutputConnectedToALiveInput": {
+      "errors": {}
+    },
+    "createDownloads": {
+      "errors": {}
+    },
+    "createSignedUrlTokensForVideos": {
+      "errors": {}
+    },
+    "createSigningKeys": {
+      "errors": {}
+    },
+    "createTypeSpecificDownloads": {
+      "errors": {}
+    },
+    "createWatermarkProfilesViaBasicUpload": {
+      "errors": {}
+    },
+    "createWebhooks": {
+      "errors": {}
+    },
+    "deleteALiveInput": {
+      "errors": {}
+    },
+    "deleteAnOutput": {
+      "errors": {}
+    },
+    "deleteAudioTracks": {
+      "errors": {}
+    },
+    "deleteCaptionsOrSubtitles": {
+      "errors": {}
+    },
+    "deleteDownloads": {
+      "errors": {}
+    },
+    "deleteSigningKeys": {
+      "errors": {}
+    },
+    "deleteTypeSpecificDownloads": {
+      "errors": {}
+    },
+    "deleteVideo": {
+      "errors": {}
+    },
+    "deleteWatermarkProfiles": {
+      "errors": {}
+    },
+    "deleteWebhooks": {
+      "errors": {}
+    },
+    "editAudioTracks": {
+      "errors": {}
+    },
+    "getCaptionOrSubtitleForLanguage": {
+      "errors": {}
+    },
+    "getVttCaptionOrSubtitle": {
+      "errors": {}
+    },
+    "listAllOutputsAssociatedWithASpecifiedLiveInput": {
+      "errors": {}
+    },
+    "listAudioTracks": {
+      "errors": {}
+    },
+    "listCaptionsOrSubtitles": {
+      "errors": {}
+    },
+    "listDownloads": {
+      "errors": {}
+    },
+    "listLiveInputs": {
+      "errors": {}
+    },
+    "listSigningKeys": {
+      "errors": {}
+    },
+    "listVideos": {
+      "errors": {}
+    },
+    "listWatermarkProfiles": {
+      "errors": {}
+    },
+    "streamLiveInputsRetrieveALiveInput": {
+      "errors": {}
+    },
+    "streamSubtitlesCaptionsGenerateCaptionOrSubtitleForLanguage": {
+      "errors": {}
+    },
+    "streamSubtitlesCaptionsUploadCaptionsOrSubtitles": {
+      "errors": {}
+    },
+    "streamVideoClippingClipVideosGivenAStartAndEndTime": {
+      "errors": {}
+    },
+    "streamVideosInitiateVideoUploadsUsingTus": {
+      "errors": {}
+    },
+    "streamVideosRetreieveEmbedCodeHtml": {
+      "errors": {}
+    },
+    "streamVideosRetrieveVideoDetails": {
+      "errors": {}
+    },
+    "streamVideosStorageUsage": {
+      "errors": {}
+    },
+    "streamVideosUploadVideosFromAUrl": {
+      "errors": {}
+    },
+    "streamVideosUploadVideosViaDirectUploadUrLs": {
+      "errors": {}
+    },
+    "streamWatermarkProfileWatermarkProfileDetails": {
+      "errors": {}
+    },
+    "streamWebhookViewWebhooks": {
+      "errors": {}
+    },
+    "updateALiveInput": {
+      "errors": {}
+    },
+    "updateAnOutput": {
+      "errors": {}
+    },
+    "updateVideoDetails": {
+      "errors": {}
+    }
+  }
+}

@@ -8,7 +8,7 @@
 import { describe, expect } from "vitest";
 import * as Effect from "effect/Effect";
 import { test, getAccountId } from "../test.ts";
-import * as Queues from "../../src/services/queues.ts";
+import * as Queues from "~/services/queues.ts";
 
 const accountId = () => getAccountId();
 

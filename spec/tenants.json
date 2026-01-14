@@ -1,0 +1,20 @@
+{
+  "errors": {},
+  "operations": {
+    "tenantsListaccounts": {
+      "errors": {}
+    },
+    "tenantsListentitlements": {
+      "errors": {}
+    },
+    "tenantsListmemberships": {
+      "errors": {}
+    },
+    "tenantsRetrievetenant": {
+      "errors": {}
+    },
+    "tenantsValidaccounttypes": {
+      "errors": {}
+    }
+  }
+}

@@ -6,7 +6,7 @@
 
 import { FileSystem } from "@effect/platform";
 import * as Effect from "effect/Effect";
-import type { ErrorCatalogData, ErrorCatalogEntry } from "../../src/error-catalog.ts";
+import type { ErrorCatalogData, ErrorCatalogEntry } from "~/error-catalog.ts";
 
 const CATALOG_PATH = "spec/error-catalog.json";
 

@@ -1,0 +1,17 @@
+{
+  "errors": {},
+  "operations": {
+    "deleteMembership": {
+      "errors": {}
+    },
+    "listMemberships": {
+      "errors": {}
+    },
+    "updateMembership": {
+      "errors": {}
+    },
+    "userSAccountMembershipsMembershipDetails": {
+      "errors": {}
+    }
+  }
+}

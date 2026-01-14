@@ -1,0 +1,1340 @@
+{
+  "errors": {},
+  "operations": {
+    "accountLevelCustomNameserversUsageForAZoneSetAccountCustomNameserverRelatedZoneMetadata": {
+      "errors": {}
+    },
+    "apiShieldApiDiscoveryRetrieveDiscoveredOperationsOnAZone": {
+      "errors": {}
+    },
+    "apiShieldApiDiscoveryRetrieveDiscoveredOperationsOnAZoneAsOpenapi": {
+      "errors": {}
+    },
+    "apiShieldEndpointManagementAddOperationToAZone": {
+      "errors": {}
+    },
+    "apiShieldEndpointManagementAddOperationsToAZone": {
+      "errors": {}
+    },
+    "apiShieldEndpointManagementRetrieveInformationAboutAllOperationsOnAZone": {
+      "errors": {}
+    },
+    "apiShieldEndpointManagementRetrieveInformationAboutAnOperation": {
+      "errors": {}
+    },
+    "apiShieldEndpointManagementRetrieveOperationsAndFeaturesAsOpenApiSchemas": {
+      "errors": {}
+    },
+    "apiShieldExpressionTemplatesFallthrough": {
+      "errors": {}
+    },
+    "apiShieldSchemaValidationEnableValidationForASchema": {
+      "errors": {}
+    },
+    "apiShieldSchemaValidationExtractOperationsFromSchema": {
+      "errors": {}
+    },
+    "apiShieldSchemaValidationRetrieveInformationAboutAllSchemas": {
+      "errors": {}
+    },
+    "apiShieldSchemaValidationRetrieveInformationAboutSpecificSchema": {
+      "errors": {}
+    },
+    "apiShieldSchemaValidationRetrieveOperationLevelSettings": {
+      "errors": {}
+    },
+    "apiShieldSchemaValidationRetrieveUserSchemaHosts": {
+      "errors": {}
+    },
+    "apiShieldSchemaValidationRetrieveZoneLevelSettings": {
+      "errors": {}
+    },
+    "apiShieldSettingsRetrieveInformationAboutSpecificConfigurationProperties": {
+      "errors": {}
+    },
+    "apiShieldSettingsSetConfigurationProperties": {
+      "errors": {}
+    },
+    "archiveZoneSecurityCenterInsight": {
+      "errors": {}
+    },
+    "argoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPs": {
+      "errors": {}
+    },
+    "argoAnalyticsForZoneArgoAnalyticsForAZone": {
+      "errors": {}
+    },
+    "clientCertificateForAZoneClientCertificateDetails": {
+      "errors": {}
+    },
+    "clientCertificateForAZoneEditClientCertificate": {
+      "errors": {}
+    },
+    "create": {
+      "errors": {}
+    },
+    "create1": {
+      "errors": {}
+    },
+    "create2": {
+      "errors": {}
+    },
+    "create3": {
+      "errors": {}
+    },
+    "create4": {
+      "errors": {}
+    },
+    "createACustomWaitingRoomPagePreview": {
+      "errors": {}
+    },
+    "createAPageRule": {
+      "errors": {}
+    },
+    "createARateLimit": {
+      "errors": {}
+    },
+    "createAServiceToken": {
+      "errors": {}
+    },
+    "createAShortLivedCertificateCa": {
+      "errors": {}
+    },
+    "createAnAccessGroup": {
+      "errors": {}
+    },
+    "createAnAccessPolicy": {
+      "errors": {}
+    },
+    "createClientCertificate": {
+      "errors": {}
+    },
+    "createCustomHostname": {
+      "errors": {}
+    },
+    "createDetection": {
+      "errors": {}
+    },
+    "createEvent": {
+      "errors": {}
+    },
+    "createFilters": {
+      "errors": {}
+    },
+    "createHealthCheck": {
+      "errors": {}
+    },
+    "createHealthCheck1": {
+      "errors": {}
+    },
+    "createHostname": {
+      "errors": {}
+    },
+    "createKeylessSslConfiguration": {
+      "errors": {}
+    },
+    "createLoadBalancer": {
+      "errors": {}
+    },
+    "createPolicy": {
+      "errors": {}
+    },
+    "createPreviewHealthCheck": {
+      "errors": {}
+    },
+    "createPrimaryZoneConfiguration": {
+      "errors": {}
+    },
+    "createRoute": {
+      "errors": {}
+    },
+    "createRoutingRule": {
+      "errors": {}
+    },
+    "createScheduledTest": {
+      "errors": {}
+    },
+    "createSchema": {
+      "errors": {}
+    },
+    "createSecondaryZoneConfiguration": {
+      "errors": {}
+    },
+    "createSpectrumApplicationUsingANameForTheOrigin": {
+      "errors": {}
+    },
+    "createSslConfiguration": {
+      "errors": {}
+    },
+    "createTest": {
+      "errors": {}
+    },
+    "createWaitingRoom": {
+      "errors": {}
+    },
+    "createWaitingRoomRule": {
+      "errors": {}
+    },
+    "createWeb3Hostname": {
+      "errors": {}
+    },
+    "createYourZeroTrustOrganization": {
+      "errors": {}
+    },
+    "createZoneSubscription": {
+      "errors": {}
+    },
+    "createzoneruleset": {
+      "errors": {}
+    },
+    "createzonerulesetrule": {
+      "errors": {}
+    },
+    "customHostnameForAZoneCustomHostnameDetails": {
+      "errors": {}
+    },
+    "customHostnameForAZoneEditCustomCertificateCustomHostname": {
+      "errors": {}
+    },
+    "customHostnameForAZoneEditCustomHostname": {
+      "errors": {}
+    },
+    "customOriginTrustStoreDetails": {
+      "errors": {}
+    },
+    "customSslForAZoneEditSslConfiguration": {
+      "errors": {}
+    },
+    "customSslForAZoneRePrioritizeSslCertificates": {
+      "errors": {}
+    },
+    "customSslForAZoneSslConfigurationDetails": {
+      "errors": {}
+    },
+    "deleteAFilter": {
+      "errors": {}
+    },
+    "deleteAPageRule": {
+      "errors": {}
+    },
+    "deleteARateLimit": {
+      "errors": {}
+    },
+    "deleteASchema": {
+      "errors": {}
+    },
+    "deleteAServiceToken": {
+      "errors": {}
+    },
+    "deleteAShortLivedCertificateCa": {
+      "errors": {}
+    },
+    "deleteAnAccessApplication": {
+      "errors": {}
+    },
+    "deleteAnAccessGroup": {
+      "errors": {}
+    },
+    "deleteAnAccessIdentityProvider": {
+      "errors": {}
+    },
+    "deleteAnAccessPolicy": {
+      "errors": {}
+    },
+    "deleteAnMtlsCertificate": {
+      "errors": {}
+    },
+    "deleteAnOperation": {
+      "errors": {}
+    },
+    "deleteCertificate": {
+      "errors": {}
+    },
+    "deleteClientCertificate": {
+      "errors": {}
+    },
+    "deleteCustomHostnameAndAnyIssuedSslCertificates": {
+      "errors": {}
+    },
+    "deleteCustomScanExpressions": {
+      "errors": {}
+    },
+    "deleteDetection": {
+      "errors": {}
+    },
+    "deleteDnssecRecords": {
+      "errors": {}
+    },
+    "deleteEvent": {
+      "errors": {}
+    },
+    "deleteFallbackOriginForCustomHostnames": {
+      "errors": {}
+    },
+    "deleteFilters": {
+      "errors": {}
+    },
+    "deleteHealthCheck": {
+      "errors": {}
+    },
+    "deleteHealthCheck1": {
+      "errors": {}
+    },
+    "deleteHostname": {
+      "errors": {}
+    },
+    "deleteHostnameClientCertificate": {
+      "errors": {}
+    },
+    "deleteKeylessSslConfiguration": {
+      "errors": {}
+    },
+    "deleteLoadBalancer": {
+      "errors": {}
+    },
+    "deleteMultipleOperations": {
+      "errors": {}
+    },
+    "deletePerOperationSetting": {
+      "errors": {}
+    },
+    "deletePolicy": {
+      "errors": {}
+    },
+    "deletePreviewHealthCheck": {
+      "errors": {}
+    },
+    "deletePrimaryZoneConfiguration": {
+      "errors": {}
+    },
+    "deleteRoute": {
+      "errors": {}
+    },
+    "deleteRoutingRule": {
+      "errors": {}
+    },
+    "deleteSchema": {
+      "errors": {}
+    },
+    "deleteSecondaryZoneConfiguration": {
+      "errors": {}
+    },
+    "deleteSecurityTxt": {
+      "errors": {}
+    },
+    "deleteSingleCertificateAndKeyInACustomHostname": {
+      "errors": {}
+    },
+    "deleteSpectrumApplication": {
+      "errors": {}
+    },
+    "deleteSslConfiguration": {
+      "errors": {}
+    },
+    "deleteTestSchedule": {
+      "errors": {}
+    },
+    "deleteTests": {
+      "errors": {}
+    },
+    "deleteWaitingRoom": {
+      "errors": {}
+    },
+    "deleteWaitingRoomRule": {
+      "errors": {}
+    },
+    "deleteWeb3Hostname": {
+      "errors": {}
+    },
+    "deleteZonesZoneIdLogpushJobsJobId": {
+      "errors": {}
+    },
+    "delete_": {
+      "errors": {}
+    },
+    "delete_1": {
+      "errors": {}
+    },
+    "delete_2": {
+      "errors": {}
+    },
+    "delete_3": {
+      "errors": {}
+    },
+    "delete_4": {
+      "errors": {}
+    },
+    "delete_5": {
+      "errors": {}
+    },
+    "deletemanagedtransforms": {
+      "errors": {}
+    },
+    "deleteurlnormalization": {
+      "errors": {}
+    },
+    "deletezoneruleset": {
+      "errors": {}
+    },
+    "deletezonerulesetrule": {
+      "errors": {}
+    },
+    "deletezonerulesetversion": {
+      "errors": {}
+    },
+    "deletezonesnippet": {
+      "errors": {}
+    },
+    "deletezonesnippetrules": {
+      "errors": {}
+    },
+    "dlsAccountRegionalHostnamesAccountFetchHostname": {
+      "errors": {}
+    },
+    "dnsAnalyticsByTime": {
+      "errors": {}
+    },
+    "dnsAnalyticsTable": {
+      "errors": {}
+    },
+    "dnssecDnssecDetails": {
+      "errors": {}
+    },
+    "dnssecEditDnssecStatus": {
+      "errors": {}
+    },
+    "emailRoutingSettingsDisableEmailRouting": {
+      "errors": {}
+    },
+    "emailRoutingSettingsDisableEmailRoutingDns": {
+      "errors": {}
+    },
+    "emailRoutingSettingsEmailRoutingDnsSettings": {
+      "errors": {}
+    },
+    "emailRoutingSettingsEnableEmailRouting": {
+      "errors": {}
+    },
+    "emailRoutingSettingsEnableEmailRoutingDns": {
+      "errors": {}
+    },
+    "emailRoutingSettingsUnlockEmailRoutingDns": {
+      "errors": {}
+    },
+    "getACustomPage": {
+      "errors": {}
+    },
+    "getAFilter": {
+      "errors": {}
+    },
+    "getAPageRule": {
+      "errors": {}
+    },
+    "getARateLimit": {
+      "errors": {}
+    },
+    "getAServiceToken": {
+      "errors": {}
+    },
+    "getAShortLivedCertificateCa": {
+      "errors": {}
+    },
+    "getAccountCustomNameserverRelatedZoneMetadata": {
+      "errors": {}
+    },
+    "getAegisSetting": {
+      "errors": {}
+    },
+    "getAllZoneSettings": {
+      "errors": {}
+    },
+    "getAnAccessApplication": {
+      "errors": {}
+    },
+    "getAnAccessGroup": {
+      "errors": {}
+    },
+    "getAnAccessIdentityProvider": {
+      "errors": {}
+    },
+    "getAnAccessPolicy": {
+      "errors": {}
+    },
+    "getAnMtlsCertificate": {
+      "errors": {}
+    },
+    "getAnalyticsByCoLocations": {
+      "errors": {}
+    },
+    "getAnalyticsByTime": {
+      "errors": {}
+    },
+    "getAnalyticsSummary": {
+      "errors": {}
+    },
+    "getArgoSmartRoutingSetting": {
+      "errors": {}
+    },
+    "getAvailabilities": {
+      "errors": {}
+    },
+    "getCacheReserveClear": {
+      "errors": {}
+    },
+    "getCatchAllRule": {
+      "errors": {}
+    },
+    "getCertificateDetails": {
+      "errors": {}
+    },
+    "getConfig": {
+      "errors": {}
+    },
+    "getConnection": {
+      "errors": {}
+    },
+    "getCookie": {
+      "errors": {}
+    },
+    "getCurrentAggregatedAnalytics": {
+      "errors": {}
+    },
+    "getDashboard": {
+      "errors": {}
+    },
+    "getDetection": {
+      "errors": {}
+    },
+    "getEmailRoutingSettings": {
+      "errors": {}
+    },
+    "getEnablementSettingForZone": {
+      "errors": {}
+    },
+    "getEnrollment": {
+      "errors": {}
+    },
+    "getFallbackOriginForCustomHostnames": {
+      "errors": {}
+    },
+    "getFontsSetting": {
+      "errors": {}
+    },
+    "getKeylessSslConfiguration": {
+      "errors": {}
+    },
+    "getOriginH2MaxStreamsSetting": {
+      "errors": {}
+    },
+    "getOriginMaxHttpVersionSetting": {
+      "errors": {}
+    },
+    "getOutgoingZoneTransferStatus": {
+      "errors": {}
+    },
+    "getPerOperationSetting": {
+      "errors": {}
+    },
+    "getPolicy": {
+      "errors": {}
+    },
+    "getPolicyCertificates": {
+      "errors": {}
+    },
+    "getRoute": {
+      "errors": {}
+    },
+    "getRoutingRule": {
+      "errors": {}
+    },
+    "getRumStatus": {
+      "errors": {}
+    },
+    "getScheduledTest": {
+      "errors": {}
+    },
+    "getSchema": {
+      "errors": {}
+    },
+    "getScript": {
+      "errors": {}
+    },
+    "getSecurityTxt": {
+      "errors": {}
+    },
+    "getSettings": {
+      "errors": {}
+    },
+    "getSettings1": {
+      "errors": {}
+    },
+    "getSettings2": {
+      "errors": {}
+    },
+    "getSingleSetting": {
+      "errors": {}
+    },
+    "getSpectrumApplicationConfiguration": {
+      "errors": {}
+    },
+    "getSpeedBrainSetting": {
+      "errors": {}
+    },
+    "getStatus": {
+      "errors": {}
+    },
+    "getStatus1": {
+      "errors": {}
+    },
+    "getTest": {
+      "errors": {}
+    },
+    "getTheHostnameClientCertificate": {
+      "errors": {}
+    },
+    "getTheHostnameStatusForClientAuthentication": {
+      "errors": {}
+    },
+    "getTieredCachingSetting": {
+      "errors": {}
+    },
+    "getWaitingRoomStatus": {
+      "errors": {}
+    },
+    "getYourZeroTrustOrganization": {
+      "errors": {}
+    },
+    "getZoneSecurityCenterInsightCountsByClass": {
+      "errors": {}
+    },
+    "getZoneSecurityCenterInsightCountsBySeverity": {
+      "errors": {}
+    },
+    "getZoneSecurityCenterInsightCountsByType": {
+      "errors": {}
+    },
+    "getZoneSecurityCenterInsights": {
+      "errors": {}
+    },
+    "getZoneSettings": {
+      "errors": {}
+    },
+    "getZonesZoneIdLogpushDatasetsDatasetIdFields": {
+      "errors": {}
+    },
+    "getZonesZoneIdLogpushDatasetsDatasetIdJobs": {
+      "errors": {}
+    },
+    "getZonesZoneIdLogpushEdgeJobs": {
+      "errors": {}
+    },
+    "getZonesZoneIdLogpushJobs": {
+      "errors": {}
+    },
+    "getZonesZoneIdLogpushJobsJobId": {
+      "errors": {}
+    },
+    "getZonesZoneIdLogsControlRetentionFlag": {
+      "errors": {}
+    },
+    "getZonesZoneIdLogsRayidsRayId": {
+      "errors": {}
+    },
+    "getZonesZoneIdLogsReceived": {
+      "errors": {}
+    },
+    "getZonesZoneIdLogsReceivedFields": {
+      "errors": {}
+    },
+    "getZonesZoneIdentifierZarazConfig": {
+      "errors": {}
+    },
+    "getZonesZoneIdentifierZarazConfigHistory": {
+      "errors": {}
+    },
+    "getZonesZoneIdentifierZarazDefault": {
+      "errors": {}
+    },
+    "getZonesZoneIdentifierZarazExport": {
+      "errors": {}
+    },
+    "getZonesZoneIdentifierZarazHistory": {
+      "errors": {}
+    },
+    "getZonesZoneIdentifierZarazWorkflow": {
+      "errors": {}
+    },
+    "get_": {
+      "errors": {}
+    },
+    "get_1": {
+      "errors": {}
+    },
+    "get_2": {
+      "errors": {}
+    },
+    "get_3": {
+      "errors": {}
+    },
+    "get_4": {
+      "errors": {}
+    },
+    "get_5": {
+      "errors": {}
+    },
+    "get_6": {
+      "errors": {}
+    },
+    "geturlnormalization": {
+      "errors": {}
+    },
+    "getzoneentrypointruleset": {
+      "errors": {}
+    },
+    "getzoneentrypointrulesetversion": {
+      "errors": {}
+    },
+    "getzoneruleset": {
+      "errors": {}
+    },
+    "getzonerulesetversion": {
+      "errors": {}
+    },
+    "getzonesnippet": {
+      "errors": {}
+    },
+    "getzonesnippetcontent": {
+      "errors": {}
+    },
+    "healthChecksHealthCheckDetails": {
+      "errors": {}
+    },
+    "healthChecksHealthCheckPreviewDetails": {
+      "errors": {}
+    },
+    "keylessSslForAZoneEditKeylessSslConfiguration": {
+      "errors": {}
+    },
+    "list": {
+      "errors": {}
+    },
+    "list1": {
+      "errors": {}
+    },
+    "list2": {
+      "errors": {}
+    },
+    "list3": {
+      "errors": {}
+    },
+    "list4": {
+      "errors": {}
+    },
+    "listAccessApplications": {
+      "errors": {}
+    },
+    "listAccessGroups": {
+      "errors": {}
+    },
+    "listAccessIdentityProviders": {
+      "errors": {}
+    },
+    "listAccessPolicies": {
+      "errors": {}
+    },
+    "listAvailablePageRulesSettings": {
+      "errors": {}
+    },
+    "listAvailablePlans": {
+      "errors": {}
+    },
+    "listAvailableRatePlans": {
+      "errors": {}
+    },
+    "listCertificates": {
+      "errors": {}
+    },
+    "listCertificates1": {
+      "errors": {}
+    },
+    "listClientCertificates": {
+      "errors": {}
+    },
+    "listConnections": {
+      "errors": {}
+    },
+    "listCookies": {
+      "errors": {}
+    },
+    "listCustomHostnames": {
+      "errors": {}
+    },
+    "listCustomPages": {
+      "errors": {}
+    },
+    "listCustomScanExpressions": {
+      "errors": {}
+    },
+    "listDetails": {
+      "errors": {}
+    },
+    "listDetails1": {
+      "errors": {}
+    },
+    "listDetections": {
+      "errors": {}
+    },
+    "listDnsSettings": {
+      "errors": {}
+    },
+    "listEntries": {
+      "errors": {}
+    },
+    "listEntry": {
+      "errors": {}
+    },
+    "listEntry1": {
+      "errors": {}
+    },
+    "listEntry2": {
+      "errors": {}
+    },
+    "listEntryDetails": {
+      "errors": {}
+    },
+    "listEvents": {
+      "errors": {}
+    },
+    "listFilters": {
+      "errors": {}
+    },
+    "listHealthChecks": {
+      "errors": {}
+    },
+    "listHealthChecks1": {
+      "errors": {}
+    },
+    "listHostnameAssociations": {
+      "errors": {}
+    },
+    "listHostnames": {
+      "errors": {}
+    },
+    "listKeylessSslConfigurations": {
+      "errors": {}
+    },
+    "listLoadBalancers": {
+      "errors": {}
+    },
+    "listMtlsCertificates": {
+      "errors": {}
+    },
+    "listMtlsCertificatesHostnameSettings": {
+      "errors": {}
+    },
+    "listPageRules": {
+      "errors": {}
+    },
+    "listPageTrend": {
+      "errors": {}
+    },
+    "listPages": {
+      "errors": {}
+    },
+    "listPerOperationSettings": {
+      "errors": {}
+    },
+    "listPolicies": {
+      "errors": {}
+    },
+    "listRateLimits": {
+      "errors": {}
+    },
+    "listRoutes": {
+      "errors": {}
+    },
+    "listRoutingRules": {
+      "errors": {}
+    },
+    "listSchemaHosts": {
+      "errors": {}
+    },
+    "listSchemasPaginated": {
+      "errors": {}
+    },
+    "listScripts": {
+      "errors": {}
+    },
+    "listServiceTokens": {
+      "errors": {}
+    },
+    "listShortLivedCertificateCAs": {
+      "errors": {}
+    },
+    "listSpectrumApplications": {
+      "errors": {}
+    },
+    "listSslConfigurations": {
+      "errors": {}
+    },
+    "listTestHistory": {
+      "errors": {}
+    },
+    "listWaitingRoomRules": {
+      "errors": {}
+    },
+    "listWaitingRooms": {
+      "errors": {}
+    },
+    "listWeb3Hostnames": {
+      "errors": {}
+    },
+    "listmanagedtransforms": {
+      "errors": {}
+    },
+    "listzoneentrypointrulesetversions": {
+      "errors": {}
+    },
+    "listzonerulesets": {
+      "errors": {}
+    },
+    "listzonerulesetversionrulesbytag": {
+      "errors": {}
+    },
+    "listzonerulesetversions": {
+      "errors": {}
+    },
+    "listzonesnippetrules": {
+      "errors": {}
+    },
+    "listzonesnippets": {
+      "errors": {}
+    },
+    "loadBalancersLoadBalancerDetails": {
+      "errors": {}
+    },
+    "pageRulesEditAPageRule": {
+      "errors": {}
+    },
+    "patch": {
+      "errors": {}
+    },
+    "patch1": {
+      "errors": {}
+    },
+    "patchArgoSmartRoutingSetting": {
+      "errors": {}
+    },
+    "patchDiscoveredOperation": {
+      "errors": {}
+    },
+    "patchDiscoveredOperations": {
+      "errors": {}
+    },
+    "patchEnrollment": {
+      "errors": {}
+    },
+    "patchEvent": {
+      "errors": {}
+    },
+    "patchHealthCheck": {
+      "errors": {}
+    },
+    "patchHealthCheck1": {
+      "errors": {}
+    },
+    "patchHostname": {
+      "errors": {}
+    },
+    "patchLoadBalancer": {
+      "errors": {}
+    },
+    "patchSettings": {
+      "errors": {}
+    },
+    "patchTieredCachingSetting": {
+      "errors": {}
+    },
+    "patchWaitingRoom": {
+      "errors": {}
+    },
+    "patchWaitingRoomRule": {
+      "errors": {}
+    },
+    "patchZoneLevelSettings": {
+      "errors": {}
+    },
+    "patchZoneSettings": {
+      "errors": {}
+    },
+    "payPerCrawlcreateconfig": {
+      "errors": {}
+    },
+    "payPerCrawlgetconfig": {
+      "errors": {}
+    },
+    "payPerCrawlpatchconfig": {
+      "errors": {}
+    },
+    "perHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthentication": {
+      "errors": {}
+    },
+    "perHostnameAuthenticatedOriginPullUploadAHostnameClientCertificate": {
+      "errors": {}
+    },
+    "post": {
+      "errors": {}
+    },
+    "post1": {
+      "errors": {}
+    },
+    "postSchema": {
+      "errors": {}
+    },
+    "postZonesZoneIdLogpushEdgeJobs": {
+      "errors": {}
+    },
+    "postZonesZoneIdLogpushJobs": {
+      "errors": {}
+    },
+    "postZonesZoneIdLogpushOwnership": {
+      "errors": {}
+    },
+    "postZonesZoneIdLogpushOwnershipValidate": {
+      "errors": {}
+    },
+    "postZonesZoneIdLogpushValidateDestination": {
+      "errors": {}
+    },
+    "postZonesZoneIdLogpushValidateDestinationExists": {
+      "errors": {}
+    },
+    "postZonesZoneIdLogpushValidateOrigin": {
+      "errors": {}
+    },
+    "postZonesZoneIdLogsControlRetentionFlag": {
+      "errors": {}
+    },
+    "postZonesZoneIdentifierZarazPublish": {
+      "errors": {}
+    },
+    "put": {
+      "errors": {}
+    },
+    "put1": {
+      "errors": {}
+    },
+    "putHostnameAssociations": {
+      "errors": {}
+    },
+    "putZonesZoneIdActivationCheck": {
+      "errors": {}
+    },
+    "putZonesZoneIdLogpushJobsJobId": {
+      "errors": {}
+    },
+    "putZonesZoneIdentifierZarazConfig": {
+      "errors": {}
+    },
+    "putZonesZoneIdentifierZarazHistory": {
+      "errors": {}
+    },
+    "putZonesZoneIdentifierZarazWorkflow": {
+      "errors": {}
+    },
+    "schemaValidationBulkEditPerOperationSettings": {
+      "errors": {}
+    },
+    "schemaValidationEditSchema": {
+      "errors": {}
+    },
+    "schemaValidationEditSettings": {
+      "errors": {}
+    },
+    "schemaValidationExtractOperationsFromSchema": {
+      "errors": {}
+    },
+    "secondaryDnsPrimaryZoneDisableOutgoingZoneTransfers": {
+      "errors": {}
+    },
+    "secondaryDnsPrimaryZoneEnableOutgoingZoneTransfers": {
+      "errors": {}
+    },
+    "secondaryDnsPrimaryZoneForceDnsNotify": {
+      "errors": {}
+    },
+    "secondaryDnsPrimaryZonePrimaryZoneConfigurationDetails": {
+      "errors": {}
+    },
+    "secondaryDnsSecondaryZoneForceAxfr": {
+      "errors": {}
+    },
+    "secondaryDnsSecondaryZoneSecondaryZoneConfigurationDetails": {
+      "errors": {}
+    },
+    "smartShieldHealthCheckDetails": {
+      "errors": {}
+    },
+    "smartShieldSettingsStartCacheReserveClear": {
+      "errors": {}
+    },
+    "tokenValidationConfigEdit": {
+      "errors": {}
+    },
+    "tokenValidationRulesBulkEdit": {
+      "errors": {}
+    },
+    "tokenValidationRulesEdit": {
+      "errors": {}
+    },
+    "tokenValidationRulesPreview": {
+      "errors": {}
+    },
+    "totalTlsEnableOrDisableTotalTls": {
+      "errors": {}
+    },
+    "totalTlsTotalTlsSettingsDetails": {
+      "errors": {}
+    },
+    "update": {
+      "errors": {}
+    },
+    "updateABookmarkApplication": {
+      "errors": {}
+    },
+    "updateACustomPage": {
+      "errors": {}
+    },
+    "updateAFilter": {
+      "errors": {}
+    },
+    "updateAPageRule": {
+      "errors": {}
+    },
+    "updateARateLimit": {
+      "errors": {}
+    },
+    "updateAServiceToken": {
+      "errors": {}
+    },
+    "updateAccessApplicationSettings": {
+      "errors": {}
+    },
+    "updateAccessApplicationSettings1": {
+      "errors": {}
+    },
+    "updateAnAccessGroup": {
+      "errors": {}
+    },
+    "updateAnAccessIdentityProvider": {
+      "errors": {}
+    },
+    "updateAnAccessPolicy": {
+      "errors": {}
+    },
+    "updateAnMtlsCertificate": {
+      "errors": {}
+    },
+    "updateAnMtlsCertificateSettings": {
+      "errors": {}
+    },
+    "updateCatchAllRule": {
+      "errors": {}
+    },
+    "updateConfig": {
+      "errors": {}
+    },
+    "updateDetection": {
+      "errors": {}
+    },
+    "updateDnsSettings": {
+      "errors": {}
+    },
+    "updateEvent": {
+      "errors": {}
+    },
+    "updateFallbackOriginForCustomHostnames": {
+      "errors": {}
+    },
+    "updateFilters": {
+      "errors": {}
+    },
+    "updateHealthCheck": {
+      "errors": {}
+    },
+    "updateHealthCheck1": {
+      "errors": {}
+    },
+    "updateLoadBalancer": {
+      "errors": {}
+    },
+    "updateMultipleOperationLevelSettings": {
+      "errors": {}
+    },
+    "updateOperationLevelSettings": {
+      "errors": {}
+    },
+    "updatePerOperationSetting": {
+      "errors": {}
+    },
+    "updatePolicy": {
+      "errors": {}
+    },
+    "updatePolicyCertificates": {
+      "errors": {}
+    },
+    "updatePrimaryZoneConfiguration": {
+      "errors": {}
+    },
+    "updateRoute": {
+      "errors": {}
+    },
+    "updateRoutingRule": {
+      "errors": {}
+    },
+    "updateSecondaryZoneConfiguration": {
+      "errors": {}
+    },
+    "updateSecurityTxt": {
+      "errors": {}
+    },
+    "updateSettings": {
+      "errors": {}
+    },
+    "updateSettings1": {
+      "errors": {}
+    },
+    "updateSettings2": {
+      "errors": {}
+    },
+    "updateSpectrumApplicationConfigurationUsingANameForTheOrigin": {
+      "errors": {}
+    },
+    "updateWaitingRoom": {
+      "errors": {}
+    },
+    "updateYourZeroTrustOrganization": {
+      "errors": {}
+    },
+    "updateZoneLevelSettings": {
+      "errors": {}
+    },
+    "updateZoneSettings": {
+      "errors": {}
+    },
+    "updateZoneSubscription": {
+      "errors": {}
+    },
+    "updatemanagedtransforms": {
+      "errors": {}
+    },
+    "updateurlnormalization": {
+      "errors": {}
+    },
+    "updatezoneentrypointruleset": {
+      "errors": {}
+    },
+    "updatezoneruleset": {
+      "errors": {}
+    },
+    "updatezonerulesetrule": {
+      "errors": {}
+    },
+    "updatezonesnippet": {
+      "errors": {}
+    },
+    "updatezonesnippetrules": {
+      "errors": {}
+    },
+    "wafContentScanningAddCustomScanExpressions": {
+      "errors": {}
+    },
+    "wafContentScanningDisable": {
+      "errors": {}
+    },
+    "wafContentScanningEnable": {
+      "errors": {}
+    },
+    "wafProductApiLeakedCredentialsSetStatus": {
+      "errors": {}
+    },
+    "waitingRoomEventDetails": {
+      "errors": {}
+    },
+    "waitingRoomPreviewActiveEventDetails": {
+      "errors": {}
+    },
+    "waitingRoomReplaceWaitingRoomRules": {
+      "errors": {}
+    },
+    "waitingRoomWaitingRoomDetails": {
+      "errors": {}
+    },
+    "web3HostnameEditWeb3Hostname": {
+      "errors": {}
+    },
+    "web3HostnameWeb3HostnameDetails": {
+      "errors": {}
+    },
+    "webAnalyticsToggleRum": {
+      "errors": {}
+    },
+    "zoneCacheSettingsChangeAegisSetting": {
+      "errors": {}
+    },
+    "zoneCacheSettingsChangeOriginH2MaxStreamsSetting": {
+      "errors": {}
+    },
+    "zoneCacheSettingsChangeOriginMaxHttpVersionSetting": {
+      "errors": {}
+    },
+    "zoneCloudConnectorRules": {
+      "errors": {}
+    },
+    "zoneLevelAccessApplicationsAddABookmarkApplication": {
+      "errors": {}
+    },
+    "zoneLevelAccessApplicationsRevokeServiceTokens": {
+      "errors": {}
+    },
+    "zoneLevelAccessApplicationsTestAccessPolicies": {
+      "errors": {}
+    },
+    "zoneLevelAccessIdentityProvidersAddAnAccessIdentityProvider": {
+      "errors": {}
+    },
+    "zoneLevelAccessMtlsAuthenticationAddAnMtlsCertificate": {
+      "errors": {}
+    },
+    "zoneLevelAuthenticatedOriginPullsSetEnablementForZone": {
+      "errors": {}
+    },
+    "zoneLevelAuthenticatedOriginPullsUploadCertificate": {
+      "errors": {}
+    },
+    "zoneLevelZeroTrustOrganizationRevokeAllAccessTokensForAUser": {
+      "errors": {}
+    },
+    "zonePurge": {
+      "errors": {}
+    },
+    "zoneRatePlanAvailablePlanDetails": {
+      "errors": {}
+    },
+    "zoneSettingsChangeFontsSetting": {
+      "errors": {}
+    },
+    "zoneSettingsChangeSpeedBrainSetting": {
+      "errors": {}
+    },
+    "zoneSettingsEditSingleSetting": {
+      "errors": {}
+    },
+    "zoneSettingsEditZoneSettingsInfo": {
+      "errors": {}
+    },
+    "zoneSubscriptionZoneSubscriptionDetails": {
+      "errors": {}
+    }
+  }
+}

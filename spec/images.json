@@ -1,0 +1,56 @@
+{
+  "errors": {},
+  "operations": {
+    "cloudflareImagesBaseImage": {
+      "errors": {}
+    },
+    "cloudflareImagesImageDetails": {
+      "errors": {}
+    },
+    "cloudflareImagesImagesUsageStatistics": {
+      "errors": {}
+    },
+    "cloudflareImagesKeysAddSigningKey": {
+      "errors": {}
+    },
+    "cloudflareImagesUploadAnImageViaUrl": {
+      "errors": {}
+    },
+    "cloudflareImagesVariantsVariantDetails": {
+      "errors": {}
+    },
+    "createAVariant": {
+      "errors": {}
+    },
+    "createAuthenticatedDirectUploadUrlV2": {
+      "errors": {}
+    },
+    "deleteAVariant": {
+      "errors": {}
+    },
+    "deleteImage": {
+      "errors": {}
+    },
+    "deleteSigningKey": {
+      "errors": {}
+    },
+    "listImages": {
+      "errors": {}
+    },
+    "listImagesV2": {
+      "errors": {}
+    },
+    "listSigningKeys": {
+      "errors": {}
+    },
+    "listVariants": {
+      "errors": {}
+    },
+    "updateAVariant": {
+      "errors": {}
+    },
+    "updateImage": {
+      "errors": {}
+    }
+  }
+}

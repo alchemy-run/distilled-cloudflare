@@ -1,0 +1,47 @@
+{
+  "errors": {},
+  "operations": {
+    "createNewWorkflowInstance": {
+      "errors": {}
+    },
+    "createOrModifyWorkflow": {
+      "errors": {}
+    },
+    "createWorkflowInstance": {
+      "errors": {}
+    },
+    "deleteWorkflow": {
+      "errors": {}
+    },
+    "getWorkflowDetails": {
+      "errors": {}
+    },
+    "listWorkflowInstances": {
+      "errors": {}
+    },
+    "listWorkflowVersions": {
+      "errors": {}
+    },
+    "listWorkflows": {
+      "errors": {}
+    },
+    "worBatchTerminateWorkflowInstances": {
+      "errors": {}
+    },
+    "worChangeStatusWorkflowInstance": {
+      "errors": {}
+    },
+    "worDescribeWorkflowInstance": {
+      "errors": {}
+    },
+    "worDescribeWorkflowVersions": {
+      "errors": {}
+    },
+    "worSendEventWorkflowInstance": {
+      "errors": {}
+    },
+    "worStatusTerminateWorkflowInstances": {
+      "errors": {}
+    }
+  }
+}

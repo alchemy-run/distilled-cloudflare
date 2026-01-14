@@ -1,75 +1,258 @@
 {
   "errors": {
-    "WorkerNotFound": { "code": 10007, "status": 404, "categories": ["NotFoundError"] },
-    "NamespaceNotFound": { "code": 100119, "status": 404, "categories": ["NotFoundError"] },
-    "InvalidWorkerName": { "code": 10016, "categories": ["BadRequestError"] },
-    "WorkerSizeLimitExceeded": { "code": 10027, "categories": ["QuotaError"] },
-    "ValidationError": { "code": 10021, "categories": ["BadRequestError"] },
-    "NoEventHandlers": { "code": 10068, "categories": ["BadRequestError"] },
-    "UnsupportedEventHandlers": { "code": 10069, "categories": ["BadRequestError"] },
-    "BindingNotFound": { "code": 10056, "categories": ["NotFoundError"] },
-    "BindingNameRequired": { "code": 10052, "categories": ["BadRequestError"] },
-    "RateLimited": { "code": 971, "categories": ["ThrottlingError", "RetryableError"] },
-    "TooManyRequests": { "code": 6100, "categories": ["ThrottlingError", "RetryableError"] },
-    "AuthenticationError": { "code": 10000, "categories": ["AuthError"] },
-    "InvalidToken": { "code": 9103, "categories": ["AuthError"] },
-    "MissingToken": { "code": 9106, "categories": ["AuthError"] },
-    "TokenExpired": { "code": 9109, "categories": ["AuthError"] },
-    "Unauthorized": { "code": 9000, "categories": ["AuthError"] }
+    "WorkerNotFound": {
+      "code": 10007,
+      "status": 404,
+      "categories": [
+        "NotFoundError"
+      ]
+    },
+    "NamespaceNotFound": {
+      "code": 100119,
+      "status": 404,
+      "categories": [
+        "NotFoundError"
+      ]
+    },
+    "InvalidWorkerName": {
+      "code": 10016,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "WorkerSizeLimitExceeded": {
+      "code": 10027,
+      "categories": [
+        "QuotaError"
+      ]
+    },
+    "ValidationError": {
+      "code": 10021,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "NoEventHandlers": {
+      "code": 10068,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "UnsupportedEventHandlers": {
+      "code": 10069,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "BindingNotFound": {
+      "code": 10056,
+      "categories": [
+        "NotFoundError"
+      ]
+    },
+    "BindingNameRequired": {
+      "code": 10052,
+      "categories": [
+        "BadRequestError"
+      ]
+    },
+    "RateLimited": {
+      "code": 971,
+      "categories": [
+        "ThrottlingError",
+        "RetryableError"
+      ]
+    },
+    "TooManyRequests": {
+      "code": 6100,
+      "categories": [
+        "ThrottlingError",
+        "RetryableError"
+      ]
+    },
+    "AuthenticationError": {
+      "code": 10000,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "InvalidToken": {
+      "code": 9103,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "MissingToken": {
+      "code": 9106,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "TokenExpired": {
+      "code": 9109,
+      "categories": [
+        "AuthError"
+      ]
+    },
+    "Unauthorized": {
+      "code": 9000,
+      "categories": [
+        "AuthError"
+      ]
+    }
   },
   "operations": {
-    "listScripts": { "errors": { "NamespaceNotFound": {} } },
-    "workerScriptUploadWorkerModule": {
+    "create": {
+      "errors": {}
+    },
+    "createAssetsUploadSession": {
       "errors": {
-        "InvalidWorkerName": {},
-        "WorkerSizeLimitExceeded": {},
-        "ValidationError": {},
-        "NoEventHandlers": {},
-        "UnsupportedEventHandlers": {}
+        "NamespaceNotFound": {},
+        "WorkerNotFound": {}
       }
     },
-    "getSettings": {
+    "createAssetsUploadSession1": {
       "errors": {
         "WorkerNotFound": {}
       }
     },
-    "patchSettings": {
+    "createDeployment": {
       "errors": {
         "WorkerNotFound": {},
         "ValidationError": {}
       }
     },
-    "listVersions": {
+    "createSubdomain": {
+      "errors": {}
+    },
+    "createWorkerAccountSettings": {
+      "errors": {}
+    },
+    "createworker": {
+      "errors": {}
+    },
+    "createworkerversion": {
+      "errors": {}
+    },
+    "deleteDeployment": {
       "errors": {
         "WorkerNotFound": {}
       }
     },
-    "listDeployments": {
+    "deleteNamespace": {
+      "errors": {}
+    },
+    "deleteScriptSecret": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteScriptSecret1": {
       "errors": {
         "WorkerNotFound": {}
       }
+    },
+    "deleteScriptTag": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteScripts": {
+      "errors": {
+        "WorkerNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "deleteSubdomain": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteSubdomain1": {
+      "errors": {}
+    },
+    "deleteTail": {
+      "errors": {}
+    },
+    "deleteWorker": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteWorker1": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "deleteworker": {
+      "errors": {}
+    },
+    "deleteworkerversion": {
+      "errors": {}
+    },
+    "destinationcreate": {
+      "errors": {}
+    },
+    "destinationlist": {
+      "errors": {}
+    },
+    "destinationsdelete": {
+      "errors": {}
+    },
+    "destinationupdate": {
+      "errors": {}
+    },
+    "editworker": {
+      "errors": {}
+    },
+    "getADomain": {
+      "errors": {}
+    },
+    "getAccountsAccountIdWorkersScriptsScriptNameTails": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "getContent": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "getCronTriggers": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "getDeployment": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "getNamespace": {
+      "errors": {}
     },
     "getScriptBindings": {
       "errors": {
         "NamespaceNotFound": {}
       }
     },
-    "listScriptSecrets": {
+    "getScriptContent": {
       "errors": {
         "NamespaceNotFound": {}
       }
     },
-    "putScriptSecrets": {
+    "getScriptContent1": {
+      "errors": {}
+    },
+    "getScriptSecret": {
       "errors": {
-        "NamespaceNotFound": {}
+        "WorkerNotFound": {}
       }
     },
     "getScriptSecrets": {
-      "errors": {
-        "NamespaceNotFound": {}
-      }
-    },
-    "getScriptContent": {
       "errors": {
         "NamespaceNotFound": {}
       }
@@ -80,78 +263,15 @@
         "WorkerNotFound": {}
       }
     },
-    "patchScriptSettings": {
-      "errors": {
-        "NamespaceNotFound": {},
-        "WorkerNotFound": {},
-        "ValidationError": {},
-        "BindingNotFound": {},
-        "BindingNameRequired": {}
-      }
-    },
-    "getCronTriggers": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
-    },
-    "getSubdomain": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
-    },
-    "getContent": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
-    },
-    "putScriptSecret": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
-    },
-    "listScriptSecrets1": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
-    },
-    "deleteScriptSecret1": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
-    },
-    "workerScriptFetchUsageModel": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
-    },
     "getScriptTags": {
       "errors": {
         "NamespaceNotFound": {},
         "WorkerNotFound": {}
       }
     },
-    "putScriptTags": {
-      "errors": {
-        "NamespaceNotFound": {},
-        "WorkerNotFound": {},
-        "ValidationError": {}
-      }
-    },
-    "deleteScriptTag": {
-      "errors": {
-        "NamespaceNotFound": {},
-        "WorkerNotFound": {}
-      }
-    },
-    "getVersionDetail": {
+    "getSettings": {
       "errors": {
         "WorkerNotFound": {}
-      }
-    },
-    "updateCronTriggers": {
-      "errors": {
-        "WorkerNotFound": {},
-        "ValidationError": {}
       }
     },
     "getSettings1": {
@@ -159,98 +279,79 @@
         "WorkerNotFound": {}
       }
     },
-    "workerScriptListTails": {
+    "getSettings2": {
+      "errors": {}
+    },
+    "getSubdomain": {
       "errors": {
         "WorkerNotFound": {}
       }
     },
-    "workerScriptStartTail": {
+    "getSubdomain1": {
+      "errors": {}
+    },
+    "getVersionDetail": {
       "errors": {
         "WorkerNotFound": {}
       }
     },
-    "workerScriptDeleteTail": {
+    "getworker": {
+      "errors": {}
+    },
+    "getworkerversion": {
       "errors": {
         "WorkerNotFound": {}
       }
     },
-    "workerScriptDownloadWorker": {
+    "list": {
+      "errors": {}
+    },
+    "listDeployments": {
       "errors": {
         "WorkerNotFound": {}
       }
     },
-    "putContent": {
-      "errors": {
-        "InvalidWorkerName": {},
-        "NoEventHandlers": {},
-        "ValidationError": {}
-      }
+    "listDomains": {
+      "errors": {}
     },
-    "createDeployment": {
-      "errors": {
-        "WorkerNotFound": {},
-        "ValidationError": {}
-      }
+    "listNamespaces": {
+      "errors": {}
     },
-    "getDeployment": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
+    "listObjects": {
+      "errors": {}
     },
-    "deleteDeployment": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
+    "listRegions": {
+      "errors": {}
     },
-    "postSubdomain": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
-    },
-    "deleteSubdomain": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
-    },
-    "updateUsageModel": {
-      "errors": {
-        "WorkerNotFound": {},
-        "ValidationError": {}
-      }
-    },
-    "workerVersionsUploadVersion": {
-      "errors": {
-        "WorkerNotFound": {},
-        "NoEventHandlers": {},
-        "ValidationError": {}
-      }
-    },
-    "patchSettings1": {
-      "errors": {
-        "WorkerNotFound": {},
-        "ValidationError": {},
-        "BindingNotFound": {},
-        "BindingNameRequired": {}
-      }
-    },
-    "getScriptSecret": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
-    },
-    "deleteWorker1": {
-      "errors": {
-        "WorkerNotFound": {}
-      }
-    },
-    "patchNamespace": {
+    "listScriptSecrets": {
       "errors": {
         "NamespaceNotFound": {}
       }
     },
-    "putNamespace": {
+    "listScriptSecrets1": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "listScripts": {
       "errors": {
         "NamespaceNotFound": {}
+      }
+    },
+    "listVersions": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "listWorkers": {
+      "errors": {}
+    },
+    "listworkers": {
+      "errors": {}
+    },
+    "listworkerversions": {
+      "errors": {
+        "WorkerNotFound": {}
       }
     },
     "namespaceWorkerScriptUploadWorkerModule": {
@@ -267,22 +368,52 @@
         "WorkerNotFound": {}
       }
     },
-    "deleteWorker": {
+    "patchNamespace": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "patchScriptSettings": {
       "errors": {
         "NamespaceNotFound": {},
+        "WorkerNotFound": {},
+        "ValidationError": {},
+        "BindingNotFound": {},
+        "BindingNameRequired": {}
+      }
+    },
+    "patchSettings": {
+      "errors": {
+        "WorkerNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "patchSettings1": {
+      "errors": {
+        "WorkerNotFound": {},
+        "ValidationError": {},
+        "BindingNotFound": {},
+        "BindingNameRequired": {}
+      }
+    },
+    "patchSettings2": {
+      "errors": {}
+    },
+    "postSubdomain": {
+      "errors": {
         "WorkerNotFound": {}
       }
     },
-    "putScriptTag": {
+    "putContent": {
       "errors": {
-        "NamespaceNotFound": {},
-        "WorkerNotFound": {}
+        "InvalidWorkerName": {},
+        "NoEventHandlers": {},
+        "ValidationError": {}
       }
     },
-    "deleteScriptSecret": {
+    "putNamespace": {
       "errors": {
-        "NamespaceNotFound": {},
-        "WorkerNotFound": {}
+        "NamespaceNotFound": {}
       }
     },
     "putScriptContent": {
@@ -293,36 +424,113 @@
         "ValidationError": {}
       }
     },
-    "getAccountsAccountIdWorkersScriptsScriptNameTails": {
+    "putScriptContent1": {
+      "errors": {}
+    },
+    "putScriptSecret": {
       "errors": {
         "WorkerNotFound": {}
       }
     },
-    "deleteScripts": {
+    "putScriptSecrets": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "putScriptTag": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "WorkerNotFound": {}
+      }
+    },
+    "putScriptTags": {
+      "errors": {
+        "NamespaceNotFound": {},
+        "WorkerNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "telemetrykeyslist": {
+      "errors": {}
+    },
+    "telemetryquery": {
+      "errors": {}
+    },
+    "telemetryvalueslist": {
+      "errors": {}
+    },
+    "updateCronTriggers": {
       "errors": {
         "WorkerNotFound": {},
         "ValidationError": {}
       }
     },
-    "listworkerversions": {
+    "updateUsageModel": {
+      "errors": {
+        "WorkerNotFound": {},
+        "ValidationError": {}
+      }
+    },
+    "updateworker": {
+      "errors": {}
+    },
+    "workerAccountSettingsFetchWorkerAccountSettings": {
+      "errors": {}
+    },
+    "workerAssetsUpload": {
+      "errors": {}
+    },
+    "workerDomainAttachToDomain": {
+      "errors": {}
+    },
+    "workerDomainDetachFromDomain": {
+      "errors": {}
+    },
+    "workerScriptDeleteTail": {
       "errors": {
         "WorkerNotFound": {}
       }
     },
-    "getworkerversion": {
+    "workerScriptDownloadWorker": {
       "errors": {
         "WorkerNotFound": {}
       }
     },
-    "createAssetsUploadSession1": {
+    "workerScriptFetchUsageModel": {
       "errors": {
         "WorkerNotFound": {}
       }
     },
-    "createAssetsUploadSession": {
+    "workerScriptListTails": {
       "errors": {
-        "NamespaceNotFound": {},
         "WorkerNotFound": {}
+      }
+    },
+    "workerScriptSearchWorkers": {
+      "errors": {}
+    },
+    "workerScriptStartTail": {
+      "errors": {
+        "WorkerNotFound": {}
+      }
+    },
+    "workerScriptUploadWorkerModule": {
+      "errors": {
+        "InvalidWorkerName": {},
+        "WorkerSizeLimitExceeded": {},
+        "ValidationError": {},
+        "NoEventHandlers": {},
+        "UnsupportedEventHandlers": {}
+      }
+    },
+    "workerTailLogsStartTail": {
+      "errors": {}
+    },
+    "workerVersionsUploadVersion": {
+      "errors": {
+        "WorkerNotFound": {},
+        "NoEventHandlers": {},
+        "ValidationError": {}
       }
     }
   }

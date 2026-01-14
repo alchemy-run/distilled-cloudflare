@@ -6,8 +6,7 @@
 
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpBody } from "@effect/platform";
 import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
-import type { ErrorCatalogData } from "../../src/error-catalog.ts";
+import type { ErrorCatalogData } from "~/error-catalog.ts";
 import { addDiscoveredError, saveCatalog } from "./catalog.ts";
 
 /**

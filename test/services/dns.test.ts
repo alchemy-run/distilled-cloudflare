@@ -12,7 +12,7 @@ import { describe, expect } from "vitest";
 import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";
 import { test, getZoneId } from "../test.ts";
-import * as DNS from "../../src/services/dns.ts";
+import * as DNS from "~/services/dns.ts";
 
 const zoneId = () => {
   const id = getZoneId();
