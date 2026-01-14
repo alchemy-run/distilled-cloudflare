@@ -6,6 +6,7 @@
  */
 
 import { HttpClient, HttpClientRequest, HttpBody } from "@effect/platform";
+import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as Redacted from "effect/Redacted";
@@ -97,12 +98,16 @@ export const make = <I extends Schema.Schema.AnyNoContext, O extends Schema.Sche
   ): Effect.Effect<
     Output,
     CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
-    ApiToken | HttpClient.HttpClient | Retry
+    ApiToken | HttpClient.HttpClient
   > =>
     Effect.gen(function* () {
       // Get retry policy from context (defaults to the standard policy)
-      const retryPolicyOption = yield* Effect.serviceOption(Retry);
       const lastErrorRef = yield* Ref.make<unknown>(null);
+
+      // Check if a custom retry policy was provided in context (without requiring it)
+      const retryPolicyOption = yield* Effect.contextWith((ctx: Context.Context<never>) =>
+        Context.getOption(ctx, Retry),
+      );
 
       // Resolve policy - could be static Options or a Factory function
       const retryPolicy = Option.match(retryPolicyOption, {

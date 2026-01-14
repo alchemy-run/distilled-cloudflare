@@ -1204,12 +1204,12 @@ export const putScriptSecrets: (
   input: PutScriptSecretsRequest
 ) => Effect.Effect<
   PutScriptSecretsResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | NamespaceNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: PutScriptSecretsRequest,
   output: PutScriptSecretsResponse,
-  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000))],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), NamespaceNotFound.pipe(T.HttpErrorCode(100119), T.HttpErrorStatus(404))],
 }));
 
 export interface GetScriptSecretsRequest {
@@ -1262,12 +1262,12 @@ export const getScriptSecrets: (
   input: GetScriptSecretsRequest
 ) => Effect.Effect<
   GetScriptSecretsResponse,
-  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
+  RateLimited | TooManyRequests | AuthenticationError | InvalidToken | MissingToken | TokenExpired | Unauthorized | NamespaceNotFound | CloudflareError | UnknownCloudflareError | CloudflareNetworkError | CloudflareHttpError,
   ApiToken | HttpClient.HttpClient
 > = API.make(() => ({
   input: GetScriptSecretsRequest,
   output: GetScriptSecretsResponse,
-  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000))],
+  errors: [RateLimited.pipe(T.HttpErrorCode(971)), TooManyRequests.pipe(T.HttpErrorCode(6100)), AuthenticationError.pipe(T.HttpErrorCode(10000)), InvalidToken.pipe(T.HttpErrorCode(9103)), MissingToken.pipe(T.HttpErrorCode(9106)), TokenExpired.pipe(T.HttpErrorCode(9109)), Unauthorized.pipe(T.HttpErrorCode(9000)), NamespaceNotFound.pipe(T.HttpErrorCode(100119), T.HttpErrorStatus(404))],
 }));
 
 export interface DeleteScriptSecretRequest {

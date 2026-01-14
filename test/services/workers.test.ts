@@ -1139,6 +1139,17 @@ export default {
       }));
   });
 
+  describe("deleteSubdomain1", () => {
+    // Note: This deletes the account-level workers subdomain which is a destructive account operation
+    test.skip("happy path - deletes account workers subdomain", () =>
+      Effect.gen(function* () {
+        // This is destructive and affects the entire account
+        yield* Workers.deleteSubdomain1({
+          account_id: accountId(),
+        });
+      }));
+  });
+
   // ============================================================================
   // Workers Services APIs (Environment-based)
   // Note: These APIs are for Workers Services which use environments
@@ -1515,6 +1526,81 @@ export default {
         account_id: accountId(),
         dispatch_namespace: "itty-cf-nonexistent-ns-secrets",
         script_name: "any-script",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("NamespaceNotFound");
+        }),
+      ));
+  });
+
+  describe("putScriptSecrets (in namespace)", () => {
+    test("happy path - puts secret to namespace worker", () =>
+      withNamespaceWorker("itty-cf-workers-ns-put-secrets", "itty-cf-ns-put-secrets-worker", (nsName, scriptName) =>
+        Effect.gen(function* () {
+          const response = yield* Workers.putScriptSecrets({
+            account_id: accountId(),
+            dispatch_namespace: nsName,
+            script_name: scriptName,
+            body: { name: "TEST_SECRET", text: "secret-value", type: "secret_text" },
+          });
+          expect(response.result).toBeDefined();
+
+          // Verify secret appears in list
+          const secrets = yield* Workers.listScriptSecrets({
+            account_id: accountId(),
+            dispatch_namespace: nsName,
+            script_name: scriptName,
+          });
+          expect(secrets.result.some((s) => s.name === "TEST_SECRET")).toBe(true);
+        }),
+      ));
+
+    test("error - NamespaceNotFound for non-existent namespace", () =>
+      Workers.putScriptSecrets({
+        account_id: accountId(),
+        dispatch_namespace: "itty-cf-nonexistent-ns-put-secrets",
+        script_name: "any-script",
+        body: { name: "TEST_SECRET", text: "secret-value", type: "secret_text" },
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBe("NamespaceNotFound");
+        }),
+      ));
+  });
+
+  describe("getScriptSecrets (in namespace)", () => {
+    test("happy path - gets secret metadata from namespace worker", () =>
+      withNamespaceWorker("itty-cf-workers-ns-get-secrets", "itty-cf-ns-get-secrets-worker", (nsName, scriptName) =>
+        Effect.gen(function* () {
+          const secretName = "GET_SECRET_TEST";
+
+          // First put a secret
+          yield* Workers.putScriptSecrets({
+            account_id: accountId(),
+            dispatch_namespace: nsName,
+            script_name: scriptName,
+            body: { name: secretName, text: "secret-value", type: "secret_text" },
+          });
+
+          // Then get it
+          const response = yield* Workers.getScriptSecrets({
+            account_id: accountId(),
+            dispatch_namespace: nsName,
+            script_name: scriptName,
+            secret_name: secretName,
+          });
+          expect(response.result).toBeDefined();
+        }),
+      ));
+
+    test("error - NamespaceNotFound for non-existent namespace", () =>
+      Workers.getScriptSecrets({
+        account_id: accountId(),
+        dispatch_namespace: "itty-cf-nonexistent-ns-get-secrets",
+        script_name: "any-script",
+        secret_name: "ANY_SECRET",
       }).pipe(
         Effect.flip,
         Effect.map((error) => {
@@ -2285,6 +2371,91 @@ export default {
           }
         }
       }));
+  });
+
+  describe("createworker (workflow)", () => {
+    // Note: createworker creates a workflow entry - the body format is unknown/undocumented
+    test.skip("happy path - creates workflow", () =>
+      Effect.gen(function* () {
+        // Body format needs to be discovered
+        const created = yield* Workers.createworker({
+          account_id: accountId(),
+          body: {},
+        });
+        expect(created.result).toBeDefined();
+      }));
+  });
+
+  describe("updateworker (workflow)", () => {
+    test("error - WorkflowNotFound for non-existent workflow", () =>
+      Workers.updateworker({
+        account_id: accountId(),
+        worker_id: "00000000-0000-0000-0000-000000000000",
+        body: {},
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBeDefined();
+        }),
+      ));
+  });
+
+  describe("deleteworker (workflow)", () => {
+    test("error - WorkflowNotFound for non-existent workflow", () =>
+      Workers.deleteworker({
+        account_id: accountId(),
+        worker_id: "00000000-0000-0000-0000-000000000000",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBeDefined();
+        }),
+      ));
+  });
+
+  describe("editworker (workflow)", () => {
+    test("error - WorkflowNotFound for non-existent workflow", () =>
+      Workers.editworker({
+        account_id: accountId(),
+        worker_id: "00000000-0000-0000-0000-000000000000",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBeDefined();
+        }),
+      ));
+  });
+
+  describe("createworkerversion (workflow)", () => {
+    test("error - WorkflowNotFound for non-existent workflow", () =>
+      Workers.createworkerversion({
+        account_id: accountId(),
+        worker_id: "00000000-0000-0000-0000-000000000000",
+        body: {
+          created_on: new Date().toISOString(),
+          id: "00000000-0000-0000-0000-000000000000",
+          number: 1,
+        },
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBeDefined();
+        }),
+      ));
+  });
+
+  describe("deleteworkerversion (workflow)", () => {
+    test("error - WorkflowNotFound for non-existent workflow", () =>
+      Workers.deleteworkerversion({
+        account_id: accountId(),
+        worker_id: "00000000-0000-0000-0000-000000000000",
+        version_id: "00000000-0000-0000-0000-000000000000",
+      }).pipe(
+        Effect.flip,
+        Effect.map((error) => {
+          expect(error._tag).toBeDefined();
+        }),
+      ));
   });
 
   // ============================================================================

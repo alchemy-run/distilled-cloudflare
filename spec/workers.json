@@ -59,6 +59,16 @@
         "NamespaceNotFound": {}
       }
     },
+    "putScriptSecrets": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
+    "getScriptSecrets": {
+      "errors": {
+        "NamespaceNotFound": {}
+      }
+    },
     "getScriptContent": {
       "errors": {
         "NamespaceNotFound": {}
