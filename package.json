@@ -5,7 +5,6 @@
   "private": true,
   "scripts": {
     "download:env": "doppler secrets download --no-file --format env > .env",
-    "find": "bun scripts/find-errors/index.ts",
     "generate": "bun scripts/generate-clients.ts && bun format",
     "test:watch": "vitest watch",
     "test": "vitest run",

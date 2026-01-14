@@ -782,6 +782,8 @@ interface ServiceSpec {
   operations: Record<
     string,
     {
+      /** Rename the exported function to a different name */
+      rename?: string;
       /** Object mapping error name to matcher (empty {} uses service default) */
       errors?: Record<string, ErrorMatcher>;
       aliases?: Array<{ from: number; to: string }>;
@@ -1074,10 +1076,23 @@ function generateServiceFile(
   const generatedSchemaNames = new Set<string>(cyclicSchemas);
 
   // Collect all errors used by this service
+  // Track function names to properly handle unique suffixes
+  const seenFuncNames = new Set<string>();
   const allErrorNames = new Set<string>();
   for (const op of operations) {
-    const funcName = OpenAPI.operationIdToFunctionName(op.operationId);
-    const safeFuncName = RESERVED_WORDS.has(funcName) ? `${funcName}_` : funcName;
+    let funcName = OpenAPI.operationIdToFunctionName(op.operationId);
+    let safeFuncName = RESERVED_WORDS.has(funcName) ? `${funcName}_` : funcName;
+
+    // Handle duplicates the same way as the main loop
+    let uniqueSuffix = 1;
+    let uniqueFuncName = safeFuncName;
+    while (seenFuncNames.has(uniqueFuncName)) {
+      uniqueFuncName = `${safeFuncName}${uniqueSuffix}`;
+      uniqueSuffix++;
+    }
+    safeFuncName = uniqueFuncName;
+    seenFuncNames.add(safeFuncName);
+
     const errors = serviceSpec.operations[safeFuncName]?.errors ?? {};
     for (const errorName of Object.keys(errors)) {
       allErrorNames.add(errorName);
@@ -1170,18 +1185,31 @@ function generateServiceFile(
   const generatedFunctions = new Set<string>();
 
   for (const { operationId, method, path, operation } of operations) {
-    let funcName = OpenAPI.operationIdToFunctionName(operationId);
-    let safeFuncName = RESERVED_WORDS.has(funcName) ? `${funcName}_` : funcName;
+    // Compute the original function name (used for spec lookup)
+    let originalFuncName = OpenAPI.operationIdToFunctionName(operationId);
+    let originalSafeFuncName = RESERVED_WORDS.has(originalFuncName)
+      ? `${originalFuncName}_`
+      : originalFuncName;
 
-    // Make function name unique if it already exists
+    // Make original function name unique (for spec lookup)
     let uniqueSuffix = 1;
-    let uniqueFuncName = safeFuncName;
-    while (generatedFunctions.has(uniqueFuncName)) {
-      uniqueFuncName = `${safeFuncName}${uniqueSuffix}`;
+    let uniqueOriginalFuncName = originalSafeFuncName;
+    while (generatedFunctions.has(uniqueOriginalFuncName)) {
+      uniqueOriginalFuncName = `${originalSafeFuncName}${uniqueSuffix}`;
       uniqueSuffix++;
     }
-    safeFuncName = uniqueFuncName;
-    generatedFunctions.add(safeFuncName);
+    originalSafeFuncName = uniqueOriginalFuncName;
+    generatedFunctions.add(originalSafeFuncName);
+
+    // Check for rename in spec (using the original function name as key)
+    const operationSpec = serviceSpec.operations[originalSafeFuncName];
+    const renamedFuncName = operationSpec?.rename;
+
+    // Use renamed name for generation if provided, otherwise use original
+    let safeFuncName = renamedFuncName ?? originalSafeFuncName;
+    if (renamedFuncName && RESERVED_WORDS.has(renamedFuncName)) {
+      safeFuncName = `${renamedFuncName}_`;
+    }
 
     const pascalName = safeFuncName.charAt(0).toUpperCase() + safeFuncName.slice(1);
     const requestClassName = `${pascalName}Request`;
@@ -1375,8 +1403,8 @@ function generateServiceFile(
       }
     }
 
-    // Get error matchers for this operation
-    const operationErrorMatchers = serviceSpec.operations[safeFuncName]?.errors ?? {};
+    // Get error matchers for this operation (use original name for spec lookup)
+    const operationErrorMatchers = serviceSpec.operations[originalSafeFuncName]?.errors ?? {};
     const serviceErrorDefaults = serviceSpec.errors ?? {};
 
     // Build combined error matchers:
