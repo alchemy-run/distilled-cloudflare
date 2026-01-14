@@ -3,7 +3,6 @@
   "include": ["src/**/*.ts"],
   "compilerOptions": {
     "outDir": "lib",
-    "baseUrl": "./src",
     "paths": {
       "~/*": ["./src/*"]
     }

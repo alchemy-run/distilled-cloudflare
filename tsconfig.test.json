@@ -3,7 +3,6 @@
   "include": ["test/**/*.ts", "scripts/**/*.ts"],
   "compilerOptions": {
     "noEmit": true,
-    "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
     }
