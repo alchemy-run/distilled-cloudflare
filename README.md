@@ -496,6 +496,86 @@ const program = R2.createBucket({
 
 Available predicates: `isAuthError`, `isNotFoundError`, `isConflictError`, `isThrottlingError`, `isServerError`.
 
+### Retry Policy
+
+By default, distilled-cloudflare automatically retries transient errors, throttling errors, and retryable errors using exponential backoff with jitter (up to 5 attempts).
+
+You can customize or disable this behavior using the `Retry` module:
+
+```typescript
+import * as Retry from "distilled-cloudflare/retry";
+```
+
+#### Disable Retries
+
+```typescript
+import * as Retry from "distilled-cloudflare/retry";
+
+myEffect.pipe(Retry.none)
+```
+
+#### Retry Throttling Errors Indefinitely
+
+```typescript
+import * as Retry from "distilled-cloudflare/retry";
+
+// Retries all throttling errors with exponential backoff (capped at 5s)
+myEffect.pipe(Retry.throttling)
+```
+
+#### Retry All Transient Errors Indefinitely
+
+```typescript
+import * as Retry from "distilled-cloudflare/retry";
+
+// Retries throttling, server errors, network errors, and retryable errors indefinitely
+myEffect.pipe(Retry.transient)
+```
+
+#### Custom Retry Policy
+
+```typescript
+import * as Retry from "distilled-cloudflare/retry";
+import { Category } from "distilled-cloudflare";
+import * as Schedule from "effect/Schedule";
+
+myEffect.pipe(
+  Retry.policy({
+    while: Category.isThrottlingError,
+    schedule: Schedule.exponential(1000),
+  })
+)
+```
+
+#### Dynamic Retry Policy with Error Inspection
+
+For advanced use cases like respecting `Retry-After` headers, you can access the last error via a `Ref`:
+
+```typescript
+import * as Retry from "distilled-cloudflare/retry";
+import * as Duration from "effect/Duration";
+import * as Effect from "effect/Effect";
+import * as Schedule from "effect/Schedule";
+
+myEffect.pipe(
+  Retry.policy((lastError) => ({
+    while: (error) => isThrottlingError(error),
+    schedule: Schedule.exponential(1000).pipe(
+      Schedule.modifyDelayEffect(
+        Effect.gen(function* (duration) {
+          const error = yield* lastError;
+          // Respect retry-after header if present
+          if (error?.retryAfterSeconds) {
+            return Duration.seconds(error.retryAfterSeconds);
+          }
+          return duration;
+        })
+      )
+    ),
+  }))
+)
+```
+
 ## Pagination
 
 Paginated operations expose `.pages()` and `.items()` methods for automatic pagination.
