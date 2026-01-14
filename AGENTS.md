@@ -154,10 +154,10 @@ When tests fail, categorize the issue:
 ```mermaid
 flowchart TD
     A[Test Fails] --> B{Failure Type?}
-    B -->|UnknownCloudflareError| C[Add to spec/{service}.json]
+    B -->|UnknownCloudflareError| C["Add to spec/service.json"]
     B -->|Schema decode failed| D[Patch openapi.patch.jsonc]
     B -->|Type error| E[Fix generator or test]
-    B -->|Needs user action| F[🛑 STOP & Request Help]
+    B -->|Needs user action| F["🛑 STOP & Request Help"]
     C --> G[Regenerate]
     D --> G
     E --> G
@@ -171,6 +171,7 @@ flowchart TD
 - ❌ Do NOT mark tests as skipped or todo
 - ❌ Do NOT move to next batch until current batch passes
 - ✅ Iterate until 100% operation coverage
+- ⚠️ EXCEPTION: Skip account-level destructive operations (e.g., `deleteSubdomain1`, `createSubdomain`) that permanently affect the entire account and cannot be safely tested
 
 **Completion Criteria:**
 - Every operation has at least one happy path test
@@ -266,7 +267,7 @@ flowchart TD
     subgraph Phase3["PHASE 3: RUN TESTS"]
         P3[Run tests]
         P3 --> P3a{Result?}
-        P3a -->|UnknownCloudflareError| P3b[Add to spec/{service}.json]
+        P3a -->|UnknownCloudflareError| P3b["Add to spec/service.json"]
         P3a -->|Schema decode failed| P3c[Patch openapi.patch.jsonc]
         P3a -->|Pass| P3d[Move to next test]
         P3b --> P3e[Regenerate & repeat]
@@ -288,14 +289,9 @@ Before writing tests, document what needs testing for each API:
 ```markdown
 ### API: putScriptSecret
 
-**Happy Path:**
-- Create worker, put secret, verify secret appears in list
-
-**Error Cases:**
-| Error Tag | Trigger | In spec? |
-|-----------|---------|----------|
-| WorkerNotFound | Put secret on non-existent worker | ✅ Yes |
-| InvalidSecretName | Use invalid characters in name | ❌ No |
+- happy: Create worker, put secret, verify secret appears in list
+- error: WorkerNotFound - put secret on non-existent worker (in spec)
+- error: InvalidSecretName - use invalid characters in name (discover)
 
 **Notes:**
 - Response omits `text` field (writeOnly)
