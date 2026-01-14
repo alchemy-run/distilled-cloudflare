@@ -12,6 +12,207 @@ bun vitest run ./test/services/r2.test.ts # Run tests
 bun tsc -b                                # Type check (run before committing)
 ```
 
+## AGENT TESTING PROTOCOL
+
+This section defines the **mandatory** process for AI agents adding comprehensive test coverage to a service.
+
+### Protocol Overview
+
+```mermaid
+flowchart LR
+    A[1. IDENTIFY] --> B[2. PLAN]
+    B --> C[3. BATCH]
+    C --> D[4. IMPLEMENT]
+    D --> E[5. DIAGNOSE]
+    E --> F{All tests pass?}
+    F -->|No| D
+    F -->|Yes| G{More batches?}
+    G -->|Yes| C
+    G -->|No| H[✅ Complete]
+```
+
+### Step 1: Identify Services Needing Tests
+
+Enumerate all operations for the target service and identify which need tests:
+
+```bash
+# List all exported functions for a service
+grep "^export const" src/services/{service}.ts | head -100
+
+# Check existing test coverage
+grep "describe\|test(" test/services/{service}.test.ts 2>/dev/null || echo "No tests yet"
+```
+
+For each operation, determine:
+- Does it have a happy path test?
+- Does it have error case tests?
+- What error cases are possible?
+
+### Step 2: Create Test Plan
+
+Document ALL operations with their happy path and error cases **before writing any code**:
+
+```markdown
+## Test Plan: {Service}
+
+### Operation: createBucket
+**Happy Path:** Create bucket with valid name, verify bucket is created
+**Error Cases:**
+| Error Tag | Trigger | Expected? |
+|-----------|---------|-----------|
+| BucketAlreadyExists | Create bucket with existing name | ❌ Discover |
+| ValidationError | Create bucket with invalid name | ❌ Discover |
+
+### Operation: deleteBucket  
+**Happy Path:** Delete existing bucket
+**Error Cases:**
+| Error Tag | Trigger | Expected? |
+|-----------|---------|-----------|
+| NoSuchBucket | Delete non-existent bucket | ✅ In spec |
+| BucketNotEmpty | Delete bucket with objects | ❌ Discover |
+```
+
+**Expected?** column indicates:
+- ✅ In spec - Error already defined in `spec/{service}.json`
+- ❌ Discover - Error needs to be discovered and added
+
+### Step 3: Batch Tests
+
+Group tests into batches of ~3-5 operations for manageable iteration:
+
+```markdown
+## Batch 1: Bucket CRUD
+- createBucket (happy + 2 errors)
+- getBucket (happy + 1 error)
+- deleteBucket (happy + 2 errors)
+
+## Batch 2: Bucket Configuration  
+- getBucketCorsPolicy (happy + 2 errors)
+- putBucketCorsPolicy (happy + 1 error)
+- deleteBucketCorsPolicy (happy + 2 errors)
+```
+
+### Step 4: Implement Tests
+
+For each batch:
+
+1. **Write all tests** (happy path + error cases)
+2. **Type-check**: `bun tsc -b`
+3. **Fix type errors** before running tests
+4. **Run tests**: `bun vitest run ./test/services/{service}.test.ts`
+
+### Step 5: Diagnose Failures
+
+When tests fail, categorize the issue:
+
+| Failure Type | Symptom | Fix |
+|--------------|---------|-----|
+| **Spec Bug** | `Schema decode failed` | Patch `spec/openapi.patch.jsonc` |
+| **Generator Bug** | Type mismatch between interface and schema | Fix `scripts/generate-clients.ts` |
+| **Client Bug** | Incorrect request/response handling | Fix `src/client/*.ts` |
+| **Missing Error** | `UnknownCloudflareError` | Add to `spec/{service}.json` |
+
+#### For UnknownCloudflareError:
+
+1. Extract the error code from the failure message
+2. Add error to `spec/{service}.json`:
+
+```json
+{
+  "errors": {
+    "NewErrorTag": { "code": 12345 }
+  },
+  "operations": {
+    "operationName": {
+      "errors": { "NewErrorTag": {} }
+    }
+  }
+}
+```
+
+3. Regenerate: `bun generate --service {service}`
+4. Re-run tests
+
+### Step 6: Iterate Until Complete
+
+```mermaid
+flowchart TD
+    A[Test Fails] --> B{Failure Type?}
+    B -->|UnknownCloudflareError| C[Add to spec/{service}.json]
+    B -->|Schema decode failed| D[Patch openapi.patch.jsonc]
+    B -->|Type error| E[Fix generator or test]
+    B -->|Needs user action| F[🛑 STOP & Request Help]
+    C --> G[Regenerate]
+    D --> G
+    E --> G
+    G --> H[Re-run tests]
+    H --> I{Pass?}
+    I -->|No| A
+    I -->|Yes| J[Next test/batch]
+```
+
+**Rules:**
+- ❌ Do NOT mark tests as skipped or todo
+- ❌ Do NOT move to next batch until current batch passes
+- ✅ Iterate until 100% operation coverage
+
+**Completion Criteria:**
+- Every operation has at least one happy path test
+- Every operation has error case tests for all discoverable errors
+- All tests pass: `bun vitest run ./test/services/{service}.test.ts`
+- Type-check passes: `bun tsc -b`
+
+### When to Request Intervention
+
+Stop and ask for user help ONLY when:
+
+| Situation | Action |
+|-----------|--------|
+| **Missing credentials** | Request user add env vars |
+| **Rate limiting** | Request user wait or increase limits |
+| **Account-level restrictions** | Request user enable feature in dashboard |
+| **Ambiguous API behavior** | Ask for clarification on expected behavior |
+| **Breaking change to generator** | Ask for approval before modifying generator |
+
+Do NOT stop for:
+- `UnknownCloudflareError` → Add to spec and continue
+- `Schema decode failed` → Patch spec and continue
+- Type errors → Fix and continue
+- Flaky tests → Add retry logic and continue
+
+### Example: Full Protocol Execution
+
+```markdown
+# Protocol Execution: R2 Service
+
+## Step 1: Identified 12 operations, 4 have tests
+
+## Step 2: Test Plan
+[Documented all 12 operations with expected happy paths and errors]
+
+## Step 3: Batches
+- Batch 1: createBucket, getBucket, deleteBucket, listBuckets
+- Batch 2: *CorsPolicy operations
+- Batch 3: *LifecycleConfiguration operations
+
+## Step 4-6: Implementation Log
+
+### Batch 1
+- ✅ createBucket happy path - PASS
+- ❌ createBucket BucketAlreadyExists - UnknownCloudflareError code 10007
+  → Added to spec/r2.json, regenerated, now PASS
+- ✅ getBucket happy path - PASS
+- ✅ getBucket NoSuchBucket - PASS (already in spec)
+...
+
+### Batch 2
+...
+
+## Final Result: 12/12 operations covered, 28 tests total
+```
+
+---
+
 ## TDD WORKFLOW
 
 The Cloudflare OpenAPI spec is incomplete. Tests reveal three types of issues:
@@ -24,48 +225,42 @@ The Cloudflare OpenAPI spec is incomplete. Tests reveal three types of issues:
 
 ### The Complete Loop
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  PHASE 0: PLAN                                                              │
-│  ────────────────                                                           │
-│  For each API, document:                                                    │
-│  • Happy path test description                                              │
-│  • Error cases to probe (with expected error tags)                          │
-│  • Whether error tags exist in spec/{service}.json                          │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  PHASE 1: WRITE TESTS                                                       │
-│  ────────────────────                                                       │
-│  Write both happy path AND error path tests for each API                    │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  PHASE 2: CHECK LSP ERRORS                                                  │
-│  ─────────────────────────                                                  │
-│  Run: ReadLints on the test file                                            │
-│                                                                             │
-│  If type errors exist:                                                      │
-│  • Wrong args? → Fix the test                                               │
-│  • Missing required field that shouldn't be required? → Patch OpenAPI spec  │
-│  • Type is Record<string,unknown> but should be union? → Fix generator      │
-│  Regenerate and repeat until no LSP errors                                  │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  PHASE 3: RUN TESTS                                                         │
-│  ──────────────────                                                         │
-│  Run: bun vitest run ./test/services/{service}.test.ts -t "test name"       │
-│                                                                             │
-│  If UnknownCloudflareError:                                                 │
-│  • Add error to spec/{service}.json → Regenerate → Repeat                   │
-│                                                                             │
-│  If Schema decode failed:                                                   │
-│  • Check response body for actual structure                                 │
-│  • Patch spec/openapi.patch.jsonc → Regenerate → Repeat                     │
-│                                                                             │
-│  If test passes: Move to next test                                          │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph Phase0["PHASE 0: PLAN"]
+        P0[Document for each API:<br/>• Happy path test<br/>• Error cases with expected tags<br/>• Whether tags exist in spec]
+    end
+    
+    subgraph Phase1["PHASE 1: WRITE TESTS"]
+        P1[Write happy path AND error path tests]
+    end
+    
+    subgraph Phase2["PHASE 2: CHECK LSP ERRORS"]
+        P2[Run type checker]
+        P2 --> P2a{Type errors?}
+        P2a -->|Wrong args| P2b[Fix the test]
+        P2a -->|Missing required field| P2c[Patch OpenAPI spec]
+        P2a -->|Record instead of union| P2d[Fix generator]
+        P2b --> P2e[Regenerate & repeat]
+        P2c --> P2e
+        P2d --> P2e
+        P2a -->|No errors| P3
+    end
+    
+    subgraph Phase3["PHASE 3: RUN TESTS"]
+        P3[Run tests]
+        P3 --> P3a{Result?}
+        P3a -->|UnknownCloudflareError| P3b[Add to spec/{service}.json]
+        P3a -->|Schema decode failed| P3c[Patch openapi.patch.jsonc]
+        P3a -->|Pass| P3d[Move to next test]
+        P3b --> P3e[Regenerate & repeat]
+        P3c --> P3e
+        P3e --> P3
+    end
+    
+    Phase0 --> Phase1
+    Phase1 --> Phase2
+    P2e --> P2
 ```
 
 ---
