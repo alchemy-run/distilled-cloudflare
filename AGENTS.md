@@ -82,14 +82,30 @@ Group tests into batches of ~3-5 operations for manageable iteration:
 
 ```markdown
 ## Batch 1: Bucket CRUD
-- createBucket (happy + 2 errors)
-- getBucket (happy + 1 error)
-- deleteBucket (happy + 2 errors)
+- createBucket
+  - happy: Create bucket, verify bucket exists
+  - error: BucketAlreadyExists - create bucket with existing name
+  - error: ValidationError - create bucket with invalid name
+- getBucket
+  - happy: Get existing bucket metadata
+  - error: NoSuchBucket - get non-existent bucket
+- deleteBucket
+  - happy: Delete existing empty bucket
+  - error: NoSuchBucket - delete non-existent bucket
+  - error: BucketNotEmpty - delete bucket with objects
 
 ## Batch 2: Bucket Configuration  
-- getBucketCorsPolicy (happy + 2 errors)
-- putBucketCorsPolicy (happy + 1 error)
-- deleteBucketCorsPolicy (happy + 2 errors)
+- getBucketCorsPolicy
+  - happy: Get CORS policy from bucket with CORS configured
+  - error: NoSuchBucket - get CORS from non-existent bucket
+  - error: NoCorsConfiguration - get CORS from bucket without CORS
+- putBucketCorsPolicy
+  - happy: Set CORS policy on bucket
+  - error: NoSuchBucket - set CORS on non-existent bucket
+- deleteBucketCorsPolicy
+  - happy: Delete CORS policy from bucket
+  - error: NoSuchBucket - delete CORS from non-existent bucket
+  - error: NoCorsConfiguration - delete CORS from bucket without CORS
 ```
 
 ### Step 4: Implement Tests
